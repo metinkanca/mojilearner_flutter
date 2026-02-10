@@ -7,6 +7,9 @@ import 'providers/character_provider.dart';
 import 'providers/language_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/chat_provider.dart';
+import 'providers/quiz_provider.dart';
+import 'providers/mistakes_provider.dart';
+import 'providers/settings_provider.dart';
 import 'router.dart';
 import 'constants/theme.dart';
 
@@ -24,8 +27,22 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => LanguageProvider()),
-      ChangeNotifierProvider(create: (_) => CharacterProvider()),
+      ChangeNotifierProxyProvider<UserProvider, CharacterProvider>(
+        create: (context) {
+          final characterProvider = CharacterProvider();
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          characterProvider.subscribeToRewards(userProvider);
+          return characterProvider;
+        },
+        update: (context, userProvider, characterProvider) {
+          characterProvider?.subscribeToRewards(userProvider);
+          return characterProvider ?? CharacterProvider();
+        },
+      ),
       ChangeNotifierProvider(create: (_) => ChatProvider()),
+      ChangeNotifierProvider(create: (_) => QuizProvider()),
+      ChangeNotifierProvider(create: (_) => MistakesProvider()),
+      ChangeNotifierProvider(create: (_) => SettingsProvider()),
     ],
     child: const MojiLearnerApp(),
   ));

@@ -92,7 +92,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: widget.isUser ? const Color(0xFF9dc4ff) : Colors.white, // retroSkyLight vs White
+                          color: widget.isUser ? AppTheme.retroSkyLight : Colors.white,
                           border: Border.all(color: AppTheme.retroDark, width: 4),
                           boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))]
                         ),

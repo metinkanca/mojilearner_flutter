@@ -34,6 +34,17 @@ class AppTheme {
   
   // Aliases/Additional Retro Colors
   static const Color retroBlue = retroSky;
+  static const Color retroSkyLight = Color(0xFF9dc4ff);
   static const Color retroGreen = retroGrass;
   static const Color retroOrange = Color(0xFFdf7126);
+
+  // Night Theme Colors
+  static const Color retroNightSky = Color(0xFF1a1c2c);
+  static const Color retroNightGrass = Color(0xFF2e573f); // Darker, night-time grass
+  static const Color retroMoon = Color(0xFFfbf7f3); // Off-white for moon
+
+  // Sunset Theme Colors
+  static const Color retroSunsetSky = Color(0xFFff9e7d); // Orange/Pinkish sky for sunset
+  static const Color retroSunsetGrass = Color(0xFFdcb15d); // Golden hour grass
+  static const Color retroSunOrange = Color(0xFFff4500); // Redder sun for sunset
 }

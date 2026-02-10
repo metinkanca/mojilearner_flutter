@@ -240,7 +240,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'XP: ${userProvider.stats.xp}',
+                                  'XP: ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
                                   style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                                 ),
                                 const SizedBox(height: 4),
@@ -252,7 +252,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                                   ),
                                   child: FractionallySizedBox(
                                     alignment: Alignment.centerLeft,
-                                    widthFactor: 0.75, // Placeholder for progress logic
+                                    widthFactor: userProvider.stats.progress,
                                     child: Container(color: AppTheme.retroPrimary),
                                   ),
                                 )

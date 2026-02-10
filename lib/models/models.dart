@@ -54,18 +54,26 @@ class Mistake {
 
 class UserStats {
   final int level;
-  final int xp;
+  final int totalXP;
+  final int currentLevelXP;
+  final int nextLevelXP;
   final int streak;
   final int coins;
-  final int xpToNextLevel;
+  final double progress;
 
   UserStats({
     this.level = 1,
-    this.xp = 0,
+    this.totalXP = 0,
+    this.currentLevelXP = 0,
+    this.nextLevelXP = 100,
     this.streak = 0,
     this.coins = 0,
-    this.xpToNextLevel = 100,
+    this.progress = 0.0,
   });
+
+  int get xp => currentLevelXP;
+  int get totalXPInLevel => nextLevelXP; // The denominator
+  int get xpToNextLevel => nextLevelXP - currentLevelXP; // Remaining
 }
 
 class CharacterCustomization {

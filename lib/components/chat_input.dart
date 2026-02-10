@@ -24,10 +24,11 @@ class _ChatInputState extends State<ChatInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 24, top: 24),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32), // Matches px-4 pt-4 pb-8
       decoration: const BoxDecoration(
-         color: AppTheme.retroLight,
-         border: Border(top: BorderSide(color: AppTheme.retroDark, width: 4)),
+        color: AppTheme.retroLight,
+        border: Border(top: BorderSide(color: AppTheme.retroDark, width: 4)),
       ),
       child: Row(
         children: [
@@ -47,13 +48,14 @@ class _ChatInputState extends State<ChatInput> {
                   hintText: "TYPE HERE...",
                   hintStyle: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.grey),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14), 
+                  isDense: true,
                 ),
                 onSubmitted: (_) => _handleSend(),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Container(
             width: 48, 
             height: 48,

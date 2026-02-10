@@ -1,15 +1,23 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/models.dart';
+import '../utils/progression_utils.dart';
+import '../constants/progression.dart';
 
 class UserProvider extends ChangeNotifier {
   String _username = 'Learner';
-  int _coins = 100;
+  int _coins = 999999; // Testing mode: infinite gold
   int _streak = 0;
-  int _level = 1;
-  int _xp = 0;
+  int _totalXP = 0;
   bool _isPremium = false;
   bool _isLoading = true;
+
+  final StreamController<int> _levelUpController = StreamController<int>.broadcast();
+  Stream<int> get onLevelUp => _levelUpController.stream;
+  
+  final StreamController<RewardDef> _rewardController = StreamController<RewardDef>.broadcast();
+  Stream<RewardDef> get onReward => _rewardController.stream;
 
   String get username => _username;
   int get coins => _coins;
@@ -17,25 +25,39 @@ class UserProvider extends ChangeNotifier {
   bool get isPremium => _isPremium;
   bool get isLoading => _isLoading;
 
-  UserStats get stats => UserStats(
-    level: _level,
-    xp: _xp,
-    streak: _streak,
-    coins: _coins,
-    xpToNextLevel: 100 * _level, // Simple formula
-  );
+  UserStats get stats {
+    int level = ProgressionUtils.getLevelFromTotalXP(_totalXP);
+    int startOfLevel = ProgressionUtils.getTotalXPForLevel(level);
+    int endOfLevel = ProgressionUtils.getTotalXPForLevel(level + 1);
+    
+    return UserStats(
+      level: level,
+      totalXP: _totalXP,
+      currentLevelXP: _totalXP - startOfLevel,
+      nextLevelXP: endOfLevel - startOfLevel,
+      streak: _streak,
+      coins: _coins,
+      progress: ProgressionUtils.getLevelProgress(_totalXP),
+    );
+  }
 
   UserProvider() {
     _loadUserData();
   }
 
+  @override
+  void dispose() {
+    _levelUpController.close();
+    _rewardController.close();
+    super.dispose();
+  }
+
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     _username = prefs.getString('username') ?? 'Learner';
-    _coins = prefs.getInt('coins') ?? 100;
+    _coins = prefs.getInt('coins') ?? 999999; // Testing mode: infinite gold
     _streak = prefs.getInt('streak') ?? 0;
-    _level = prefs.getInt('level') ?? 1;
-    _xp = prefs.getInt('xp') ?? 0;
+    _totalXP = prefs.getInt('total_xp') ?? 0;
     _isLoading = false;
     notifyListeners();
   }
@@ -54,6 +76,45 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addXp(int amount) async {
+    int oldLevel = ProgressionUtils.getLevelFromTotalXP(_totalXP);
+    _totalXP += amount;
+    int newLevel = ProgressionUtils.getLevelFromTotalXP(_totalXP);
+
+    if (newLevel > oldLevel) {
+      // Level Up!
+      _levelUpController.add(newLevel);
+      _handleLevelUpRewards(newLevel);
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('total_xp', _totalXP);
+    
+    notifyListeners();
+  }
+
+  void _handleLevelUpRewards(int level) {
+    // Find if there's a reward for this level
+    for (var reward in levelRewards) {
+      if (reward.level == level) {
+        // Grant coins automatically
+        if (reward.type == RewardType.coins) {
+          addCoins(reward.value);
+        }
+        
+        // Emit reward event for items/unlocks (CharacterProvider will listen)
+        if (reward.type == RewardType.item || reward.type == RewardType.unlock) {
+          _rewardController.add(reward);
+        }
+        
+        // Level 20 special case: also grant 1000 coins
+        if (level == 20) {
+          addCoins(1000);
+        }
+      }
+    }
+  }
+
   Future<void> spendCoins(int amount) async {
     if (_coins >= amount) {
       _coins -= amount;
@@ -66,21 +127,8 @@ class UserProvider extends ChangeNotifier {
   void incrementStreak() {
     _streak++;
     notifyListeners();
-    // Save to prefs...
-  }
-
-  void addXp(int amount) {
-    _xp += amount;
-    int nextLevel = 100 * _level;
-    if (_xp >= nextLevel) {
-      _level++;
-      _xp -= nextLevel;
-      // Level up celebration?
-    }
-    notifyListeners();
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setInt('xp', _xp);
-      prefs.setInt('level', _level);
+      prefs.setInt('streak', _streak);
     });
   }
 }

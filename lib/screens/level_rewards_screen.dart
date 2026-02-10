@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
+import '../providers/settings_provider.dart';
 import '../constants/theme.dart';
+import '../constants/progression.dart';
 
 class LevelRewardsScreen extends StatefulWidget {
   const LevelRewardsScreen({super.key});
@@ -16,24 +18,9 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
   late PageController _pageController;
   int _currentPage = 0;
 
-  final List<Map<String, dynamic>> _rewards = [
-    {'level': 1, 'reward': '150 gold'},
-    {'level': 2, 'reward': '200 gold'},
-    {'level': 3, 'reward': 'Color unlock: Blue Fur'},
-    {'level': 4, 'reward': '250 gold'},
-    {'level': 5, 'reward': 'Food item (meal) + 200 gold'},
-    {'level': 6, 'reward': '300 gold'},
-    {'level': 7, 'reward': 'Cosmetic: Eye Shape A'},
-    {'level': 8, 'reward': 'Boost: +20% XP (24h)'},
-    {'level': 9, 'reward': '350 gold'},
-    {'level': 10, 'reward': 'Background: Green Hills'},
-  ];
-
   @override
   void initState() {
     super.initState();
-    // We will initialize the controller in the build method or didChangeDependencies
-    // to ensure we have access to the provider for the initial page.
   }
 
   @override
@@ -41,13 +28,11 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
     super.didChangeDependencies();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final currentLevel = userProvider.stats.level;
-    // Ensure we don't go out of bounds if level > 10
-    final initialIndex = (currentLevel - 1).clamp(0, _rewards.length - 1);
-    
+    final initialIndex = (currentLevel - 1).clamp(0, levelRewards.length - 1);
+
     _pageController = PageController(
-      viewportFraction: 0.65, // Smaller fraction to show more side content
-      initialPage: initialIndex
-    );
+        viewportFraction: 0.75, // Standard card width
+        initialPage: initialIndex);
     _currentPage = initialIndex;
   }
 
@@ -60,29 +45,51 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     final currentLevel = userProvider.stats.level;
 
+    final fontFunction = settingsProvider.usePixelFont
+        ? GoogleFonts.pressStart2p
+        : GoogleFonts.spaceMono;
+
     return Scaffold(
-      backgroundColor: AppTheme.background, // Or a specific gradient from image
+      backgroundColor: AppTheme.retroSky,
       appBar: AppBar(
         title: Text(
-          'Level Rewards',
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF1F2937),
+          'LEVELS',
+          style: fontFunction(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.retroDark,
+            letterSpacing: 1.5,
           ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1F2937)),
-          onPressed: () => context.pop(),
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppTheme.retroDark, width: 3),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppTheme.retroDark,
+                  offset: Offset(2, 2),
+                  blurRadius: 0)
+            ],
+          ),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back,
+                color: AppTheme.retroDark, size: 20),
+            onPressed: () => context.pop(),
+            padding: EdgeInsets.zero,
+          ),
         ),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           Expanded(
             child: PageView.builder(
               controller: _pageController,
@@ -91,136 +98,203 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                   _currentPage = index;
                 });
               },
-              itemCount: _rewards.length,
+              itemCount: levelRewards.length,
               itemBuilder: (context, index) {
-                final item = _rewards[index];
-                final level = item['level'] as int;
-                final reward = item['reward'] as String;
-                final isCurrentLevel = level == currentLevel;
-                // Since this runs in build, we can adjust visual state
-                // However, PageView builds scrolling items. 
-                // We want smooth scaling.
-                
+                final item = levelRewards[index];
+                final level = item.level;
+                final reward = item.description;
+
+                // State logic
+                final isCurrent = level == currentLevel;
+                final isLocked = level > currentLevel;
+
                 return AnimatedBuilder(
                   animation: _pageController,
                   builder: (context, child) {
                     double value = 1.0;
                     if (_pageController.position.haveDimensions) {
                       value = _pageController.page! - index;
-                      value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0); 
+                      value = (1 - (value.abs() * 0.2)).clamp(0.0, 1.0);
                     } else {
-                       value = index == _currentPage ? 1.0 : 0.7;
+                      value = index == _currentPage ? 1.0 : 0.8;
                     }
-                    
+
                     return Center(
                       child: SizedBox(
-                        height: 380, // Taller fixed height to prevent overflow
-                         child: Transform.scale(
-                           scale: value,
-                           child: child,
-                         ),
+                        height: 450,
+                        child: Transform.scale(
+                          scale: value,
+                          child: child,
+                        ),
                       ),
                     );
                   },
-                  child: AspectRatio(
-                    aspectRatio: 0.8, // Slightly taller than square (4:5) to fit content
-                    child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                  child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isCurrentLevel 
-                        ? const Color(0xFF2563EB) // Active Level Color
-                        : Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                         BoxShadow(
-                           color: Colors.black.withOpacity(0.1),
-                           blurRadius: 10,
-                           offset: const Offset(0, 5),
-                         )
+                      color: isLocked ? Colors.grey[200] : Colors.white,
+                      border: Border.all(color: AppTheme.retroDark, width: 6),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppTheme.retroDark,
+                          blurRadius: 0,
+                          offset: Offset(8, 8),
+                        )
                       ],
-                      border: isCurrentLevel 
-                          ? Border.all(color: const Color(0xFF60A5FA), width: 2)
-                          : Border.all(color: Colors.transparent),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0), // Reduced padding
+                      padding: const EdgeInsets.all(18.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "LEVEL",
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: isCurrentLevel ? Colors.white70 : Colors.grey[400],
-                              letterSpacing: 2.0,
-                            ),
-                          ),
-                          const SizedBox(height: 4), // Reduced spacing
-                          Text(
-                            "$level",
-                            style: GoogleFonts.poppins(
-                              fontSize: 56, // Reduced font size
-                              fontWeight: FontWeight.w900,
-                              color: isCurrentLevel ? Colors.white : const Color(0xFF1F2937),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
+                          // Header Status
                           Container(
-                            height: 1,
-                            width: 40,
-                            color: isCurrentLevel ? Colors.white30 : Colors.grey[200],
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            "REWARD",
-                            style: GoogleFonts.poppins(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: isCurrentLevel ? Colors.white70 : Colors.grey[400],
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: isLocked
+                                  ? AppTheme.retroDark
+                                  : (isCurrent
+                                      ? Colors.white
+                                      : AppTheme.retroGreen),
+                              border: Border.all(
+                                  color: AppTheme.retroDark, width: 3),
+                            ),
+                            child: Text(
+                              isCurrent
+                                  ? "CURRENT"
+                                  : (isLocked ? "LOCKED" : "COMPLETED"),
+                              style: fontFunction(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: isCurrent
+                                    ? AppTheme.retroDark
+                                    : Colors.white,
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Expanded( // Allow reward text to flex if needed
+                          const SizedBox(height: 20),
+
+                          // Big Number Box
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                  color: AppTheme.retroDark, width: 4),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: AppTheme.retroDark,
+                                  offset: Offset(4, 4),
+                                )
+                              ],
+                            ),
                             child: Center(
                               child: Text(
-                                reward,
-                                textAlign: TextAlign.center,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  height: 1.2,
+                                "$level",
+                                style: fontFunction(
+                                  fontSize: 40,
                                   fontWeight: FontWeight.bold,
-                                  color: isCurrentLevel ? Colors.white : const Color(0xFF4B5563),
+                                  color: AppTheme.retroDark,
                                 ),
                               ),
                             ),
                           ),
-                          if (level < currentLevel) ...[
-                            const SizedBox(height: 12),
-                            const Icon(Icons.check_circle, color: Color(0xFF34D399), size: 28)
-                          ] else if (level == currentLevel) ...[
-                             const SizedBox(height: 12),
-                             Container(
-                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                               decoration: BoxDecoration(
-                                 color: Colors.white.withOpacity(0.2),
-                                 borderRadius: BorderRadius.circular(20)
-                               ),
-                               child: Text(
-                                 "Current",
-                                 style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-                               ),
-                             )
-                          ] else ...[
-                             const SizedBox(height: 12),
-                             Icon(Icons.lock, color: Colors.grey[300], size: 24),
-                          ]
+                          const SizedBox(height: 20),
+                          Text(
+                            "REWARD",
+                            style: fontFunction(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.retroDark.withValues(alpha: 0.7),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          // Fixed height container for reward text to prevent dynamic sizing
+                          SizedBox(
+                            height: 55, // Fixed height
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  reward.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: fontFunction(
+                                    fontSize: 12,
+                                    height: 1.5,
+                                    color: AppTheme.retroDark,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          
+                          // XP Progress Info for Current Level
+                          if (isCurrent) ...[
+                            const SizedBox(height: 16),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                "${userProvider.stats.currentLevelXP} / ${userProvider.stats.nextLevelXP} XP",
+                                style: fontFunction(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.retroDark,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // Progress bar
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Container(
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  border: Border.all(
+                                      color: AppTheme.retroDark, width: 3),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: AppTheme.retroDark,
+                                      offset: Offset(3, 3),
+                                      blurRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRect(
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FractionallySizedBox(
+                                      widthFactor: userProvider.stats.progress.clamp(0.0, 1.0),
+                                      child: Container(
+                                        height: double.infinity,
+                                        color: AppTheme.retroGreen,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          
+                          const SizedBox(height: 20),
+
+                          // Footer Indicator
+                          if (isLocked)
+                            Icon(Icons.lock, size: 32, color: Colors.grey[400])
+                          else if (!isCurrent)
+                            const Icon(Icons.check_circle,
+                                size: 32, color: AppTheme.retroGreen)
+                          else
+                            const SizedBox(height: 32),
+                          if (!isCurrent) const SizedBox(height: 12),
                         ],
                       ),
                     ),
-                  ),
                   ),
                 );
               },

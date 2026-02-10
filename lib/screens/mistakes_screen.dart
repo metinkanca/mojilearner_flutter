@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../constants/theme.dart'; // Added
 import '../../models/models.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/mistakes_provider.dart';
@@ -15,6 +18,90 @@ class MistakesScreen extends StatefulWidget {
 
 class _MistakesScreenState extends State<MistakesScreen> {
   String selectedFilter = 'all'; // 'all', 'grammar', 'vocabulary'
+
+  void _showExplanationDialog(BuildContext context, Mistake mistake) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppTheme.retroDark, width: 4),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppTheme.retroDark,
+                  offset: Offset(8, 8),
+                  blurRadius: 0),
+            ],
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("WHY IS THIS WRONG?",
+                    style: GoogleFonts.pressStart2p(
+                        fontSize: 14, color: AppTheme.retroDark)),
+                const SizedBox(height: 24),
+                Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        border: Border.all(color: Colors.red, width: 2)),
+                    child: Text(mistake.original,
+                        style: GoogleFonts.spaceMono(
+                            fontSize: 14,
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.red[900]))),
+                const SizedBox(height: 8),
+                Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.1),
+                        border: Border.all(color: Colors.green, width: 2)),
+                    child: Text(mistake.correction,
+                        style: GoogleFonts.spaceMono(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green[900]))),
+                const Divider(
+                    height: 32, thickness: 4, color: AppTheme.retroDark),
+                Text(mistake.explanation.isNotEmpty ? mistake.explanation : "No explanation available.",
+                    style: GoogleFonts.spaceMono(fontSize: 14, height: 1.5)),
+                const SizedBox(height: 24),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(ctx),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: AppTheme.retroAccent,
+                        border: Border.all(color: AppTheme.retroDark, width: 4),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: AppTheme.retroDark,
+                              offset: Offset(4, 4),
+                              blurRadius: 0)
+                        ],
+                      ),
+                      child: Text("GOT IT!",
+                          style: GoogleFonts.pressStart2p(
+                              fontSize: 12, color: AppTheme.retroDark)),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,314 +120,199 @@ class _MistakesScreenState extends State<MistakesScreen> {
     final translations = languageProvider.getTranslations();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB), // bg-gray-50
-      appBar: AppBar(
-        title: Text(
-          translations['yourMistakes'] ?? 'Your Mistakes',
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF1F2937),
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1F2937)),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Column(
-        children: [
-          // Header with description
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF3C7), // bg-amber-100
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: const Center(
-                    child: Icon(Icons.warning_amber_rounded,
-                        color: Color(0xFFD97706), size: 32),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  translations['yourMistakes'] ?? 'Your Mistakes',
-                  style: GoogleFonts.poppins(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1F2937),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  translations['learnFromWrong'] ??
-                      'Learn from what went wrong',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: const Color(0xFF6B7280),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Filters
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                _buildFilterChip('all', translations['all'] ?? 'All'),
-                const SizedBox(width: 8),
-                _buildFilterChip(
-                    'grammar', translations['grammar'] ?? 'Grammar'),
-                const SizedBox(width: 8),
-                _buildFilterChip(
-                    'vocabulary', translations['vocabulary'] ?? 'Vocabulary'),
-              ],
-            ),
-          ),
-
-          // List
-          Expanded(
-            child: filteredMistakes.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.check_circle_outline,
-                            size: 64, color: Color(0xFF10B981)),
-                        const SizedBox(height: 16),
-                        Text(
-                          translations['noMistakes'] ?? 'No mistakes found!',
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF374151),
-                          ),
-                        ),
-                      ],
+      backgroundColor: AppTheme.retroSky,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Custom Retro AppBar
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppTheme.retroDark, width: 4)),
+                color: Colors.white,
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => context.pop(),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppTheme.retroDark, width: 4),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: AppTheme.retroDark,
+                              offset: Offset(2, 2))
+                        ],
+                        color: Colors.white,
+                      ),
+                      child: const Icon(Icons.arrow_back,
+                          color: AppTheme.retroDark),
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: filteredMistakes.length,
-                    itemBuilder: (context, index) {
-                      final mistake = filteredMistakes[index];
-                      return _buildMistakeCard(mistake, translations);
-                    },
                   ),
-          ),
-        ],
+                  const SizedBox(width: 16),
+                  Text("MISTAKES",
+                      style: GoogleFonts.pressStart2p(
+                          fontSize: 20, color: AppTheme.retroDark)),
+                ],
+              ),
+            ),
+
+            // Filter Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    _buildRetroChip('all', translations['all'] ?? 'ALL'),
+                    const SizedBox(width: 12),
+                    _buildRetroChip(
+                        'grammar', translations['grammar'] ?? 'GRAMMAR'),
+                    const SizedBox(width: 12),
+                    _buildRetroChip('vocabulary',
+                        translations['vocabulary'] ?? 'VOCABULARY'),
+                  ],
+                ),
+              ),
+            ),
+
+            // List
+            Expanded(
+              child: filteredMistakes.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_circle_outline,
+                              size: 64,
+                              color: AppTheme.retroDark.withOpacity(0.5)),
+                          const SizedBox(height: 16),
+                          Text(
+                            "NO MISTAKES YET!",
+                            style: GoogleFonts.pressStart2p(
+                                color: AppTheme.retroDark.withOpacity(0.5),
+                                fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                      itemCount: filteredMistakes.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        final mistake = filteredMistakes[index];
+                        return _buildMistakeCard(context, mistake);
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildFilterChip(String value, String label) {
-    final isSelected = selectedFilter == value;
+  Widget _buildRetroChip(String key, String label) {
+    final isSelected = selectedFilter == key;
     return GestureDetector(
-      onTap: () => setState(() => selectedFilter = value),
+      onTap: () => setState(() => selectedFilter = key),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2563EB) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? AppTheme.retroAccent : Colors.white,
           border: Border.all(
-            color: isSelected ? const Color(0xFF2563EB) : const Color(0xFFE5E7EB),
-          ),
+              color: AppTheme.retroDark, width: isSelected ? 4 : 2),
           boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: const Color(0xFF2563EB).withOpacity(0.3),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  )
+              ? const [
+                  BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4))
                 ]
               : null,
         ),
         child: Text(
-          label,
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: isSelected ? Colors.white : const Color(0xFF4B5563),
-          ),
+          label.toUpperCase(),
+          style: GoogleFonts.pressStart2p(
+              fontSize: 10,
+              color: isSelected ? AppTheme.retroDark : Colors.grey),
         ),
       ),
     );
   }
 
-  Widget _buildMistakeCard(Mistake mistake, Map<String, String> translations) {
+  Widget _buildMistakeCard(BuildContext context, Mistake mistake) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
+        border: Border.all(color: AppTheme.retroDark, width: 4),
+        boxShadow: const [
+          BoxShadow(color: AppTheme.retroDark, offset: Offset(6, 6))
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        children: [
+          // Header of card
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppTheme.retroDark, width: 2)),
+                color: AppTheme.retroLight),
+            child: Row(
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color:
-                        mistake.type == 'grammar' ? const Color(0xFFDBEAFE) : const Color(0xFFF3E8FF),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    mistake.type.toUpperCase(),
-                    style: GoogleFonts.poppins(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: mistake.type == 'grammar'
-                          ? const Color(0xFF1E40AF)
-                          : const Color(0xFF7E22CE),
+                Icon(Icons.error_outline, size: 16, color: Colors.orange[800]),
+                const SizedBox(width: 8),
+                Text(mistake.type.toUpperCase(),
+                    style: GoogleFonts.pressStart2p(
+                        fontSize: 10, color: AppTheme.retroDark)),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () => _showExplanationDialog(context, mistake),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppTheme.retroSkyLight,
+                      border: Border.all(color: AppTheme.retroDark, width: 2),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.info_outline, size: 12),
+                        const SizedBox(width: 4),
+                        Text("INFO",
+                            style: GoogleFonts.pressStart2p(fontSize: 8)),
+                      ],
                     ),
                   ),
-                ),
-                Text(
-                  // Simple Date Format
-                  "${mistake.timestamp.day}/${mistake.timestamp.month}",
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: const Color(0xFF9CA3AF),
-                  ),
-                ),
+                )
               ],
             ),
-            const SizedBox(height: 12),
-            // Original (Wrong)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 2.0),
-                  child: Icon(Icons.close, color: Color(0xFFEF4444), size: 16),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        translations['yourAnswer'] ?? 'Your Answer',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: const Color(0xFF6B7280),
-                        ),
-                      ),
-                      Text(
-                        mistake.original,
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: const Color(0xFF1F2937),
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: const Color(0xFFEF4444),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                Text(mistake.original,
+                    style: GoogleFonts.spaceMono(
+                        fontSize: 16,
+                        color: Colors.red,
+                        decoration: TextDecoration.lineThrough)),
+                const SizedBox(height: 8),
+                const Icon(Icons.arrow_downward, size: 20),
+                const SizedBox(height: 8),
+                Text(mistake.correction,
+                    style: GoogleFonts.spaceMono(
+                        fontSize: 16,
+                        color: Colors.green[700],
+                        fontWeight: FontWeight.bold)),
               ],
             ),
-            const SizedBox(height: 12),
-            // Correction (Right)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 2.0),
-                  child: Icon(Icons.check, color: Color(0xFF10B981), size: 16),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        translations['correctAnswer'] ?? 'Correct Answer',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: const Color(0xFF6B7280),
-                        ),
-                      ),
-                      Text(
-                        mistake.correction,
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF10B981),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF9FAFB),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.info_outline,
-                          size: 14, color: Color(0xFF6B7280)),
-                      const SizedBox(width: 4),
-                      Text(
-                        translations['explanation'] ?? 'Explanation',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF4B5563),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    mistake.explanation,
-                    style: GoogleFonts.poppins(
-                      fontSize: 13,
-                      color: const Color(0xFF4B5563),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

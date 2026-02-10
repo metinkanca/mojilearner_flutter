@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../providers/language_provider.dart';
+import '../constants/theme.dart';
 
 class ScenariosScreen extends StatelessWidget {
   const ScenariosScreen({super.key});
@@ -23,225 +24,283 @@ class ScenariosScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
-      appBar: AppBar(
-        title: Text(
-          translations['scenarios'] ?? 'Roleplay Scenarios',
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF1F2937),
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1F2937)),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      backgroundColor: AppTheme.retroSky,
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Retro Header
             Container(
-              padding: const EdgeInsets.all(24),
-              width: double.infinity,
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.theater_comedy, color: Colors.white, size: 24),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    translations['practiceRealLife'] ?? 'Practice Real Life',
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    translations['chooseSituation'] ?? 'Choose a situation to master your conversation skills',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
+                color: AppTheme.retroUi,
+                border: Border.all(color: AppTheme.retroDark, width: 4),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppTheme.retroDark,
+                    offset: Offset(4, 4),
+                    blurRadius: 0,
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              translations['createYourOwn'] ?? 'Create Your Own',
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF1F2937),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: AppTheme.retroDark, size: 28),
+                    onPressed: () => context.pop(),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        (translations['scenarios'] ?? 'SCENARIOS').toUpperCase(),
+                        style: GoogleFonts.pressStart2p(
+                          fontSize: 16,
+                          color: AppTheme.retroDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 48), // Balance the back button
+                ],
               ),
             ),
-            const SizedBox(height: 12),
-            GestureDetector(
-              onTap: () {
-                // Navigate to chat with custom scenario
-                 context.pushNamed(
-                  'chat',
-                  pathParameters: {'chatId': 'new_custom'},
-                   extra: {'isScenario': true}
-                  );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    )
-                  ],
-                ),
-                child: Row(
+
+            // Scrollable Content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Container(
-                      width: 48,
-                      height: 48,
+                    // Hero Section ("Practice Real Life")
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      width: double.infinity,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFDBEAFE),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.add, color: Color(0xFF2563EB)),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          translations['startCustom'] ?? 'Start Custom Scenario',
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: const Color(0xFF1F2937),
-                          ),
-                        ),
-                        Text(
-                           translations['customPlaceholder'] ?? 'E.g. You are a taxi driver...',
-                           style: GoogleFonts.poppins(
-                             fontSize: 12,
-                             color: const Color(0xFF6B7280),
-                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-             const SizedBox(height: 24),
-            Text(
-              'Popular Scenarios',
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF1F2937),
-              ),
-            ),
-             const SizedBox(height: 12),
-             GridView.builder(
-               physics: const NeverScrollableScrollPhysics(),
-               shrinkWrap: true,
-               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                 crossAxisCount: 2,
-                 crossAxisSpacing: 16,
-                 mainAxisSpacing: 16,
-                 childAspectRatio: 0.9,
-               ),
-               itemCount: scenarios.length,
-               itemBuilder: (context, index) {
-                 final scene = scenarios[index];
-                 return GestureDetector(
-                   onTap: () {
-                    context.pushNamed(
-                      'chat',
-                      pathParameters: {'chatId': 'new_${scene['id']}'},
-                      extra: {'scenario': scene['title'], 'isScenario': true}
-                    );
-                   },
-                   child: Container(
-                     decoration: BoxDecoration(
-                       color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFE5E7EB)),
-                        boxShadow: [
+                        color: AppTheme.retroPrimary,
+                        border: Border.all(color: AppTheme.retroDark, width: 4),
+                        boxShadow: const [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          )
+                            color: AppTheme.retroDark,
+                            offset: Offset(4, 4),
+                            blurRadius: 0,
+                          ),
                         ],
-                     ),
-                     child: Padding(
-                       padding: const EdgeInsets.all(16.0),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: [
-                           Icon(scene['icon'] as IconData, size: 40, color: const Color(0xFF2563EB)),
-                           const SizedBox(height: 12),
-                           Text(
-                             scene['title'] as String,
-                             textAlign: TextAlign.center,
-                             style: GoogleFonts.poppins(
-                               fontWeight: FontWeight.w600,
-                               fontSize: 14,
-                               color: const Color(0xFF1F2937),
-                             ),
-                           ),
-                           const SizedBox(height: 8),
-                            Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF3F4F6),
-                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                              border: Border.all(color: AppTheme.retroDark, width: 3),
                             ),
-                            child: Text(
-                              scene['level'] as String,
-                              style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                color: const Color(0xFF6B7280),
+                            child: const Center(
+                              child: Icon(Icons.theater_comedy, color: AppTheme.retroDark, size: 28),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            translations['practiceRealLife'] ?? 'Practice Real Life',
+                            style: GoogleFonts.pressStart2p(
+                              fontSize: 16,
+                              color: Colors.white,
+                              height: 1.5,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            translations['chooseSituation'] ?? 'Choose a situation to master your conversation skills',
+                            style: GoogleFonts.spaceMono(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+                    
+                    Text(
+                      translations['createYourOwn'] ?? 'Create Your Own',
+                      style: GoogleFonts.pressStart2p(
+                        fontSize: 14,
+                        color: Colors.white,
+                        shadows: [
+                             const Shadow(color: AppTheme.retroDark, offset: Offset(2, 2)),
+                        ]
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // "Create Custom" Card
+                    GestureDetector(
+                      onTap: () {
+                        context.pushNamed(
+                          'chat',
+                          pathParameters: {'chatId': 'new_custom'},
+                          extra: {'isScenario': true}
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppTheme.retroLight,
+                          border: Border.all(color: AppTheme.retroDark, width: 4),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppTheme.retroDark,
+                              offset: Offset(4, 4),
+                              blurRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: AppTheme.retroAccent,
+                                border: Border.all(color: AppTheme.retroDark, width: 3),
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.add, color: AppTheme.retroDark),
                               ),
                             ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    translations['startCustom'] ?? 'Start Custom',
+                                    style: GoogleFonts.pressStart2p(
+                                      fontSize: 12,
+                                      color: AppTheme.retroDark,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    translations['customPlaceholder'] ?? 'E.g. You are a taxi driver...',
+                                    style: GoogleFonts.spaceMono(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.retroDark.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+                    
+                    Text(
+                      'POPULAR',
+                      style: GoogleFonts.pressStart2p(
+                        fontSize: 14,
+                        color: Colors.white,
+                        shadows: [
+                             const Shadow(color: AppTheme.retroDark, offset: Offset(2, 2)),
+                        ]
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Grid Layout
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.85,
+                      ),
+                      itemCount: scenarios.length,
+                      itemBuilder: (context, index) {
+                        final scene = scenarios[index];
+                        // Assign colors based on index for variety
+                        final cardColor = index % 2 == 0 ? Colors.white : AppTheme.retroLight;
+                        final iconBgColor = index % 3 == 0 ? AppTheme.retroGrass : (index % 3 == 1 ? AppTheme.retroSkyLight : AppTheme.retroOrange);
+
+                        return GestureDetector(
+                          onTap: () {
+                            context.pushNamed(
+                              'chat',
+                              pathParameters: {'chatId': 'new_${scene['id']}'},
+                              extra: {'scenario': scene['title'], 'isScenario': true}
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: cardColor,
+                              border: Border.all(color: AppTheme.retroDark, width: 4),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: AppTheme.retroDark,
+                                  offset: Offset(4, 4),
+                                  blurRadius: 0,
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: iconBgColor,
+                                    border: Border.all(color: AppTheme.retroDark, width: 3),
+                                  ),
+                                  child: Icon(scene['icon'] as IconData, color: AppTheme.retroDark, size: 24),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  (scene['title'] as String).toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.pressStart2p(
+                                    fontSize: 10,
+                                    color: AppTheme.retroDark,
+                                    height: 1.4,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.retroDark,
+                                  ),
+                                  child: Text(
+                                    (scene['level'] as String).toUpperCase(),
+                                    style: GoogleFonts.pressStart2p(
+                                      fontSize: 6,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                         ],
-                       ),
-                     ),
-                   ),
-                 );
-               },
-             ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 80), // Bottom padding
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

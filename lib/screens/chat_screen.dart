@@ -12,6 +12,10 @@ import '../../components/chat_sidebar.dart';
 import '../../models/models.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/chat_provider.dart';
+import '../../providers/mistakes_provider.dart';
+import '../../providers/character_provider.dart';
+import '../../providers/user_provider.dart';
+import 'dart:convert'; // For JSON parsing
 
 class ChatScreen extends StatefulWidget {
   final String? chatId;
@@ -154,9 +158,15 @@ GRAMMAR:
 4. Try changing it:
    - Me gustaría comprar esto. (I would like to buy this.)
    - Me gustaría visitar México. (I would like to visit Mexico.)
+
+MISTAKE HANDLING:
+If the user makes a clear grammar or vocabulary mistake (not just style), append this HIDDEN block at the very end of your response (after GRAMMAR):
+|||MISTAKE|||
+{ "original": "user's wrong text", "correction": "correct text", "explanation": "brief reason in $nativeLang", "type": "grammar" }
+(Use type: "grammar" or "vocabulary")
     ''';
 
-    if (widget.scenarioTitle != null) { 
+    if (widget.scenarioTitle != null) {  
         systemInstruction += '''
 \nScenario: "${widget.scenarioTitle}".
 You must stay strictly within this scenario roleplay.
@@ -252,6 +262,18 @@ Correct mistakes gently if they block understanding.
       
       if (response.text != null && mounted) {
         await _parseAndSaveBotResponse(response.text!);
+        
+        // Reward pet and XP for chatting
+        final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        
+        if (widget.scenarioTitle != null) {
+          characterProvider.rewardScenario();
+          userProvider.addXp(10); // 10 XP for scenario messages
+        } else {
+          characterProvider.rewardChat();
+          userProvider.addXp(5); // 5 XP per chat message
+        }
       }
     } catch (e) {
        if (mounted) {
@@ -262,16 +284,40 @@ Correct mistakes gently if they block understanding.
 
   Future<void> _parseAndSaveBotResponse(String rawText) async {
       String content = rawText;
+      
+      // 1. Extract Mistake Data
+      if (rawText.contains('|||MISTAKE|||')) {
+        final parts = rawText.split('|||MISTAKE|||');
+        content = parts[0].trim(); // Remove the JSON part from visible text
+        
+        if (parts.length > 1) {
+          try {
+            final jsonStr = parts[1].trim();
+            final jsonMap = json.decode(jsonStr);
+            if (mounted) {
+              Provider.of<MistakesProvider>(context, listen: false).addMistake(
+                jsonMap['original'] ?? '',
+                jsonMap['correction'] ?? '',
+                jsonMap['explanation'] ?? '',
+                jsonMap['type'] ?? 'grammar'
+              );
+            }
+          } catch (e) {
+            debugPrint("Mistake JSON Error: $e");
+          }
+        }
+      }
+
       String? translation;
       String? grammar;
 
       // Simple parsing of labeled sections
-      final textMatch = RegExp(r'TEXT:\s*(.*?)(?=\nTRANS:|$)', dotAll: true).firstMatch(rawText);
-      final transMatch = RegExp(r'TRANS:\s*(.*?)(?=\nGRAMMAR:|$)', dotAll: true).firstMatch(rawText);
-      final grammarMatch = RegExp(r'GRAMMAR:\s*(.*)', dotAll: true).firstMatch(rawText);
+      final textMatch = RegExp(r'TEXT:\s*(.*?)(?=\nTRANS:|$)', dotAll: true).firstMatch(content);
+      final transMatch = RegExp(r'TRANS:\s*(.*?)(?=\nGRAMMAR:|$)', dotAll: true).firstMatch(content);
+      final grammarMatch = RegExp(r'GRAMMAR:\s*(.*)', dotAll: true).firstMatch(content);
 
       if (textMatch != null) {
-         content = textMatch.group(1)?.trim() ?? rawText;
+         content = textMatch.group(1)?.trim() ?? content;
          translation = transMatch?.group(1)?.trim();
          grammar = grammarMatch?.group(1)?.trim();
       }
@@ -287,6 +333,14 @@ Correct mistakes gently if they block understanding.
           grammarAnalysis: grammar,
         ));
       }
+  }
+
+  String _formatTime(DateTime date) {
+    // Simple formatter since we don't have intl setup yet: "TODAY hh:mm AM"
+    final hour = date.hour > 12 ? date.hour - 12 : date.hour;
+    final amPm = date.hour >= 12 ? 'PM' : 'AM';
+    final minute = date.minute.toString().padLeft(2, '0');
+    return "TODAY $hour:$minute $amPm";
   }
 
   @override
@@ -343,7 +397,7 @@ Correct mistakes gently if they block understanding.
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 color: Colors.black.withOpacity(0.1),
                 child: Text(
-                  "TODAY 10:23 AM", // Mock date for retro feel
+                  "${_formatTime(DateTime.now())}", 
                   style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                 ),
               ),

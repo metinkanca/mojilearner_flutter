@@ -6,12 +6,14 @@ import 'screens/chat_screen.dart';
 import 'screens/design_moji_screen.dart';
 import 'screens/scenarios_screen.dart';
 import 'screens/mistakes_screen.dart';
+import 'screens/shop_screen.dart';
 import 'screens/onboarding/welcome_screen.dart';
 import 'screens/onboarding/language_selection_screen.dart';
 import 'screens/onboarding/calibration_screen.dart';
 import 'screens/onboarding/result_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/level_rewards_screen.dart';
+import 'screens/quiz_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -56,6 +58,10 @@ final router = GoRouter(
           builder: (context, state) => const CalibrationScreen(),
         ),
         GoRoute(
+          path: '/quiz', 
+          builder: (context, state) => const QuizScreen(),
+        ),
+        GoRoute(
           path: '/scenarios',
           name: 'scenarios',
           builder: (context, state) => const ScenariosScreen(),
@@ -84,6 +90,11 @@ final router = GoRouter(
           path: '/profile',
           name: 'profile',
           builder: (context, state) => const ProfileScreen(),
+        ),
+        GoRoute(
+          path: '/shop',
+          name: 'shop',
+          builder: (context, state) => const ShopScreen(),
         ),
       ],
     ),

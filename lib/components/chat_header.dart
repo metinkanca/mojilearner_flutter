@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../constants/theme.dart';
+import '../providers/user_provider.dart';
 
 class ChatHeader extends StatelessWidget {
   final VoidCallback onOpenSidebar;
@@ -11,6 +13,9 @@ class ChatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final level = userProvider.stats.level;
+
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
       decoration: const BoxDecoration(
@@ -25,9 +30,9 @@ class ChatHeader extends StatelessWidget {
             // Left Side: Back button + Title
             Row(
               children: [
-                // Back Button (Square Box)
+                // Hamburger Menu (Square Box)
                 GestureDetector(
-                  onTap: () => context.go('/'), // Go Home
+                  onTap: onOpenSidebar,
                   child: Container(
                     width: 32, 
                     height: 32,
@@ -36,8 +41,18 @@ class ChatHeader extends StatelessWidget {
                       border: Border.all(color: AppTheme.retroDark, width: 4),
                       boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))]
                     ),
-                    child: const Center(
-                      child: Icon(Icons.arrow_back, size: 16, color: AppTheme.retroDark),
+                    child: Center(
+                      // Custom pixel hamburger icon
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 14, height: 2, color: AppTheme.retroDark),
+                          const SizedBox(height: 3),
+                          Container(width: 14, height: 2, color: AppTheme.retroDark),
+                          const SizedBox(height: 3),
+                          Container(width: 14, height: 2, color: AppTheme.retroDark),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -81,7 +96,7 @@ class ChatHeader extends StatelessWidget {
                   const BlinkingDot(),
                   const SizedBox(width: 6),
                   Text(
-                    'LV.5', // Hardcoded for design, can be real later
+                    'LV.$level',
                     style: GoogleFonts.pressStart2p(
                       color: AppTheme.retroDark,
                       fontSize: 8,
