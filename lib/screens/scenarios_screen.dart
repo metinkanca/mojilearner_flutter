@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../providers/language_provider.dart';
 import '../constants/theme.dart';
+import '../l10n/app_localizations.dart';
 
 class ScenariosScreen extends StatelessWidget {
   const ScenariosScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final languageProvider = Provider.of<LanguageProvider>(context);
-    final translations = languageProvider.getTranslations();
+    final l10n = AppLocalizations.of(context)!;
 
     final scenarios = [
-      {'id': 'coffee', 'icon': LucideIcons.coffee, 'title': translations['orderingCoffee'], 'level': 'Beginner'},
-      {'id': 'job_interview', 'icon': LucideIcons.briefcase, 'title': translations['jobInterview'], 'level': 'Advanced'},
-      {'id': 'directions', 'icon': LucideIcons.map, 'title': translations['askingDirections'], 'level': 'Beginner'},
-      {'id': 'doctor', 'icon': LucideIcons.stethoscope, 'title': translations['atTheDoctor'], 'level': 'Intermediate'},
-      {'id': 'shopping', 'icon': LucideIcons.store, 'title': translations['shopping'], 'level': 'Beginner'},
-      {'id': 'restaurant', 'icon': LucideIcons.utensils, 'title': translations['restaurant'], 'level': 'Intermediate'},
+      {'id': 'coffee', 'icon': LucideIcons.coffee, 'title': l10n.orderingCoffee, 'level': l10n.beginner},
+      {'id': 'job_interview', 'icon': LucideIcons.briefcase, 'title': l10n.jobInterview, 'level': l10n.advanced},
+      {'id': 'directions', 'icon': LucideIcons.map, 'title': l10n.askingDirections, 'level': l10n.beginner},
+      {'id': 'doctor', 'icon': LucideIcons.stethoscope, 'title': l10n.atTheDoctor, 'level': l10n.intermediate},
+      {'id': 'shopping', 'icon': LucideIcons.store, 'title': l10n.shopping, 'level': l10n.beginner},
+      {'id': 'restaurant', 'icon': LucideIcons.utensils, 'title': l10n.restaurant, 'level': l10n.intermediate},
     ];
 
     return Scaffold(
@@ -52,11 +50,13 @@ class ScenariosScreen extends StatelessWidget {
                   Expanded(
                     child: Center(
                       child: Text(
-                        (translations['scenarios'] ?? 'SCENARIOS').toUpperCase(),
+                        l10n.scenarios.toUpperCase(),
                         style: GoogleFonts.pressStart2p(
                           fontSize: 16,
                           color: AppTheme.retroDark,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
@@ -103,21 +103,25 @@ class ScenariosScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            translations['practiceRealLife'] ?? 'Practice Real Life',
+                            l10n.practiceRealLife,
                             style: GoogleFonts.pressStart2p(
                               fontSize: 16,
                               color: Colors.white,
                               height: 1.5,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            translations['chooseSituation'] ?? 'Choose a situation to master your conversation skills',
+                            l10n.chooseSituation,
                             style: GoogleFonts.spaceMono(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -126,7 +130,7 @@ class ScenariosScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     
                     Text(
-                      translations['createYourOwn'] ?? 'Create Your Own',
+                      l10n.createYourOwn,
                       style: GoogleFonts.pressStart2p(
                         fontSize: 14,
                         color: Colors.white,
@@ -178,20 +182,24 @@ class ScenariosScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    translations['startCustom'] ?? 'Start Custom',
+                                    l10n.startCustom,
                                     style: GoogleFonts.pressStart2p(
                                       fontSize: 12,
                                       color: AppTheme.retroDark,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    translations['customPlaceholder'] ?? 'E.g. You are a taxi driver...',
+                                    l10n.customPlaceholder,
                                     style: GoogleFonts.spaceMono(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
-                                      color: AppTheme.retroDark.withOpacity(0.7),
+                                      color: AppTheme.retroDark.withValues(alpha: 0.7),
                                     ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -279,7 +287,7 @@ class ScenariosScreen extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: AppTheme.retroDark,
                                   ),
                                   child: Text(

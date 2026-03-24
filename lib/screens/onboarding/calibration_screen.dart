@@ -7,8 +7,12 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
+import '../../components/character_sprite.dart';
+import '../../components/quiz_rewards_popup.dart';
+import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/user_provider.dart';
+import '../../utils/progression_utils.dart';
 
 class CalibrationScreen extends StatefulWidget {
   const CalibrationScreen({super.key});
@@ -117,17 +121,42 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
     });
   }
 
-  void _finishCalibration() {
-    final percentage = _score / _questions.length;
-    String level = 'A1';
-    if (percentage > 0.8) level = 'B1';
-    else if (percentage > 0.4) level = 'A2';
+  Future<void> _finishCalibration() async {
+    final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    context.goNamed('result', extra: {
-      'score': _score,
-      'totalQuestions': _questions.length,
-      'level': level,
-    });
+    final reward = ProgressionUtils.getQuizRewardOutcome(
+      correctAnswers: _score,
+      totalQuestions: _questions.length,
+    );
+
+    characterProvider.applyQuizRewards(
+      happinessDelta: reward.happinessDelta,
+      hungerDelta: reward.hungerDelta,
+    );
+    await userProvider.addXp(reward.xpReward);
+    await userProvider.markOnboardingComplete();
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+      builder: (_) => QuizRewardsPopup(
+        score: _score,
+        totalQuestions: _questions.length,
+          level: reward.level,
+          xpReward: reward.xpReward,
+          happinessDelta: reward.happinessDelta,
+          hungerDelta: reward.hungerDelta,
+          passed: reward.passed,
+        onContinue: () => Navigator.of(context, rootNavigator: true).pop(),
+      ),
+    );
+
+    if (!mounted) return;
+    context.go('/');
   }
 
   @override
@@ -417,8 +446,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                 SvgPicture.asset(
-                   'assets/svgs/pet.svg',
+                 const CharacterSprite(
                    width: 100,
                    height: 100,
                  ),

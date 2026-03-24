@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/theme.dart';
 import '../providers/chat_provider.dart';
-import '../providers/language_provider.dart';
 import '../providers/quiz_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class NavigationWrapper extends StatelessWidget {
   final Widget child;
@@ -16,44 +16,99 @@ class NavigationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
-    final bool isHome = location == '/';
-    final texts = Provider.of<LanguageProvider>(context).getTranslations();
+    final l10n = AppLocalizations.of(context)!;
+    final bool showNavChrome =
+        location == '/' || location == '/new-chat' || location.startsWith('/chat/');
+    final bool showWrapperBackArrow = !showNavChrome &&
+      location != '/quiz' &&
+      location != '/profile' &&
+      location != '/shop';
 
     return Scaffold(
       extendBody: false, // Changed to false so content doesn't go under opaque navbar
-      resizeToAvoidBottomInset: true, // Allow resizing for keyboard
-      body: child,
-      // Retro FAB
-      floatingActionButton: Container(
-        width: 64,
-        height: 64,
-        margin: const EdgeInsets.only(top: 40),
-        decoration: BoxDecoration(
-          color: AppTheme.retroPrimary,
-          border: Border.all(color: AppTheme.retroDark, width: 4),
-          boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
-        ),
-        child: FloatingActionButton(
-          onPressed: () {
-            if (location == '/quiz') {
-               _showPauseDialog(context);
-               return;
-            }
-            if (location != '/') context.go('/');
-          },
-          backgroundColor: AppTheme.retroPrimary,
-          elevation: 0,  
-          shape: const RoundedRectangleBorder(), // Square
-          child: SvgPicture.asset(
-            'assets/svgs/icon-home.svg', 
-            width: 24, 
-            height: 24,
-            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          ),
-        ),
+      resizeToAvoidBottomInset: false, // Keyboard overlays content instead of pushing navigation up
+      body: Stack(
+        children: [
+          child,
+          if (showWrapperBackArrow)
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12, top: 12),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (location == '/quiz') {
+                        _showPauseDialog(context, targetRoute: '/');
+                        return;
+                      }
+
+                      if (Navigator.of(context).canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: AppTheme.retroDark, width: 3),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppTheme.retroDark,
+                            offset: Offset(2, 2),
+                            blurRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: AppTheme.retroDark,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: Container(
+      // Retro FAB
+      floatingActionButton: showNavChrome
+          ? Container(
+              width: 64,
+              height: 64,
+              margin: const EdgeInsets.only(top: 40),
+              decoration: BoxDecoration(
+                color: AppTheme.retroPrimary,
+                border: Border.all(color: AppTheme.retroDark, width: 4),
+                boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
+              ),
+              child: FloatingActionButton(
+                onPressed: () {
+                  if (location == '/quiz') {
+                     _showPauseDialog(context);
+                     return;
+                  }
+                  if (location != '/') context.go('/');
+                },
+                backgroundColor: AppTheme.retroPrimary,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(), // Square
+                child: SvgPicture.asset(
+                  'assets/svgs/icon-home.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                ),
+              ),
+            )
+          : null,
+      floatingActionButtonLocation:
+          showNavChrome ? FloatingActionButtonLocation.centerDocked : null,
+      bottomNavigationBar: showNavChrome ? Container(
         height: 80, // Reduced from 90 to save space
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -67,11 +122,11 @@ class NavigationWrapper extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _navItem(context, 'assets/svgs/icon-quiz.svg', texts['quizMode'] ?? 'Quiz', '/quiz', location),
+                  _navItem(context, 'assets/svgs/icon-quiz.svg', l10n.quizMode, '/quiz', location),
                   _navItem(
                     context, 
                     'assets/svgs/icon-chat.svg', 
-                    texts['chats'] ?? 'Chat', 
+                    l10n.chats,
                     '/new-chat', 
                     location, 
                     onTap: () async {
@@ -92,14 +147,14 @@ class NavigationWrapper extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _navItem(context, 'assets/svgs/icon-shop.svg', texts['shop'] ?? 'Shop', '/shop', location),
-                  _navItem(context, 'assets/svgs/icon-user.svg', texts['profile'] ?? 'User', '/profile', location),
+                  _navItem(context, 'assets/svgs/icon-shop.svg', l10n.shop, '/shop', location),
+                  _navItem(context, 'assets/svgs/icon-user.svg', l10n.profile, '/profile', location),
                 ],
               ),
             ),
           ],
         ),
-      ),
+      ) : null,
     );
   }
   
@@ -214,6 +269,7 @@ class NavigationWrapper extends StatelessWidget {
                   onTap: () async {
                     final qp = Provider.of<QuizProvider>(context, listen: false);
                     await qp.clearProgress();
+                    if (!context.mounted || !dialogContext.mounted) return;
                      
                     Navigator.pop(dialogContext);
                     _navigate(context, targetRoute, isChat);
@@ -252,39 +308,53 @@ class NavigationWrapper extends StatelessWidget {
   Widget _navItem(BuildContext context, String svgPath, String label, String route, String currentLocation, {VoidCallback? onTap}) {
     final bool isActive = currentLocation == route;
     final Color itemColor = isActive ? AppTheme.retroPrimary : Colors.grey;
+    final navLabel = label.toUpperCase();
+    final navFontSize = navLabel.length > 8 ? 7.0 : 8.0;
 
-    return GestureDetector(
-      onTap: () {
-        if (currentLocation == '/quiz') {
-           _showPauseDialog(context, targetRoute: route, isChat: onTap != null && route == '/new-chat');
-           return;
-        }
+    return SizedBox(
+      width: 72,
+      height: 80,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          if (currentLocation == '/quiz') {
+             _showPauseDialog(context, targetRoute: route, isChat: onTap != null && route == '/new-chat');
+             return;
+          }
 
-        if (onTap != null) {
-          onTap();
-        } else if (!isActive) {
-          context.go(route);
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            svgPath,
-            width: 24,
-            height: 24,
-            colorFilter: ColorFilter.mode(itemColor, BlendMode.srcIn),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label.toUpperCase(),
-            style: GoogleFonts.pressStart2p(
-              fontSize: 8,
-              color: itemColor,
+          if (onTap != null) {
+            onTap();
+          } else if (!isActive) {
+            context.go(route);
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              svgPath,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(itemColor, BlendMode.srcIn),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            SizedBox(
+              width: 64,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  navLabel,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: navFontSize,
+                    color: itemColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

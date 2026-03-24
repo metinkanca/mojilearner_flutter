@@ -98,10 +98,67 @@ To get started with the Mojilearner Flutter project, follow these steps:
 
 ## Features
 
-- Interactive chat interface for language learning.
-- Various screens for onboarding, quizzes, and user profiles.
-- Custom hooks for managing audio recording and chat sessions.
-- Context providers for managing application state.
+- **AI-Powered Calibration**: Intelligent level assessment using Gemini 2.5 Flash
+- **Offline Mode**: Complete functionality with mock AI for testing
+- **8-Step Onboarding**: Comprehensive first-time user experience
+- **Multi-Language Support**: 24 languages for learning
+- **Interactive Chat**: Conversational language practice
+- **Adaptive Quizzes**: Difficulty adjusts to your level
+- **Retro Pixel UI**: Fun, nostalgic design aesthetic
+- **Pet Companion**: Friendly mascot guides your journey
+
+## Building for Distribution
+
+### Android APK
+
+```bash
+# Setup offline mode
+cp .env.offline .env
+
+# Build release APK
+flutter build apk --release
+```
+
+Output: `build/app/outputs/flutter-apk/app-release.apk`
+
+**Full Guide:** See [QUICK_BUILD.md](QUICK_BUILD.md)
+
+### iOS (Requires Mac + Xcode)
+
+```bash
+# Setup offline mode
+cp .env.offline .env
+
+# Build for iOS
+flutter build ios --release
+open ios/Runner.xcworkspace
+```
+
+**Full Guide:** See [IOS_BUILD_GUIDE.md](IOS_BUILD_GUIDE.md)
+
+## Documentation
+
+**For Developers:**
+- [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) - Complete build process for Android & iOS
+- [IOS_BUILD_GUIDE.md](IOS_BUILD_GUIDE.md) - Detailed iOS/Mac instructions with TestFlight setup
+- [QUICK_BUILD.md](QUICK_BUILD.md) - Quick reference commands
+- [OFFLINE_MODE.md](OFFLINE_MODE.md) - How offline mode works and how to extend it
+
+**For Testers:**
+- [TESTER_GUIDE.md](TESTER_GUIDE.md) - Comprehensive testing checklist
+- [INSTALL_GUIDE.md](INSTALL_GUIDE.md) - Simple installation instructions for Android & iOS
+
+## Offline Mode
+
+The app supports full offline functionality for testing without API costs:
+
+1. **Copy offline config:** `cp .env.offline .env`
+2. **Build the app** (Android or iOS)
+3. **Share with testers** - app works completely offline
+
+All AI features use pre-written mock responses. Perfect for beta testing!
+
+**Learn more:** [OFFLINE_MODE.md](OFFLINE_MODE.md)
 
 ## Contributing
 

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../constants/theme.dart'; // Added
-import '../../models/models.dart';
-import '../../providers/language_provider.dart';
-import '../../providers/mistakes_provider.dart';
+import '../constants/theme.dart';
+import '../l10n/app_localizations.dart';
+import '../models/models.dart';
+import '../providers/mistakes_provider.dart';
 
 class MistakesScreen extends StatefulWidget {
   const MistakesScreen({super.key});
@@ -20,6 +18,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
   String selectedFilter = 'all'; // 'all', 'grammar', 'vocabulary'
 
   void _showExplanationDialog(BuildContext context, Mistake mistake) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
@@ -41,7 +40,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("WHY IS THIS WRONG?",
+                Text(l10n.grammarBreakdown,
                     style: GoogleFonts.pressStart2p(
                         fontSize: 14, color: AppTheme.retroDark)),
                 const SizedBox(height: 24),
@@ -49,7 +48,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                         border: Border.all(color: Colors.red, width: 2)),
                     child: Text(mistake.original,
                         style: GoogleFonts.spaceMono(
@@ -61,7 +60,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                         border: Border.all(color: Colors.green, width: 2)),
                     child: Text(mistake.correction,
                         style: GoogleFonts.spaceMono(
@@ -70,7 +69,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
                             color: Colors.green[900]))),
                 const Divider(
                     height: 32, thickness: 4, color: AppTheme.retroDark),
-                Text(mistake.explanation.isNotEmpty ? mistake.explanation : "No explanation available.",
+                Text(mistake.explanation.isNotEmpty ? mistake.explanation : l10n.noGrammarAnalysis,
                     style: GoogleFonts.spaceMono(fontSize: 14, height: 1.5)),
                 const SizedBox(height: 24),
                 Center(
@@ -89,7 +88,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
                               blurRadius: 0)
                         ],
                       ),
-                      child: Text("GOT IT!",
+                        child: Text(l10n.close.toUpperCase(),
                           style: GoogleFonts.pressStart2p(
                               fontSize: 12, color: AppTheme.retroDark)),
                     ),
@@ -105,7 +104,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final languageProvider = Provider.of<LanguageProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
     final mistakesProvider = Provider.of<MistakesProvider>(context);
     final validMistakes = mistakesProvider.mistakes
         .where((m) => m.type != 'style')
@@ -116,8 +115,6 @@ class _MistakesScreenState extends State<MistakesScreen> {
     final filteredMistakes = selectedFilter == 'all'
         ? validMistakes
         : validMistakes.where((m) => m.type == selectedFilter).toList();
-
-    final translations = languageProvider.getTranslations();
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -153,7 +150,7 @@ class _MistakesScreenState extends State<MistakesScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Text("MISTAKES",
+                    Text(l10n.mistakes,
                       style: GoogleFonts.pressStart2p(
                           fontSize: 20, color: AppTheme.retroDark)),
                 ],
@@ -168,13 +165,11 @@ class _MistakesScreenState extends State<MistakesScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    _buildRetroChip('all', translations['all'] ?? 'ALL'),
+                    _buildRetroChip('all', l10n.all),
                     const SizedBox(width: 12),
-                    _buildRetroChip(
-                        'grammar', translations['grammar'] ?? 'GRAMMAR'),
+                    _buildRetroChip('grammar', l10n.grammar),
                     const SizedBox(width: 12),
-                    _buildRetroChip('vocabulary',
-                        translations['vocabulary'] ?? 'VOCABULARY'),
+                    _buildRetroChip('vocabulary', l10n.vocabulary),
                   ],
                 ),
               ),
@@ -189,12 +184,12 @@ class _MistakesScreenState extends State<MistakesScreen> {
                         children: [
                           Icon(Icons.check_circle_outline,
                               size: 64,
-                              color: AppTheme.retroDark.withOpacity(0.5)),
+                              color: AppTheme.retroDark.withValues(alpha: 0.5)),
                           const SizedBox(height: 16),
                           Text(
-                            "NO MISTAKES YET!",
+                            l10n.noMistakesYet,
                             style: GoogleFonts.pressStart2p(
-                                color: AppTheme.retroDark.withOpacity(0.5),
+                                color: AppTheme.retroDark.withValues(alpha: 0.5),
                                 fontSize: 12),
                           ),
                         ],

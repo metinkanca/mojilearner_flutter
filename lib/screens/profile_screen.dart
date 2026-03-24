@@ -1,22 +1,324 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/theme.dart';
+import '../constants/progression.dart';
 import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
+import '../components/character_sprite.dart';
+import '../components/daily_rewards_dialog.dart';
+import '../l10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  void _showDailyRewardManually(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final rewardInfo = await userProvider.checkDailyReward();
+    
+    if (context.mounted) {
+      if (rewardInfo != null) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => DailyRewardsDialog(
+            rewardInfo: rewardInfo,
+            onClaim: () {
+              userProvider.claimDailyReward();
+            },
+          ),
+        );
+      } else {
+        // Show status of current week
+        _showWeeklyStatus(context, userProvider);
+      }
+    }
+  }
+
+  void _showWeeklyStatus(BuildContext context, UserProvider userProvider) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final totalClaims = userProvider.dailyRewardClaimCount;
+        final completedDayInCycle = userProvider.completedRewardCycleDay;
+        final nextDayInCycle = userProvider.nextRewardCycleDay;
+        
+        return AlertDialog(
+          backgroundColor: AppTheme.retroLight,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(color: AppTheme.retroDark, width: 4),
+          ),
+          title: Text(
+            'WEEKLY PROGRESS',
+            style: GoogleFonts.pressStart2p(fontSize: 14, color: AppTheme.retroDark),
+            textAlign: TextAlign.center,
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                
+                const SizedBox(height: 24),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.center,
+                  children: List.generate(7, (index) {
+                    final dayNum = index + 1;
+                    final isCompleted = dayNum <= completedDayInCycle && totalClaims > 0;
+                    final isToday = dayNum == nextDayInCycle;
+                    final reward = dailyRewards[index];
+                    
+                    return Container(
+                      width: 65,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isToday ? AppTheme.retroAccent.withValues(alpha: 0.3) : Colors.white,
+                        border: Border.all(
+                          color: isCompleted ? AppTheme.retroGreen : AppTheme.retroDark,
+                          width: isToday ? 3 : 2,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'DAY $dayNum',
+                            style: GoogleFonts.pressStart2p(
+                              fontSize: 6,
+                              color: isCompleted ? AppTheme.retroGreen : AppTheme.retroDark,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            isCompleted ? '✅' : _getRewardIcon(reward),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Claim once per day. Your weekly track continues where you left off.',
+                  style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark, height: 1.5),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('CLOSE', style: GoogleFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String _getRewardIcon(RewardDef reward) {
+    if (reward.type == RewardType.coins) return '🪙';
+    if (reward.itemId == 'apple') return '🍎';
+    if (reward.itemId == 'coffee') return '☕';
+    if (reward.itemId == 'pizza') return '🍕';
+    return '🎁';
+  }
+
+  void _handleTargetLanguageChange(BuildContext context, Language newLanguage) async {
+    final langProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    
+    // Update the target language
+    await langProvider.setTargetLanguage(newLanguage);
+    
+    // Check if this language has been calibrated
+    final isCalibrated = userProvider.isLanguageCalibrated(newLanguage.code);
+    
+    if (!isCalibrated && context.mounted) {
+      // Show dialog asking if they want to calibrate
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => AlertDialog(
+          backgroundColor: AppTheme.retroLight,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: const BorderSide(color: AppTheme.retroDark, width: 4),
+          ),
+          title: Text(
+            'NEW LANGUAGE!',
+            style: GoogleFonts.pressStart2p(
+              fontSize: 14,
+              color: AppTheme.retroDark,
+            ),
+          ),
+          content: Text(
+            'Let\'s calibrate your ${newLanguage.name} level!\n\nThis helps us personalize your learning experience.',
+            style: GoogleFonts.pressStart2p(
+              fontSize: 8,
+              color: AppTheme.retroDark,
+              height: 1.5,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: const BorderSide(color: AppTheme.retroDark, width: 2),
+                ),
+              ),
+              child: Text(
+                'LATER',
+                style: GoogleFonts.pressStart2p(
+                  fontSize: 8,
+                  color: AppTheme.retroDark,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                context.go('/onboarding/self-assessment');
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: AppTheme.retroPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: const BorderSide(color: AppTheme.retroDark, width: 2),
+                ),
+              ),
+              child: Text(
+                'START NOW',
+                style: GoogleFonts.pressStart2p(
+                  fontSize: 8,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  void _showResetDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppTheme.retroLight,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: const BorderSide(color: AppTheme.retroDark, width: 4),
+        ),
+        title: Text(
+          'RESET APP?',
+          style: GoogleFonts.pressStart2p(
+            fontSize: 14,
+            color: AppTheme.retroDark,
+          ),
+        ),
+        content: Text(
+          'This will delete all your progress, calibration data, and settings.\n\nYou\'ll restart from the beginning.\n\nAre you sure?',
+          style: GoogleFonts.pressStart2p(
+            fontSize: 8,
+            color: AppTheme.retroDark,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+                side: const BorderSide(color: AppTheme.retroDark, width: 2),
+              ),
+            ),
+            child: Text(
+              'CANCEL',
+              style: GoogleFonts.pressStart2p(
+                fontSize: 8,
+                color: AppTheme.retroDark,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              await _resetApp(context);
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: const Color(0xFFF44336),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+                side: const BorderSide(color: AppTheme.retroDark, width: 2),
+              ),
+            ),
+            child: Text(
+              'RESET',
+              style: GoogleFonts.pressStart2p(
+                fontSize: 8,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _resetApp(BuildContext context) async {
+    try {
+      // Clear all SharedPreferences data
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      
+      // Show feedback
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: AppTheme.retroPrimary,
+            content: Text(
+              'App reset! Restarting...',
+              style: GoogleFonts.pressStart2p(
+                fontSize: 8,
+                color: Colors.white,
+              ),
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        
+        // Wait a moment then navigate to onboarding
+        await Future.delayed(const Duration(seconds: 1));
+        
+        if (context.mounted) {
+          context.go('/onboarding/welcome');
+        }
+      }
+    } catch (e) {
+      debugPrint('Error resetting app: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // Watch language provider for updates (rebuilds when language changes)
     final langProvider = Provider.of<LanguageProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
-    // Get translated strings based on native language
-    final texts = langProvider.getTranslations();
+    final l10n = AppLocalizations.of(context)!;
 
     final stats = userProvider.stats;
     // Calculate level progress (safe division)
@@ -42,14 +344,51 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Center(
-                child: Text(
-                  (texts['profile'] ?? 'PROFILE').toUpperCase(),
-                  style: GoogleFonts.pressStart2p(
-                    fontSize: 16,
-                    color: AppTheme.retroDark,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (Navigator.of(context).canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: AppTheme.retroDark, width: 3),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppTheme.retroDark,
+                            offset: Offset(2, 2),
+                            blurRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: AppTheme.retroDark,
+                        size: 18,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        l10n.profile.toUpperCase(),
+                        style: GoogleFonts.pressStart2p(
+                          fontSize: 16,
+                          color: AppTheme.retroDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 48),
+                ],
               ),
             ),
 
@@ -82,7 +421,7 @@ class ProfileScreen extends StatelessWidget {
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: SvgPicture.asset('assets/svgs/pet.svg'),
+                            child: const CharacterSprite(width: 120, height: 120),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -131,6 +470,43 @@ class ProfileScreen extends StatelessWidget {
                              ),
                           ],
                         ),
+                        
+                        const SizedBox(height: 24),
+                        
+                        // Daily Reward Tracker Item
+                        GestureDetector(
+                          onTap: () => _showDailyRewardManually(context),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: AppTheme.retroAccent.withValues(alpha: 0.1),
+                              border: Border.all(color: AppTheme.retroDark, width: 4),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  offset: Offset(2, 2),
+                                  blurRadius: 0,
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                const Text("🎁", style: TextStyle(fontSize: 20)),
+                                const SizedBox(width: 12),
+                                Text(
+                                  "DAILY REWARDS",
+                                  style: GoogleFonts.pressStart2p(
+                                    fontSize: 10,
+                                    color: AppTheme.retroDark,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Icon(Icons.chevron_right, color: AppTheme.retroDark, size: 20),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -141,7 +517,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
                     child: Text(
-                      (texts['header'] ?? 'SETTINGS').toUpperCase(),
+                      l10n.header.toUpperCase(),
                       style: GoogleFonts.pressStart2p(
                         fontSize: 14,
                         color: Colors.white,
@@ -155,7 +531,7 @@ class ProfileScreen extends StatelessWidget {
                   
                   _buildRetroLanguageSelector(
                     context, 
-                    label: texts['iSpeak'] ?? 'I SPEAK', 
+                    label: l10n.iSpeak,
                     current: langProvider.nativeLanguage,
                     options: langProvider.availableLanguages,
                     onSelect: (lang) => langProvider.setNativeLanguage(lang),
@@ -165,14 +541,47 @@ class ProfileScreen extends StatelessWidget {
                   
                   _buildRetroLanguageSelector(
                      context, 
-                     label: texts['imLearning'] ?? "TARGET", 
+                    label: l10n.imLearning,
                      current: langProvider.targetLanguage ?? langProvider.availableLanguages[1],
                      options: langProvider.availableLanguages,
-                     onSelect: (lang) => langProvider.setTargetLanguage(lang),
+                     onSelect: (lang) => _handleTargetLanguageChange(context, lang),
                   ),
                   
-                  // Removed Streak and XP Cards as requested
-
+                  const SizedBox(height: 32),
+                  
+                  // Reset App Button
+                  GestureDetector(
+                    onTap: () => _showResetDialog(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF44336),
+                        border: Border.all(color: AppTheme.retroDark, width: 4),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppTheme.retroDark,
+                            offset: Offset(4, 4),
+                            blurRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.refresh, color: Colors.white, size: 20),
+                          const SizedBox(width: 12),
+                          Text(
+                            'RESET APP',
+                            style: GoogleFonts.pressStart2p(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  
                   const SizedBox(height: 80), // Bottom nav padding
                 ],
               ),

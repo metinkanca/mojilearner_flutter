@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
-import '../../components/ascii_face.dart';
+import '../../components/character_sprite.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -9,68 +11,134 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Spacer(),
-                        const AsciiFace(size: 48, face: '( ^_^ )'),
-                        const SizedBox(height: 32),
-                        const Text(
-                          'Welcome to MojiLearner',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.text,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Learn languages through conversation with your AI friend.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.textSecondary,
-                          ),
-                        ),
-                        const Spacer(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.primary,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            onPressed: () => context.push('/language-selection'),
-                            child: const Text(
-                              'Get Started',
-                              style: TextStyle(fontSize: 18, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                      ],
+      backgroundColor: AppTheme.retroSky,
+      body: Stack(
+        children: [
+          // Background decorations
+          Positioned(
+            top: 40,
+            left: 30,
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppTheme.retroAccent,
+                border: Border.all(width: 4, color: AppTheme.retroDark),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 100,
+            right: 40,
+            child: Container(
+              width: 64,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppTheme.retroDark, width: 4),
+              ),
+            ),
+          ),
+          
+          // Main content
+          SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 60),
+                
+                // Welcome text
+                Text(
+                  'MOJILEARNER',
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: 24,
+                    color: AppTheme.retroDark,
+                    shadows: [
+                      const Shadow(
+                        color: AppTheme.retroAccent,
+                        offset: Offset(4, 4),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 8),
+                
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    'Learn Languages with Your Pet!',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.pressStart2p(
+                      fontSize: 10,
+                      color: AppTheme.retroDark,
+                      height: 1.5,
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+                
+                const Spacer(),
+                
+                // Character preview
+                Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    border: Border.all(color: AppTheme.retroDark, width: 4),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: AppTheme.retroDark,
+                        offset: Offset(6, 6),
+                        blurRadius: 0,
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: const CharacterSprite(
+                      width: 120,
+                      height: 120,
+                    ),
+                  ),
+                ),
+                
+                const Spacer(),
+                
+                // Start button
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: GestureDetector(
+                    onTap: () => context.go('/onboarding/native-language'),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        color: AppTheme.retroPrimary,
+                        border: Border.all(color: AppTheme.retroDark, width: 4),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppTheme.retroDark,
+                            offset: Offset(4, 4),
+                            blurRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        'START',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.pressStart2p(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(height: 60),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

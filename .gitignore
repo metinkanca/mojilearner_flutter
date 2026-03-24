@@ -48,3 +48,45 @@ app.*.map.json
 # Environment Variables
 .env
 *.env
+.env.*
+
+# Firebase secrets
+google-services.json
+GoogleService-Info.plist
+
+# Signing / Key files
+*.p12
+*.jks
+*.keystore
+*.key
+*.pem
+
+# Agent Skills/Local Reports (Security blueprint)
+.agent/
+.claude/
+SECURITY_AGENT_PLAN.md
+SECURITY_GUIDE.md
+TEST_PLAN_V1.md
+FINAL_TEST_REPORT.md
+EXECUTIVE_SUMMARY.md
+test/security/
+test/unit/
+test/mocks/
+test/helpers/
+test/widget/
+integration_test/
+test_driver/
+test/AGENT_*_INSTRUCTIONS.md
+test/AGENT_*_COMPLETION.md
+test/TESTING_*_PLAN.md
+test/HOMESCREEN_FIX_REPORT.md
+test/README.md
+
+# Build Instructions (Optional security)
+BUILD_INSTRUCTIONS.md
+INSTALL_GUIDE.md
+IOS_BUILD_GUIDE.md
+IOS_WHICH_METHOD.md
+OFFLINE_MODE.md
+QUICK_BUILD.md
+TESTER_GUIDE.md

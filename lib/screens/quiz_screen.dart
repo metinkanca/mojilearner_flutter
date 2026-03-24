@@ -4,9 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/theme.dart';
+import '../components/character_sprite.dart';
+import '../components/quiz_rewards_popup.dart';
 import '../providers/user_provider.dart';
 import '../providers/quiz_provider.dart';
 import '../providers/character_provider.dart';
+import '../utils/progression_utils.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -72,8 +75,7 @@ class _QuizScreenState extends State<QuizScreen> {
           _currentQuestionIndex = quizProvider.savedQuestionIndex ?? 0;
           _score = quizProvider.savedScore ?? 0;
         });
-        // Clear saved progress once loaded so we don't reload it if they finish properly
-        quizProvider.clearProgress(); 
+        // Don't clear progress here - it will be cleared when quiz is completed or explicitly exited
       }
     });
   }
@@ -88,40 +90,55 @@ class _QuizScreenState extends State<QuizScreen> {
         _score++;
       }
     });
+  }
 
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
+  Future<void> _goToNextQuestion() async {
+    if (_currentQuestionIndex == _questions.length - 1) {
+      // Last question - show rewards popup
+      final quizProvider = Provider.of<QuizProvider>(context, listen: false);
+      final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      final reward = ProgressionUtils.getQuizRewardOutcome(
+        correctAnswers: _score,
+        totalQuestions: _questions.length,
+      );
+
+      characterProvider.applyQuizRewards(
+        happinessDelta: reward.happinessDelta,
+        hungerDelta: reward.hungerDelta,
+      );
+      await userProvider.addXp(reward.xpReward);
       
-      if (_currentQuestionIndex < _questions.length - 1) {
-        setState(() {
-          _currentQuestionIndex++;
-          _showExplanation = false;
-          _selectedAnswer = null;
-        });
-      } else {
-        // Quiz Finished
-        final quizProvider = Provider.of<QuizProvider>(context, listen: false);
-        final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        
-        final passed = _score >= (_questions.length * 0.6); // 60% pass rate
-        characterProvider.rewardQuiz(passed);
-        
-        // Award XP
-        if (passed) {
-          userProvider.addXp(25); // 25 XP for passing quiz
-        } else {
-          userProvider.addXp(10); // 10 XP for attempting quiz
-        }
-        
-        quizProvider.clearProgress();
-        context.go('/result', extra: {
-           'score': _score, 
-           'totalQuestions': _questions.length,
-           'level': 'A1' // Dynamic later
-        }); 
-      }
-    });
+      quizProvider.clearProgress();
+
+      if (!mounted) return;
+
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        builder: (_) => QuizRewardsPopup(
+          score: _score,
+          totalQuestions: _questions.length,
+          level: reward.level,
+          xpReward: reward.xpReward,
+          happinessDelta: reward.happinessDelta,
+          hungerDelta: reward.hungerDelta,
+          passed: reward.passed,
+          onContinue: () => Navigator.of(context, rootNavigator: true).pop(),
+        ),
+      );
+
+      if (!mounted) return;
+      context.go('/');
+    } else {
+      setState(() {
+        _showExplanation = false;
+        _selectedAnswer = null;
+        _currentQuestionIndex++;
+      });
+    }
   }
 
   Widget _pixel(Color color) {
@@ -328,11 +345,12 @@ class _QuizScreenState extends State<QuizScreen> {
                                                   // Pause Button
                                                   GestureDetector(
                                                     onTap: () async {
+                                                      // Save current progress and exit to home
                                                       final quizProvider = Provider.of<QuizProvider>(context, listen: false);
                                                       await quizProvider.saveProgress(_currentQuestionIndex, _score);
                                                       if (context.mounted) {
                                                         Navigator.pop(context); // Close dialog
-                                                        context.go('/'); // Go home
+                                                        context.go('/'); // Go home - progress will be restored next time
                                                       }
                                                     },
                                                     child: Container(
@@ -412,6 +430,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                         fontSize: 10,
                                         height: 1.8,
                                         color: Colors.grey[600],
+                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                     const SizedBox(height: 16),
@@ -422,6 +441,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                         fontSize: 20,
                                         height: 1.4,
                                         color: AppTheme.retroDark,
+                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                   ],
@@ -455,17 +475,17 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
 
                         // Spacer to push content down gently, but collapses on small screens
-                        const Spacer(flex: 1),
+                        const SizedBox(height: 12),
 
                         // Options Grid
                         // Options Grid (Custom Wrap/Column to avoid ShrinkWrappingViewport issues)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                           child: Column(
                             children: [
                               for (int i = 0; i < options.length; i += 2)
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  padding: const EdgeInsets.only(bottom: 12.0),
                                   child: Row(
                                     children: [
                                       Expanded(child: _buildOption(options[i], questionData)),
@@ -482,19 +502,19 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                         
                         // Spacer pushes the Pet to the bottom
-                        const Spacer(flex: 2),
+                        const SizedBox(height: 24),
 
                         // Character & Speech Bubble
                         Padding(
-                          padding: const EdgeInsets.only(right: 24, bottom: 24),
+                          padding: const EdgeInsets.only(right: 24, bottom: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                                // Speech Bubble
                                Container(
                                  padding: const EdgeInsets.all(12),
-                                 margin: const EdgeInsets.only(bottom: 60, right: 8), 
+                                 margin: const EdgeInsets.only(right: 8), 
                                  constraints: const BoxConstraints(maxWidth: 180),
                                  decoration: BoxDecoration(
                                    color: Colors.white,
@@ -507,14 +527,45 @@ class _QuizScreenState extends State<QuizScreen> {
                                  ),
                                ),
                                // Pet Avatar
-                               SvgPicture.asset(
-                                'assets/svgs/pet.svg',
+                               const CharacterSprite(
                                 width: 96,
                                 height: 96,
                                ),
                             ],
                           ),
                         ),
+
+                        // Continue Button (appears after answer is selected)
+                        if (_showExplanation)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: GestureDetector(
+                              onTap: _goToNextQuestion,
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.retroPrimary,
+                                  border: Border.all(color: AppTheme.retroDark, width: 4),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: AppTheme.retroDark,
+                                      offset: Offset(4, 4),
+                                      blurRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  'CONTINUE',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.pressStart2p(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -534,7 +585,7 @@ class _QuizScreenState extends State<QuizScreen> {
     
     if (_showExplanation) {
       if (isCorrect) bgColor = AppTheme.retroGrass;
-      else if (isSelected) bgColor = Colors.grey.shade300;
+      else if (isSelected) bgColor = AppTheme.retroPrimary;
     }
 
     return GestureDetector(

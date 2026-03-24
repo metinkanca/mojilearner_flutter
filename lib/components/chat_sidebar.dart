@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import '../models/models.dart';
-import '../providers/language_provider.dart';
 import '../constants/theme.dart';
+import '../l10n/app_localizations.dart';
 
 class ChatSidebar extends StatelessWidget {
   final List<Chat> chats;
   final VoidCallback onClose;
+  final VoidCallback onStartNewChat;
   final Function(String) onSelectChat;
   final String? activeChatId;
 
@@ -16,14 +15,14 @@ class ChatSidebar extends StatelessWidget {
     super.key,
     required this.chats,
     required this.onClose,
+    required this.onStartNewChat,
     required this.onSelectChat,
     this.activeChatId,
   });
 
   @override
   Widget build(BuildContext context) {
-    final languageProvider = Provider.of<LanguageProvider>(context);
-    final translations = languageProvider.getTranslations();
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       width: 300,
@@ -45,7 +44,7 @@ class ChatSidebar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  (translations['chats'] ?? 'CHATS').toUpperCase(),
+                  l10n.chats.toUpperCase(),
                   style: GoogleFonts.pressStart2p(
                     fontSize: 14,
                     color: Colors.white,
@@ -82,7 +81,7 @@ class ChatSidebar extends StatelessWidget {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: (translations['searchPlaceholder'] ?? 'SEARCH...').toUpperCase(),
+                  hintText: l10n.searchPlaceholder.toUpperCase(),
                   hintStyle: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.grey),
                   prefixIcon: const Icon(Icons.search, size: 16, color: AppTheme.retroDark),
                   border: InputBorder.none,
@@ -100,7 +99,7 @@ class ChatSidebar extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 onClose();
-                context.pushNamed('new_chat');
+                Future.delayed(const Duration(milliseconds: 180), onStartNewChat);
               },
               child: Container(
                 width: double.infinity,
@@ -118,7 +117,7 @@ class ChatSidebar extends StatelessWidget {
                     const Icon(Icons.add, size: 16, color: AppTheme.retroDark),
                     const SizedBox(width: 8),
                     Text(
-                      (translations['newChat'] ?? 'NEW CHAT').toUpperCase(),
+                      l10n.newChat.toUpperCase(),
                       style: GoogleFonts.pressStart2p(
                         fontSize: 10, 
                         color: AppTheme.retroDark
@@ -144,7 +143,7 @@ class ChatSidebar extends StatelessWidget {
                             size: 32, color: AppTheme.retroDark),
                         const SizedBox(height: 16),
                         Text(
-                          (translations['noChats'] ?? 'NO CHATS YET').toUpperCase(),
+                          l10n.noChats.toUpperCase(),
                           textAlign: TextAlign.center,
                           style: GoogleFonts.pressStart2p(
                             color: AppTheme.retroDark,

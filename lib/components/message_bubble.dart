@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constants/theme.dart';
-import '../providers/language_provider.dart';
+import '../components/character_sprite.dart';
+import '../l10n/app_localizations.dart';
 
 class MessageBubble extends StatefulWidget {
   final String text;
@@ -27,22 +26,21 @@ class _MessageBubbleState extends State<MessageBubble> {
   bool _showTranslation = false;
 
   void _showGrammar(BuildContext context) {
-    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-    final translations = languageProvider.getTranslations();
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(), // Square dialog
-        title: Text(translations['grammarBreakdown'] ?? "Grammar Breakdown", style: GoogleFonts.pressStart2p(color: AppTheme.retroPrimary, fontSize: 12)),
+        title: Text(l10n.grammarBreakdown, style: GoogleFonts.pressStart2p(color: AppTheme.retroPrimary, fontSize: 12)),
         content: SingleChildScrollView(
-          child: Text(widget.grammarAnalysis ?? translations['noGrammarAnalysis'] ?? "No grammar analysis available.", style: GoogleFonts.pressStart2p(fontSize: 10, height: 1.5, color: AppTheme.retroDark)),
+          child: Text(widget.grammarAnalysis ?? l10n.noGrammarAnalysis, style: GoogleFonts.pressStart2p(fontSize: 10, height: 1.5, color: AppTheme.retroDark)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(translations['close'] ?? "Close", style: GoogleFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 10)),
+            child: Text(l10n.close, style: GoogleFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 10)),
           ),
         ],
       ),
@@ -71,7 +69,10 @@ class _MessageBubbleState extends State<MessageBubble> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
-                child: SvgPicture.asset('assets/svgs/pet.svg', fit: BoxFit.contain),
+                child: const CharacterSprite(
+                  width: 36,
+                  height: 36,
+                ),
               ), 
             ),
             const SizedBox(width: 12),
