@@ -66,3 +66,21 @@ const List<RewardDef> levelRewards = [
   // MILESTONE Level 20
   RewardDef(level: 20, type: RewardType.unlock, value: 0, description: 'Galaxy Purple + 1000 gold', itemId: 'bg_galaxy'),
 ];
+
+/// Daily rewards schedule (cycles every 7 days with bonuses)
+const List<RewardDef> dailyRewards = [
+  // Day 1: Small welcome back
+  RewardDef(level: 1, type: RewardType.coins, value: 50, description: 'Day 1: 50 coins'),
+  // Day 2: Slightly better
+  RewardDef(level: 2, type: RewardType.coins, value: 75, description: 'Day 2: 75 coins'),
+  // Day 3: Food item
+  RewardDef(level: 3, type: RewardType.item, value: 1, description: 'Day 3: Apple', itemId: 'apple'),
+  // Day 4: More coins
+  RewardDef(level: 4, type: RewardType.coins, value: 100, description: 'Day 4: 100 coins'),
+  // Day 5: Coffee boost
+  RewardDef(level: 5, type: RewardType.item, value: 2, description: 'Day 5: Coffee x2', itemId: 'coffee'),
+  // Day 6: Big coin reward
+  RewardDef(level: 6, type: RewardType.coins, value: 150, description: 'Day 6: 150 coins'),
+  // Day 7: Special weekly reward
+  RewardDef(level: 7, type: RewardType.item, value: 1, description: 'Day 7: Pizza!', itemId: 'pizza'),
+];

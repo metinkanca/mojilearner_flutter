@@ -21,6 +21,8 @@ class CharacterProvider extends ChangeNotifier {
   StreamSubscription<RewardDef>? _rewardSubscription;
 
   CharacterCustomization get customization => _customization;
+  String get currentCharacterType => _customization.characterType;
+  String get currentCharacterAsset => 'assets/svgs/${_customization.characterType}.svg';
   Set<String> get unlockedItems => _unlockedItems;
   List<String> get inventory => _inventory;
   
@@ -102,6 +104,18 @@ class CharacterProvider extends ChangeNotifier {
       _inventory.clear();
       _inventory.addAll(inv);
     }
+
+    final savedCharacterType = prefs.getString('character_type') ?? 'cat';
+    _customization = CharacterCustomization(
+      characterType: {'dog', 'cat', 'bird'}.contains(savedCharacterType)
+          ? savedCharacterType
+          : 'cat',
+      openFace: _customization.openFace,
+      closedFace: _customization.closedFace,
+      color: _customization.color,
+      backgroundColor: _customization.backgroundColor,
+    );
+
     notifyListeners();
   }
 
@@ -111,6 +125,7 @@ class CharacterProvider extends ChangeNotifier {
     await prefs.setInt('pet_happiness', _happiness);
     await prefs.setInt('pet_health', _health);
     await prefs.setInt('pet_last_update', _lastUpdate.millisecondsSinceEpoch);
+    await prefs.setString('character_type', _customization.characterType);
     // persist unlocked items and inventory
     await prefs.setStringList('unlocked_items', _unlockedItems.toList());
     await prefs.setStringList('inventory', _inventory);
@@ -145,13 +160,12 @@ class CharacterProvider extends ChangeNotifier {
     final elapsed = now.difference(_lastUpdate);
     
     if (elapsed.inMinutes >= 1) {
-      _hunger = (_hunger + 1).clamp(0, 100);
+      // Every 1 minute = 1/60th of an hour
+      final hourFraction = 1 / 60.0;
+      _hunger = ((_hunger + 3 * hourFraction).round()).clamp(0, 100);
+      _happiness = ((_happiness - 2 * hourFraction).round()).clamp(0, 100);
       
-      if (_hunger > 80) {
-        _happiness = (_happiness - 1).clamp(0, 100);
-      }
-      
-      if (_hunger > 90 || _happiness < 10) {
+      if (_hunger > 80 || _happiness < 20) {
         _health = (_health - 1).clamp(0, 100);
       }
       
@@ -189,6 +203,16 @@ class CharacterProvider extends ChangeNotifier {
       _happiness = (_happiness - 5).clamp(0, 100);
     }
     _hunger = (_hunger + 10).clamp(0, 100);
+    _savePetState();
+    notifyListeners();
+  }
+
+  void applyQuizRewards({
+    required int happinessDelta,
+    required int hungerDelta,
+  }) {
+    _happiness = (_happiness + happinessDelta).clamp(0, 100);
+    _hunger = (_hunger + hungerDelta).clamp(0, 100);
     _savePetState();
     notifyListeners();
   }
@@ -232,14 +256,26 @@ class CharacterProvider extends ChangeNotifier {
       case 'confusion':
          return Faces.confused.first.open;
       default:
-        // Use the selected closed face for idle sometimes? 
-        // For now just return open face or strictly idle if we had one
-        return _customization.openFace;
+        // Check mood before returning customization face
+        switch (mood) {
+          case 'sick':
+            return Faces.confused.first.open;
+          case 'starving':
+            return Faces.sad.first.open;
+          case 'sad':
+            return Faces.sad.first.open;
+          case 'happy':
+            return Faces.happy.first.open;
+          case 'neutral':
+          default:
+            return _customization.openFace;
+        }
     }
   }
 
   void updateFace(String openFace, {String? closedFace}) {
     _customization = CharacterCustomization(
+      characterType: _customization.characterType,
       openFace: openFace,
       closedFace: closedFace ?? _customization.closedFace,
       color: _customization.color,
@@ -250,6 +286,7 @@ class CharacterProvider extends ChangeNotifier {
 
   void updateColor(String color) {
     _customization = CharacterCustomization(
+      characterType: _customization.characterType,
       openFace: _customization.openFace,
       closedFace: _customization.closedFace,
       color: color,
@@ -260,11 +297,29 @@ class CharacterProvider extends ChangeNotifier {
 
   void updateBackgroundColor(String color) {
     _customization = CharacterCustomization(
+      characterType: _customization.characterType,
       openFace: _customization.openFace,
       closedFace: _customization.closedFace,
       color: _customization.color,
       backgroundColor: color,
     );
+    notifyListeners();
+  }
+
+  Future<void> updateCharacterType(String type) async {
+    const validTypes = {'dog', 'cat', 'bird'};
+    if (!validTypes.contains(type)) return;
+
+    if (_customization.characterType == type) return;
+
+    _customization = CharacterCustomization(
+      characterType: type,
+      openFace: _customization.openFace,
+      closedFace: _customization.closedFace,
+      color: _customization.color,
+      backgroundColor: _customization.backgroundColor,
+    );
+    await _savePetState();
     notifyListeners();
   }
 
