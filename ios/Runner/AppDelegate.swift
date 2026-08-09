@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import UserNotifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -8,6 +9,11 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    // Required by flutter_local_notifications so scheduled reminders are
+    // delivered while the app is in the foreground on iOS 10+.
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

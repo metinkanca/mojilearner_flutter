@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Local reminders (pet care, reviews, daily reward).
+         POST_NOTIFICATIONS is required from Android 13; the others let a
+         scheduled reminder survive a reboot. Notably absent:
+         SCHEDULE_EXACT_ALARM — nothing here is time-critical, and inexact
+         scheduling avoids a permission reviewers question. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:label="mojilearner_flutter"
         android:name="${applicationName}"
@@ -25,6 +33,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Reschedules pending reminders after a reboot; without it every
+             scheduled notification is silently dropped on restart. -->
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

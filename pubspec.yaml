@@ -42,6 +42,13 @@ dependencies:
   google_generative_ai: ^0.4.7
   flutter_svg: ^2.2.3
 
+  # Local reminders (pet care, reviews, daily reward).
+  # timezone + flutter_timezone let a reminder keep meaning "8am local"
+  # after the player changes time zone.
+  flutter_local_notifications: ^22.2.0
+  timezone: ^0.11.1
+  flutter_timezone: ^5.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,10 +62,39 @@ flutter:
   generate: true
   
   assets:
-    - .env
     - assets/svgs/
   
   fonts:
     - family: PressStart2P
       fonts:
         - asset: assets/fonts/PressStart2P-Regular.ttf
+    - family: PixelAEArabic
+      fonts:
+        - asset: assets/fonts/pixelae/PixelAE-Regular.ttf
+    - family: SraPixelSmall
+      fonts:
+        - asset: assets/fonts/sra/PixelSmall.ttf
+    - family: SraPixelMiddle
+      fonts:
+        - asset: assets/fonts/sra/PixelMiddle.ttf
+    - family: SraPixelHigh
+      fonts:
+        - asset: assets/fonts/sra/PixelHigh.ttf
+    - family: ArkPixelJa
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-16px-proportional-ja.ttf
+    - family: ArkPixelKo
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-16px-proportional-ko.ttf
+    - family: ArkPixelZhCn
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_cn.ttf
+    - family: ArkPixelZhHk
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_hk.ttf
+    - family: ArkPixelZhTw
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_tw.ttf
+    - family: ArkPixelZhTr
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_tr.ttf
