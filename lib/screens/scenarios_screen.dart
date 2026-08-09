@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:provider/provider.dart';
+import '../constants/scenarios.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
+import '../providers/scenario_provider.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class ScenariosScreen extends StatelessWidget {
   const ScenariosScreen({super.key});
@@ -11,15 +14,10 @@ class ScenariosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
 
-    final scenarios = [
-      {'id': 'coffee', 'icon': LucideIcons.coffee, 'title': l10n.orderingCoffee, 'level': l10n.beginner},
-      {'id': 'job_interview', 'icon': LucideIcons.briefcase, 'title': l10n.jobInterview, 'level': l10n.advanced},
-      {'id': 'directions', 'icon': LucideIcons.map, 'title': l10n.askingDirections, 'level': l10n.beginner},
-      {'id': 'doctor', 'icon': LucideIcons.stethoscope, 'title': l10n.atTheDoctor, 'level': l10n.intermediate},
-      {'id': 'shopping', 'icon': LucideIcons.store, 'title': l10n.shopping, 'level': l10n.beginner},
-      {'id': 'restaurant', 'icon': LucideIcons.utensils, 'title': l10n.restaurant, 'level': l10n.intermediate},
-    ];
+    const scenarios = ScenarioCatalog.all;
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -41,17 +39,50 @@ class ScenariosScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              // This screen owns its back button (see NavigationWrapper, which
+              // suppresses its floating one for /scenarios).
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: AppTheme.retroDark, size: 28),
-                    onPressed: () => context.pop(),
+                  // GestureDetector rather than IconButton: no ink ripple, and
+                  // this screen is reached via `go` (which leaves nothing to
+                  // pop), so fall back to home.
+                  GestureDetector(
+                    onTap: () {
+                      if (Navigator.of(context).canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: AppTheme.retroDark, width: 3),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppTheme.retroDark,
+                            offset: Offset(2, 2),
+                            blurRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: AppTheme.retroDark,
+                        size: 18,
+                      ),
+                    ),
                   ),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Center(
                       child: Text(
                         l10n.scenarios.toUpperCase(),
-                        style: GoogleFonts.pressStart2p(
+                        textDirection: textDirection,
+                        textAlign: TextAlign.center,
+                        style: AppFonts.pressStart2p(
                           fontSize: 16,
                           color: AppTheme.retroDark,
                         ),
@@ -72,157 +103,6 @@ class ScenariosScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Hero Section ("Practice Real Life")
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppTheme.retroPrimary,
-                        border: Border.all(color: AppTheme.retroDark, width: 4),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: AppTheme.retroDark,
-                            offset: Offset(4, 4),
-                            blurRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: AppTheme.retroDark, width: 3),
-                            ),
-                            child: const Center(
-                              child: Icon(Icons.theater_comedy, color: AppTheme.retroDark, size: 28),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            l10n.practiceRealLife,
-                            style: GoogleFonts.pressStart2p(
-                              fontSize: 16,
-                              color: Colors.white,
-                              height: 1.5,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            l10n.chooseSituation,
-                            style: GoogleFonts.spaceMono(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-                    
-                    Text(
-                      l10n.createYourOwn,
-                      style: GoogleFonts.pressStart2p(
-                        fontSize: 14,
-                        color: Colors.white,
-                        shadows: [
-                             const Shadow(color: AppTheme.retroDark, offset: Offset(2, 2)),
-                        ]
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // "Create Custom" Card
-                    GestureDetector(
-                      onTap: () {
-                        context.pushNamed(
-                          'chat',
-                          pathParameters: {'chatId': 'new_custom'},
-                          extra: {'isScenario': true}
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppTheme.retroLight,
-                          border: Border.all(color: AppTheme.retroDark, width: 4),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: AppTheme.retroDark,
-                              offset: Offset(4, 4),
-                              blurRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: AppTheme.retroAccent,
-                                border: Border.all(color: AppTheme.retroDark, width: 3),
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.add, color: AppTheme.retroDark),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    l10n.startCustom,
-                                    style: GoogleFonts.pressStart2p(
-                                      fontSize: 12,
-                                      color: AppTheme.retroDark,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    l10n.customPlaceholder,
-                                    style: GoogleFonts.spaceMono(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppTheme.retroDark.withValues(alpha: 0.7),
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-                    
-                    Text(
-                      'POPULAR',
-                      style: GoogleFonts.pressStart2p(
-                        fontSize: 14,
-                        color: Colors.white,
-                        shadows: [
-                             const Shadow(color: AppTheme.retroDark, offset: Offset(2, 2)),
-                        ]
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
                     // Grid Layout
                     GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
@@ -240,12 +120,25 @@ class ScenariosScreen extends StatelessWidget {
                         final cardColor = index % 2 == 0 ? Colors.white : AppTheme.retroLight;
                         final iconBgColor = index % 3 == 0 ? AppTheme.retroGrass : (index % 3 == 1 ? AppTheme.retroSkyLight : AppTheme.retroOrange);
 
+                        // Progress is read per card so the grid answers "what
+                        // have I actually done here" at a glance.
+                        final scenarioProvider =
+                            context.watch<ScenarioProvider>();
+                        final done =
+                            scenarioProvider.clearedRequiredCount(scene);
+                        final everCleared =
+                            scenarioProvider.hasEverCompleted(scene.id);
+
                         return GestureDetector(
                           onTap: () {
                             context.pushNamed(
                               'chat',
-                              pathParameters: {'chatId': 'new_${scene['id']}'},
-                              extra: {'scenario': scene['title'], 'isScenario': true}
+                              pathParameters: {'chatId': 'new_${scene.id}'},
+                              extra: {
+                                'scenario': scene.title(l10n),
+                                'scenarioId': scene.id,
+                                'isScenario': true,
+                              },
                             );
                           },
                           child: Container(
@@ -270,13 +163,14 @@ class ScenariosScreen extends StatelessWidget {
                                     color: iconBgColor,
                                     border: Border.all(color: AppTheme.retroDark, width: 3),
                                   ),
-                                  child: Icon(scene['icon'] as IconData, color: AppTheme.retroDark, size: 24),
+                                  child: Icon(scene.icon, color: AppTheme.retroDark, size: 24),
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  (scene['title'] as String).toUpperCase(),
+                                  scene.title(l10n).toUpperCase(),
+                                  textDirection: textDirection,
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.pressStart2p(
+                                  style: AppFonts.pressStart2p(
                                     fontSize: 10,
                                     color: AppTheme.retroDark,
                                     height: 1.4,
@@ -284,18 +178,36 @@ class ScenariosScreen extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 10),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                                  decoration: const BoxDecoration(
-                                    color: AppTheme.retroDark,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: everCleared
+                                        ? AppTheme.retroGrass
+                                        : Colors.white,
+                                    border: Border.all(
+                                        color: AppTheme.retroDark, width: 2),
                                   ),
                                   child: Text(
-                                    (scene['level'] as String).toUpperCase(),
-                                    style: GoogleFonts.pressStart2p(
-                                      fontSize: 6,
-                                      color: Colors.white,
+                                    // A cleared scenario keeps showing its
+                                    // in-progress count once replayed, so the
+                                    // stamp and the tally are both useful.
+                                    everCleared && done == 0
+                                        ? l10n.scenarioCleared.toUpperCase()
+                                        : l10n.scenarioProgress(
+                                            done, scene.requiredCount),
+                                    textDirection: everCleared && done == 0
+                                        ? textDirection
+                                        : TextDirection.ltr,
+                                    textAlign: TextAlign.center,
+                                    style: AppFonts.pressStart2p(
+                                      fontSize: 7,
+                                      color: AppTheme.retroDark,
+                                      fontWeight: FontWeight.bold,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
