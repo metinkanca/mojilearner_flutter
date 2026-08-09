@@ -1,37 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/app_localizations.dart';
+import '../components/character_sprite.dart';
 import '../providers/character_provider.dart';
 import '../providers/settings_provider.dart';
 import '../constants/theme.dart';
+import '../utils/fonts.dart';
+import '../utils/rtl_locale.dart';
+
+/// The shared subset of the two retro font helpers (pixel / mono), so a chosen
+/// font can be passed to the colour-picker helpers.
+typedef _FontFn = TextStyle Function({
+  double? fontSize,
+  FontWeight? fontWeight,
+  Color? color,
+  double? letterSpacing,
+});
 
 class DesignMojiScreen extends StatelessWidget {
   const DesignMojiScreen({super.key});
 
   static const _characters = <Map<String, String>>[
-    {'type': 'dog', 'label': 'DOG', 'asset': 'assets/svgs/dog.svg'},
-    {'type': 'cat', 'label': 'CAT', 'asset': 'assets/svgs/cat.svg'},
-    {'type': 'bird', 'label': 'BIRD', 'asset': 'assets/svgs/bird.svg'},
+    {'type': 'dog', 'asset': 'assets/svgs/dog.svg'},
+    {'type': 'cat', 'asset': 'assets/svgs/cat.svg'},
+    {'type': 'bird', 'asset': 'assets/svgs/bird.svg'},
   ];
+
+  String _characterLabelForType(AppLocalizations l10n, String type) {
+    switch (type) {
+      case 'dog':
+        return l10n.characterDog;
+      case 'cat':
+        return l10n.characterCat;
+      case 'bird':
+        return l10n.characterBird;
+      default:
+        return type;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final characterProvider = Provider.of<CharacterProvider>(context);
     final settingsProvider = Provider.of<SettingsProvider>(context);
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
-    final fontFunction = settingsProvider.usePixelFont
-        ? GoogleFonts.pressStart2p
-        : GoogleFonts.spaceMono;
+    final _FontFn fontFunction = settingsProvider.usePixelFont
+      ? AppFonts.pressStart2p
+      : AppFonts.spaceMono;
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
       appBar: AppBar(
         title: Text(
           l10n.designMoji.toUpperCase(),
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
           style: fontFunction(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -60,8 +89,39 @@ class DesignMojiScreen extends StatelessWidget {
                 color: AppTheme.retroDark, size: 20),
             onPressed: () => context.pop(),
             padding: EdgeInsets.zero,
+            // No round ink ripple inside the square retro frame.
+            style: const ButtonStyle(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            ),
           ),
         ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: AppTheme.retroDark, width: 3),
+              boxShadow: const [
+                BoxShadow(
+                  color: AppTheme.retroDark,
+                  offset: Offset(2, 2),
+                  blurRadius: 0,
+                )
+              ],
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.checkroom,
+                  color: AppTheme.retroDark, size: 20),
+              tooltip: 'Wardrobe',
+              onPressed: () => context.pushNamed('wardrobe'),
+              padding: EdgeInsets.zero,
+              // No round ink ripple inside the square retro frame.
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -70,7 +130,8 @@ class DesignMojiScreen extends StatelessWidget {
             final previewSize = (constraints.maxWidth * 0.68).clamp(150.0, 260.0);
             final previewFrameHeight = (previewSize + 28).clamp(190.0, 300.0);
 
-            return Column(
+            return SingleChildScrollView(
+              child: Column(
               children: [
                 Container(
                   width: double.infinity,
@@ -91,15 +152,16 @@ class DesignMojiScreen extends StatelessWidget {
                       SizedBox(
                         width: previewSize,
                         height: previewFrameHeight,
-                        child: SvgPicture.asset(
-                          characterProvider.currentCharacterAsset,
+                        child: CharacterSprite(
+                          width: previewSize,
+                          height: previewFrameHeight,
                           fit: BoxFit.contain,
-                          alignment: Alignment.bottomCenter,
                         ),
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'SELECT YOUR CHARACTER',
+                        l10n.selectYourCharacter.toUpperCase(),
+                        textDirection: textDirection,
                         textAlign: TextAlign.center,
                         style: fontFunction(
                           fontSize: 10,
@@ -111,8 +173,9 @@ class DesignMojiScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Expanded(
-                  child: GridView.builder(
+                GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _characters.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -123,7 +186,7 @@ class DesignMojiScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final character = _characters[index];
                       final type = character['type']!;
-                      final label = character['label']!;
+                      final label = _characterLabelForType(l10n, type);
                       final asset = character['asset']!;
                       final isSelected = characterProvider.currentCharacterType == type;
 
@@ -171,6 +234,8 @@ class DesignMojiScreen extends StatelessWidget {
                                   const SizedBox(height: 6),
                                   Text(
                                     label,
+                                    textDirection: textDirection,
+                                    textAlign: textAlign,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: fontFunction(
@@ -187,8 +252,9 @@ class DesignMojiScreen extends StatelessWidget {
                       );
                     },
                   ),
-                ),
+                const SizedBox(height: 24),
               ],
+            ),
             );
           },
         ),
