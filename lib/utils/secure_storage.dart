@@ -17,6 +17,7 @@
 /// ```
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
@@ -53,7 +54,7 @@ class SecureStorage {
       final jsonString = json.encode(value);
       _memoryStore[key] = jsonString;
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to save $key - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to save $key - $e');
       rethrow;
     }
   }
@@ -71,7 +72,7 @@ class SecureStorage {
       if (jsonString == null) return null;
       return json.decode(jsonString) as T;
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to read $key - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to read $key - $e');
       return null;
     }
   }
@@ -85,7 +86,7 @@ class SecureStorage {
     } on MissingPluginException {
       _memoryStore[key] = value;
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to save string $key - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to save string $key - $e');
       rethrow;
     }
   }
@@ -99,7 +100,7 @@ class SecureStorage {
     } on MissingPluginException {
       return _memoryStore[key];
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to read string $key - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to read string $key - $e');
       return null;
     }
   }
@@ -111,7 +112,7 @@ class SecureStorage {
     } on MissingPluginException {
       _memoryStore.remove(key);
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to delete $key - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to delete $key - $e');
       rethrow;
     }
   }
@@ -124,7 +125,7 @@ class SecureStorage {
     } on MissingPluginException {
       return _memoryStore.containsKey(key);
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to check key $key - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to check key $key - $e');
       return false;
     }
   }
@@ -138,7 +139,7 @@ class SecureStorage {
     } on MissingPluginException {
       _memoryStore.clear();
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to delete all - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to delete all - $e');
       rethrow;
     }
   }
@@ -153,7 +154,7 @@ class SecureStorage {
     } on MissingPluginException {
       return _memoryStore.keys.toList();
     } catch (e) {
-      print('⚠️ SECURE STORAGE: Failed to get all keys - $e');
+      debugPrint('⚠️ SECURE STORAGE: Failed to get all keys - $e');
       return [];
     }
   }
@@ -202,6 +203,35 @@ class SecureStorage {
         .toList();
   }
 
+  /// Save spaced-repetition review items (encrypted)
+  static Future<void> saveReviewItems(List<Map<String, dynamic>> items) async {
+    await saveEncrypted('review_items', items);
+  }
+
+  /// Read spaced-repetition review items (encrypted)
+  static Future<List<Map<String, dynamic>>?> readReviewItems() async {
+    final data = await readEncrypted<List>('review_items');
+    if (data == null) return null;
+    return data
+        .map((item) => Map<String, dynamic>.from(item as Map))
+        .toList();
+  }
+
+  /// Save scenario quest progress (encrypted)
+  static Future<void> saveScenarioProgress(
+      List<Map<String, dynamic>> entries) async {
+    await saveEncrypted('scenario_progress', entries);
+  }
+
+  /// Read scenario quest progress (encrypted)
+  static Future<List<Map<String, dynamic>>?> readScenarioProgress() async {
+    final data = await readEncrypted<List>('scenario_progress');
+    if (data == null) return null;
+    return data
+        .map((entry) => Map<String, dynamic>.from(entry as Map))
+        .toList();
+  }
+
   /// Save assessment conversation (encrypted)
   static Future<void> saveAssessmentConversation(String languageCode, List<Map<String, dynamic>> conversation) async {
     await saveEncrypted('assessment_$languageCode', conversation);
@@ -216,25 +246,6 @@ class SecureStorage {
         .toList();
   }
 
-  // ===== Migration Helper =====
-
-  /// Migrate data from SharedPreferences to SecureStorage
-  /// 
-  /// Use this in app startup to migrate sensitive data
-  /// ```dart
-  /// final prefs = await SharedPreferences.getInstance();
-  /// await SecureStorage.migrateFromSharedPreferences('chats_json', prefs);
-  /// ```
-  static Future<void> migrateFromSharedPreferences(String key, dynamic sharedPrefsInstance) async {
-    try {
-      // This is a placeholder - actual implementation would read from SharedPreferences
-      // and save to SecureStorage, then delete from SharedPreferences
-      print('🔄 MIGRATION: Migrating $key to encrypted storage');
-      // TODO: Implement actual migration logic
-    } catch (e) {
-      print('⚠️ MIGRATION: Failed to migrate $key - $e');
-    }
-  }
 }
 
 /// Storage Strategy Guidelines

@@ -1,11 +1,12 @@
 /// Security Event Logger
-/// 
+///
 /// Centralized logging system for security events including injection attempts,
 /// rate limit violations, and validation failures.
-/// 
-/// Events are tracked in-memory and can be exported to JSON for analysis.
-/// In production, events should be sent to a security monitoring service.
-/// 
+///
+/// Events are tracked in-memory and persisted (encrypted, capped at
+/// [SecurityLogger.maxPersistedEvents]) so they survive app restarts.
+/// Call [SecurityLogger.init] once at startup to restore persisted events.
+///
 /// Usage:
 /// ```dart
 /// SecurityLogger.logInjectionAttempt(
@@ -13,12 +14,17 @@
 ///   source: 'chat_screen',
 ///   patterns: ['ignore previous instructions'],
 /// );
-/// 
+///
 /// // Export logs for analysis
 /// final logs = SecurityLogger.exportToJson();
 /// ```
 
+import 'dart:async';
 import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
+import 'secure_storage.dart';
 
 /// Represents a single security event
 class SecurityEvent {
@@ -59,22 +65,98 @@ class SecurityEvent {
     if (text.length <= maxLength) return text;
     return '${text.substring(0, maxLength)}... [truncated]';
   }
+
+  factory SecurityEvent.fromJson(Map<String, dynamic> json) => SecurityEvent(
+        timestamp: DateTime.parse(json['timestamp']),
+        eventType: json['eventType'],
+        source: json['source'],
+        input: json['input'],
+        output: json['output'],
+        patterns: (json['patterns'] as List?)?.cast<String>(),
+        reason: json['reason'],
+        metadata: json['metadata'] != null
+            ? Map<String, dynamic>.from(json['metadata'] as Map)
+            : null,
+      );
 }
 
 class SecurityLogger {
   // Private constructor to prevent instantiation
   SecurityLogger._();
 
-  // In-memory event storage (in production, send to backend)
+  // In-memory event storage, backed by encrypted local persistence.
   static final List<SecurityEvent> _events = [];
-  
+
   // Configuration
   static const int maxEventsInMemory = 1000;
+  static const int maxPersistedEvents = 200;
   static bool _enabled = true;
+
+  static const String _storageKey = 'security_events';
+  static Future<void>? _initFuture;
+  static Timer? _persistTimer;
 
   /// Enable or disable security logging
   static void setEnabled(bool enabled) {
     _enabled = enabled;
+  }
+
+  /// Restores persisted events. Call once at app startup; later calls are
+  /// no-ops. Logging works without it, but persisted history stays hidden
+  /// until init runs.
+  static Future<void> init() => _initFuture ??= _loadPersisted();
+
+  static Future<void> _loadPersisted() async {
+    try {
+      final data = await SecureStorage.readEncrypted<List>(_storageKey);
+      if (data == null) return;
+      final restored = data
+          .map((e) =>
+              SecurityEvent.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList();
+      // Persisted events predate anything logged this session.
+      _events.insertAll(0, restored);
+      while (_events.length > maxEventsInMemory) {
+        _events.removeAt(0);
+      }
+    } catch (e) {
+      debugPrint('⚠️ SECURITY: Failed to load persisted events - $e');
+    }
+  }
+
+  /// Debounced persistence: bursts of events collapse into a single write.
+  static void _schedulePersist() {
+    _persistTimer?.cancel();
+    _persistTimer = Timer(const Duration(seconds: 2), persistNow);
+  }
+
+  /// Writes the most recent [maxPersistedEvents] events to encrypted
+  /// storage immediately.
+  static Future<void> persistNow() async {
+    _persistTimer?.cancel();
+    _persistTimer = null;
+    try {
+      await init();
+      final recent = _events.length > maxPersistedEvents
+          ? _events.sublist(_events.length - maxPersistedEvents)
+          : _events;
+      await SecureStorage.saveEncrypted(
+        _storageKey,
+        recent.map((e) => e.toJson()).toList(),
+      );
+    } catch (e) {
+      debugPrint('⚠️ SECURITY: Failed to persist events - $e');
+    }
+  }
+
+  /// Test hook: clears in-memory state without touching persisted data,
+  /// simulating an app restart.
+  @visibleForTesting
+  static void resetForTest() {
+    _events.clear();
+    _persistTimer?.cancel();
+    _persistTimer = null;
+    _initFuture = null;
   }
 
   /// Log a prompt injection attempt
@@ -98,9 +180,9 @@ class SecurityLogger {
     _addEvent(event);
     
     // Log to console for development
-    print('⚠️ SECURITY [INJECTION]: Attempt from $source');
-    print('   Patterns: ${patterns.join(", ")}');
-    print('   Input preview: ${_preview(input)}');
+    debugPrint('⚠️ SECURITY [INJECTION]: Attempt from $source');
+    debugPrint('   Patterns: ${patterns.join(", ")}');
+    debugPrint('   Input preview: ${_preview(input)}');
   }
 
   /// Log a rate limit violation
@@ -131,9 +213,9 @@ class SecurityLogger {
     _addEvent(event);
     
     // Log to console for development
-    print('⚠️ SECURITY [RATE_LIMIT]: Violation in $source');
-    print('   Type: $limitType');
-    print('   Count: $requestCount/$maxRequests');
+    debugPrint('⚠️ SECURITY [RATE_LIMIT]: Violation in $source');
+    debugPrint('   Type: $limitType');
+    debugPrint('   Count: $requestCount/$maxRequests');
   }
 
   /// Log an output validation failure
@@ -159,11 +241,11 @@ class SecurityLogger {
     _addEvent(event);
     
     // Log to console for development
-    print('⚠️ SECURITY [VALIDATION]: Failure in $source');
-    print('   Reason: $reason');
-    print('   Output preview: ${_preview(output)}');
+    debugPrint('⚠️ SECURITY [VALIDATION]: Failure in $source');
+    debugPrint('   Reason: $reason');
+    debugPrint('   Output preview: ${_preview(output)}');
     if (patterns != null && patterns.isNotEmpty) {
-      print('   Patterns: ${patterns.join(", ")}');
+      debugPrint('   Patterns: ${patterns.join(", ")}');
     }
   }
 
@@ -190,21 +272,23 @@ class SecurityLogger {
     _addEvent(event);
     
     // Log to console for development
-    print('⚠️ SECURITY [SUSPICIOUS]: Activity in $source');
-    print('   Description: $description');
+    debugPrint('⚠️ SECURITY [SUSPICIOUS]: Activity in $source');
+    debugPrint('   Description: $description');
     if (input != null) {
-      print('   Input preview: ${_preview(input)}');
+      debugPrint('   Input preview: ${_preview(input)}');
     }
   }
 
   /// Add event to storage with size management
   static void _addEvent(SecurityEvent event) {
     _events.add(event);
-    
+
     // Prevent memory overflow by removing oldest events
     if (_events.length > maxEventsInMemory) {
       _events.removeAt(0);
     }
+
+    _schedulePersist();
   }
 
   /// Create a preview of text for logging
@@ -281,11 +365,19 @@ class SecurityLogger {
     };
   }
 
-  /// Clear all events
-  /// 
+  /// Clear all events, including the persisted copy
+  ///
   /// Useful for testing or after exporting logs
-  static void clearEvents() {
+  static Future<void> clearEvents() async {
     _events.clear();
+    _persistTimer?.cancel();
+    _persistTimer = null;
+    try {
+      await init();
+      await SecureStorage.delete(_storageKey);
+    } catch (e) {
+      debugPrint('⚠️ SECURITY: Failed to clear persisted events - $e');
+    }
   }
 
   /// Get security summary
@@ -317,19 +409,19 @@ class SecurityLogger {
   /// Print summary to console
   static void printSummary() {
     final summary = getSummary();
-    print('');
-    print('═══════════════════════════════════════');
-    print('   SECURITY EVENT SUMMARY');
-    print('═══════════════════════════════════════');
-    print('Total Events: ${summary['total_events']}');
-    print('Last 24 Hours: ${summary['events_last_24h']}');
-    print('');
-    print('By Type:');
+    debugPrint('');
+    debugPrint('═══════════════════════════════════════');
+    debugPrint('   SECURITY EVENT SUMMARY');
+    debugPrint('═══════════════════════════════════════');
+    debugPrint('Total Events: ${summary['total_events']}');
+    debugPrint('Last 24 Hours: ${summary['events_last_24h']}');
+    debugPrint('');
+    debugPrint('By Type:');
     final byType = summary['by_type'] as Map<String, dynamic>;
     byType.forEach((type, count) {
-      print('  - ${type.padRight(25)}: $count');
+      debugPrint('  - ${type.padRight(25)}: $count');
     });
-    print('═══════════════════════════════════════');
-    print('');
+    debugPrint('═══════════════════════════════════════');
+    debugPrint('');
   }
 }
