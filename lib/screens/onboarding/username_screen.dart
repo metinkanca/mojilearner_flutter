@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../providers/user_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class UsernameScreen extends StatefulWidget {
   const UsernameScreen({super.key});
@@ -36,6 +37,9 @@ class _UsernameScreenState extends State<UsernameScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -49,7 +53,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 children: [
                   Text(
                     '2/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -84,7 +89,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 children: [
                   Text(
                     l10n.whatsYourName,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: AppTheme.retroDark,
                     ),
@@ -142,14 +148,16 @@ class _UsernameScreenState extends State<UsernameScreen> {
                   controller: _controller,
                   focusNode: _focusNode,
                   autofocus: true,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 16,
                     color: AppTheme.retroDark,
                   ),
                   decoration: InputDecoration(
                     hintText: l10n.enterYourName,
-                    hintStyle: GoogleFonts.pressStart2p(
+                    hintTextDirection: textDirection,
+                    hintStyle: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark.withValues(alpha: 0.5),
                     ),
@@ -199,8 +207,9 @@ class _UsernameScreenState extends State<UsernameScreen> {
                         ),
                         child: Text(
                           l10n.continueBtn,
+                          textDirection: textDirection,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.pressStart2p(
+                          style: AppFonts.pressStart2p(
                             fontSize: 12,
                             color: Colors.white,
                           ),

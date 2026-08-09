@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/user_provider.dart';
 import '../providers/settings_provider.dart';
 import '../constants/theme.dart';
 import '../constants/progression.dart';
+import '../utils/fonts.dart';
+import '../utils/rtl_locale.dart';
 
 class LevelRewardsScreen extends StatefulWidget {
   const LevelRewardsScreen({super.key});
@@ -17,6 +19,52 @@ class LevelRewardsScreen extends StatefulWidget {
 class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
   late PageController _pageController;
   int _currentPage = 0;
+
+  String _itemNameForReward(AppLocalizations l10n, String itemId) {
+    switch (itemId) {
+      case 'apple':
+        return l10n.shopItemAppleName;
+      case 'croissant':
+        return l10n.shopItemCroissantName;
+      case 'pizza':
+        return l10n.shopItemPizzaName;
+      case 'sushi':
+        return l10n.shopItemSushiName;
+      case 'coffee':
+        return l10n.shopItemCoffeeName;
+      case 'bg_blue':
+        return l10n.shopItemBgBlueName;
+      case 'bg_forest':
+        return l10n.shopItemBgForestName;
+      case 'bg_sunset':
+        return l10n.shopItemBgSunsetName;
+      case 'bg_galaxy':
+        return l10n.shopItemBgGalaxyName;
+      default:
+        return itemId;
+    }
+  }
+
+  String _localizedRewardDescription(AppLocalizations l10n, RewardDef reward) {
+    if (reward.type == RewardType.coins) {
+      return '${reward.value} 🪙';
+    }
+
+    if (reward.itemId != null) {
+      final itemName = _itemNameForReward(l10n, reward.itemId!);
+      if (reward.type == RewardType.item) {
+        return reward.value > 1 ? '$itemName x${reward.value}' : itemName;
+      }
+      if (reward.type == RewardType.unlock) {
+        if (reward.level == 20) {
+          return '$itemName + 1000 🪙';
+        }
+        return itemName;
+      }
+    }
+
+    return reward.description;
+  }
 
   @override
   void initState() {
@@ -46,17 +94,23 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final settingsProvider = Provider.of<SettingsProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
     final currentLevel = userProvider.stats.level;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     final fontFunction = settingsProvider.usePixelFont
-        ? GoogleFonts.pressStart2p
-        : GoogleFonts.spaceMono;
+      ? AppFonts.pressStart2p
+      : AppFonts.spaceMono;
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
       appBar: AppBar(
         title: Text(
-          'LEVELS',
+          l10n.levelsScreenTitle.toUpperCase(),
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
           style: fontFunction(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -84,6 +138,10 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                 color: AppTheme.retroDark, size: 20),
             onPressed: () => context.pop(),
             padding: EdgeInsets.zero,
+            // No round ink ripple inside the square retro frame.
+            style: const ButtonStyle(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            ),
           ),
         ),
       ),
@@ -102,7 +160,7 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
               itemBuilder: (context, index) {
                 final item = levelRewards[index];
                 final level = item.level;
-                final reward = item.description;
+                final reward = _localizedRewardDescription(l10n, item);
 
                 // State logic
                 final isCurrent = level == currentLevel;
@@ -163,8 +221,12 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                             ),
                             child: Text(
                               isCurrent
-                                  ? "CURRENT"
-                                  : (isLocked ? "LOCKED" : "COMPLETED"),
+                                ? l10n.levelStatusCurrent.toUpperCase()
+                                : (isLocked
+                                  ? l10n.locked.toUpperCase()
+                                  : l10n.levelStatusCompleted.toUpperCase()),
+                              textDirection: textDirection,
+                              textAlign: TextAlign.center,
                               style: fontFunction(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
@@ -194,6 +256,8 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                             child: Center(
                               child: Text(
                                 "$level",
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
                                 style: fontFunction(
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
@@ -204,7 +268,9 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            "REWARD",
+                            l10n.levelRewardLabel.toUpperCase(),
+                            textDirection: textDirection,
+                            textAlign: textAlign,
                             style: fontFunction(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -219,7 +285,8 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
-                                  reward.toUpperCase(),
+                                  reward,
+                                  textDirection: textDirection,
                                   textAlign: TextAlign.center,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
@@ -239,7 +306,9 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
-                                "${userProvider.stats.currentLevelXP} / ${userProvider.stats.nextLevelXP} XP",
+                                '${userProvider.stats.currentLevelXP} / ${userProvider.stats.nextLevelXP} ${l10n.xp}',
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
                                 style: fontFunction(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,

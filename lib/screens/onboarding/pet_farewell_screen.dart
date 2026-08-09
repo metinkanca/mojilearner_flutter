@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
+import '../../providers/calibration_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../providers/language_provider.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class PetFarewellScreen extends StatefulWidget {
   const PetFarewellScreen({super.key});
@@ -59,7 +61,6 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
       'vi': 'Làm tốt lắm, $username!',
       'th': 'ทำได้ดีมาก, $username!',
       'el': 'Μπράβο, $username!',
-      'he': 'כל הכבוד, $username!',
       'da': 'Godt klaret, $username!',
       'fi': 'Hyvää työtä, $username!',
       'no': 'Godt jobbet, $username!',
@@ -109,8 +110,12 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
     final username = Provider.of<UserProvider>(context).username;
     final languageCode = 
         Provider.of<LanguageProvider>(context).targetLanguage?.code ?? 'en';
-    final userProvider = Provider.of<UserProvider>(context);
-    final proficiency = userProvider.getLanguageProficiency(languageCode);
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+    final calibrationProvider = Provider.of<CalibrationProvider>(context);
+    final proficiency =
+        calibrationProvider.getLanguageProficiency(languageCode);
     final finalLevel = proficiency?.aiDeterminedLevel ?? 'beginner';
     
     final farewell = _getFarewell(languageCode, username);
@@ -129,7 +134,8 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
                 children: [
                   Text(
                     '8/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -156,7 +162,9 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
             // Header
             Text(
               'CALIBRATION',
-              style: GoogleFonts.pressStart2p(
+              textDirection: textDirection,
+              textAlign: textAlign,
+              style: AppFonts.pressStart2p(
                 fontSize: 12,
                 color: AppTheme.retroDark,
               ),
@@ -164,7 +172,9 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
             const SizedBox(height: 8),
             Text(
               'COMPLETE!',
-              style: GoogleFonts.pressStart2p(
+              textDirection: textDirection,
+              textAlign: textAlign,
+              style: AppFonts.pressStart2p(
                 fontSize: 20,
                 color: AppTheme.retroDark,
                 shadows: [
@@ -194,7 +204,9 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
               ),
               child: Text(
                 levelBadge,
-                style: GoogleFonts.pressStart2p(
+                textDirection: TextDirection.ltr,
+                textAlign: TextAlign.center,
+                style: AppFonts.pressStart2p(
                   fontSize: 14,
                   color: Colors.white,
                 ),
@@ -255,8 +267,9 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
                 ),
                 child: Text(
                   farewell,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 12,
                     color: AppTheme.retroDark,
                     height: 1.5,
@@ -288,8 +301,9 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
                   ),
                   child: Text(
                     'START LEARNING!',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: Colors.white,
                     ),

@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/level_validator.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class QuizIntroScreen extends StatelessWidget {
   final String? aiLevel;
-  
+
   const QuizIntroScreen({super.key, this.aiLevel});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
     final retroDarkHex = AppTheme.retroDark
         .toARGB32()
         .toRadixString(16)
@@ -32,7 +36,8 @@ class QuizIntroScreen extends StatelessWidget {
                 children: [
                   Text(
                     '7/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -57,9 +62,9 @@ class QuizIntroScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 40),
-            
+
             // Header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -67,7 +72,9 @@ class QuizIntroScreen extends StatelessWidget {
                 children: [
                   Text(
                     'QUIZ TIME!',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    textAlign: TextAlign.center,
+                    style: AppFonts.pressStart2p(
                       fontSize: 20,
                       color: AppTheme.retroDark,
                       shadows: [
@@ -81,8 +88,9 @@ class QuizIntroScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   Text(
                     'Let\'s verify your level with a quick quiz',
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                       height: 1.6,
@@ -91,9 +99,9 @@ class QuizIntroScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Pet and Speech Bubble area
             Expanded(
               child: Padding(
@@ -109,7 +117,8 @@ class QuizIntroScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: AppTheme.retroDark, width: 4),
+                            border:
+                                Border.all(color: AppTheme.retroDark, width: 4),
                             boxShadow: const [
                               BoxShadow(
                                 color: AppTheme.retroDark,
@@ -120,8 +129,9 @@ class QuizIntroScreen extends StatelessWidget {
                           ),
                           child: Text(
                             'I\'ve prepared a quick quiz of 5 questions tailored just for you! It helps me understand exactly where you are so we can learn faster together.',
+                            textDirection: textDirection,
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.pressStart2p(
+                            style: AppFonts.pressStart2p(
                               fontSize: 10,
                               color: AppTheme.retroDark,
                               height: 1.8,
@@ -145,9 +155,9 @@ class QuizIntroScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 32),
-                    
+
                     // Pet character
                     const CharacterSprite(
                       width: 130,
@@ -157,13 +167,17 @@ class QuizIntroScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Continue button
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: GestureDetector(
                 onTap: () {
-                  context.go('/onboarding/adaptive-quiz?aiLevel=${aiLevel ?? 'beginner'}');
+                  final normalizedLevel =
+                      LevelValidator.normalizeLevel(aiLevel);
+                  context.go(
+                    '/onboarding/adaptive-quiz?aiLevel=$normalizedLevel',
+                  );
                 },
                 child: Container(
                   width: double.infinity,
@@ -181,8 +195,9 @@ class QuizIntroScreen extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.continueBtn,
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: Colors.white,
                     ),

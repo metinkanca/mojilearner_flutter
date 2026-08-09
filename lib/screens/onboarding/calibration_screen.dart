@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
@@ -13,6 +10,9 @@ import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/progression_utils.dart';
+import '../../utils/rtl_locale.dart';
+import '../../services/ai_service.dart';
+import '../../../utils/fonts.dart';
 
 class CalibrationScreen extends StatefulWidget {
   const CalibrationScreen({super.key});
@@ -40,12 +40,6 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
     final targetLang = languageProvider.targetLanguage?.name ?? 'Spanish';
 
     try {
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
-      if (apiKey == null || apiKey.isEmpty) {
-        throw Exception("API Key not found");
-      }
-
-      final model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
       final prompt = '''
         Context: Create a test for $targetLang.
         Rules: Keep questions clear. One concept per question.
@@ -54,11 +48,15 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
         Important: Include a short 'topic' field (max 1-2 words) which will be shown big (e.g. 'Cat?'). 'question' field should be the prompt (e.g. 'How do you say...').
       ''';
 
-      final content = [Content.text(prompt)];
-      final response = await model.generateContent(content);
-      
-      if (response.text != null) {
-        String jsonText = response.text!.trim();
+      final aiText = await AiService.instance.generateText(
+        prompt: prompt,
+        source: 'calibration_screen',
+        // Structured JSON: no thinking, low randomness.
+        config: AiGenerationConfig.structuredJson,
+      );
+
+      if (aiText.isNotEmpty) {
+        String jsonText = aiText.trim();
         if (jsonText.startsWith('```json')) {
           jsonText = jsonText.replaceAll('```json', '').replaceAll('```', '');
         } else if (jsonText.startsWith('```')) {
@@ -135,6 +133,8 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
       hungerDelta: reward.hungerDelta,
     );
     await userProvider.addXp(reward.xpReward);
+    // No sickness scaling during onboarding — the pet starts at full health.
+    await userProvider.addCoins(reward.coinReward);
     await userProvider.markOnboardingComplete();
 
     if (!mounted) return;
@@ -148,6 +148,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
         totalQuestions: _questions.length,
           level: reward.level,
           xpReward: reward.xpReward,
+          coinReward: reward.coinReward,
           happinessDelta: reward.happinessDelta,
           hungerDelta: reward.hungerDelta,
           passed: reward.passed,
@@ -161,6 +162,9 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+
     if (_isLoading) {
       return const Scaffold(
         backgroundColor: AppTheme.retroSky,
@@ -219,7 +223,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                   child: Stack(
                     children: [
                         Align(alignment: Alignment.topCenter, child: Container(height: 4, color: AppTheme.retroDark)),
-                        Positioned(top: 8, left: 0, right: 0, child: Container(height: 16, color: AppTheme.retroGrassDark.withOpacity(0.2))),
+                        Positioned(top: 8, left: 0, right: 0, child: Container(height: 16, color: AppTheme.retroGrassDark.withValues(alpha: 0.2))),
                         Positioned(top: 40, left: 40, child: _pixel(AppTheme.retroGrassDark)),
                         Positioned(top: 48, left: 48, child: _pixel(AppTheme.retroGrassDark)),
                         Positioned(top: 80, right: 80, child: _pixel(AppTheme.retroGrassDark)),
@@ -260,7 +264,8 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                               child: Center(
                                 child: Text(
                                   '${userProvider.stats.level}', 
-                                  style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)
+                                  textDirection: TextDirection.ltr,
+                                  style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)
                                 ),
                               ),
                             ),
@@ -270,7 +275,8 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                               children: [
                                 Text(
                                   'XP: ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
-                                  style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                                  textDirection: TextDirection.ltr,
+                                  style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                                 ),
                                 const SizedBox(height: 4),
                                 Container(
@@ -300,8 +306,13 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                         ),
                         child: IconButton(
                           padding: EdgeInsets.zero,
+                          // No round ink ripple inside the square retro frame.
+                          style: const ButtonStyle(
+                            overlayColor:
+                                WidgetStatePropertyAll(Colors.transparent),
+                          ),
                           icon: const Icon(Icons.pause, color: AppTheme.retroDark),
-                          onPressed: () => context.go('/'), 
+                          onPressed: () => context.go('/'),
                         ),
                       )
                     ],
@@ -330,12 +341,19 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(height: 16),
-                            Text(subText, style: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.grey)),
+                            Text(
+                              subText,
+                              textDirection: textDirection,
+                              textAlign: TextAlign.center,
+                              style: AppFonts.pressStart2p(fontSize: 10, color: Colors.grey),
+                            ),
+
                             const SizedBox(height: 16),
                             Text(
-                              fullQuestion, 
+                              fullQuestion,
+                              textDirection: textDirection,
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.pressStart2p(fontSize: 20, color: AppTheme.retroDark, height: 1.5),
+                              style: AppFonts.pressStart2p(fontSize: 20, color: AppTheme.retroDark, height: 1.5),
                             ),
                           ],
                         ),
@@ -351,7 +369,13 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                           ),
                           child: Text(
                             "QUESTION ${_currentQuestionIndex + 1}/${_questions.length}",
-                            style: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.white),
+                            textDirection: TextDirection.ltr,
+                            textAlign: TextAlign.center,
+                            style: AppFonts.pressStart2p(
+                              fontSize: 10,
+                              color: Colors.white,
+                              decoration: TextDecoration.none,
+                            ),
                           ),
                         ),
                       ),
@@ -396,8 +420,9 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                             child: Center(
                               child: Text(
                                 opt,
-                                style: GoogleFonts.pressStart2p(
-                                  fontSize: 10, 
+                                textDirection: textDirection,
+                                style: AppFonts.pressStart2p(
+                                  fontSize: 10,
                                   color: AppTheme.retroDark
                                 ),
                                 textAlign: TextAlign.center,
@@ -433,7 +458,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                         border: Border.all(color: AppTheme.retroDark, width: 2),
                         boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2), blurRadius: 0)],
                       ),
-                      child: Text("You got this!", style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)),
+                      child: Text("You got this!", style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)),
                     ),
                      Positioned(
                       bottom: -6, 

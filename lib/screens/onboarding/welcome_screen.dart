@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
       body: Stack(
@@ -49,7 +54,9 @@ class WelcomeScreen extends StatelessWidget {
                 // Welcome text
                 Text(
                   'MOJILEARNER',
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 24,
                     color: AppTheme.retroDark,
                     shadows: [
@@ -67,8 +74,9 @@ class WelcomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Text(
                     'Learn Languages with Your Pet!',
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                       height: 1.5,
@@ -83,7 +91,7 @@ class WelcomeScreen extends StatelessWidget {
                   width: 200,
                   height: 200,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     border: Border.all(color: AppTheme.retroDark, width: 4),
                     boxShadow: const [
                       BoxShadow(
@@ -124,8 +132,9 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       child: Text(
                         'START',
+                        textDirection: textDirection,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.pressStart2p(
+                        style: AppFonts.pressStart2p(
                           fontSize: 16,
                           color: Colors.white,
                         ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../providers/user_provider.dart';
 import '../../providers/language_provider.dart';
+import '../../services/ai_service.dart';
 import '../../utils/offline_detector.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class PetGreetingScreen extends StatefulWidget {
   const PetGreetingScreen({super.key});
@@ -61,7 +62,6 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
       'vi': 'Xin chào $username! Tôi là Moji!',
       'th': 'สวัสดี $username! ฉันคือโมจิ!',
       'el': 'Γεια $username! Είμαι ο Moji!',
-      'he': 'שלום $username! אני מוג\'י!',
       'da': 'Hej $username! Jeg er Moji!',
       'fi': 'Hei $username! Olen Moji!',
       'no': 'Hei $username! Jeg er Moji!',
@@ -71,11 +71,10 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
   }
 
   void _continue() {
-    // Auto-detect offline mode and route accordingly
-    if (OfflineDetector.isOfflineMode) {
-      context.go('/onboarding/mock-conversational-assessment');
-    } else {
+    if (OfflineDetector.shouldUseConversationalAssessment) {
       context.go('/onboarding/conversational-assessment');
+    } else {
+      context.go('/onboarding/mock-conversational-assessment');
     }
   }
 
@@ -86,10 +85,15 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
   @override
   Widget build(BuildContext context) {
     final username = Provider.of<UserProvider>(context).username;
-    final languageCode = 
+    final languageCode =
         Provider.of<LanguageProvider>(context).targetLanguage?.code ?? 'en';
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
     final greeting = _getGreeting(languageCode, username);
     final isOffline = OfflineDetector.isOfflineMode;
+    final useConversational = OfflineDetector.shouldUseConversationalAssessment;
+    final isAiAvailable = AiService.instance.isAiAvailable;
+    final showLocalFallbackIndicator = useConversational && !isAiAvailable;
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -104,8 +108,24 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 color: const Color(0xFFFFC107),
                 child: Text(
                   'OFFLINE MODE - USING MOCK AI',
+                  textDirection: textDirection,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.pressStart2p(
+                  style: AppFonts.pressStart2p(
+                    fontSize: 8,
+                    color: AppTheme.retroDark,
+                  ),
+                ),
+              ),
+            if (showLocalFallbackIndicator)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                color: const Color(0xFFFFC107),
+                child: Text(
+                  'ONLINE MODE - LOCAL SAFE FALLBACK',
+                  textDirection: textDirection,
+                  textAlign: TextAlign.center,
+                  style: AppFonts.pressStart2p(
                     fontSize: 8,
                     color: AppTheme.retroDark,
                   ),
@@ -118,7 +138,8 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 children: [
                   Text(
                     '5/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -143,9 +164,9 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 ],
               ),
             ),
-            
+
             const Spacer(),
-            
+
             // Animated pet character
             ScaleTransition(
               scale: _bounceAnimation,
@@ -171,9 +192,9 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 40),
-            
+
             // Speech bubble
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -192,8 +213,9 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 ),
                 child: Text(
                   greeting,
+                  textDirection: textDirection,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.pressStart2p(
+                  style: AppFonts.pressStart2p(
                     fontSize: 12,
                     color: AppTheme.retroDark,
                     height: 1.5,
@@ -201,9 +223,9 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 ),
               ),
             ),
-            
+
             const Spacer(),
-            
+
             // Continue button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -218,7 +240,8 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFC107),
-                          border: Border.all(color: AppTheme.retroDark, width: 3),
+                          border:
+                              Border.all(color: AppTheme.retroDark, width: 3),
                           boxShadow: const [
                             BoxShadow(
                               color: AppTheme.retroDark,
@@ -229,8 +252,9 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                         ),
                         child: Text(
                           'MOCK MODE (NO API)',
+                          textDirection: textDirection,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.pressStart2p(
+                          style: AppFonts.pressStart2p(
                             fontSize: 10,
                             color: AppTheme.retroDark,
                           ),
@@ -239,7 +263,7 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                     ),
                     const SizedBox(height: 12),
                   ],
-                  
+
                   // Main continue button
                   GestureDetector(
                     onTap: _continue,
@@ -258,9 +282,14 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                         ],
                       ),
                       child: Text(
-                        isOffline ? 'START ASSESSMENT (MOCK)' : 'NICE TO MEET YOU!',
+                        isOffline
+                            ? 'START ASSESSMENT (MOCK)'
+                            : (showLocalFallbackIndicator
+                                ? 'START ASSESSMENT (LOCAL)'
+                                : 'NICE TO MEET YOU!'),
+                        textDirection: textDirection,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.pressStart2p(
+                        style: AppFonts.pressStart2p(
                           fontSize: 12,
                           color: Colors.white,
                         ),
@@ -270,7 +299,7 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
           ],
         ),

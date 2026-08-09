@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../providers/language_provider.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class NativeLanguageScreen extends StatefulWidget {
   const NativeLanguageScreen({super.key});
@@ -53,6 +54,10 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
       body: SafeArea(
@@ -65,7 +70,9 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
                 children: [
                   Text(
                     '1/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.left,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -98,7 +105,9 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
                 children: [
                   Text(
                     'SELECT YOUR',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: AppTheme.retroDark,
                     ),
@@ -106,7 +115,9 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'NATIVE LANGUAGE',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                       fontSize: 16,
                       color: AppTheme.retroDark,
                       shadows: [
@@ -120,8 +131,9 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
                   const SizedBox(height: 16),
                   Text(
                     'This will be the language of the app interface',
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    style: AppFonts.pressStart2p(
                       fontSize: 8,
                       color: AppTheme.retroDark,
                       height: 1.5,
@@ -181,7 +193,9 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
                           Flexible(
                             child: Text(
                               lang['name']!,
-                              style: GoogleFonts.pressStart2p(
+                              textDirection: textDirection,
+                              textAlign: textAlign,
+                              style: AppFonts.pressStart2p(
                                 fontSize: 8,
                                 color: isSelected ? Colors.white : AppTheme.retroDark,
                               ),
@@ -221,8 +235,9 @@ class _NativeLanguageScreenState extends State<NativeLanguageScreen> {
                     ),
                     child: Text(
                       'CONTINUE',
+                      textDirection: textDirection,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.pressStart2p(
+                      style: AppFonts.pressStart2p(
                         fontSize: 12,
                         color: Colors.white,
                       ),

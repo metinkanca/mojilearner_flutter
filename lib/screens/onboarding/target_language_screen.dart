@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/language_provider.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class TargetLanguageScreen extends StatefulWidget {
   const TargetLanguageScreen({super.key});
@@ -55,6 +56,9 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -68,7 +72,9 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                 children: [
                   Text(
                     '3/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.left,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -101,7 +107,8 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                 children: [
                   Text(
                     l10n.whichLanguage,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: AppTheme.retroDark,
                     ),
@@ -112,7 +119,8 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                   const SizedBox(height: 8),
                   Text(
                     l10n.doYouWantToLearn,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    style: AppFonts.pressStart2p(
                       fontSize: 14,
                       color: AppTheme.retroDark,
                       shadows: [
@@ -129,8 +137,9 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                   const SizedBox(height: 16),
                   Text(
                     l10n.changeAnytime,
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    style: AppFonts.pressStart2p(
                       fontSize: 8,
                       color: AppTheme.retroDark.withValues(alpha: 0.7),
                       height: 1.5,
@@ -192,7 +201,9 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                           Flexible(
                             child: Text(
                               lang['name']!,
-                              style: GoogleFonts.pressStart2p(
+                              textDirection: textDirection,
+                              textAlign: textAlign,
+                              style: AppFonts.pressStart2p(
                                 fontSize: 8,
                                 color: isSelected ? Colors.white : AppTheme.retroDark,
                               ),
@@ -232,8 +243,9 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                     ),
                     child: Text(
                       l10n.continueBtn,
+                      textDirection: textDirection,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.pressStart2p(
+                      style: AppFonts.pressStart2p(
                         fontSize: 12,
                         color: Colors.white,
                       ),

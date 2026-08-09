@@ -1,25 +1,26 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../components/quiz_rewards_popup.dart';
+import '../../providers/calibration_provider.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/offline_detector.dart';
 import '../../utils/input_sanitizer.dart';
-import '../../utils/rate_limiter.dart';
+import '../../utils/level_validator.dart';
 import '../../utils/progression_utils.dart';
+import '../../utils/rtl_locale.dart';
+import '../../services/ai_guard.dart';
+import '../../services/ai_service.dart';
+import '../../../utils/fonts.dart';
 
 class AdaptiveQuizScreen extends StatefulWidget {
   final String? aiLevel;
-  
+
   const AdaptiveQuizScreen({super.key, this.aiLevel});
 
   @override
@@ -32,6 +33,7 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
   int _currentQuestionIndex = 0;
   int _score = 0;
   bool _showExplanation = false;
+  bool _usingLocalFallback = false;
   String? _selectedAnswer;
 
   @override
@@ -54,37 +56,54 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
   }
 
   Future<void> _generateQuiz() async {
-    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
     final targetLang = languageProvider.targetLanguage?.name ?? 'Spanish';
     final targetCode = languageProvider.targetLanguage?.code ?? 'es';
-    final aiLevel = widget.aiLevel ?? 'beginner';
-    
+    final aiLevel = LevelValidator.normalizeLevel(widget.aiLevel);
+
     // Get self-assessed level from proficiency
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final proficiency = userProvider.getLanguageProficiency(targetCode);
-    final selfLevel = proficiency?.selfAssessedLevel ?? 'beginner';
-    
+    final calibrationProvider =
+        Provider.of<CalibrationProvider>(context, listen: false);
+    final proficiency = calibrationProvider.getLanguageProficiency(targetCode);
+    final selfLevel =
+        LevelValidator.normalizeLevel(proficiency?.selfAssessedLevel);
+
     // Use mock questions if offline
     if (OfflineDetector.isOfflineMode) {
       setState(() {
+        _usingLocalFallback = false;
         _questions = _getMockQuestions(targetCode, aiLevel);
         _isLoading = false;
       });
       return;
     }
-    
+
+    if (!AiService.instance.isAiAvailable) {
+      setState(() {
+        _usingLocalFallback = true;
+        _questions = _getFallbackQuestions(targetLang, aiLevel);
+        _isLoading = false;
+      });
+      return;
+    }
+
     final difficulty = _getDifficultyDescription(aiLevel);
 
     try {
       // 🔒 SECURITY: Rate limiting for quiz generation
-      if (!RateLimiter.canGenerateQuiz('adaptive_quiz')) {
+      final guard = AiGuard.checkRequest(
+        kind: AiRequestKind.quiz,
+        source: 'adaptive_quiz',
+      );
+      if (!guard.allowed) {
         if (mounted) {
           setState(() {
             _isLoading = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(RateLimiter.getRateLimitMessage('adaptive_quiz', 2)),
+              content: Text(guard.rateLimitMessage),
               duration: const Duration(seconds: 3),
             ),
           );
@@ -92,20 +111,17 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
         return;
       }
 
-      RateLimiter.recordRequest('adaptive_quiz');
-
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
-      if (apiKey == null || apiKey.isEmpty) {
-        throw Exception("API Key not found");
-      }
+      AiGuard.recordRequest('adaptive_quiz');
 
       // 🔒 SECURITY: Sanitize language inputs
-      final sanitizedTargetLang = InputSanitizer.sanitizeLanguageName(targetLang) ?? 'Spanish';
-      final sanitizedAiLevel = InputSanitizer.sanitizeLanguageName(aiLevel) ?? 'beginner';
-      final sanitizedSelfLevel = InputSanitizer.sanitizeLanguageName(selfLevel) ?? 'beginner';
-
-      final model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
-      final prompt = '''Generate exactly 5 multiple-choice questions to test $sanitizedTargetLang proficiency at $sanitizedAiLevel level.
+      final sanitizedTargetLang =
+          InputSanitizer.sanitizeLanguageName(targetLang) ?? 'Spanish';
+      final sanitizedAiLevel =
+          InputSanitizer.sanitizeLanguageName(aiLevel) ?? 'beginner';
+      final sanitizedSelfLevel =
+          InputSanitizer.sanitizeLanguageName(selfLevel) ?? 'beginner';
+      final prompt =
+          '''Generate exactly 5 multiple-choice questions to test $sanitizedTargetLang proficiency at $sanitizedAiLevel level.
 
 User's self-assessment: $sanitizedSelfLevel
 AI's assessment from chat: $sanitizedAiLevel
@@ -132,20 +148,29 @@ Format:
 
 Generate 5 questions now:''';
 
-      final content = [Content.text(prompt)];
-      final response = await model.generateContent(content);
-      
-      if (response.text != null) {
-        String jsonText = response.text!.trim();
+      final aiText = await AiService.instance.generateText(
+        prompt: prompt,
+        source: 'adaptive_quiz_screen',
+        // Same reasoning as the main quiz: structured JSON, no thinking.
+        config: AiGenerationConfig.structuredJson,
+      );
+
+      if (aiText.isNotEmpty) {
+        String jsonText = aiText.trim();
         // Remove markdown code blocks if present
-        jsonText = jsonText
-            .replaceAll('```json', '')
-            .replaceAll('```', '')
-            .trim();
-        
+        jsonText =
+            jsonText.replaceAll('```json', '').replaceAll('```', '').trim();
+
         final List<dynamic> data = json.decode(jsonText);
         setState(() {
+          _usingLocalFallback = false;
           _questions = data.cast<Map<String, dynamic>>();
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _usingLocalFallback = true;
+          _questions = _getFallbackQuestions(targetLang, aiLevel);
           _isLoading = false;
         });
       }
@@ -153,6 +178,7 @@ Generate 5 questions now:''';
       debugPrint('Error generating quiz: $e');
       // Fallback questions
       setState(() {
+        _usingLocalFallback = true;
         _questions = _getFallbackQuestions(targetLang, aiLevel);
         _isLoading = false;
       });
@@ -200,16 +226,19 @@ Generate 5 questions now:''';
     ];
   }
 
-  List<Map<String, dynamic>> _getMockQuestions(String languageCode, String level) {
+  List<Map<String, dynamic>> _getMockQuestions(
+      String languageCode, String level) {
     // Mock questions for offline mode - basic questions in common languages
     final mockQuestions = <String, List<Map<String, dynamic>>>{
-      'tr': [ // Turkish
+      'tr': [
+        // Turkish
         {
           "question": "How do you say 'Hello' in Turkish?",
           "topic": "Greetings",
           "options": ["Merhaba", "Günaydın", "İyi akşamlar", "Hoşça kal"],
           "correct": "Merhaba",
-          "explanation": "Merhaba is the general greeting for 'hello' in Turkish.",
+          "explanation":
+              "Merhaba is the general greeting for 'hello' in Turkish.",
         },
         {
           "question": "What does 'Teşekkür ederim' mean?",
@@ -240,7 +269,8 @@ Generate 5 questions now:''';
           "explanation": "Hoşça kal means 'goodbye' (said by the one leaving).",
         },
       ],
-      'es': [ // Spanish
+      'es': [
+        // Spanish
         {
           "question": "How do you say 'Hello' in Spanish?",
           "topic": "Greetings",
@@ -277,7 +307,8 @@ Generate 5 questions now:''';
           "explanation": "Por favor means 'please' in Spanish.",
         },
       ],
-      'fr': [ // French
+      'fr': [
+        // French
         {
           "question": "How do you say 'Hello' in French?",
           "topic": "Greetings",
@@ -314,7 +345,8 @@ Generate 5 questions now:''';
           "explanation": "S'il vous plaît means 'please' in French.",
         },
       ],
-      'de': [ // German
+      'de': [
+        // German
         {
           "question": "How do you say 'Hello' in German?",
           "topic": "Greetings",
@@ -352,14 +384,14 @@ Generate 5 questions now:''';
         },
       ],
     };
-    
+
     // Return questions for the language, or default to Spanish
     return mockQuestions[languageCode] ?? mockQuestions['es']!;
   }
 
   void _handleAnswer(String answer) {
     if (_showExplanation) return;
-    
+
     setState(() {
       _selectedAnswer = answer;
       _showExplanation = true;
@@ -386,6 +418,8 @@ Generate 5 questions now:''';
         hungerDelta: reward.hungerDelta,
       );
       await userProvider.addXp(reward.xpReward);
+      // No sickness scaling during onboarding — the pet starts at full health.
+      await userProvider.addCoins(reward.coinReward);
       await userProvider.markOnboardingComplete();
 
       if (!mounted) return;
@@ -399,6 +433,7 @@ Generate 5 questions now:''';
           totalQuestions: _questions.length,
           level: reward.level,
           xpReward: reward.xpReward,
+          coinReward: reward.coinReward,
           happinessDelta: reward.happinessDelta,
           hungerDelta: reward.hungerDelta,
           passed: reward.passed,
@@ -426,10 +461,13 @@ Generate 5 questions now:''';
     bool isSelected = _selectedAnswer == opt;
     bool isCorrect = opt == questionData['correct'];
     Color bgColor = Colors.white;
-    
+
     if (_showExplanation) {
-      if (isCorrect) bgColor = AppTheme.retroGrass;
-      else if (isSelected) bgColor = AppTheme.retroPrimary;
+      if (isCorrect) {
+        bgColor = AppTheme.retroGrass;
+      } else if (isSelected) {
+        bgColor = AppTheme.retroPrimary;
+      }
     }
 
     return GestureDetector(
@@ -441,12 +479,19 @@ Generate 5 questions now:''';
           decoration: BoxDecoration(
             color: bgColor,
             border: Border.all(color: AppTheme.retroDark, width: 4),
-            boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
+            boxShadow: const [
+              BoxShadow(
+                  color: AppTheme.retroDark,
+                  offset: Offset(4, 4),
+                  blurRadius: 0)
+            ],
           ),
           child: Text(
             opt,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.pressStart2p(
+            textDirection:
+                textDirectionForLocale(Localizations.localeOf(context)),
+            textAlign: textAlignForLocale(Localizations.localeOf(context)),
+            style: AppFonts.pressStart2p(
               fontSize: 10,
               color: AppTheme.retroDark,
               height: 1.5,
@@ -461,7 +506,11 @@ Generate 5 questions now:''';
   @override
   Widget build(BuildContext context) {
     final isOffline = OfflineDetector.isOfflineMode;
-    
+    final showLocalFallbackIndicator = _usingLocalFallback && !isOffline;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+
     if (_isLoading) {
       return Scaffold(
         backgroundColor: AppTheme.retroSky,
@@ -492,10 +541,17 @@ Generate 5 questions now:''';
               ),
               const SizedBox(height: 24),
               Text(
-                isOffline ? 'Loading mock quiz...' : 'Generating quiz...',
-                style: GoogleFonts.pressStart2p(
+                isOffline
+                    ? 'Loading mock quiz...'
+                    : (_usingLocalFallback
+                        ? 'Loading local fallback quiz...'
+                        : 'Generating quiz...'),
+                textDirection: textDirection,
+                textAlign: textAlign,
+                style: AppFonts.pressStart2p(
                   fontSize: 10,
                   color: AppTheme.retroDark,
+                  decoration: TextDecoration.none,
                 ),
               ),
             ],
@@ -508,9 +564,9 @@ Generate 5 questions now:''';
     final mainTopic = question['topic'] ?? '';
     final subText = question['question'] ?? 'Select the correct option';
     final options = (question['options'] as List).cast<String>();
-    
+
     // Bubble logic
-    final bubbleText = _showExplanation 
+    final bubbleText = _showExplanation
         ? (question['explanation'] ?? "Great job!")
         : "You got this!";
 
@@ -528,23 +584,43 @@ Generate 5 questions now:''';
                   child: Stack(
                     children: [
                       Positioned(
-                        top: 40, left: 30,
-                        child: Container(
-                          width: 48, height: 48, 
-                          color: AppTheme.retroAccent, 
-                          child: Container(decoration: BoxDecoration(border: Border.all(width: 4, color: AppTheme.retroDark)))
-                        )
-                      ),
+                          top: 40,
+                          left: 30,
+                          child: Container(
+                              width: 48,
+                              height: 48,
+                              color: AppTheme.retroAccent,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 4,
+                                          color: AppTheme.retroDark))))),
                       Positioned(
-                        top: 70, right: 40,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(width: 64, height: 32, decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppTheme.retroDark, width: 4))),
-                            Transform.translate(offset: const Offset(-16, -16), child: Container(width: 48, height: 32, decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppTheme.retroDark, width: 4)))),
-                          ],
-                        )
-                      ),
+                          top: 70,
+                          right: 40,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  width: 64,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                          color: AppTheme.retroDark,
+                                          width: 4))),
+                              Transform.translate(
+                                  offset: const Offset(-16, -16),
+                                  child: Container(
+                                      width: 48,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: AppTheme.retroDark,
+                                              width: 4)))),
+                            ],
+                          )),
                       // Offline mode indicator (positioned in sky)
                       if (isOffline)
                         Positioned(
@@ -557,11 +633,38 @@ Generate 5 questions now:''';
                             color: const Color(0xFFFFC107),
                             child: Text(
                               'OFFLINE MODE - USING MOCK QUIZ',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.pressStart2p(
+                              textDirection: textDirection,
+                              textAlign: textAlign,
+                              style: AppFonts.pressStart2p(
                                 fontSize: 8,
                                 color: AppTheme.retroDark,
+                                decoration: TextDecoration.none,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      if (showLocalFallbackIndicator)
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            color: const Color(0xFFFFC107),
+                            child: Text(
+                              'ONLINE MODE - LOCAL FALLBACK QUIZ',
+                              textDirection: textDirection,
+                              textAlign: textAlign,
+                              style: AppFonts.pressStart2p(
+                                fontSize: 8,
+                                color: AppTheme.retroDark,
+                                decoration: TextDecoration.none,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),
@@ -570,18 +673,39 @@ Generate 5 questions now:''';
                 ),
               ),
               Expanded(
-                flex: 4, 
+                flex: 4,
                 child: Container(
                   width: double.infinity,
                   color: AppTheme.retroGrass,
                   child: Stack(
                     children: [
-                      Align(alignment: Alignment.topCenter, child: Container(height: 4, color: AppTheme.retroDark)),
-                      Positioned(top: 8, left: 0, right: 0, child: Container(height: 16, color: AppTheme.retroGrassDark.withOpacity(0.2))),
-                      Positioned(top: 40, left: 40, child: _pixel(AppTheme.retroGrassDark)),
-                      Positioned(top: 48, left: 48, child: _pixel(AppTheme.retroGrassDark)),
-                      Positioned(top: 80, right: 80, child: _pixel(AppTheme.retroGrassDark)),
-                      Positioned(top: 150, left: 100, child: _pixel(AppTheme.retroGrassDark)),
+                      Align(
+                          alignment: Alignment.topCenter,
+                          child:
+                              Container(height: 4, color: AppTheme.retroDark)),
+                      Positioned(
+                          top: 8,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                              height: 16,
+                              color: AppTheme.retroGrassDark.withValues(alpha: 0.2))),
+                      Positioned(
+                          top: 40,
+                          left: 40,
+                          child: _pixel(AppTheme.retroGrassDark)),
+                      Positioned(
+                          top: 48,
+                          left: 48,
+                          child: _pixel(AppTheme.retroGrassDark)),
+                      Positioned(
+                          top: 80,
+                          right: 80,
+                          child: _pixel(AppTheme.retroGrassDark)),
+                      Positioned(
+                          top: 150,
+                          left: 100,
+                          child: _pixel(AppTheme.retroGrassDark)),
                     ],
                   ),
                 ),
@@ -594,28 +718,43 @@ Generate 5 questions now:''';
             child: CustomScrollView(
               slivers: [
                 SliverFillRemaining(
-                  hasScrollBody: false, 
+                  hasScrollBody: false,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16), // Bottom padding for scrolling
+                    padding: const EdgeInsets.only(
+                        bottom: 16), // Bottom padding for scrolling
                     child: Column(
                       children: [
                         // Top Bar
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               // Progress indicator only
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
+                                  border: Border.all(
+                                      color: AppTheme.retroDark, width: 4),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        color: AppTheme.retroDark,
+                                        offset: Offset(4, 4),
+                                        blurRadius: 0)
+                                  ],
                                 ),
                                 child: Text(
                                   '${_currentQuestionIndex + 1}/${_questions.length}',
-                                  style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                                  textDirection: TextDirection.ltr,
+                                  textAlign: TextAlign.center,
+                                  style: AppFonts.pressStart2p(
+                                    fontSize: 8,
+                                    color: AppTheme.retroDark,
+                                    decoration: TextDecoration.none,
+                                  ),
                                 ),
                               ),
                             ],
@@ -633,20 +772,29 @@ Generate 5 questions now:''';
                             children: [
                               Container(
                                 width: double.infinity,
-                                constraints: const BoxConstraints(minHeight: 180),
+                                constraints:
+                                    const BoxConstraints(minHeight: 180),
                                 padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(6, 6), blurRadius: 0)],
+                                  border: Border.all(
+                                      color: AppTheme.retroDark, width: 4),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        color: AppTheme.retroDark,
+                                        offset: Offset(6, 6),
+                                        blurRadius: 0)
+                                  ],
                                 ),
                                 child: Column(
                                   children: [
-                                    const SizedBox(height: 32), // Space for header overlap
+                                    const SizedBox(
+                                        height: 32), // Space for header overlap
                                     Text(
                                       subText, // e.g. "How do you say..."
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.pressStart2p(
+                                      textDirection: textDirection,
+                                      textAlign: textAlign,
+                                      style: AppFonts.pressStart2p(
                                         fontSize: 10,
                                         height: 1.8,
                                         color: Colors.grey[600],
@@ -656,8 +804,9 @@ Generate 5 questions now:''';
                                     const SizedBox(height: 16),
                                     Text(
                                       mainTopic, // e.g. "Greetings"
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.pressStart2p(
+                                      textDirection: textDirection,
+                                      textAlign: textAlign,
+                                      style: AppFonts.pressStart2p(
                                         fontSize: 20,
                                         height: 1.4,
                                         color: AppTheme.retroDark,
@@ -671,25 +820,42 @@ Generate 5 questions now:''';
                               Positioned(
                                 top: -16,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
                                   decoration: BoxDecoration(
                                     color: AppTheme.retroPrimary,
-                                    border: Border.all(color: AppTheme.retroDark, width: 4),
+                                    border: Border.all(
+                                        color: AppTheme.retroDark, width: 4),
                                   ),
                                   child: Text(
                                     "QUESTION ${_currentQuestionIndex + 1}/${_questions.length}",
-                                    style: GoogleFonts.pressStart2p(
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.center,
+                                    style: AppFonts.pressStart2p(
                                       fontSize: 10,
                                       color: Colors.white,
+                                      decoration: TextDecoration.none,
                                     ),
                                   ),
                                 ),
                               ),
                               // Corner dots
-                              Positioned(top: 8, left: 8, child: _pixel(AppTheme.retroDark)),
-                              Positioned(top: 8, right: 8, child: _pixel(AppTheme.retroDark)),
-                              Positioned(bottom: 8, left: 8, child: _pixel(AppTheme.retroDark)),
-                              Positioned(bottom: 8, right: 8, child: _pixel(AppTheme.retroDark)),
+                              Positioned(
+                                  top: 8,
+                                  left: 8,
+                                  child: _pixel(AppTheme.retroDark)),
+                              Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: _pixel(AppTheme.retroDark)),
+                              Positioned(
+                                  bottom: 8,
+                                  left: 8,
+                                  child: _pixel(AppTheme.retroDark)),
+                              Positioned(
+                                  bottom: 8,
+                                  right: 8,
+                                  child: _pixel(AppTheme.retroDark)),
                             ],
                           ),
                         ),
@@ -699,7 +865,8 @@ Generate 5 questions now:''';
 
                         // Options Grid (2x2 layout)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                           child: Column(
                             children: [
                               for (int i = 0; i < options.length; i += 2)
@@ -707,10 +874,14 @@ Generate 5 questions now:''';
                                   padding: const EdgeInsets.only(bottom: 12.0),
                                   child: Row(
                                     children: [
-                                      Expanded(child: _buildOption(options[i], question)),
+                                      Expanded(
+                                          child: _buildOption(
+                                              options[i], question)),
                                       const SizedBox(width: 16),
                                       if (i + 1 < options.length)
-                                        Expanded(child: _buildOption(options[i + 1], question))
+                                        Expanded(
+                                            child: _buildOption(
+                                                options[i + 1], question))
                                       else
                                         const Spacer(),
                                     ],
@@ -719,7 +890,7 @@ Generate 5 questions now:''';
                             ],
                           ),
                         ),
-                        
+
                         // Fixed spacing to prevent layout shift
                         const SizedBox(height: 24),
 
@@ -733,16 +904,30 @@ Generate 5 questions now:''';
                               // Speech Bubble
                               Container(
                                 padding: const EdgeInsets.all(12),
-                                margin: const EdgeInsets.only(right: 8), 
-                                constraints: const BoxConstraints(maxWidth: 180),
+                                margin: const EdgeInsets.only(right: 8),
+                                constraints:
+                                    const BoxConstraints(maxWidth: 180),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  border: Border.all(color: AppTheme.retroDark, width: 3),
-                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(3, 3), blurRadius: 0)],
+                                  border: Border.all(
+                                      color: AppTheme.retroDark, width: 3),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        color: AppTheme.retroDark,
+                                        offset: Offset(3, 3),
+                                        blurRadius: 0)
+                                  ],
                                 ),
                                 child: Text(
                                   bubbleText,
-                                  style: GoogleFonts.pressStart2p(fontSize: 8, height: 1.5, color: AppTheme.retroDark),
+                                  textDirection: textDirection,
+                                  textAlign: textAlign,
+                                  style: AppFonts.pressStart2p(
+                                    fontSize: 8,
+                                    height: 1.5,
+                                    color: AppTheme.retroDark,
+                                    decoration: TextDecoration.none,
+                                  ),
                                 ),
                               ),
                               // Pet Avatar
@@ -753,7 +938,7 @@ Generate 5 questions now:''';
                             ],
                           ),
                         ),
-                        
+
                         // Continue Button (appears after answer is selected)
                         if (_showExplanation)
                           Padding(
@@ -762,10 +947,12 @@ Generate 5 questions now:''';
                               onTap: _goToNextQuestion,
                               child: Container(
                                 width: double.infinity,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 decoration: BoxDecoration(
                                   color: AppTheme.retroPrimary,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
+                                  border: Border.all(
+                                      color: AppTheme.retroDark, width: 4),
                                   boxShadow: const [
                                     BoxShadow(
                                       color: AppTheme.retroDark,
@@ -777,9 +964,10 @@ Generate 5 questions now:''';
                                 child: Text(
                                   'CONTINUE',
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.pressStart2p(
+                                  style: AppFonts.pressStart2p(
                                     fontSize: 12,
                                     color: Colors.white,
+                                    decoration: TextDecoration.none,
                                   ),
                                 ),
                               ),

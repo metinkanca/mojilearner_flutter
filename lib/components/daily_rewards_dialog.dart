@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../constants/progression.dart';
 import '../constants/shop.dart';
+import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../providers/settings_provider.dart';
+import '../utils/fonts.dart';
+import '../utils/rtl_locale.dart';
 
 class DailyRewardsDialog extends StatefulWidget {
   final DailyRewardInfo rewardInfo;
@@ -45,50 +47,44 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
     super.dispose();
   }
 
-  String _getText(String key, String fallback) {
-    try {
-      final languageProvider = Provider.of<dynamic>(context, listen: false);
-      final translations = languageProvider.getTranslations() as Map<String, String>;
-      return translations[key] ?? fallback;
-    } catch (_) {
-      return fallback;
-    }
-  }
-
-  String _getDayStreakText(int dayNumber) {
-    try {
-      final languageProvider = Provider.of<dynamic>(context, listen: false);
-      final translations = languageProvider.getTranslations() as Map<String, String>;
-      final template = translations['day_streak'] ?? 'Day {X} Streak';
-      return template.replaceAll('{X}', dayNumber.toString());
-    } catch (_) {
-      return 'Day $dayNumber Streak';
-    }
-  }
-
-  String _getAmazingStreakText(int dayNumber) {
-    try {
-      final languageProvider = Provider.of<dynamic>(context, listen: false);
-      final translations = languageProvider.getTranslations() as Map<String, String>;
-      final template = translations['amazing_streak'] ?? 'Amazing! Day {X} streak!';
-      return template.replaceAll('{X}', dayNumber.toString());
-    } catch (_) {
-      return 'Amazing! Day $dayNumber streak!';
-    }
-  }
-
-  String _getMotivationalMessage() {
+  String _getMotivationalMessage(AppLocalizations l10n) {
     if (widget.rewardInfo.streakReset) {
-      return _getText('streak_broken', 'Welcome back! Starting fresh');
+      return l10n.streak_broken;
     }
     if (widget.rewardInfo.dayNumber == 7) {
-      return _getAmazingStreakText(widget.rewardInfo.dayNumber);
+      return l10n.amazing_streak(widget.rewardInfo.dayNumber);
     }
-    return _getText('keep_going', 'Keep it going!');
+    return l10n.keep_going;
   }
 
-  String _getRewardDisplayText() {
-    final reward = widget.rewardInfo.reward as RewardDef;
+  String _localizedShopItemName(
+      AppLocalizations l10n, String itemId, String fallback) {
+    switch (itemId) {
+      case 'apple':
+        return l10n.shopItemAppleName;
+      case 'croissant':
+        return l10n.shopItemCroissantName;
+      case 'pizza':
+        return l10n.shopItemPizzaName;
+      case 'sushi':
+        return l10n.shopItemSushiName;
+      case 'coffee':
+        return l10n.shopItemCoffeeName;
+      case 'bg_blue':
+        return l10n.shopItemBgBlueName;
+      case 'bg_forest':
+        return l10n.shopItemBgForestName;
+      case 'bg_sunset':
+        return l10n.shopItemBgSunsetName;
+      case 'bg_galaxy':
+        return l10n.shopItemBgGalaxyName;
+      default:
+        return fallback;
+    }
+  }
+
+  String _getRewardDisplayText(AppLocalizations l10n) {
+    final reward = widget.rewardInfo.reward;
     if (reward.type == RewardType.coins) {
       return '${reward.value} 🪙';
     } else if (reward.type == RewardType.item && reward.itemId != null) {
@@ -96,14 +92,14 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
         (i) => i.id == reward.itemId,
         orElse: () => shopItems.first,
       );
-      final itemName = item.name;
+      final itemName = _localizedShopItemName(l10n, item.id, item.name);
       return '${item.icon} $itemName ${reward.value > 1 ? 'x${reward.value}' : ''}';
     }
     return reward.description;
   }
 
   String _getRewardIcon() {
-    final reward = widget.rewardInfo.reward as RewardDef;
+    final reward = widget.rewardInfo.reward;
     if (reward.type == RewardType.coins) {
       return '🪙';
     } else if (reward.type == RewardType.item && reward.itemId != null) {
@@ -133,9 +129,13 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
   @override
   Widget build(BuildContext context) {
     final settings = Provider.of<SettingsProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
     final fontFunction = settings.usePixelFont
-        ? GoogleFonts.pressStart2p
-        : GoogleFonts.spaceMono;
+      ? AppFonts.pressStart2p
+      : AppFonts.spaceMono;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -155,7 +155,9 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
             children: [
               // Header
               Text(
-                _getText('daily_reward', 'Daily Reward').toUpperCase(),
+                l10n.daily_reward.toUpperCase(),
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
                 style: fontFunction(
                   fontSize: 14,
                   color: AppTheme.retroDark,
@@ -184,7 +186,9 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      _getDayStreakText(widget.rewardInfo.dayNumber),
+                      l10n.day_streak(widget.rewardInfo.dayNumber),
+                      textDirection: textDirection,
+                      textAlign: textAlign,
                       style: fontFunction(
                         fontSize: 12,
                         color: AppTheme.retroDark,
@@ -213,7 +217,8 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        _getRewardDisplayText(),
+                        _getRewardDisplayText(l10n),
+                        textDirection: textDirection,
                         textAlign: TextAlign.center,
                         style: fontFunction(
                           fontSize: 10,
@@ -238,7 +243,8 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            _getText('reward_claimed', 'Reward Claimed!').toUpperCase(),
+                            l10n.reward_claimed.toUpperCase(),
+                            textDirection: textDirection,
                             textAlign: TextAlign.center,
                             style: fontFunction(
                               fontSize: 12,
@@ -257,7 +263,8 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
 
               // Motivational Message
               Text(
-                _getMotivationalMessage(),
+                _getMotivationalMessage(l10n),
+                textDirection: textDirection,
                 textAlign: TextAlign.center,
                 style: fontFunction(
                   fontSize: 9,
@@ -291,7 +298,9 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                       ],
                     ),
                     child: Text(
-                      _getText('claim_reward', 'Claim Reward').toUpperCase(),
+                      l10n.claim_reward.toUpperCase(),
+                      textDirection: textDirection,
+                      textAlign: TextAlign.center,
                       style: fontFunction(
                         fontSize: 12,
                         color: Colors.white,
@@ -302,7 +311,8 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  _getText('come_back_tomorrow', 'Come back tomorrow!'),
+                  l10n.come_back_tomorrow,
+                  textDirection: textDirection,
                   textAlign: TextAlign.center,
                   style: fontFunction(
                     fontSize: 8,

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
-import '../../providers/user_provider.dart';
+import '../../providers/calibration_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class SelfAssessmentScreen extends StatefulWidget {
   const SelfAssessmentScreen({super.key});
@@ -17,7 +18,7 @@ class SelfAssessmentScreen extends StatefulWidget {
 class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
   String? _selectedLevel;
 
-  void _selectLevel(String level) {
+  Future<void> _selectLevel(String level) async {
     setState(() {
       _selectedLevel = level;
     });
@@ -25,14 +26,14 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
     // Save the self-assessment
     final languageCode = Provider.of<LanguageProvider>(context, listen: false)
         .targetLanguage?.code ?? 'en';
-    Provider.of<UserProvider>(context, listen: false)
+    await Provider.of<CalibrationProvider>(context, listen: false)
         .updateSelfAssessment(languageCode, level);
+    if (!mounted) return;
     
     // Wait a moment for visual feedback, then navigate
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (!mounted) return;
-      context.go('/onboarding/pet-greeting');
-    });
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+    context.go('/onboarding/pet-greeting');
   }
 
   Widget _buildLevelButton({
@@ -43,6 +44,9 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
     required BuildContext context,
   }) {
     final isSelected = _selectedLevel == level;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     return GestureDetector(
       onTap: () => _selectLevel(level),
@@ -76,8 +80,10 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                   fit: BoxFit.scaleDown,
                   child: Text(
                     title,
+                    textDirection: textDirection,
                     maxLines: 1,
-                    style: GoogleFonts.pressStart2p(
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                       fontSize: 14,
                       color: isSelected ? Colors.white : AppTheme.retroDark,
                     ),
@@ -91,8 +97,9 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
               child: Center(
                 child: Text(
                   description,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 8,
                     color: isSelected
                         ? Colors.white.withValues(alpha: 0.9)
@@ -113,6 +120,9 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -126,7 +136,8 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                 children: [
                   Text(
                     '4/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -161,18 +172,20 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                 children: [
                   Text(
                     l10n.howWouldYouRate,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: textAlign,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     l10n.yourLevel,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    style: AppFonts.pressStart2p(
                       fontSize: 18,
                       color: AppTheme.retroDark,
                       shadows: [
@@ -182,15 +195,16 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                         ),
                       ],
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: textAlign,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     l10n.dontWorryVerify,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                       fontSize: 8,
                       color: AppTheme.retroDark.withValues(alpha: 0.7),
                       height: 1.5,

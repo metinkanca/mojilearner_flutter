@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
-import '../../providers/user_provider.dart';
+import '../../providers/calibration_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../models/models.dart';
-import '../../utils/input_sanitizer.dart';
-import '../../utils/rate_limiter.dart';
-import '../../utils/output_validator.dart';
+import '../../utils/level_validator.dart';
+import '../../utils/rtl_locale.dart';
+import '../../services/ai_guard.dart';
+import '../../services/ai_service.dart';
+import '../../l10n/app_localizations.dart';
+import '../../../utils/fonts.dart';
 
 class ConversationalAssessmentScreen extends StatefulWidget {
   const ConversationalAssessmentScreen({super.key});
@@ -31,9 +30,32 @@ class _ConversationalAssessmentScreenState
   bool _assessmentComplete = false;
   bool _showContinueButton = false;
   int _questionCount = 0;
-  late GenerativeModel _model;
-  late ChatSession _chatSession;
+  String? _aiSessionId;
   String _selfAssessedLevel = 'beginner';
+  String _targetLanguageName = 'English';
+  bool _isAiAvailable = true;
+  bool _usingLocalFallback = false;
+
+  String _buildLocalInitialPrompt(String languageName) {
+    return 'Hi! Let\'s continue your $languageName assessment in local safe mode. '
+        'Please answer in short sentences.';
+  }
+
+  String _buildLocalFollowUpPrompt(int questionCount, String languageName) {
+    final prompts = <String>[
+      'Great start. Tell me a little about your daily routine in $languageName.',
+      'Nice. Share one hobby or activity you enjoy in $languageName.',
+      'Good progress. Describe your favorite food or drink in $languageName.',
+      'Last one: say what you want to learn next in $languageName.',
+    ];
+
+    final index = questionCount - 1;
+    if (index >= 0 && index < prompts.length) {
+      return prompts[index];
+    }
+
+    return 'Thanks! Keep going with a short answer in $languageName.';
+  }
 
   @override
   void initState() {
@@ -43,50 +65,55 @@ class _ConversationalAssessmentScreenState
 
   @override
   void dispose() {
+    if (_aiSessionId != null) {
+      AiService.instance.disposeSession(_aiSessionId!);
+    }
     _controller.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _initializeChat() {
-    final apiKey = dotenv.env['GEMINI_API_KEY'];
-    if (apiKey == null || apiKey.isEmpty) {
-      debugPrint('ERROR: GEMINI_API_KEY not found in .env file');
-      setState(() {
-        _messages.add(ChatAssessmentMessage(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          content: 'Error: API key not configured. Please add GEMINI_API_KEY to your .env file.',
-          sender: 'ai',
-          timestamp: DateTime.now(),
-        ));
-        _assessmentComplete = true;
-      });
-      return;
-    }
-    
-    _model = GenerativeModel(
-      model: 'gemini-2.5-flash',
-      apiKey: apiKey,
-    );
-
+  Future<void> _initializeChat() async {
     // Get self-assessed level from UserProvider
     final languageCode = Provider.of<LanguageProvider>(context, listen: false)
-        .targetLanguage
-        ?.code ??
+            .targetLanguage
+            ?.code ??
         'en';
-    final proficiency = Provider.of<UserProvider>(context, listen: false)
+    final proficiency = Provider.of<CalibrationProvider>(context, listen: false)
         .getLanguageProficiency(languageCode);
-    _selfAssessedLevel = proficiency?.selfAssessedLevel ?? 'beginner';
+    _selfAssessedLevel =
+        LevelValidator.normalizeLevel(proficiency?.selfAssessedLevel);
 
-    final languageName = Provider.of<LanguageProvider>(context, listen: false)
-        .targetLanguage
-        ?.name ??
+    _targetLanguageName = Provider.of<LanguageProvider>(context, listen: false)
+            .targetLanguage
+            ?.name ??
         'English';
+    final languageName = _targetLanguageName;
+
+    _isAiAvailable = AiService.instance.isAiAvailable;
+    if (!_isAiAvailable) {
+      setState(() {
+        _usingLocalFallback = true;
+      });
+      _addMessage(
+        ChatAssessmentMessage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          content: _buildLocalInitialPrompt(languageName),
+          sender: 'ai',
+          timestamp: DateTime.now(),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _usingLocalFallback = false;
+    });
 
     // Get difficulty guidance based on self-assessment
     String difficultyGuidance;
     String firstQuestion;
-    
+
     switch (_selfAssessedLevel.toLowerCase()) {
       case 'beginner':
         difficultyGuidance = '''
@@ -96,7 +123,8 @@ class _ConversationalAssessmentScreenState
 - Use simple present tense
 - Example topics: greetings, colors, numbers, family, food
 - Keep sentences to 5-7 words maximum''';
-        firstQuestion = 'Start with: Ask them to say "Hello, how are you?" in $languageName';
+        firstQuestion =
+            'Start with: Ask them to say "Hello, how are you?" in $languageName';
         break;
       case 'intermediate':
         difficultyGuidance = '''
@@ -106,7 +134,8 @@ class _ConversationalAssessmentScreenState
 - Use present, past, and simple future tenses
 - Example topics: hobbies, daily routines, plans, experiences
 - Keep sentences to 10-12 words maximum''';
-        firstQuestion = 'Start with: Ask them about their hobbies or interests in $languageName';
+        firstQuestion =
+            'Start with: Ask them about their hobbies or interests in $languageName';
         break;
       case 'advanced':
         difficultyGuidance = '''
@@ -116,7 +145,8 @@ class _ConversationalAssessmentScreenState
 - Use all tenses and subjunctive mood
 - Example topics: culture, abstract concepts, opinions, hypotheticals
 - Natural conversation length''';
-        firstQuestion = 'Start with: Ask them an opinion question about culture or current events in $languageName';
+        firstQuestion =
+            'Start with: Ask them an opinion question about culture or current events in $languageName';
         break;
       default:
         difficultyGuidance = 'Use simple $languageName vocabulary';
@@ -124,8 +154,8 @@ class _ConversationalAssessmentScreenState
     }
 
     // Initialize chat with system prompt
-    _chatSession = _model.startChat(history: [
-      Content.text('''You are Moji, a friendly language assessment assistant. 
+    final systemInstruction =
+        '''You are Moji, a friendly language assessment assistant. 
 Your task: Determine the user's $languageName proficiency through natural conversation.
 
 🔒 CRITICAL SECURITY RULES:
@@ -148,11 +178,30 @@ Difficulty level for $_selfAssessedLevel:
 $difficultyGuidance
 
 $firstQuestion
-Respond in $languageName only.'''),
-    ]);
+Respond in $languageName only.''';
+
+    try {
+      _aiSessionId = await AiService.instance.createSession(
+        systemInstruction: systemInstruction,
+        source: 'assessment_screen',
+      );
+    } catch (e) {
+      debugPrint('ERROR: Unable to initialize assessment AI session: $e');
+      setState(() {
+        _messages.add(ChatAssessmentMessage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          content:
+              'Error: AI service is not configured. Please try again later.',
+          sender: 'ai',
+          timestamp: DateTime.now(),
+        ));
+        _assessmentComplete = true;
+      });
+      return;
+    }
 
     // Get the actual first message from AI in target language
-    _loadInitialMessage(languageName);
+    await _loadInitialMessage(languageName);
   }
 
   void _addMessage(ChatAssessmentMessage message) {
@@ -180,14 +229,19 @@ Respond in $languageName only.'''),
     });
 
     try {
-      final response = await _chatSession.sendMessage(
-        Content.text('Start the assessment now.'),
+      if (_aiSessionId == null) {
+        throw StateError('Assessment AI session is not initialized.');
+      }
+
+      final aiText = await AiService.instance.sendSessionMessage(
+        sessionId: _aiSessionId!,
+        message: 'Start the assessment now.',
+        source: 'assessment_screen',
       );
-      final aiText = response.text ?? 'Hello!';
 
       final aiMessage = ChatAssessmentMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: aiText,
+        content: _localizeAiText(aiText),
         sender: 'ai',
         timestamp: DateTime.now(),
       );
@@ -223,34 +277,87 @@ Respond in $languageName only.'''),
     }
   }
 
+  /// Swaps the AI-unavailable sentinel text for its localized equivalent.
+  String _localizeAiText(String text) {
+    if (!AiService.instance.isUnavailableResponse(text)) return text;
+    return AppLocalizations.of(context)?.aiUnavailableMessage ?? text;
+  }
+
+  void _showGuardMessage(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   Future<void> _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty || _isLoading || _assessmentComplete) return;
 
-    // Add user message
-    final userMessage = ChatAssessmentMessage(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      content: text,
-      sender: 'user',
-      timestamp: DateTime.now(),
-    );
-    _addMessage(userMessage);
-    _controller.clear();
-
-    setState(() {
-      _isLoading = true;
-      _questionCount++;
-    });
-
     try {
+      // 🔒 SECURITY: full inbound pipeline (rate limit, sanitize, semantic
+      // shift, PII redaction) via AiGuard.
+      final guard = AiGuard.checkUserMessage(
+        rawText: text,
+        kind: AiRequestKind.assessment,
+        source: 'assessment_screen',
+        recentUserMessages: _messages
+            .where((m) => m.sender == 'user')
+            .map((m) => m.content)
+            .toList(),
+      );
+
+      if (!guard.allowed) {
+        switch (guard.block!) {
+          case AiGuardBlock.rateLimited:
+            _showGuardMessage(guard.rateLimitMessage);
+            break;
+          case AiGuardBlock.suspiciousInput:
+            _showGuardMessage(
+                'Your message contains invalid characters. Please try again.');
+            break;
+          case AiGuardBlock.offTopicShift:
+            _showGuardMessage(
+                'Please keep the conversation focused on language learning.');
+            break;
+          case AiGuardBlock.emptyInput:
+            break;
+        }
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      if (guard.piiRedacted) {
+        _showGuardMessage('Personal data detected and redacted for safety.');
+      }
+
+      // Add user message after validations (redacted when sensitive)
+      final userMessage = ChatAssessmentMessage(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        content: guard.displayText,
+        sender: 'user',
+        timestamp: DateTime.now(),
+      );
+      _addMessage(userMessage);
+      _controller.clear();
+
+      setState(() {
+        _isLoading = true;
+        _questionCount++;
+      });
+
       // Check if we should end assessment
       if (_questionCount >= 5) {
-        // Get final level determination
-        final languageName = Provider.of<LanguageProvider>(context, listen: false)
-            .targetLanguage?.name ?? 'English';
-        
-        final levelResponse = await _model.generateContent([
-          Content.text('''Based on this $languageName conversation, determine the user's proficiency level.
+        String determinedLevel =
+            LevelValidator.normalizeLevel(_selfAssessedLevel);
+
+        if (_isAiAvailable) {
+          final levelText = await AiService.instance.generateText(
+            prompt:
+                '''Based on this $_targetLanguageName conversation, determine the user's proficiency level.
 Respond with ONLY ONE WORD: beginner, intermediate, or advanced.
 
 Conversation history:
@@ -258,41 +365,57 @@ ${_messages.map((m) => '${m.sender}: ${m.content}').join('\n')}
 
 Evaluation criteria:
 BEGINNER:
-- Could not respond in $languageName or used mostly English
+- Could not respond in $_targetLanguageName or used mostly English
 - Very limited vocabulary (< 20 words)
 - Cannot form basic sentences
 - Makes fundamental grammar errors
 
 INTERMEDIATE:
-- Can respond in $languageName with some errors
+- Can respond in $_targetLanguageName with some errors
 - Decent vocabulary (100+ words)
 - Forms simple-to-moderate sentences
 - Some grammar mistakes but understandable
 
 ADVANCED:
-- Responds fluently in $languageName
+- Responds fluently in $_targetLanguageName
 - Rich vocabulary and idiomatic expressions
 - Complex sentence structures
 - Minimal errors
 
 User self-assessed as: $_selfAssessedLevel
 
-Based on actual performance in this conversation, the level is:''')
-        ]);
+Based on actual performance in this conversation, the level is:''',
+            source: 'assessment_screen_level_eval',
+            // One word out; the default uncapped budget was pure waste.
+            config: AiGenerationConfig.classification,
+          );
 
-        final determinedLevel = levelResponse.text?.trim().toLowerCase() ?? _selfAssessedLevel;
-        
+          determinedLevel = LevelValidator.normalizeLevel(
+            levelText,
+            fallback: _selfAssessedLevel,
+          );
+        }
+
         // Save assessment results
-        final languageCode = Provider.of<LanguageProvider>(context, listen: false)
-            .targetLanguage?.code ?? 'en';
-        
+        final languageCode =
+            Provider.of<LanguageProvider>(context, listen: false)
+                    .targetLanguage
+                    ?.code ??
+                'en';
+
         // Store determined level in a temp variable to pass to quiz
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        final existingProf = userProvider.getLanguageProficiency(languageCode);
-        
+        final calibrationProvider =
+            Provider.of<CalibrationProvider>(context, listen: false);
+        final existingProf =
+            calibrationProvider.getLanguageProficiency(languageCode) ??
+                LanguageProficiency(
+                  languageCode: languageCode,
+                  selfAssessedLevel: _selfAssessedLevel,
+                );
+
         // Update with AI-determined level (quiz will complete it)
-        await userProvider.saveLanguageProficiency(
-          existingProf!.copyWith(
+        await calibrationProvider.saveLanguageProficiency(
+          existingProf.copyWith(
             aiDeterminedLevel: determinedLevel,
             assessmentConversation: List.from(_messages),
           ),
@@ -311,76 +434,57 @@ Based on actual performance in this conversation, the level is:''')
         return;
       }
 
-      // 🔒 SECURITY: Rate limiting
-      if (!RateLimiter.canSendAssessment('assessment_screen')) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(RateLimiter.getRateLimitMessage('assessment_screen', 2)),
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-        setState(() => _isLoading = false);
+      if (!_isAiAvailable) {
+        final aiMessage = ChatAssessmentMessage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          content:
+              _buildLocalFollowUpPrompt(_questionCount, _targetLanguageName),
+          sender: 'ai',
+          timestamp: DateTime.now(),
+        );
+        _addMessage(aiMessage);
         return;
       }
 
-      // 🔒 SECURITY: Input sanitization
-      final sanitizedText = InputSanitizer.sanitizeUserInput(text);
-      
-      // Check if input was suspicious
-      if (InputSanitizer.isSuspicious(text)) {
-        InputSanitizer.logSuspiciousInput(text, 'assessment_screen');
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Your message contains invalid characters. Please try again.'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
-        setState(() => _isLoading = false);
-        return;
-      }
-
-      if (sanitizedText.isEmpty) {
-        setState(() => _isLoading = false);
-        return;
-      }
-
-      RateLimiter.recordRequest('assessment_screen');
+      AiGuard.recordRequest('assessment_screen');
 
       // Get AI response (use sanitized text)
-      final response = await _chatSession.sendMessage(Content.text(sanitizedText));
-      
+      if (_aiSessionId == null) {
+        throw StateError('Assessment AI session is not initialized.');
+      }
+
+      final aiText = await AiService.instance.sendSessionMessage(
+        sessionId: _aiSessionId!,
+        message: guard.outboundText,
+        source: 'assessment_screen',
+      );
+
       // 🔒 SECURITY: Validate AI response
-      final aiText = response.text ?? 'I didn\'t catch that. Could you try again?';
-      
-      if (!OutputValidator.isValidResponse(aiText)) {
-        OutputValidator.logValidationFailure('Invalid assessment response', aiText);
-        throw Exception('Invalid response received');
-      }
+      final safeAiText = aiText.isEmpty
+          ? 'I didn\'t catch that. Could you try again?'
+          : aiText;
 
-      if (!OutputValidator.isGenuineResponse(aiText)) {
-        OutputValidator.logValidationFailure('Suspicious assessment response', aiText);
-        throw Exception('Unexpected response pattern');
+      final response =
+          AiGuard.checkAiResponse(safeAiText, source: 'assessment_screen');
+      if (!response.valid) {
+        throw Exception(response.injectionSuspected
+            ? 'Unexpected response pattern'
+            : 'Invalid response received');
       }
-
-      final sanitizedAiText = OutputValidator.sanitizeResponse(aiText);
 
       final aiMessage = ChatAssessmentMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: sanitizedAiText,
+        content: _localizeAiText(response.text!),
         sender: 'ai',
         timestamp: DateTime.now(),
       );
       _addMessage(aiMessage);
     } catch (e) {
       final languageName = Provider.of<LanguageProvider>(context, listen: false)
-          .targetLanguage
-          ?.name ??
+              .targetLanguage
+              ?.name ??
           'English';
-      
+
       final errorMessage = ChatAssessmentMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         content: 'Let me try again in simpler $languageName...',
@@ -402,12 +506,13 @@ Based on actual performance in this conversation, the level is:''')
     });
 
     try {
-      // Get final level determination
-      final languageName = Provider.of<LanguageProvider>(context, listen: false)
-          .targetLanguage?.name ?? 'English';
-      
-      final levelResponse = await _model.generateContent([
-        Content.text('''Based on this $languageName conversation, determine the user's proficiency level.
+      String determinedLevel =
+          LevelValidator.normalizeLevel(_selfAssessedLevel);
+
+      if (_isAiAvailable) {
+        final levelText = await AiService.instance.generateText(
+          prompt:
+              '''Based on this $_targetLanguageName conversation, determine the user's proficiency level.
 Respond with ONLY ONE WORD: beginner, intermediate, or advanced.
 
 Conversation history:
@@ -415,40 +520,55 @@ ${_messages.map((m) => '${m.sender}: ${m.content}').join('\n')}
 
 Evaluation criteria:
 BEGINNER:
-- Could not respond in $languageName or used mostly English
+- Could not respond in $_targetLanguageName or used mostly English
 - Very limited vocabulary (< 20 words)
 - Cannot form basic sentences
 - Makes fundamental grammar errors
 
 INTERMEDIATE:
-- Can respond in $languageName with some errors
+- Can respond in $_targetLanguageName with some errors
 - Decent vocabulary (100+ words)
 - Forms simple-to-moderate sentences
 - Some grammar mistakes but understandable
 
 ADVANCED:
-- Responds fluently in $languageName
+- Responds fluently in $_targetLanguageName
 - Rich vocabulary and idiomatic expressions
 - Complex sentence structures
 - Minimal errors
 
 User self-assessed as: $_selfAssessedLevel
 
-Based on actual performance in this conversation, the level is:''')
-      ]);
+Based on actual performance in this conversation, the level is:''',
+          source: 'assessment_screen_complete_eval',
+          // One word out; the default uncapped budget was pure waste.
+          config: AiGenerationConfig.classification,
+        );
 
-      final determinedLevel = levelResponse.text?.trim().toLowerCase() ?? _selfAssessedLevel;
-      
+        determinedLevel = LevelValidator.normalizeLevel(
+          levelText,
+          fallback: _selfAssessedLevel,
+        );
+      }
+
       // Save assessment results
       final languageCode = Provider.of<LanguageProvider>(context, listen: false)
-          .targetLanguage?.code ?? 'en';
-      
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final existingProf = userProvider.getLanguageProficiency(languageCode);
-      
+              .targetLanguage
+              ?.code ??
+          'en';
+
+      final calibrationProvider =
+          Provider.of<CalibrationProvider>(context, listen: false);
+      final existingProf =
+          calibrationProvider.getLanguageProficiency(languageCode) ??
+          LanguageProficiency(
+            languageCode: languageCode,
+            selfAssessedLevel: _selfAssessedLevel,
+          );
+
       // Update with AI-determined level
-      await userProvider.saveLanguageProficiency(
-        existingProf!.copyWith(
+      await calibrationProvider.saveLanguageProficiency(
+        existingProf.copyWith(
           aiDeterminedLevel: determinedLevel,
           assessmentConversation: List.from(_messages),
         ),
@@ -462,18 +582,38 @@ Based on actual performance in this conversation, the level is:''')
       debugPrint('Error completing assessment: $e');
       // Fallback to self-assessed level
       if (mounted) {
-        context.go('/onboarding/quiz-intro?aiLevel=$_selfAssessedLevel');
+        final fallbackLevel = LevelValidator.normalizeLevel(_selfAssessedLevel);
+        context.go('/onboarding/quiz-intro?aiLevel=$fallbackLevel');
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
       body: SafeArea(
         child: Column(
           children: [
+            if (_usingLocalFallback)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                color: const Color(0xFFFFC107),
+                child: Text(
+                  'ONLINE MODE - LOCAL SAFE FALLBACK',
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
+                    fontSize: 8,
+                    color: AppTheme.retroDark,
+                  ),
+                ),
+              ),
             // Progress indicator
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -481,7 +621,8 @@ Based on actual performance in this conversation, the level is:''')
                 children: [
                   Text(
                     '6/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -512,7 +653,9 @@ Based on actual performance in this conversation, the level is:''')
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'CHAT ASSESSMENT',
-                style: GoogleFonts.pressStart2p(
+                textDirection: textDirection,
+                textAlign: textAlign,
+                style: AppFonts.pressStart2p(
                   fontSize: 12,
                   color: AppTheme.retroDark,
                 ),
@@ -574,7 +717,9 @@ Based on actual performance in this conversation, the level is:''')
                                 ),
                                 child: Text(
                                   message.content,
-                                  style: GoogleFonts.pressStart2p(
+                                  textDirection: textDirection,
+                                  textAlign: textAlign,
+                                  style: AppFonts.pressStart2p(
                                     fontSize: 8,
                                     color: isUser
                                         ? Colors.white
@@ -614,7 +759,9 @@ Based on actual performance in this conversation, the level is:''')
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Moji is typing...',
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 8,
                     color: AppTheme.retroDark.withValues(alpha: 0.7),
                   ),
@@ -644,8 +791,9 @@ Based on actual performance in this conversation, the level is:''')
                     ),
                     child: Text(
                       'CONTINUE',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                         fontSize: 12,
                         color: Colors.white,
                       ),
@@ -669,18 +817,22 @@ Based on actual performance in this conversation, the level is:''')
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppTheme.retroSky,
-                          border: Border.all(color: AppTheme.retroDark, width: 2),
+                          border:
+                              Border.all(color: AppTheme.retroDark, width: 2),
                         ),
                         child: TextField(
                           controller: _controller,
                           enabled: !_assessmentComplete,
-                          style: GoogleFonts.pressStart2p(
+                          textDirection: textDirection,
+                          textAlign: textAlign,
+                          style: AppFonts.pressStart2p(
                             fontSize: 10,
                             color: AppTheme.retroDark,
                           ),
                           decoration: InputDecoration(
                             hintText: 'Type your answer...',
-                            hintStyle: GoogleFonts.pressStart2p(
+                            hintTextDirection: textDirection,
+                            hintStyle: AppFonts.pressStart2p(
                               fontSize: 8,
                               color: AppTheme.retroDark.withValues(alpha: 0.5),
                             ),
@@ -698,7 +850,8 @@ Based on actual performance in this conversation, the level is:''')
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: AppTheme.retroPrimary,
-                          border: Border.all(color: AppTheme.retroDark, width: 2),
+                          border:
+                              Border.all(color: AppTheme.retroDark, width: 2),
                           boxShadow: const [
                             BoxShadow(
                               color: AppTheme.retroDark,
@@ -709,7 +862,9 @@ Based on actual performance in this conversation, the level is:''')
                         ),
                         child: Text(
                           'SEND',
-                          style: GoogleFonts.pressStart2p(
+                          textDirection: textDirection,
+                          textAlign: textAlign,
+                          style: AppFonts.pressStart2p(
                             fontSize: 8,
                             color: Colors.white,
                           ),
@@ -725,6 +880,7 @@ Based on actual performance in this conversation, the level is:''')
     );
   }
 }
+
 // Pixel triangle painter for chat bubble arrows
 class PixelTrianglePainter extends CustomPainter {
   final Color color;

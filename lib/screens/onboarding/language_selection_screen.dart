@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../constants/theme.dart';
 import '../../providers/language_provider.dart';
+import '../../utils/rtl_locale.dart';
 
 class LanguageSelectionScreen extends StatelessWidget {
   const LanguageSelectionScreen({super.key});
@@ -10,11 +11,19 @@ class LanguageSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = context.watch<LanguageProvider>();
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Select Language', style: TextStyle(color: AppTheme.text)),
+        title: Text(
+          'Select Language',
+          textDirection: textDirection,
+          textAlign: textAlign,
+          style: const TextStyle(color: AppTheme.text),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -26,7 +35,7 @@ class LanguageSelectionScreen extends StatelessWidget {
           final isSelected = languageProvider.targetLanguage?.code == lang.code;
           
           return Card(
-            color: isSelected ? AppTheme.primary.withOpacity(0.2) : AppTheme.card,
+            color: isSelected ? AppTheme.primary.withValues(alpha: 0.2) : AppTheme.card,
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -34,7 +43,12 @@ class LanguageSelectionScreen extends StatelessWidget {
             ),
             child: ListTile(
               leading: Text(lang.flag, style: const TextStyle(fontSize: 32)),
-              title: Text(lang.name, style: const TextStyle(color: AppTheme.text, fontWeight: FontWeight.bold)),
+              title: Text(
+                lang.name,
+                textDirection: textDirection,
+                textAlign: textAlign,
+                style: const TextStyle(color: AppTheme.text, fontWeight: FontWeight.bold),
+              ),
               trailing: isSelected ? const Icon(Icons.check_circle, color: AppTheme.primary) : null,
               onTap: () {
                 context.read<LanguageProvider>().setTargetLanguage(lang);
@@ -54,7 +68,12 @@ class LanguageSelectionScreen extends StatelessWidget {
           onPressed: languageProvider.hasSelectedLanguages 
               ? () => context.push('/calibration') 
               : null,
-          child: const Text('Continue', style: TextStyle(fontSize: 18, color: Colors.white)),
+          child: Text(
+            'Continue',
+            textDirection: textDirection,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          ),
         ),
       ),
     );

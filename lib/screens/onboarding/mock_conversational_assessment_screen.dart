@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
-import '../../providers/user_provider.dart';
+import '../../providers/calibration_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../models/models.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/rtl_locale.dart';
+import '../../../utils/fonts.dart';
 
 class MockConversationalAssessmentScreen extends StatefulWidget {
   const MockConversationalAssessmentScreen({super.key});
@@ -81,7 +82,7 @@ class _MockConversationalAssessmentScreenState
         ?.code ??
         'en';
 
-    final proficiency = Provider.of<UserProvider>(context, listen: false)
+    final proficiency = Provider.of<CalibrationProvider>(context, listen: false)
         .getLanguageProficiency(languageCode);
     _selfAssessedLevel = proficiency?.selfAssessedLevel ?? 'beginner';
 
@@ -181,12 +182,18 @@ class _MockConversationalAssessmentScreenState
     final languageCode = Provider.of<LanguageProvider>(context, listen: false)
         .targetLanguage?.code ?? 'en';
     
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final existingProf = userProvider.getLanguageProficiency(languageCode);
+    final calibrationProvider =
+        Provider.of<CalibrationProvider>(context, listen: false);
+    final existingProf =
+        calibrationProvider.getLanguageProficiency(languageCode) ??
+        LanguageProficiency(
+          languageCode: languageCode,
+          selfAssessedLevel: _selfAssessedLevel,
+        );
     
     // Update with mock AI-determined level
-    await userProvider.saveLanguageProficiency(
-      existingProf!.copyWith(
+    await calibrationProvider.saveLanguageProficiency(
+      existingProf.copyWith(
         aiDeterminedLevel: determinedLevel,
         assessmentConversation: List.from(_messages),
       ),
@@ -201,6 +208,9 @@ class _MockConversationalAssessmentScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -214,8 +224,9 @@ class _MockConversationalAssessmentScreenState
               color: const Color(0xFFFFC107),
               child: Text(
                 'OFFLINE MODE - USING MOCK AI',
+                textDirection: textDirection,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.pressStart2p(
+                style: AppFonts.pressStart2p(
                   fontSize: 8,
                   color: AppTheme.retroDark,
                 ),
@@ -228,7 +239,8 @@ class _MockConversationalAssessmentScreenState
                 children: [
                   Text(
                     '6/8',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    style: AppFonts.pressStart2p(
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
@@ -268,7 +280,9 @@ class _MockConversationalAssessmentScreenState
                     ),
                     child: Text(
                       'MOCK',
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                         fontSize: 8,
                         color: AppTheme.retroDark,
                       ),
@@ -277,7 +291,9 @@ class _MockConversationalAssessmentScreenState
                   const SizedBox(width: 8),
                   Text(
                     l10n.chatAssessment,
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: textDirection,
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: AppTheme.retroDark,
                     ),
@@ -343,7 +359,9 @@ class _MockConversationalAssessmentScreenState
                                 ),
                                 child: Text(
                                   message.content,
-                                  style: GoogleFonts.pressStart2p(
+                                  textDirection: textDirection,
+                                  textAlign: textAlign,
+                                  style: AppFonts.pressStart2p(
                                     fontSize: 8,
                                     color: isUser
                                         ? Colors.white
@@ -383,7 +401,9 @@ class _MockConversationalAssessmentScreenState
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   l10n.mojiIsTyping,
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 8,
                     color: AppTheme.retroDark.withValues(alpha: 0.7),
                   ),
@@ -413,8 +433,9 @@ class _MockConversationalAssessmentScreenState
                     ),
                     child: Text(
                       l10n.continueBtn,
+                      textDirection: textDirection,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.pressStart2p(
+                      style: AppFonts.pressStart2p(
                         fontSize: 12,
                         color: Colors.white,
                       ),
@@ -445,13 +466,16 @@ class _MockConversationalAssessmentScreenState
                         child: TextField(
                           controller: _controller,
                           enabled: !_assessmentComplete,
-                          style: GoogleFonts.pressStart2p(
+                          textDirection: textDirection,
+                          textAlign: textAlign,
+                          style: AppFonts.pressStart2p(
                             fontSize: 10,
                             color: AppTheme.retroDark,
                           ),
                           decoration: InputDecoration(
                             hintText: l10n.typeYourAnswer,
-                            hintStyle: GoogleFonts.pressStart2p(
+                            hintTextDirection: textDirection,
+                            hintStyle: AppFonts.pressStart2p(
                               fontSize: 8,
                               color: AppTheme.retroDark.withValues(alpha: 0.5),
                             ),
@@ -480,7 +504,9 @@ class _MockConversationalAssessmentScreenState
                         ),
                         child: Text(
                           l10n.send,
-                          style: GoogleFonts.pressStart2p(
+                          textDirection: textDirection,
+                          textAlign: TextAlign.center,
+                          style: AppFonts.pressStart2p(
                             fontSize: 8,
                             color: Colors.white,
                           ),
