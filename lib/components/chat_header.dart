@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../providers/user_provider.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class ChatHeader extends StatelessWidget {
   final VoidCallback onOpenSidebar;
@@ -13,6 +14,9 @@ class ChatHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final level = userProvider.stats.level;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
@@ -62,7 +66,9 @@ class ChatHeader extends StatelessWidget {
                   children: [
                     Text(
                       'PIXEL PET',
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                         color: Colors.white,
                         fontSize: 12,
                         shadows: [const Shadow(color: Colors.black26, offset: Offset(2, 2))]
@@ -71,8 +77,10 @@ class ChatHeader extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'Online',
-                      style: GoogleFonts.pressStart2p(
-                        color: Colors.white.withOpacity(0.8),
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 8,
                       ),
                     ),
@@ -95,7 +103,9 @@ class ChatHeader extends StatelessWidget {
                   const SizedBox(width: 6),
                   Text(
                     'LV.$level',
-                    style: GoogleFonts.pressStart2p(
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.left,
+                    style: AppFonts.pressStart2p(
                       color: AppTheme.retroDark,
                       fontSize: 8,
                     ),

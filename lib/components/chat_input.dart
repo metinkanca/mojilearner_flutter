@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/theme.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class ChatInput extends StatefulWidget {
   final Function(String) onSend;
@@ -23,6 +24,10 @@ class _ChatInputState extends State<ChatInput> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 32), // Matches px-4 pt-4 pb-8
@@ -43,10 +48,12 @@ class _ChatInputState extends State<ChatInput> {
               ),
               child: TextField(
                 controller: _controller,
-                style: GoogleFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark), 
+                textDirection: textDirection,
+                textAlign: textAlign,
+                style: AppFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark), 
                 decoration: InputDecoration(
                   hintText: "TYPE HERE...",
-                  hintStyle: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.grey),
+                  hintStyle: AppFonts.pressStart2p(fontSize: 10, color: Colors.grey),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14), 
                   isDense: true,
@@ -67,6 +74,12 @@ class _ChatInputState extends State<ChatInput> {
             child: IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
+              // The legacy splash/highlight params above are ignored by the
+              // Material 3 IconButton; this is what actually suppresses the
+              // round ripple inside the square retro frame.
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              ),
               padding: EdgeInsets.zero,
               icon: const Icon(Icons.send, size: 20, color: Colors.white),
               onPressed: _handleSend,

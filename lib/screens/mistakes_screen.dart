@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../providers/mistakes_provider.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class MistakesScreen extends StatefulWidget {
   const MistakesScreen({super.key});
@@ -19,6 +20,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
 
   void _showExplanationDialog(BuildContext context, Mistake mistake) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
@@ -41,7 +45,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(l10n.grammarBreakdown,
-                    style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                         fontSize: 14, color: AppTheme.retroDark)),
                 const SizedBox(height: 24),
                 Container(
@@ -51,7 +57,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                     color: Colors.red.withValues(alpha: 0.1),
                         border: Border.all(color: Colors.red, width: 2)),
                     child: Text(mistake.original,
-                        style: GoogleFonts.spaceMono(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                        style: AppFonts.spaceMono(
                             fontSize: 14,
                             decoration: TextDecoration.lineThrough,
                             color: Colors.red[900]))),
@@ -63,14 +71,18 @@ class _MistakesScreenState extends State<MistakesScreen> {
                     color: Colors.green.withValues(alpha: 0.1),
                         border: Border.all(color: Colors.green, width: 2)),
                     child: Text(mistake.correction,
-                        style: GoogleFonts.spaceMono(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                        style: AppFonts.spaceMono(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.green[900]))),
                 const Divider(
                     height: 32, thickness: 4, color: AppTheme.retroDark),
                 Text(mistake.explanation.isNotEmpty ? mistake.explanation : l10n.noGrammarAnalysis,
-                    style: GoogleFonts.spaceMono(fontSize: 14, height: 1.5)),
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                    style: AppFonts.spaceMono(fontSize: 14, height: 1.5)),
                 const SizedBox(height: 24),
                 Center(
                   child: GestureDetector(
@@ -89,7 +101,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                         ],
                       ),
                         child: Text(l10n.close.toUpperCase(),
-                          style: GoogleFonts.pressStart2p(
+                          textDirection: textDirection,
+                          textAlign: TextAlign.center,
+                          style: AppFonts.pressStart2p(
                               fontSize: 12, color: AppTheme.retroDark)),
                     ),
                   ),
@@ -105,6 +119,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     final mistakesProvider = Provider.of<MistakesProvider>(context);
     final validMistakes = mistakesProvider.mistakes
         .where((m) => m.type != 'style')
@@ -151,7 +168,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                   ),
                   const SizedBox(width: 16),
                     Text(l10n.mistakes,
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                           fontSize: 20, color: AppTheme.retroDark)),
                 ],
               ),
@@ -188,7 +207,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                           const SizedBox(height: 16),
                           Text(
                             l10n.noMistakesYet,
-                            style: GoogleFonts.pressStart2p(
+                            textDirection: textDirection,
+                            textAlign: textAlign,
+                            style: AppFonts.pressStart2p(
                                 color: AppTheme.retroDark.withValues(alpha: 0.5),
                                 fontSize: 12),
                           ),
@@ -213,6 +234,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
 
   Widget _buildRetroChip(String key, String label) {
     final isSelected = selectedFilter == key;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     return GestureDetector(
       onTap: () => setState(() => selectedFilter = key),
       child: Container(
@@ -229,7 +253,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
         ),
         child: Text(
           label.toUpperCase(),
-          style: GoogleFonts.pressStart2p(
+          textDirection: textDirection,
+          textAlign: textAlign,
+          style: AppFonts.pressStart2p(
               fontSize: 10,
               color: isSelected ? AppTheme.retroDark : Colors.grey),
         ),
@@ -238,6 +264,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
   }
 
   Widget _buildMistakeCard(BuildContext context, Mistake mistake) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -260,7 +289,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                 Icon(Icons.error_outline, size: 16, color: Colors.orange[800]),
                 const SizedBox(width: 8),
                 Text(mistake.type.toUpperCase(),
-                    style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                    style: AppFonts.pressStart2p(
                         fontSize: 10, color: AppTheme.retroDark)),
                 const Spacer(),
                 GestureDetector(
@@ -277,7 +308,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                         const Icon(Icons.info_outline, size: 12),
                         const SizedBox(width: 4),
                         Text("INFO",
-                            style: GoogleFonts.pressStart2p(fontSize: 8)),
+                          textDirection: textDirection,
+                          textAlign: textAlign,
+                            style: AppFonts.pressStart2p(fontSize: 8)),
                       ],
                     ),
                   ),
@@ -292,7 +325,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(mistake.original,
-                    style: GoogleFonts.spaceMono(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                    style: AppFonts.spaceMono(
                         fontSize: 16,
                         color: Colors.red,
                         decoration: TextDecoration.lineThrough)),
@@ -300,7 +335,9 @@ class _MistakesScreenState extends State<MistakesScreen> {
                 const Icon(Icons.arrow_downward, size: 20),
                 const SizedBox(height: 8),
                 Text(mistake.correction,
-                    style: GoogleFonts.spaceMono(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                    style: AppFonts.spaceMono(
                         fontSize: 16,
                         color: Colors.green[700],
                         fontWeight: FontWeight.bold)),

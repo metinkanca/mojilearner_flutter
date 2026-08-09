@@ -5,6 +5,7 @@ import 'components/navigation_wrapper.dart';
 import 'screens/home_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/design_moji_screen.dart';
+import 'screens/wardrobe_screen.dart';
 import 'screens/scenarios_screen.dart';
 import 'screens/mistakes_screen.dart';
 import 'screens/shop_screen.dart';
@@ -24,41 +25,79 @@ import 'screens/onboarding/pet_farewell_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/level_rewards_screen.dart';
 import 'screens/quiz_screen.dart';
+import 'screens/review_screen.dart';
+import 'screens/splash_screen.dart';
+import 'providers/calibration_provider.dart';
 import 'providers/user_provider.dart';
+import 'utils/level_validator.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-final router = GoRouter(
+const String splashRoute = '/splash';
+const String welcomeRoute = '/onboarding/welcome';
+
+/// Decides where the user belongs given the loaded startup state. Extracted
+/// so it can be unit-tested without building a widget tree.
+///
+/// [location] is the route being evaluated. Returns the route to redirect to,
+/// or null to stay put.
+String? resolveStartupRedirect({
+  required String location,
+  required bool isLoading,
+  required bool hasCompletedOnboarding,
+}) {
+  final isSplash = location == splashRoute;
+
+  // Hold on the splash screen until persisted state is known, so a returning
+  // user never sees the onboarding flow flash past.
+  if (isLoading) {
+    return isSplash ? null : splashRoute;
+  }
+
+  // State is known — leave the splash screen.
+  if (isSplash) {
+    return hasCompletedOnboarding ? '/' : welcomeRoute;
+  }
+
+  final isOnboardingRoute = location.startsWith('/onboarding/');
+
+  if (!hasCompletedOnboarding && !isOnboardingRoute) {
+    return welcomeRoute;
+  }
+  if (hasCompletedOnboarding && isOnboardingRoute) {
+    return '/';
+  }
+  return null;
+}
+
+/// Builds the app router.
+///
+/// [refreshListenable] must notify when startup state changes (i.e. when
+/// UserProvider / CalibrationProvider finish loading), otherwise the redirect
+/// below is evaluated only once — while both are still loading — and the user
+/// is stranded on the splash screen.
+GoRouter createRouter({required Listenable refreshListenable}) => GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/onboarding/welcome',
+  initialLocation: splashRoute,
+  refreshListenable: refreshListenable,
   redirect: (context, state) {
-    // Get user provider to check onboarding status
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    
-    // If still loading, don't redirect yet
-    if (userProvider.isLoading) {
-      return null;
-    }
-    
-    final isOnboardingRoute = state.matchedLocation.startsWith('/onboarding/');
-    final hasCompletedOnboarding =
-      userProvider.hasCompletedOnboarding || userProvider.hasAnyCalibratedLanguage;
-    
-    // If user hasn't completed onboarding and not on an onboarding route, redirect to welcome
-    if (!hasCompletedOnboarding && !isOnboardingRoute) {
-      return '/onboarding/welcome';
-    }
-    
-    // If user has completed onboarding and is on any onboarding route, redirect to home
-    if (hasCompletedOnboarding && isOnboardingRoute) {
-      return '/';
-    }
-    
-    // No redirect needed
-    return null;
+    final calibrationProvider =
+        Provider.of<CalibrationProvider>(context, listen: false);
+
+    return resolveStartupRedirect(
+      location: state.matchedLocation,
+      isLoading: userProvider.isLoading || calibrationProvider.isLoading,
+      hasCompletedOnboarding: userProvider.hasCompletedOnboarding ||
+          calibrationProvider.hasAnyCalibratedLanguage,
+    );
   },
   routes: [
+    GoRoute(
+      path: splashRoute,
+      builder: (context, state) => const SplashScreen(),
+    ),
     // New onboarding flow
     GoRoute(
       path: '/onboarding/welcome',
@@ -95,14 +134,18 @@ final router = GoRouter(
     GoRoute(
       path: '/onboarding/quiz-intro',
       builder: (context, state) {
-        final aiLevel = state.uri.queryParameters['aiLevel'];
+        final aiLevel = LevelValidator.normalizeLevel(
+          state.uri.queryParameters['aiLevel'],
+        );
         return QuizIntroScreen(aiLevel: aiLevel);
       },
     ),
     GoRoute(
       path: '/onboarding/adaptive-quiz',
       builder: (context, state) {
-        final aiLevel = state.uri.queryParameters['aiLevel'];
+        final aiLevel = LevelValidator.normalizeLevel(
+          state.uri.queryParameters['aiLevel'],
+        );
         return AdaptiveQuizScreen(aiLevel: aiLevel);
       },
     ),
@@ -130,27 +173,32 @@ final router = GoRouter(
           builder: (context, state) => const HomeScreen(),
         ),
         GoRoute(
-          path: '/calibration', 
+          path: '/calibration',
           builder: (context, state) => const CalibrationScreen(),
         ),
         GoRoute(
-          path: '/quiz', 
+          path: '/quiz',
           builder: (context, state) => const QuizScreen(),
+        ),
+        GoRoute(
+          path: '/review',
+          name: 'review',
+          builder: (context, state) => const ReviewScreen(),
         ),
         GoRoute(
           path: '/scenarios',
           name: 'scenarios',
           builder: (context, state) => const ScenariosScreen(),
         ),
-        // We probably want chat to be full screen or wrapped? 
-        // User said "keep the bottomnavbar throughout the pages". 
+        // We probably want chat to be full screen or wrapped?
+        // User said "keep the bottomnavbar throughout the pages".
         // So we include it here.
         GoRoute(
           path: '/new-chat',
           name: 'new_chat',
           builder: (context, state) => const ChatScreen(),
         ),
-         GoRoute(
+        GoRoute(
           path: '/chat/:chatId',
           name: 'chat',
           builder: (context, state) {
@@ -159,6 +207,7 @@ final router = GoRouter(
             return ChatScreen(
               chatId: chatId,
               scenarioTitle: extra['scenario'],
+              scenarioId: extra['scenarioId'],
             );
           },
         ),
@@ -178,6 +227,11 @@ final router = GoRouter(
       path: '/design-moji', // Fullscreen modal flow
       name: 'design_moji',
       builder: (context, state) => const DesignMojiScreen(),
+    ),
+    GoRoute(
+      path: '/wardrobe', // Fullscreen modal flow
+      name: 'wardrobe',
+      builder: (context, state) => const WardrobeScreen(),
     ),
     GoRoute(
       path: '/mistakes',

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../constants/theme.dart';
 import '../components/character_sprite.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class MessageBubble extends StatefulWidget {
   final String text;
@@ -10,12 +11,16 @@ class MessageBubble extends StatefulWidget {
   final String? translation;
   final String? grammarAnalysis;
 
+  /// Romanized pronunciation of [text], for non-Latin scripts.
+  final String? reading;
+
   const MessageBubble({
     super.key,
     required this.text,
     required this.isUser,
     this.translation,
     this.grammarAnalysis,
+    this.reading,
   });
 
   @override
@@ -27,20 +32,48 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   void _showGrammar(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(), // Square dialog
-        title: Text(l10n.grammarBreakdown, style: GoogleFonts.pressStart2p(color: AppTheme.retroPrimary, fontSize: 12)),
+        title: Text(
+          l10n.grammarBreakdown,
+          textDirection: textDirection,
+          textAlign: textAlign,
+          style: AppFonts.pressStart2p(
+            color: AppTheme.retroPrimary,
+            fontSize: 12,
+          ),
+        ),
         content: SingleChildScrollView(
-          child: Text(widget.grammarAnalysis ?? l10n.noGrammarAnalysis, style: GoogleFonts.pressStart2p(fontSize: 10, height: 1.5, color: AppTheme.retroDark)),
+          child: Text(
+            widget.grammarAnalysis ?? l10n.noGrammarAnalysis,
+            textDirection: textDirection,
+            textAlign: textAlign,
+            style: AppFonts.pressStart2p(
+              fontSize: 10,
+              height: 1.5,
+              color: AppTheme.retroDark,
+            ),
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.close, style: GoogleFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 10)),
+            child: Text(
+              l10n.close,
+              textDirection: textDirection,
+              textAlign: textAlign,
+              style: AppFonts.pressStart2p(
+                color: AppTheme.retroDark,
+                fontSize: 10,
+              ),
+            ),
           ),
         ],
       ),
@@ -50,6 +83,9 @@ class _MessageBubbleState extends State<MessageBubble> {
   @override
   Widget build(BuildContext context) {
     final isBot = !widget.isUser;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     // Bubble Layout
     return Container(
@@ -102,21 +138,46 @@ class _MessageBubbleState extends State<MessageBubble> {
                           children: [
                             Text(
                               widget.text,
-                              style: GoogleFonts.pressStart2p(
+                              textDirection: textDirection,
+                              textAlign: textAlign,
+                              style: AppFonts.pressStart2p(
                                 color: AppTheme.retroDark, 
                                 fontSize: 10,
                                 height: 1.6
                               ),
                             ),
+                            // Pronunciation. Always visible rather than
+                            // hidden behind the translation tap: a learner
+                            // who cannot read the script needs this to follow
+                            // along at all, not on demand.
+                            if (widget.reading != null &&
+                                widget.reading!.isNotEmpty) ...[
+                              const SizedBox(height: 6),
+                              Text(
+                                widget.reading!,
+                                // Romanization is Latin script regardless of
+                                // the target language's own direction.
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
+                                style: AppFonts.pressStart2p(
+                                  color: AppTheme.retroDark
+                                      .withValues(alpha: 0.55),
+                                  fontSize: 8,
+                                  height: 1.6,
+                                ),
+                              ),
+                            ],
                             // Translation
                             if (_showTranslation && widget.translation != null) ...[
                               const SizedBox(height: 8),
-                              Divider(color: AppTheme.retroDark.withOpacity(0.2), thickness: 2),
+                              Divider(color: AppTheme.retroDark.withValues(alpha: 0.2), thickness: 2),
                               const SizedBox(height: 4),
                               Text(
                                 widget.translation!,
-                                style: GoogleFonts.pressStart2p(
-                                  color: AppTheme.retroDark.withOpacity(0.6),
+                                textDirection: textDirection,
+                                textAlign: textAlign,
+                                style: AppFonts.pressStart2p(
+                                  color: AppTheme.retroDark.withValues(alpha: 0.6),
                                   fontSize: 8,
                                   fontStyle: FontStyle.italic,
                                 ),
@@ -153,7 +214,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                             ),
                           child: Text(
                             "?",
-                            style: GoogleFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 8),
+                            style: AppFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 8),
                           ),
                         ),
                       ),

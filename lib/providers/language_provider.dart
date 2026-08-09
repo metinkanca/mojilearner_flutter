@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../constants/translations.dart';
 
 // Simple model for Language
 class Language {
@@ -64,10 +63,6 @@ class LanguageProvider extends ChangeNotifier {
     await prefs.setString('target_language_code', lang.code);
   }
   
-  Map<String, String> getTranslations() {
-    return getTranslation(_nativeLanguage.code);
-  }
-
   // Helper to get available languages
   List<Language> get availableLanguages => const [
     Language(code: 'en', name: 'English', flag: '🇺🇸'),
@@ -81,7 +76,6 @@ class LanguageProvider extends ChangeNotifier {
     Language(code: 'zh', name: 'Chinese', flag: '🇨🇳'),
     Language(code: 'ko', name: 'Korean', flag: '🇰🇷'),
     Language(code: 'ar', name: 'Arabic', flag: '🇸🇦'),
-    Language(code: 'he', name: 'Hebrew', flag: '🇮🇱'),
     Language(code: 'hi', name: 'Hindi', flag: '🇮🇳'),
     Language(code: 'tr', name: 'Turkish', flag: '🇹🇷'),
     Language(code: 'nl', name: 'Dutch', flag: '🇳🇱'),

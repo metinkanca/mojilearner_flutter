@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../models/models.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class ChatSidebar extends StatelessWidget {
   final List<Chat> chats;
@@ -23,6 +24,9 @@ class ChatSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return Container(
       width: 300,
@@ -45,7 +49,9 @@ class ChatSidebar extends StatelessWidget {
               children: [
                 Text(
                   l10n.chats.toUpperCase(),
-                  style: GoogleFonts.pressStart2p(
+                  textDirection: textDirection,
+                  textAlign: textAlign,
+                  style: AppFonts.pressStart2p(
                     fontSize: 14,
                     color: Colors.white,
                   ),
@@ -80,15 +86,17 @@ class ChatSidebar extends StatelessWidget {
                 ]
               ),
               child: TextField(
+                textDirection: textDirection,
+                textAlign: textAlign,
                 decoration: InputDecoration(
                   hintText: l10n.searchPlaceholder.toUpperCase(),
-                  hintStyle: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.grey),
+                  hintStyle: AppFonts.pressStart2p(fontSize: 10, color: Colors.grey),
                   prefixIcon: const Icon(Icons.search, size: 16, color: AppTheme.retroDark),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   isDense: true,
                 ),
-                style: GoogleFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark),
+                style: AppFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark),
               ),
             ),
           ),
@@ -118,7 +126,9 @@ class ChatSidebar extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       l10n.newChat.toUpperCase(),
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                         fontSize: 10, 
                         color: AppTheme.retroDark
                       ),
@@ -144,8 +154,9 @@ class ChatSidebar extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           l10n.noChats.toUpperCase(),
+                          textDirection: textDirection,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.pressStart2p(
+                          style: AppFonts.pressStart2p(
                             color: AppTheme.retroDark,
                             fontSize: 10,
                           ),
@@ -192,9 +203,11 @@ class ChatSidebar extends StatelessWidget {
                                         Expanded(
                                           child: Text(
                                             chat.title.toUpperCase(),
+                                            textDirection: textDirection,
+                                            textAlign: textAlign,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: GoogleFonts.pressStart2p(
+                                            style: AppFonts.pressStart2p(
                                               fontSize: 10,
                                               color: AppTheme.retroDark,
                                             ),
@@ -203,9 +216,11 @@ class ChatSidebar extends StatelessWidget {
                                         // Simple date formatting
                                         Text(
                                           '${chat.createdAt.day}/${chat.createdAt.month}',
-                                          style: GoogleFonts.pressStart2p(
+                                          textDirection: TextDirection.ltr,
+                                          textAlign: TextAlign.left,
+                                          style: AppFonts.pressStart2p(
                                             fontSize: 8,
-                                            color: AppTheme.retroDark.withOpacity(0.6),
+                                            color: AppTheme.retroDark.withValues(alpha: 0.6),
                                           ),
                                         ),
                                       ],
@@ -214,11 +229,13 @@ class ChatSidebar extends StatelessWidget {
                                     Text(
                                       chat.lastMessage?.content.toUpperCase() ??
                                           'EMPTY',
+                                      textDirection: textDirection,
+                                      textAlign: textAlign,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.pressStart2p(
+                                      style: AppFonts.pressStart2p(
                                         fontSize: 8,
-                                        color: AppTheme.retroDark.withOpacity(0.8),
+                                        color: AppTheme.retroDark.withValues(alpha: 0.8),
                                       ),
                                     ),
                                   ],

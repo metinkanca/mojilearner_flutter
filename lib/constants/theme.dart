@@ -43,6 +43,14 @@ class AppTheme {
   static const Color retroNightGrass = Color(0xFF2e573f); // Darker, night-time grass
   static const Color retroMoon = Color(0xFFfbf7f3); // Off-white for moon
 
+  // Wardrobe Theme Colors — warm wood closet, in the retro palette family
+  static const Color wardrobeWood = Color(0xFF8f563b); // Mid walnut (panels)
+  static const Color wardrobeWoodDark = Color(0xFF663931); // Deep frame/shadow
+  static const Color wardrobeWoodLight = Color(0xFFab7345); // Lit wood edge
+  static const Color wardrobeShelf = Color(0xFFd9a066); // Shelf / drawer front
+  static const Color wardrobeInterior = Color(0xFF45283c); // Closet interior
+  static const Color wardrobeBrass = Color(0xFFfbf236); // Knobs / highlights
+
   // Sunset Theme Colors
   static const Color retroSunsetSky = Color(0xFFff9e7d); // Orange/Pinkish sky for sunset
   static const Color retroSunsetGrass = Color(0xFFdcb15d); // Golden hour grass

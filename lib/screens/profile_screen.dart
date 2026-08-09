@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/theme.dart';
 import '../constants/progression.dart';
+import '../providers/calibration_provider.dart';
+import '../providers/daily_reward_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
 import '../components/character_sprite.dart';
 import '../components/daily_rewards_dialog.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   void _showDailyRewardManually(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final rewardInfo = await userProvider.checkDailyReward();
-    
+    final dailyRewardProvider =
+        Provider.of<DailyRewardProvider>(context, listen: false);
+    final rewardInfo = await dailyRewardProvider.checkDailyReward();
+
     if (context.mounted) {
       if (rewardInfo != null) {
         showDialog(
@@ -26,24 +30,30 @@ class ProfileScreen extends StatelessWidget {
           builder: (context) => DailyRewardsDialog(
             rewardInfo: rewardInfo,
             onClaim: () {
-              userProvider.claimDailyReward();
+              dailyRewardProvider.claimDailyReward();
             },
           ),
         );
       } else {
         // Show status of current week
-        _showWeeklyStatus(context, userProvider);
+        _showWeeklyStatus(context, dailyRewardProvider);
       }
     }
   }
 
-  void _showWeeklyStatus(BuildContext context, UserProvider userProvider) {
+  void _showWeeklyStatus(
+      BuildContext context, DailyRewardProvider dailyRewardProvider) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale, ltr: TextAlign.center, rtl: TextAlign.center);
+
     showDialog(
       context: context,
       builder: (context) {
-        final totalClaims = userProvider.dailyRewardClaimCount;
-        final completedDayInCycle = userProvider.completedRewardCycleDay;
-        final nextDayInCycle = userProvider.nextRewardCycleDay;
+        final totalClaims = dailyRewardProvider.dailyRewardClaimCount;
+        final completedDayInCycle = dailyRewardProvider.completedRewardCycleDay;
+        final nextDayInCycle = dailyRewardProvider.nextRewardCycleDay;
         
         return AlertDialog(
           backgroundColor: AppTheme.retroLight,
@@ -52,8 +62,9 @@ class ProfileScreen extends StatelessWidget {
             side: BorderSide(color: AppTheme.retroDark, width: 4),
           ),
           title: Text(
-            'WEEKLY PROGRESS',
-            style: GoogleFonts.pressStart2p(fontSize: 14, color: AppTheme.retroDark),
+            l10n.weeklyProgressTitle.toUpperCase(),
+            textDirection: textDirection,
+            style: AppFonts.pressStart2p(fontSize: 14, color: AppTheme.retroDark),
             textAlign: TextAlign.center,
           ),
           content: SizedBox(
@@ -86,8 +97,9 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            'DAY $dayNum',
-                            style: GoogleFonts.pressStart2p(
+                            l10n.dayLabel(dayNum).toUpperCase(),
+                            textDirection: textDirection,
+                            style: AppFonts.pressStart2p(
                               fontSize: 6,
                               color: isCompleted ? AppTheme.retroGreen : AppTheme.retroDark,
                             ),
@@ -104,8 +116,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Claim once per day. Your weekly track continues where you left off.',
-                  style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark, height: 1.5),
+                  l10n.dailyRewardHint,
+                  textDirection: textDirection,
+                  style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark, height: 1.5),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -114,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('CLOSE', style: GoogleFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark)),
+              child: Text(l10n.close.toUpperCase(), style: AppFonts.pressStart2p(fontSize: 10, color: AppTheme.retroDark)),
             ),
           ],
         );
@@ -132,15 +145,20 @@ class ProfileScreen extends StatelessWidget {
 
   void _handleTargetLanguageChange(BuildContext context, Language newLanguage) async {
     final langProvider = Provider.of<LanguageProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    
+    final calibrationProvider =
+        Provider.of<CalibrationProvider>(context, listen: false);
+
     // Update the target language
     await langProvider.setTargetLanguage(newLanguage);
-    
+
     // Check if this language has been calibrated
-    final isCalibrated = userProvider.isLanguageCalibrated(newLanguage.code);
+    final isCalibrated =
+        calibrationProvider.isLanguageCalibrated(newLanguage.code);
     
     if (!isCalibrated && context.mounted) {
+      final locale = Localizations.localeOf(context);
+      final textDirection = textDirectionForLocale(locale);
+
       // Show dialog asking if they want to calibrate
       showDialog(
         context: context,
@@ -153,14 +171,18 @@ class ProfileScreen extends StatelessWidget {
           ),
           title: Text(
             'NEW LANGUAGE!',
-            style: GoogleFonts.pressStart2p(
+            textDirection: textDirection,
+            textAlign: TextAlign.center,
+            style: AppFonts.pressStart2p(
               fontSize: 14,
               color: AppTheme.retroDark,
             ),
           ),
           content: Text(
             'Let\'s calibrate your ${newLanguage.name} level!\n\nThis helps us personalize your learning experience.',
-            style: GoogleFonts.pressStart2p(
+            textDirection: textDirection,
+            textAlign: TextAlign.center,
+            style: AppFonts.pressStart2p(
               fontSize: 8,
               color: AppTheme.retroDark,
               height: 1.5,
@@ -180,7 +202,9 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Text(
                 'LATER',
-                style: GoogleFonts.pressStart2p(
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
+                style: AppFonts.pressStart2p(
                   fontSize: 8,
                   color: AppTheme.retroDark,
                 ),
@@ -200,7 +224,9 @@ class ProfileScreen extends StatelessWidget {
               ),
               child: Text(
                 'START NOW',
-                style: GoogleFonts.pressStart2p(
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
+                style: AppFonts.pressStart2p(
                   fontSize: 8,
                   color: Colors.white,
                 ),
@@ -213,6 +239,10 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _showResetDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -222,15 +252,19 @@ class ProfileScreen extends StatelessWidget {
           side: const BorderSide(color: AppTheme.retroDark, width: 4),
         ),
         title: Text(
-          'RESET APP?',
-          style: GoogleFonts.pressStart2p(
+          l10n.resetAppTitle.toUpperCase(),
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
+          style: AppFonts.pressStart2p(
             fontSize: 14,
             color: AppTheme.retroDark,
           ),
         ),
         content: Text(
-          'This will delete all your progress, calibration data, and settings.\n\nYou\'ll restart from the beginning.\n\nAre you sure?',
-          style: GoogleFonts.pressStart2p(
+          l10n.resetAppWarning,
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
+          style: AppFonts.pressStart2p(
             fontSize: 8,
             color: AppTheme.retroDark,
             height: 1.5,
@@ -247,8 +281,10 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             child: Text(
-              'CANCEL',
-              style: GoogleFonts.pressStart2p(
+              l10n.cancel.toUpperCase(),
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: AppFonts.pressStart2p(
                 fontSize: 8,
                 color: AppTheme.retroDark,
               ),
@@ -267,8 +303,10 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             child: Text(
-              'RESET',
-              style: GoogleFonts.pressStart2p(
+              l10n.resetAction.toUpperCase(),
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: AppFonts.pressStart2p(
                 fontSize: 8,
                 color: Colors.white,
               ),
@@ -287,12 +325,15 @@ class ProfileScreen extends StatelessWidget {
       
       // Show feedback
       if (context.mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: AppTheme.retroPrimary,
             content: Text(
-              'App reset! Restarting...',
-              style: GoogleFonts.pressStart2p(
+              l10n.resetSuccessMessage,
+              textDirection: textDirectionForLocale(Localizations.localeOf(context)),
+              textAlign: textAlignForLocale(Localizations.localeOf(context)),
+              style: AppFonts.pressStart2p(
                 fontSize: 8,
                 color: Colors.white,
               ),
@@ -319,6 +360,9 @@ class ProfileScreen extends StatelessWidget {
     final langProvider = Provider.of<LanguageProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     final stats = userProvider.stats;
     // Calculate level progress (safe division)
@@ -380,7 +424,9 @@ class ProfileScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         l10n.profile.toUpperCase(),
-                        style: GoogleFonts.pressStart2p(
+                        textDirection: textDirection,
+                        textAlign: TextAlign.center,
+                        style: AppFonts.pressStart2p(
                           fontSize: 16,
                           color: AppTheme.retroDark,
                         ),
@@ -429,7 +475,9 @@ class ProfileScreen extends StatelessWidget {
                         // "MOJI" Title
                         Text(
                           "MOJI",
-                          style: GoogleFonts.pressStart2p(
+                          textDirection: textDirection,
+                          textAlign: textAlign,
+                          style: AppFonts.pressStart2p(
                             fontSize: 24,
                             color: AppTheme.retroDark,
                           ),
@@ -441,9 +489,11 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                              Text(
                                 "LVL ${stats.level}",
-                                style: GoogleFonts.pressStart2p(
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
+                                style: AppFonts.pressStart2p(
                                   fontSize: 12,
-                                  color: AppTheme.retroDark.withOpacity(0.6),
+                                  color: AppTheme.retroDark.withValues(alpha: 0.6),
                                 ),
                              ),
                              const SizedBox(height: 8),
@@ -495,8 +545,10 @@ class ProfileScreen extends StatelessWidget {
                                 const Text("🎁", style: TextStyle(fontSize: 20)),
                                 const SizedBox(width: 12),
                                 Text(
-                                  "DAILY REWARDS",
-                                  style: GoogleFonts.pressStart2p(
+                                  l10n.daily_reward.toUpperCase(),
+                                  textDirection: textDirection,
+                                  textAlign: textAlign,
+                                  style: AppFonts.pressStart2p(
                                     fontSize: 10,
                                     color: AppTheme.retroDark,
                                   ),
@@ -518,7 +570,9 @@ class ProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 4),
                     child: Text(
                       l10n.header.toUpperCase(),
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                         fontSize: 14,
                         color: Colors.white,
                         shadows: [
@@ -571,8 +625,10 @@ class ProfileScreen extends StatelessWidget {
                           const Icon(Icons.refresh, color: Colors.white, size: 20),
                           const SizedBox(width: 12),
                           Text(
-                            'RESET APP',
-                            style: GoogleFonts.pressStart2p(
+                            l10n.resetAppButton.toUpperCase(),
+                            textDirection: textDirection,
+                            textAlign: textAlign,
+                            style: AppFonts.pressStart2p(
                               fontSize: 12,
                               color: Colors.white,
                             ),
@@ -597,6 +653,9 @@ class ProfileScreen extends StatelessWidget {
       (lang) => lang.code == current.code,
       orElse: () => options.first,
     );
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -618,8 +677,10 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               label.toUpperCase(), 
-              style: GoogleFonts.pressStart2p(
-                color: AppTheme.retroDark.withOpacity(0.6), 
+              textDirection: textDirection,
+              textAlign: textAlign,
+              style: AppFonts.pressStart2p(
+                color: AppTheme.retroDark.withValues(alpha: 0.6), 
                 fontSize: 10
               )
             ),
@@ -644,7 +705,9 @@ class ProfileScreen extends StatelessWidget {
                        const SizedBox(width: 12),
                        Text(
                          lang.name.toUpperCase(), 
-                         style: GoogleFonts.vt323(
+                         textDirection: textDirection,
+                         textAlign: textAlign,
+                         style: AppFonts.spaceMono(
                            fontSize: 22, 
                            fontWeight: FontWeight.bold,
                            color: AppTheme.retroDark

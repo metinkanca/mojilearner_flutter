@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import '../../constants/theme.dart';
 import '../../components/chat_header.dart';
@@ -15,20 +12,37 @@ import '../../providers/chat_provider.dart';
 import '../../providers/mistakes_provider.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/user_provider.dart';
-import '../../utils/input_sanitizer.dart';
-import '../../utils/rate_limiter.dart';
-import '../../utils/output_validator.dart';
+import '../../providers/vocab_provider.dart';
+import '../../utils/rtl_locale.dart';
+import '../../utils/srs_briefing.dart';
+import '../../utils/vocab_extractor.dart';
+import '../../utils/language_script.dart';
+import '../../constants/scenarios.dart';
+import '../../providers/scenario_provider.dart';
+import '../../utils/objective_extractor.dart';
+import '../../utils/scenario_briefing.dart';
+import '../../utils/progression_utils.dart';
+import '../../components/scenario_complete_popup.dart';
+import '../../components/scenario_objective_tracker.dart';
+import '../../services/ai_guard.dart';
+import '../../services/ai_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/fonts.dart';
 import 'dart:convert'; // For JSON parsing
 
 class ChatScreen extends StatefulWidget {
   final String? chatId;
   final String? scenarioTitle;
 
+  /// Stable scenario id, e.g. 'coffee'. Null for free chat and for custom
+  /// scenarios, which stay freeform and untracked.
+  final String? scenarioId;
+
   const ChatScreen({
     super.key,
     this.chatId,
     this.scenarioTitle,
+    this.scenarioId,
   });
 
   @override
@@ -45,10 +59,13 @@ class _ChatScreenState extends State<ChatScreen>
   double _dragStartProgress = 0;
   
   // AI State
-  GenerativeModel? _model;
-  ChatSession? _chatSession;
+  String? _aiSessionId;
   bool _isConnecting = true;
   String? _currentChatId;
+
+  /// Guards against paying out a scenario twice if another response
+  /// lands while the completion popup is still open.
+  bool _completionHandled = false;
 
   String? _resolveScenarioTitle(ChatProvider chatProvider) {
     if (widget.scenarioTitle != null && widget.scenarioTitle!.trim().isNotEmpty) {
@@ -62,6 +79,33 @@ class _ChatScreenState extends State<ChatScreen>
     final chat = existing.first;
     if (chat.type == 'scenario') {
       return chat.title;
+    }
+    return null;
+  }
+
+  /// Recovers the scenario id from a `new_<id>` route, so a deep link works
+  /// even without the `extra` map the scenarios grid passes.
+  String? _scenarioIdFromRouteId(String? routeChatId) {
+    if (routeChatId == null || !routeChatId.startsWith('new_')) return null;
+    final raw = routeChatId.substring(4);
+    if (raw.isEmpty || raw == 'custom') return null;
+    return ScenarioCatalog.byId(raw)?.id;
+  }
+
+  /// The scenario this chat is playing, or null when it isn't a tracked one.
+  ///
+  /// Prefers the id carried on the route, then the id persisted on the chat —
+  /// chats saved before scenarios became trackable have neither, and stay
+  /// freeform.
+  ScenarioDefinition? _resolveScenario(ChatProvider chatProvider) {
+    final routeId = widget.scenarioId ?? _scenarioIdFromRouteId(widget.chatId);
+    if (routeId != null) return ScenarioCatalog.byId(routeId);
+
+    if (_currentChatId == null) return null;
+    for (final chat in chatProvider.chats) {
+      if (chat.id == _currentChatId && chat.scenarioId != null) {
+        return ScenarioCatalog.byId(chat.scenarioId!);
+      }
     }
     return null;
   }
@@ -100,6 +144,9 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   void dispose() {
+    if (_aiSessionId != null) {
+      AiService.instance.disposeSession(_aiSessionId!);
+    }
     _sidebarController.dispose();
     super.dispose();
   }
@@ -107,14 +154,25 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   void didUpdateWidget(ChatScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.chatId != oldWidget.chatId || widget.scenarioTitle != oldWidget.scenarioTitle) {
+    if (widget.chatId != oldWidget.chatId ||
+        widget.scenarioTitle != oldWidget.scenarioTitle ||
+        widget.scenarioId != oldWidget.scenarioId) {
       _setupChat();
     }
   }
 
   Future<void> _setupChat() async {
+    // A fresh chat is a fresh run, so the payout latch has to clear with it —
+    // otherwise the second scenario opened without leaving this screen would
+    // silently never pay out.
+    _completionHandled = false;
     setState(() => _isConnecting = true); // Start loading
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
+    if (_aiSessionId != null) {
+      AiService.instance.disposeSession(_aiSessionId!);
+      _aiSessionId = null;
+    }
 
     try {
       final isNewRouteRequest = widget.chatId?.startsWith('new_') ?? false;
@@ -124,6 +182,7 @@ class _ChatScreenState extends State<ChatScreen>
         final newId = await chatProvider.createNewChat(
           title: scenarioTitle,
           type: 'scenario',
+          scenarioId: widget.scenarioId ?? _scenarioIdFromRouteId(widget.chatId),
         );
         if (mounted) {
           setState(() => _currentChatId = newId);
@@ -150,6 +209,7 @@ class _ChatScreenState extends State<ChatScreen>
   Future<void> _initAI({required bool isNew}) async {
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    final vocabProvider = Provider.of<VocabProvider>(context, listen: false);
     
     // Safety check
     if (_currentChatId == null) return;
@@ -226,20 +286,67 @@ GRAMMAR:
    - Me gustaría comprar esto. (I would like to buy this.)
    - Me gustaría visitar México. (I would like to visit Mexico.)
 
+VOCABULARY CAPTURE:
+After GRAMMAR, always append this HIDDEN block listing the 1-3 most useful new $targetLang words or phrases from your TEXT. Skip words the user clearly already knows.
+|||VOCAB|||
+[{ "term": "word in $targetLang", "meaning": "meaning in $nativeLang", "example": "short example sentence in $targetLang", "reading": "romanized pronunciation of the term, or omit for Latin-script languages" }]
+Output a JSON array and nothing else in this block. If there is nothing worth remembering, use an empty array [].
+
 MISTAKE HANDLING:
-If the user makes a clear grammar or vocabulary mistake (not just style), append this HIDDEN block at the very end of your response (after GRAMMAR):
+If the user makes a clear grammar or vocabulary mistake (not just style), append this HIDDEN block at the very end of your response (after the VOCAB and OBJECTIVE blocks):
 |||MISTAKE|||
 { "original": "user's wrong text", "correction": "correct text", "explanation": "brief reason in $nativeLang", "type": "grammar" }
 (Use type: "grammar" or "vocabulary")
     ''';
 
+    // Non-Latin target scripts get a romanized reading. Without it the
+    // learner can recognise the sentence but has no way to say it, which is
+    // the difference between reading practice and language practice.
+    final scriptGuide = LanguageScript.guideFor(
+        languageProvider.targetLanguage?.code);
+    if (scriptGuide != null) {
+      systemInstruction += '''
+
+PRONUNCIATION GUIDE:
+$targetLang uses a non-Latin script, so you must add a READING line directly
+after TEXT, making the format:
+TEXT: [your reply in $targetLang]
+READING: [${scriptGuide.promptInstruction}]
+TRANS: [the translation in $nativeLang]
+GRAMMAR: [the grammar breakdown in $nativeLang]
+The READING line covers the TEXT line only. Never romanize the TRANS or
+GRAMMAR sections.
+''';
+    }
+
     if (isScenarioChat) {
-        systemInstruction += '''
-  \nScenario: "$effectiveScenarioTitle".
+        final scenario = _resolveScenario(chatProvider);
+        if (scenario != null) {
+          // A tracked scenario: brief the tutor on the goals still
+          // outstanding, and on how to report the ones the learner hits.
+          final l10n = AppLocalizations.of(context)!;
+          final progress = Provider.of<ScenarioProvider>(context, listen: false)
+              .forScenario(scenario.id);
+          systemInstruction += ScenarioBriefing.build(
+            title: scenario.title(l10n),
+            objectives: scenario.objectives
+                .map((objective) => BriefedObjective(
+                      id: objective.id,
+                      label: objective.label(l10n),
+                      isBonus: objective.isBonus,
+                      isCleared: progress.isCleared(objective.id),
+                    ))
+                .toList(),
+          );
+        } else {
+          // Custom or legacy scenario: freeform roleplay, nothing tracked.
+          systemInstruction += '''
+\nScenario: "$effectiveScenarioTitle".
 You must stay strictly within this scenario roleplay.
 Speak only in $targetLang (in the TEXT section).
 Keep responses natural and concise.
-        ''';
+          ''';
+        }
     } else {
         systemInstruction += '''
 \nEngage in free-flowing conversation.
@@ -247,43 +354,42 @@ Correct mistakes gently if they block understanding.
         ''';
     }
 
+    // Give the tutor the learner's review queue so conversation reinforces
+    // what's actually due, instead of drifting to unrelated vocabulary.
+    final targetCode = languageProvider.targetLanguage?.code;
+    final briefing = SrsBriefing.build(
+      troubleSpots: vocabProvider.troubleSpots(languageCode: targetCode),
+      dueItems: vocabProvider.nextSession(languageCode: targetCode),
+    );
+    if (briefing != null) {
+      systemInstruction += briefing;
+    }
+
     try {
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
-      if (apiKey == null) throw Exception('No API Key');
-
-      _model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
-
       // --- 2. Build History ---
-      List<Content> history = [];
+      List<AiChatMessage> history = [];
       
       if (!isNew) {
         // Load existing messages from Provider
         final messages = chatProvider.getMessages(_currentChatId!);
         
-        // Filter and map to Gemini Content
-        // We ignore 'system' messages for the model history to avoid confusing it
+        // Filter and map to session history
         history = messages
           .where((m) => m.sender == 'user' || m.sender == 'bot')
           .map((m) {
-             return Content(m.sender == 'user' ? 'user' : 'model', [TextPart(m.content)]);
+             return AiChatMessage(
+               role: m.sender == 'user' ? 'user' : 'model',
+               text: m.content,
+             );
           }).toList();
       }
 
       // --- 3. Start Chat Session ---
-      // We prepend the system instruction to history? 
-      // GenerativeModel.startChat(history: ...) takes the full history.
-      // Usually system instruction is just the first part or passed in valid google_ai logic (systemInstruction param is supported in newer SDKs, checking usage...)
-      // The current google_generative_ai package supports `systemInstruction` in constructor usually or we just pass it in history.
-      // Let's stick to passing it as first text part if needed, or rely on prompt engineering.
-      // Since I used `Content.text(systemInstruction)` in the old code, I'll stick to that.
-      
-      final fullHistory = [
-          Content.text(systemInstruction),
-          Content.model([TextPart("Understood. I am ready to help you learn $targetLang.")]),
-          ...history
-      ];
-      
-      _chatSession = _model!.startChat(history: fullHistory);
+      _aiSessionId = await AiService.instance.createSession(
+        systemInstruction: systemInstruction,
+        history: history,
+        source: 'chat_screen',
+      );
       
       // --- 4. Initial Bot Message (If New) ---
       if (isNew) {
@@ -297,9 +403,13 @@ Correct mistakes gently if they block understanding.
              initialPrompt = "Say a warm hello to start the conversation.";
          }
          
-         final response = await _chatSession!.sendMessage(Content.text(initialPrompt));
-         if (response.text != null && mounted) {
-            await _parseAndSaveBotResponse(response.text!);
+        final responseText = await AiService.instance.sendSessionMessage(
+          sessionId: _aiSessionId!,
+          message: initialPrompt,
+          source: 'chat_screen',
+        );
+        if (responseText.isNotEmpty && mounted) {
+          await _parseAndSaveBotResponse(_localizeAiText(responseText));
          }
       }
 
@@ -311,103 +421,144 @@ Correct mistakes gently if they block understanding.
     }
   }
 
+  /// Swaps the AI-unavailable sentinel text for its localized equivalent.
+  String _localizeAiText(String text) {
+    if (!AiService.instance.isUnavailableResponse(text)) return text;
+    return AppLocalizations.of(context)?.aiUnavailableMessage ?? text;
+  }
+
+  void _showGuardMessage(
+    String message,
+    TextDirection textDirection,
+    TextAlign textAlign,
+  ) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          textDirection: textDirection,
+          textAlign: textAlign,
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   Future<void> _handleSend(String text) async {
-    if (_currentChatId == null || _chatSession == null) return;
+    if (_currentChatId == null || _aiSessionId == null) return;
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
-    // 🔒 SECURITY: Rate limiting
-    if (!RateLimiter.canSendMessage('chat_screen')) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(RateLimiter.getRateLimitMessage('chat_screen', 3)),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+    // 🔒 SECURITY: full inbound pipeline (rate limit, sanitize, semantic
+    // shift, PII redaction) via AiGuard.
+    final guard = AiGuard.checkUserMessage(
+      rawText: text,
+      kind: AiRequestKind.chat,
+      source: 'chat_screen',
+      recentUserMessages: chatProvider
+          .getMessages(_currentChatId!)
+          .where((m) => m.sender == 'user')
+          .map((m) => m.content)
+          .toList(),
+    );
+
+    if (!guard.allowed) {
+      switch (guard.block!) {
+        case AiGuardBlock.rateLimited:
+          _showGuardMessage(guard.rateLimitMessage, textDirection, textAlign);
+          break;
+        case AiGuardBlock.suspiciousInput:
+          _showGuardMessage(
+            'Your message contains invalid characters. Please try again.',
+            textDirection,
+            textAlign,
+          );
+          break;
+        case AiGuardBlock.offTopicShift:
+          _showGuardMessage(
+            'Please keep the conversation focused on language learning.',
+            textDirection,
+            textAlign,
+          );
+          break;
+        case AiGuardBlock.emptyInput:
+          break;
       }
       return;
     }
 
-    // 🔒 SECURITY: Input sanitization
-    final sanitizedText = InputSanitizer.sanitizeUserInput(text);
-    
-    // Check if input was suspicious
-    if (InputSanitizer.isSuspicious(text)) {
-      InputSanitizer.logSuspiciousInput(text, 'chat_screen');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Your message contains invalid characters. Please try again.'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
-      return;
+    if (guard.piiRedacted) {
+      _showGuardMessage(
+        'Personal data detected and redacted for safety.',
+        textDirection,
+        textAlign,
+      );
     }
 
-    if (sanitizedText.isEmpty) return;
+    AiGuard.recordRequest('chat_screen');
 
-    RateLimiter.recordRequest('chat_screen');
-
-    // 1. Add User Message to Provider (original text for display)
+    // 1. Add User Message to Provider (redacted when sensitive)
     await chatProvider.addMessage(_currentChatId!, Message(
       id: DateTime.now().toString(),
-      content: text,
+      content: guard.displayText,
       sender: 'user',
       timestamp: DateTime.now()
     ));
 
-    // 2. Send to AI (sanitized text)
+    // 2. Send to AI (sanitized and redacted text)
     try {
-      final response = await _chatSession!.sendMessage(Content.text(sanitizedText));
-      
-      if (response.text != null && mounted) {
+      final responseText = await AiService.instance.sendSessionMessage(
+        sessionId: _aiSessionId!,
+        message: guard.outboundText,
+        source: 'chat_screen',
+      );
+
+      if (responseText.isNotEmpty && mounted) {
         // 🔒 SECURITY: Validate AI response
-        if (!OutputValidator.isValidResponse(response.text)) {
-          OutputValidator.logValidationFailure('Invalid response format', response.text!);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Received invalid response. Please try again.'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
+        final response =
+            AiGuard.checkAiResponse(responseText, source: 'chat_screen');
+        if (!response.valid) {
+          _showGuardMessage(
+            response.injectionSuspected
+                ? 'Unexpected response. Please rephrase your message.'
+                : 'Received invalid response. Please try again.',
+            textDirection,
+            textAlign,
+          );
           return;
         }
 
-        if (!OutputValidator.isGenuineResponse(response.text!)) {
-          OutputValidator.logValidationFailure('Prompt injection detected in response', response.text!);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Unexpected response. Please rephrase your message.'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-          return;
-        }
-
-        final sanitizedResponse = OutputValidator.sanitizeResponse(response.text!);
-        await _parseAndSaveBotResponse(sanitizedResponse);
+        await _parseAndSaveBotResponse(_localizeAiText(response.text!));
         
         // Reward pet and XP for chatting
         final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         final isScenarioChat = _resolveScenarioTitle(chatProvider) != null;
         
+        // Chat grants XP only — it's unlimited, so paying coins per message
+        // would let players farm the shop without ever taking a quiz.
         if (isScenarioChat) {
           characterProvider.rewardScenario();
-          userProvider.addXp(10); // 10 XP for scenario messages
+          userProvider.addXp(characterProvider.scaleReward(10));
         } else {
           characterProvider.rewardChat();
-          userProvider.addXp(5); // 5 XP per chat message
+          userProvider.addXp(characterProvider.scaleReward(5));
         }
       }
     } catch (e) {
        if (mounted) {
-         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+         ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(
+             content: Text(
+               "Error: $e",
+               textDirection: textDirection,
+               textAlign: textAlign,
+             ),
+           ),
+         );
        }
     }
   }
@@ -438,11 +589,55 @@ Correct mistakes gently if they block understanding.
         }
       }
 
+      // 2. Record objectives the tutor says this turn accomplished.
+      //
+      // Block order in the response is VOCAB, then OBJECTIVE, then MISTAKE, so
+      // extraction unwinds from the tail: mistake above, objectives here,
+      // vocabulary below.
+      final objectiveExtraction = ObjectiveExtractor.extract(content);
+      content = objectiveExtraction.content;
+      if (mounted && objectiveExtraction.objectiveIds.isNotEmpty) {
+        _recordObjectives(objectiveExtraction.objectiveIds);
+      }
+
+      // 3. Extract taught vocabulary into the review queue.
+      //
+      // Runs before the TEXT/TRANS/GRAMMAR regexes below so the block never
+      // leaks into the visible bubble.
+      final vocabExtraction = VocabExtractor.extract(content);
+      content = vocabExtraction.content;
+      if (mounted && vocabExtraction.entries.isNotEmpty) {
+        final languageCode =
+            Provider.of<LanguageProvider>(context, listen: false)
+                .targetLanguage
+                ?.code;
+        if (languageCode != null) {
+          final vocabProvider =
+              Provider.of<VocabProvider>(context, listen: false);
+          for (final entry in vocabExtraction.entries) {
+            vocabProvider.addVocabulary(
+              languageCode: languageCode,
+              prompt: entry.term,
+              answer: entry.meaning,
+              context: entry.example,
+              reading: entry.reading,
+            );
+          }
+        }
+      }
+
       String? translation;
       String? grammar;
+      String? reading;
 
-      // Simple parsing of labeled sections
-      final textMatch = RegExp(r'TEXT:\s*(.*?)(?=\nTRANS:|$)', dotAll: true).firstMatch(content);
+      // Simple parsing of labeled sections. READING is optional and sits
+      // between TEXT and TRANS, so TEXT has to stop at either.
+      final textMatch = RegExp(r'TEXT:\s*(.*?)(?=\nREADING:|\nTRANS:|$)',
+              dotAll: true)
+          .firstMatch(content);
+      final readingMatch =
+          RegExp(r'READING:\s*(.*?)(?=\nTRANS:|$)', dotAll: true)
+              .firstMatch(content);
       final transMatch = RegExp(r'TRANS:\s*(.*?)(?=\nGRAMMAR:|$)', dotAll: true).firstMatch(content);
       final grammarMatch = RegExp(r'GRAMMAR:\s*(.*)', dotAll: true).firstMatch(content);
 
@@ -450,6 +645,8 @@ Correct mistakes gently if they block understanding.
          content = textMatch.group(1)?.trim() ?? content;
          translation = transMatch?.group(1)?.trim();
          grammar = grammarMatch?.group(1)?.trim();
+         final rawReading = readingMatch?.group(1)?.trim();
+         reading = (rawReading == null || rawReading.isEmpty) ? null : rawReading;
       }
 
       final chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -461,8 +658,91 @@ Correct mistakes gently if they block understanding.
           timestamp: DateTime.now(),
           translation: translation,
           grammarAnalysis: grammar,
+          reading: reading,
         ));
       }
+  }
+
+  /// Applies the objectives the tutor reported, and closes out the run when
+  /// the last required one lands.
+  ///
+  /// Ids are claims, not facts: [ScenarioProvider.markObjectives] drops
+  /// anything not in the catalogue, so a model that invents an id cannot
+  /// award itself a clear.
+  void _recordObjectives(List<String> objectiveIds) {
+    final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    final scenario = _resolveScenario(chatProvider);
+    if (scenario == null) return;
+
+    final scenarioProvider =
+        Provider.of<ScenarioProvider>(context, listen: false);
+    final newlyCleared =
+        scenarioProvider.markObjectives(scenario, objectiveIds);
+    if (newlyCleared.isEmpty) return;
+
+    if (!scenarioProvider.isComplete(scenario) || _completionHandled) return;
+
+    // Latch before any await: a second response arriving mid-popup must not
+    // pay out twice.
+    _completionHandled = true;
+    _completeScenario(scenario, scenarioProvider);
+  }
+
+  Future<void> _completeScenario(
+    ScenarioDefinition scenario,
+    ScenarioProvider scenarioProvider,
+  ) async {
+    final clearedThisRun =
+        Set<String>.from(scenarioProvider.forScenario(scenario.id)
+            .clearedObjectiveIds);
+    final bonusCleared = scenario.objectives
+        .where((o) => o.isBonus && clearedThisRun.contains(o.id))
+        .length;
+    final bonusTotal = scenario.objectives.where((o) => o.isBonus).length;
+
+    // completeRun resets the checklist for the next play-through, so the
+    // reward tier has to be read from its return value, not re-derived after.
+    final isFirstClear = scenarioProvider.completeRun(scenario);
+
+    final reward = ProgressionUtils.getScenarioRewardOutcome(
+      bonusObjectivesCleared: bonusCleared,
+      bonusObjectivesTotal: bonusTotal,
+      isFirstClear: isFirstClear,
+    );
+
+    final characterProvider =
+        Provider.of<CharacterProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    // Scale while the pet is still in its pre-reward condition, matching the
+    // quiz flow — a sick pet earns half.
+    final wasSick = characterProvider.isSick;
+    final grantedXp = characterProvider.scaleReward(reward.xpReward);
+    final grantedCoins = characterProvider.scaleReward(reward.coinReward);
+
+    characterProvider.applyQuizRewards(
+      happinessDelta: reward.happinessDelta,
+      hungerDelta: reward.hungerDelta,
+    );
+    await userProvider.addXp(grantedXp);
+    await userProvider.addCoins(grantedCoins);
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+      builder: (_) => ScenarioCompletePopup(
+        scenario: scenario,
+        clearedObjectiveIds: clearedThisRun,
+        reward: reward,
+        grantedXp: grantedXp,
+        grantedCoins: grantedCoins,
+        sickPenaltyApplied: wasSick,
+        onContinue: () => Navigator.of(context, rootNavigator: true).pop(),
+      ),
+    );
   }
 
   String _formatTime(DateTime date) {
@@ -540,6 +820,9 @@ Correct mistakes gently if they block understanding.
 
   void _showNewChatTypeDialog() {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     showDialog(
       context: context,
@@ -561,8 +844,9 @@ Correct mistakes gently if they block understanding.
             children: [
               Text(
                 l10n.chooseChatType.toUpperCase(),
-                textAlign: TextAlign.center,
-                style: GoogleFonts.pressStart2p(
+                textDirection: textDirection,
+                textAlign: textAlign,
+                style: AppFonts.pressStart2p(
                   fontSize: 11,
                   color: AppTheme.retroDark,
                   fontWeight: FontWeight.bold,
@@ -589,7 +873,9 @@ Correct mistakes gently if they block understanding.
                     children: [
                       Text(
                         l10n.blankChat.toUpperCase(),
-                        style: GoogleFonts.pressStart2p(
+                        textDirection: textDirection,
+                        textAlign: textAlign,
+                        style: AppFonts.pressStart2p(
                           fontSize: 9,
                           color: AppTheme.retroDark,
                           fontWeight: FontWeight.bold,
@@ -598,7 +884,9 @@ Correct mistakes gently if they block understanding.
                       const SizedBox(height: 6),
                       Text(
                         l10n.blankChatDesc,
-                        style: GoogleFonts.pressStart2p(
+                        textDirection: textDirection,
+                        textAlign: textAlign,
+                        style: AppFonts.pressStart2p(
                           fontSize: 7,
                           color: AppTheme.retroDark.withValues(alpha: 0.8),
                           height: 1.4,
@@ -629,7 +917,9 @@ Correct mistakes gently if they block understanding.
                     children: [
                       Text(
                         l10n.roleplayScenario.toUpperCase(),
-                        style: GoogleFonts.pressStart2p(
+                        textDirection: textDirection,
+                        textAlign: textAlign,
+                        style: AppFonts.pressStart2p(
                           fontSize: 9,
                           color: AppTheme.retroDark,
                           fontWeight: FontWeight.bold,
@@ -638,7 +928,9 @@ Correct mistakes gently if they block understanding.
                       const SizedBox(height: 6),
                       Text(
                         l10n.roleplayScenarioDesc,
-                        style: GoogleFonts.pressStart2p(
+                        textDirection: textDirection,
+                        textAlign: textAlign,
+                        style: AppFonts.pressStart2p(
                           fontSize: 7,
                           color: AppTheme.retroDark.withValues(alpha: 0.85),
                           height: 1.4,
@@ -661,7 +953,9 @@ Correct mistakes gently if they block understanding.
                   child: Center(
                     child: Text(
                       l10n.cancel.toUpperCase(),
-                      style: GoogleFonts.pressStart2p(
+                      textDirection: textDirection,
+                      textAlign: textAlign,
+                      style: AppFonts.pressStart2p(
                         fontSize: 8,
                         color: AppTheme.retroDark,
                       ),
@@ -678,6 +972,10 @@ Correct mistakes gently if they block understanding.
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+
     if (_isConnecting && _currentChatId == null) {
       return const Scaffold(
         backgroundColor: AppTheme.retroSky,
@@ -724,10 +1022,12 @@ Correct mistakes gently if they block understanding.
               Container(
                 margin: const EdgeInsets.only(top: 12, bottom: 4),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 child: Text(
                   "${_formatTime(DateTime.now())}", 
-                  style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.center,
+                  style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                 ),
               ),
 
@@ -738,8 +1038,17 @@ Correct mistakes gently if they block understanding.
                   decoration: BoxDecoration(border: Border.all(color: AppTheme.retroDark, width: 2), color: AppTheme.retroAccent),
                   child: Text(
                     "SCENARIO: ${_resolveScenarioTitle(chatProvider) ?? ''}".toUpperCase(),
-                    style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                    textDirection: textDirection,
+                    textAlign: textAlign,
+                    style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                   ),
+                ),
+
+              // Objective checklist for tracked scenarios. The tutor never
+              // says what's left, so this is the only place that answers it.
+              if (_resolveScenario(chatProvider) != null)
+                ScenarioObjectiveTracker(
+                  scenario: _resolveScenario(chatProvider)!,
                 ),
 
               Expanded(
@@ -757,6 +1066,7 @@ Correct mistakes gently if they block understanding.
                       isUser: msg.sender == 'user',
                       translation: msg.translation,
                       grammarAnalysis: msg.grammarAnalysis,
+                      reading: msg.reading,
                     );
                   },
                 ),
@@ -769,7 +1079,7 @@ Correct mistakes gently if they block understanding.
                   child: GestureDetector(
                     onTap: _closeSidebar,
                     child: Container(
-                      color: Colors.black.withOpacity(0.30 * sidebarProgress),
+                      color: Colors.black.withValues(alpha: 0.30 * sidebarProgress),
                     ),
                   ),
                 ),
@@ -807,7 +1117,7 @@ class DitherPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.retroUi.withOpacity(0.2)
+      ..color = AppTheme.retroUi.withValues(alpha: 0.2)
       ..style = PaintingStyle.fill;
     
     // Draw simple dots grid pattern
