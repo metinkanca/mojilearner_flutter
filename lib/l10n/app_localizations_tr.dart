@@ -400,6 +400,65 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shopItemCoffeeDescription => 'Hızlı enerji artışı.';
 
   @override
+  String get shopItemMedicineName => 'İlaç';
+
+  @override
+  String get shopItemMedicineDescription =>
+      'Moji’yi tekrar sağlığına kavuşturur.';
+
+  @override
+  String get review => 'Tekrar';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count bekliyor';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$total içinden $current';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Cevabı göster';
+
+  @override
+  String get reviewGradeAgain => 'Tekrar';
+
+  @override
+  String get reviewGradeHard => 'Zor';
+
+  @override
+  String get reviewGradeGood => 'İyi';
+
+  @override
+  String get reviewGradeEasy => 'Kolay';
+
+  @override
+  String get reviewAllCaughtUp => 'Her şey tamam!';
+
+  @override
+  String get reviewNothingDue =>
+      'Şu an tekrar edilecek bir şey yok. Sohbet et ya da bir test çöz, Moji zorlandığın yerleri hatırlasın.';
+
+  @override
+  String get reviewSessionComplete => 'Tekrar tamamlandı!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '$count tekrar edildi';
+  }
+
+  @override
+  String get reviewDone => 'Bitti';
+
+  @override
+  String get reviewCorrectionPrompt => 'Doğrusu ne?';
+
+  @override
+  String get reviewVocabularyPrompt => 'Bu ne demek?';
+
+  @override
   String get shopItemBgBlueName => 'Okyanus Mavisi';
 
   @override
@@ -432,4 +491,381 @@ class AppLocalizationsTr extends AppLocalizations {
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
     return '$itemName x$quantity satın alındı!';
   }
+
+  @override
+  String get youLabel => 'Sen';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... Dil bağlantısı yeniden bağlanırken Moji kestiriyor. Kısa süre sonra tekrar dene.';
+
+  @override
+  String get mojiSleepNight =>
+      'Şşş... Moji uyuyor. Uyandırmak için Moji\'ye dokun.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI KESTİRİYOR... DİL BAĞLANTISI YENİDEN BAĞLANIYOR';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI UYUYOR... UYANDIRMAK İÇİN DOKUN';
+
+  @override
+  String get mojiWakeSuccess =>
+      'Esneme... Moji şimdi uyanık! Hadi pratik yapalım!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Dil bağlantısı yeniden bağlanırken Moji kestiriyor.';
+
+  @override
+  String get mojiSleepReasonNight => 'Moji uyuyor. Uyandırmak için dokun.';
+
+  @override
+  String get levelsScreenTitle => 'Seviyeler';
+
+  @override
+  String get levelStatusCurrent => 'Mevcut Seviye';
+
+  @override
+  String get levelStatusCompleted => 'Tamamlandı';
+
+  @override
+  String get levelRewardLabel => 'Ödül';
+
+  @override
+  String get quizPausedTitle => 'Duraklatıldı';
+
+  @override
+  String get quizPausedPrompt => 'Devam etmek mi yoksa çıkmak mı?';
+
+  @override
+  String get quizPlay => 'Oyna';
+
+  @override
+  String get quizPause => 'Duraklat';
+
+  @override
+  String get quizExit => 'Çık';
+
+  @override
+  String get weeklyProgressTitle => 'Haftalık İlerleme';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'Gün $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Günlük ödül için yarın geri dön';
+
+  @override
+  String get resetAppButton => 'Sıfırla';
+
+  @override
+  String get resetAppTitle => 'Uygulamayı Sıfırla';
+
+  @override
+  String get resetAppWarning =>
+      'Bu, tüm ilerlemenizi silecektir.\n\nEmin misiniz?';
+
+  @override
+  String get resetAction => 'Sıfırla';
+
+  @override
+  String get resetSuccessMessage => 'Uygulama başarıyla sıfırlandı';
+
+  @override
+  String get selectYourCharacter => 'Karakterinizi seçin';
+
+  @override
+  String get characterDog => 'Köpek';
+
+  @override
+  String get characterCat => 'Kedi';
+
+  @override
+  String get characterBird => 'Kuş';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Dil bağlantısı yeniden kurulurken Moji kestiriyor. Az sonra tekrar dene.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Dil bağlantısı yeniden kurulurken Moji kestiriyor.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji uyuyor. Uyandırmak için dokun.';
+
+  @override
+  String get mojiAwakeReady => 'Moji uyanık ve hazır!';
+
+  @override
+  String get wardrobeTitle => 'Gardırop';
+
+  @override
+  String get slotHat => 'Şapka';
+
+  @override
+  String get slotNeck => 'Boyun';
+
+  @override
+  String get slotFace => 'Yüz';
+
+  @override
+  String get bodyTailColor => 'Gövde ve kuyruk rengi';
+
+  @override
+  String get eyeColor => 'Göz rengi';
+
+  @override
+  String get eyeStyleSolid => 'Tek renk';
+
+  @override
+  String get eyeStyleOddEyed => 'Farklı gözler';
+
+  @override
+  String get leftEye => 'Sol göz';
+
+  @override
+  String get rightEye => 'Sağ göz';
+
+  @override
+  String get colorLabel => 'Renk';
+
+  @override
+  String get scenarioObjectives => 'Hedefler';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Tamamlandı';
+
+  @override
+  String get scenarioBonusLabel => 'Bonus';
+
+  @override
+  String get scenarioCompleteTitle => 'Senaryo tamamlandı!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$total hedeften $done tanesi';
+  }
+
+  @override
+  String get scenarioFirstClear => 'İlk tamamlama!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Tekrar ödülü — ilk tamamlama daha çok kazandırır.';
+
+  @override
+  String get scenarioContinue => 'Devam';
+
+  @override
+  String get objCoffeeOrder => 'Bir içecek sipariş et';
+
+  @override
+  String get objCoffeeCustomize => 'Siparişini özelleştir';
+
+  @override
+  String get objCoffeePrice => 'Fiyatını sor';
+
+  @override
+  String get objCoffeeSmallTalk => 'Barista ile biraz sohbet et';
+
+  @override
+  String get objInterviewGreet => 'Kendini tanıt';
+
+  @override
+  String get objInterviewExperience => 'Deneyimini anlat';
+
+  @override
+  String get objInterviewStrength => 'Neden uygun olduğunu açıkla';
+
+  @override
+  String get objInterviewAsk => 'Pozisyon hakkında bir soru sor';
+
+  @override
+  String get objDirectionsAsk => 'Bir yere nasıl gidileceğini sor';
+
+  @override
+  String get objDirectionsClarify =>
+      'Tekrar etmelerini ya da yavaş konuşmalarını iste';
+
+  @override
+  String get objDirectionsDistance => 'Ne kadar uzak olduğunu öğren';
+
+  @override
+  String get objDirectionsThank => 'Onlara doğru şekilde teşekkür et';
+
+  @override
+  String get objDoctorSymptom => 'Şikâyetini anlat';
+
+  @override
+  String get objDoctorDuration => 'Ne zamandan beri böyle olduğunu söyle';
+
+  @override
+  String get objDoctorQuestion => 'Ne yapman gerektiğini sor';
+
+  @override
+  String get objDoctorAllergy => 'Bir alerjini ya da kullandığın ilacı söyle';
+
+  @override
+  String get objShoppingFind => 'Bir ürünün nerede olduğunu sor';
+
+  @override
+  String get objShoppingSize => 'Beden, renk ya da nasıl durduğunu sor';
+
+  @override
+  String get objShoppingPrice => 'Fiyatı sor';
+
+  @override
+  String get objShoppingPay => 'Ödemesini yap';
+
+  @override
+  String get objRestaurantTable => 'Bir masa iste';
+
+  @override
+  String get objRestaurantOrder => 'Yemek sipariş et';
+
+  @override
+  String get objRestaurantDrink => 'İçecek bir şey sipariş et';
+
+  @override
+  String get objRestaurantBill => 'Hesabı iste';
+
+  @override
+  String get notificationsTitle => 'Bildirimler';
+
+  @override
+  String get notificationsEnable => 'Bana Moji’yi hatırlat';
+
+  @override
+  String get notificationsDesc =>
+      'Moji sana ihtiyacı olduğunda, tekrar zamanı geldiğinde ve günlük ödülün hazır olduğunda haber verir.';
+
+  @override
+  String get notificationsBlocked => 'Bildirimler cihaz ayarlarında kapalı.';
+
+  @override
+  String get notifPetChannelName => 'Moji sana ihtiyaç duyuyor';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Evcil hayvanın acıktığında ya da mutsuz olduğunda hatırlatmalar';
+
+  @override
+  String get notifReviewChannelName => 'Tekrar hatırlatmaları';
+
+  @override
+  String get notifReviewChannelDesc =>
+      'Tekrar zamanı gelen kelimeler için hatırlatmalar';
+
+  @override
+  String get notifRewardChannelName => 'Günlük ödül';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Günlük ödülün hazır olduğunda hatırlatmalar';
+
+  @override
+  String get notifPetHungryTitle => 'Moji acıktı';
+
+  @override
+  String get notifPetHungryBody =>
+      'Evcil hayvanının şu an bir atıştırmalığa ihtiyacı var.';
+
+  @override
+  String get notifPetSadTitle => 'Moji seni özledi';
+
+  @override
+  String get notifPetSadBody =>
+      'Sensiz burası sessiz kaldı. Uğrayıp merhaba der misin?';
+
+  @override
+  String get notifReviewTitle => 'Tekrar zamanı';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kelime seni bekliyor.',
+      one: '1 kelime seni bekliyor.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Günlük ödülün hazır';
+
+  @override
+  String get notifRewardBody => 'Moji’nin sana bir şeyi var. Gel de al!';
+
+  @override
+  String get careTitle => 'Moji nasıl?';
+
+  @override
+  String get careStatFullness => 'Tokluk';
+
+  @override
+  String get careStatHappiness => 'Mutluluk';
+
+  @override
+  String get careStatHealth => 'Sağlık';
+
+  @override
+  String get careAllWell => 'Moji gayet iyi.';
+
+  @override
+  String get careNeedHungry => 'Moji aç';
+
+  @override
+  String get careNeedLonely => 'Moji keyifsiz';
+
+  @override
+  String get careNeedSick => 'Moji hasta';
+
+  @override
+  String get careSickPenalty =>
+      'Moji hastayken tüm XP ve altınlar yarıya iner.';
+
+  @override
+  String get careFeedTitle => 'Moji’yi besle';
+
+  @override
+  String get careNoFood => 'Yiyecek kalmadı. Mağazadan alabilirsin.';
+
+  @override
+  String get careGoToShop => 'Mağazaya git';
+
+  @override
+  String get carePlay => 'Moji’yi sev';
+
+  @override
+  String get carePlayCooldown => 'Moji şimdilik yeterince sevildi.';
+
+  @override
+  String get careClose => 'Kapat';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji $item yedi.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Şu anki tokluk: %$value';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Moji hasta — ödüller yarıya indi';
+
+  @override
+  String get careDragToFeed => 'Beslemek için Moji’nin üstüne sürükle';
 }

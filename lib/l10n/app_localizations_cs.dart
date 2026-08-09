@@ -215,82 +215,82 @@ class AppLocalizationsCs extends AppLocalizations {
   String get typeHere => 'Pište zde...';
 
   @override
-  String get shopTitle => 'Shop';
+  String get shopTitle => 'Obchod';
 
   @override
-  String get categoryAll => 'All';
+  String get categoryAll => 'Vše';
 
   @override
-  String get categoryFood => 'Food';
+  String get categoryFood => 'Jídlo';
 
   @override
-  String get categoryDecor => 'Decor';
+  String get categoryDecor => 'Dekorace';
 
   @override
-  String get hideOwnedCosmetics => 'Hide Owned Cosmetics';
+  String get hideOwnedCosmetics => 'Skrýt vlastněné doplňky';
 
   @override
-  String get noItems => 'No Items';
+  String get noItems => 'Žádné předměty';
 
   @override
-  String get owned => 'Owned';
+  String get owned => 'Vlastněno';
 
   @override
-  String get alreadyOwned => 'Already Owned';
+  String get alreadyOwned => 'Již vlastníš';
 
   @override
-  String get alreadyOwnedMessage => 'You already own this item!';
+  String get alreadyOwnedMessage => 'Tento předmět už vlastníš!';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Množství';
 
   @override
-  String get totalPrice => 'Total Price';
+  String get totalPrice => 'Celková cena';
 
   @override
-  String get notEnoughCoins => 'Not Enough Coins!';
+  String get notEnoughCoins => 'Nedostatek mincí!';
 
   @override
-  String get purchaseFailed => 'Purchase Failed';
+  String get purchaseFailed => 'Nákup se nezdařil';
 
   @override
-  String get notEnoughCoinsMessage => 'Not enough coins!';
+  String get notEnoughCoinsMessage => 'Nemáš dost mincí!';
 
   @override
-  String get buy => 'Buy';
+  String get buy => 'Koupit';
 
   @override
-  String get tooPoor => 'Too Poor';
+  String get tooPoor => 'Málo mincí';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get daily_reward => 'Daily Reward';
+  String get daily_reward => 'Denní odměna';
 
   @override
-  String get claim_reward => 'Claim Reward';
+  String get claim_reward => 'Vyzvednout odměnu';
 
   @override
   String day_streak(Object X) {
-    return 'Day $X Streak';
+    return 'Série: den $X';
   }
 
   @override
-  String get come_back_tomorrow => 'Come back tomorrow!';
+  String get come_back_tomorrow => 'Vrať se zítra!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
+  String get streak_broken => 'Vítej zpět! Začínáme znovu';
 
   @override
-  String get keep_going => 'Keep it going!';
+  String get keep_going => 'Jen tak dál!';
 
   @override
-  String get reward_claimed => 'Reward Claimed!';
+  String get reward_claimed => 'Odměna vyzvednuta!';
 
   @override
   String amazing_streak(Object X) {
-    return 'Amazing! Day $X streak!';
+    return 'Úžasné! Série $X dní!';
   }
 
   @override
@@ -396,6 +396,64 @@ class AppLocalizationsCs extends AppLocalizations {
   String get shopItemCoffeeDescription => 'Rychlý nárůst energie.';
 
   @override
+  String get shopItemMedicineName => 'Lék';
+
+  @override
+  String get shopItemMedicineDescription => 'Vyléčí Mojiho.';
+
+  @override
+  String get review => 'Opakování';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count k opakování';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current z $total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Zobrazit odpověď';
+
+  @override
+  String get reviewGradeAgain => 'Znovu';
+
+  @override
+  String get reviewGradeHard => 'Těžké';
+
+  @override
+  String get reviewGradeGood => 'Dobré';
+
+  @override
+  String get reviewGradeEasy => 'Snadné';
+
+  @override
+  String get reviewAllCaughtUp => 'Vše hotovo!';
+
+  @override
+  String get reviewNothingDue =>
+      'Teď není co opakovat. Popovídej si nebo si dej kvíz a Moji si zapamatuje, co ti nejde.';
+
+  @override
+  String get reviewSessionComplete => 'Opakování dokončeno!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return 'Zopakováno: $count';
+  }
+
+  @override
+  String get reviewDone => 'Hotovo';
+
+  @override
+  String get reviewCorrectionPrompt => 'Jak to má být správně?';
+
+  @override
+  String get reviewVocabularyPrompt => 'Co to znamená?';
+
+  @override
   String get shopItemBgBlueName => 'Oceánská modř';
 
   @override
@@ -428,4 +486,379 @@ class AppLocalizationsCs extends AppLocalizations {
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
     return 'Zakoupen $itemName x$quantity!';
   }
+
+  @override
+  String get youLabel => 'Ty';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... Moji podřimuje, zatímco se znovu připojuje jazykové spojení. Zkus to brzy znovu.';
+
+  @override
+  String get mojiSleepNight => 'Pšš... Moji spí. Klepni na Mojiho a probuď ho.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI PODŘIMUJE... JAZYKOVÉ SPOJENÍ SE OBNOVUJE';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI SPÍ... KLEPNI PRO PROBUZENÍ';
+
+  @override
+  String get mojiWakeSuccess => 'Zív... Moji je teď vzhůru! Pojďme trénovat!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Moji podřimuje, zatímco se jazykové spojení obnovuje.';
+
+  @override
+  String get mojiSleepReasonNight => 'Moji spí. Klepni pro probuzení.';
+
+  @override
+  String get levelsScreenTitle => 'Úrovně';
+
+  @override
+  String get levelStatusCurrent => 'Aktuální úroveň';
+
+  @override
+  String get levelStatusCompleted => 'Dokončeno';
+
+  @override
+  String get levelRewardLabel => 'Odměna';
+
+  @override
+  String get quizPausedTitle => 'Pozastaveno';
+
+  @override
+  String get quizPausedPrompt => 'Chcete pokračovat nebo skončit?';
+
+  @override
+  String get quizPlay => 'Hrát';
+
+  @override
+  String get quizPause => 'Pozastavit';
+
+  @override
+  String get quizExit => 'Ukončit';
+
+  @override
+  String get weeklyProgressTitle => 'Týdenní pokrok';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'Den $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Vraťte se zítra na denní odměnu';
+
+  @override
+  String get resetAppButton => 'Obnovit';
+
+  @override
+  String get resetAppTitle => 'Obnovit aplikaci';
+
+  @override
+  String get resetAppWarning =>
+      'Odstraní veškerý váš pokrok.\n\nJste si jisti?';
+
+  @override
+  String get resetAction => 'Obnovit';
+
+  @override
+  String get resetSuccessMessage => 'Aplikace byla úspěšně obnovena';
+
+  @override
+  String get selectYourCharacter => 'Vyberte si svou postavu';
+
+  @override
+  String get characterDog => 'Pes';
+
+  @override
+  String get characterCat => 'Kočka';
+
+  @override
+  String get characterBird => 'Pták';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji podřimuje, dokud se jazykové spojení neobnoví. Zkus to brzy znovu.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji podřimuje, dokud se jazykové spojení neobnoví.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji spí. Klepnutím ho probudíš.';
+
+  @override
+  String get mojiAwakeReady => 'Moji je vzhůru a připraven!';
+
+  @override
+  String get wardrobeTitle => 'Šatník';
+
+  @override
+  String get slotHat => 'Klobouk';
+
+  @override
+  String get slotNeck => 'Krk';
+
+  @override
+  String get slotFace => 'Obličej';
+
+  @override
+  String get bodyTailColor => 'Barva těla a ocasu';
+
+  @override
+  String get eyeColor => 'Barva očí';
+
+  @override
+  String get eyeStyleSolid => 'Jednobarevné';
+
+  @override
+  String get eyeStyleOddEyed => 'Různobarevné';
+
+  @override
+  String get leftEye => 'Levé oko';
+
+  @override
+  String get rightEye => 'Pravé oko';
+
+  @override
+  String get colorLabel => 'Barva';
+
+  @override
+  String get scenarioObjectives => 'Cíle';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Splněno';
+
+  @override
+  String get scenarioBonusLabel => 'Bonus';
+
+  @override
+  String get scenarioCompleteTitle => 'Scénář dokončen!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done z $total cílů';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Poprvé splněno!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Odměna za opakování — poprvé je odměna vyšší.';
+
+  @override
+  String get scenarioContinue => 'Pokračovat';
+
+  @override
+  String get objCoffeeOrder => 'Objednej si nápoj';
+
+  @override
+  String get objCoffeeCustomize => 'Uprav si objednávku';
+
+  @override
+  String get objCoffeePrice => 'Zjisti, kolik to stojí';
+
+  @override
+  String get objCoffeeSmallTalk => 'Prohoď pár slov s baristou';
+
+  @override
+  String get objInterviewGreet => 'Představ se';
+
+  @override
+  String get objInterviewExperience => 'Popiš své zkušenosti';
+
+  @override
+  String get objInterviewStrength => 'Vysvětli, proč se hodíš';
+
+  @override
+  String get objInterviewAsk => 'Zeptej se na tu pozici';
+
+  @override
+  String get objDirectionsAsk => 'Zjisti, jak se někam dostat';
+
+  @override
+  String get objDirectionsClarify => 'Popros o zopakování nebo zpomalení';
+
+  @override
+  String get objDirectionsDistance => 'Zjisti, jak je to daleko';
+
+  @override
+  String get objDirectionsThank => 'Slušně poděkuj';
+
+  @override
+  String get objDoctorSymptom => 'Popiš své potíže';
+
+  @override
+  String get objDoctorDuration => 'Řekni, jak dlouho to trvá';
+
+  @override
+  String get objDoctorQuestion => 'Zeptej se, co máš dělat';
+
+  @override
+  String get objDoctorAllergy => 'Zmiň alergii nebo léky';
+
+  @override
+  String get objShoppingFind => 'Zeptej se, kde něco najdeš';
+
+  @override
+  String get objShoppingSize => 'Zeptej se na velikost, barvu nebo střih';
+
+  @override
+  String get objShoppingPrice => 'Zeptej se na cenu';
+
+  @override
+  String get objShoppingPay => 'Zaplať za to';
+
+  @override
+  String get objRestaurantTable => 'Popros o stůl';
+
+  @override
+  String get objRestaurantOrder => 'Objednej si jídlo';
+
+  @override
+  String get objRestaurantDrink => 'Objednej si něco k pití';
+
+  @override
+  String get objRestaurantBill => 'Popros o účet';
+
+  @override
+  String get notificationsTitle => 'Oznámení';
+
+  @override
+  String get notificationsEnable => 'Připomínej mi Mojiho';
+
+  @override
+  String get notificationsDesc =>
+      'Moji ti dá vědět, když tě potřebuje, když je čas na opakování a když je připravená denní odměna.';
+
+  @override
+  String get notificationsBlocked =>
+      'Oznámení jsou vypnutá v nastavení zařízení.';
+
+  @override
+  String get notifPetChannelName => 'Moji tě potřebuje';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Připomínky, když má mazlíček hlad nebo je smutný';
+
+  @override
+  String get notifReviewChannelName => 'Připomínky opakování';
+
+  @override
+  String get notifReviewChannelDesc =>
+      'Připomínky, když je čas opakovat slovíčka';
+
+  @override
+  String get notifRewardChannelName => 'Denní odměna';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Připomínky, když je připravená denní odměna';
+
+  @override
+  String get notifPetHungryTitle => 'Moji má hlad';
+
+  @override
+  String get notifPetHungryBody => 'Tvůj mazlíček by teď fakt uvítal svačinu.';
+
+  @override
+  String get notifPetSadTitle => 'Mojimu chybíš';
+
+  @override
+  String get notifPetSadBody => 'Bez tebe je tu ticho. Nestavíš se pozdravit?';
+
+  @override
+  String get notifReviewTitle => 'Čas na opakování';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count slov na tebe čeká.',
+      many: '$count slova na tebe čekají.',
+      few: '$count slova na tebe čekají.',
+      one: '$count slovo na tebe čeká.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Denní odměna je připravená';
+
+  @override
+  String get notifRewardBody => 'Moji pro tebe něco má. Přijď si pro to!';
+
+  @override
+  String get careTitle => 'Jak se má Moji?';
+
+  @override
+  String get careStatFullness => 'Sytost';
+
+  @override
+  String get careStatHappiness => 'Radost';
+
+  @override
+  String get careStatHealth => 'Zdraví';
+
+  @override
+  String get careAllWell => 'Mojimu se daří skvěle.';
+
+  @override
+  String get careNeedHungry => 'Moji má hlad';
+
+  @override
+  String get careNeedLonely => 'Moji je posmutnělý';
+
+  @override
+  String get careNeedSick => 'Moji je nemocný';
+
+  @override
+  String get careSickPenalty =>
+      'Dokud je Moji nemocný, XP i mince jsou poloviční.';
+
+  @override
+  String get careFeedTitle => 'Nakrm Mojiho';
+
+  @override
+  String get careNoFood => 'Došlo jídlo. Zajdi do obchodu doplnit zásoby.';
+
+  @override
+  String get careGoToShop => 'Do obchodu';
+
+  @override
+  String get carePlay => 'Pohlaď Mojiho';
+
+  @override
+  String get carePlayCooldown => 'Moji už má mazlení pro tuto chvíli dost.';
+
+  @override
+  String get careClose => 'Zavřít';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji snědl $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Sytost teď: $value %';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Moji je nemocný — odměny poloviční';
+
+  @override
+  String get careDragToFeed => 'Přetáhni na Mojiho a nakrm ho';
 }

@@ -294,7 +294,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get whatsYourName => 'QUAL É O SEU NOME?';
+  String get whatsYourName => 'QUAL Ã‰ O SEU NOME?';
 
   @override
   String get enterYourName => 'Digite seu nome';
@@ -303,7 +303,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get continueBtn => 'CONTINUAR';
 
   @override
-  String get howWouldYouRate => 'COMO VOCÊ AVALIARIA';
+  String get howWouldYouRate => 'COMO VOCÃŠ AVALIARIA';
 
   @override
   String get yourLevel => 'SEU NÍVEL?';
@@ -315,7 +315,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get intermediate => 'INTERMEDIÁRIO';
 
   @override
-  String get advanced => 'AVANÇADO';
+  String get advanced => 'AVANÃ‡ADO';
 
   @override
   String get beginnerDesc => 'Estou começando. Conheço muito poucas palavras.';
@@ -332,7 +332,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get whichLanguage => 'QUAL IDIOMA';
 
   @override
-  String get doYouWantToLearn => 'VOCÊ QUER APRENDER?';
+  String get doYouWantToLearn => 'VOCÃŠ QUER APRENDER?';
 
   @override
   String get changeAnytime =>
@@ -343,10 +343,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Não se preocupe, vamos verificar isso com um bate-papo rápido!';
 
   @override
-  String get startAssessment => 'INICIAR AVALIAÇÃO';
+  String get startAssessment => 'INICIAR AVALIAÃ‡ÃƒO';
 
   @override
-  String get chatAssessment => 'AVALIAÇÃO POR CHAT';
+  String get chatAssessment => 'AVALIAÃ‡ÃƒO POR CHAT';
 
   @override
   String get typeYourAnswer => 'Digite sua resposta...';
@@ -398,6 +398,64 @@ class AppLocalizationsPt extends AppLocalizations {
   String get shopItemCoffeeDescription => 'Impulso rápido de energia.';
 
   @override
+  String get shopItemMedicineName => 'Remédio';
+
+  @override
+  String get shopItemMedicineDescription => 'Cuida do Moji até ele melhorar.';
+
+  @override
+  String get review => 'Revisão';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count pendentes';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current de $total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Ver resposta';
+
+  @override
+  String get reviewGradeAgain => 'De novo';
+
+  @override
+  String get reviewGradeHard => 'Difícil';
+
+  @override
+  String get reviewGradeGood => 'Bom';
+
+  @override
+  String get reviewGradeEasy => 'Fácil';
+
+  @override
+  String get reviewAllCaughtUp => 'Tudo em dia!';
+
+  @override
+  String get reviewNothingDue =>
+      'Nada para revisar agora. Converse ou faça um quiz e Moji vai lembrar do que você tem dificuldade.';
+
+  @override
+  String get reviewSessionComplete => 'Revisão concluída!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '$count revisados';
+  }
+
+  @override
+  String get reviewDone => 'Pronto';
+
+  @override
+  String get reviewCorrectionPrompt => 'Qual é a correção?';
+
+  @override
+  String get reviewVocabularyPrompt => 'O que isso significa?';
+
+  @override
   String get shopItemBgBlueName => 'Azul oceano';
 
   @override
@@ -430,4 +488,383 @@ class AppLocalizationsPt extends AppLocalizations {
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
     return '$itemName x$quantity comprado!';
   }
+
+  @override
+  String get youLabel => 'Você';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... O Moji está cochilando enquanto o link de idioma se reconecta. Tente novamente em breve.';
+
+  @override
+  String get mojiSleepNight =>
+      'Shhh... O Moji está dormindo. Toque no Moji para acordá-lo.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI COCHILANDO... RECONECTANDO LINK DE IDIOMA';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI DORMINDO... TOQUE PARA ACORDAR';
+
+  @override
+  String get mojiWakeSuccess => 'Bocejo... O Moji acordou! Vamos praticar!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'O Moji está cochilando enquanto o link de idioma se reconecta.';
+
+  @override
+  String get mojiSleepReasonNight =>
+      'O Moji está dormindo. Toque para acordar.';
+
+  @override
+  String get levelsScreenTitle => 'Níveis';
+
+  @override
+  String get levelStatusCurrent => 'Nível atual';
+
+  @override
+  String get levelStatusCompleted => 'Concluído';
+
+  @override
+  String get levelRewardLabel => 'Recompensa';
+
+  @override
+  String get quizPausedTitle => 'Pausado';
+
+  @override
+  String get quizPausedPrompt => 'Continuar ou sair?';
+
+  @override
+  String get quizPlay => 'Jogar';
+
+  @override
+  String get quizPause => 'Pausar';
+
+  @override
+  String get quizExit => 'Sair';
+
+  @override
+  String get weeklyProgressTitle => 'Progresso semanal';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'Dia $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Volte amanhã para sua recompensa diária';
+
+  @override
+  String get resetAppButton => 'Redefinir';
+
+  @override
+  String get resetAppTitle => 'Redefinir app';
+
+  @override
+  String get resetAppWarning =>
+      'Isso excluirá todo o seu progresso.\n\nTem certeza?';
+
+  @override
+  String get resetAction => 'Redefinir';
+
+  @override
+  String get resetSuccessMessage => 'App redefinido com sucesso';
+
+  @override
+  String get selectYourCharacter => 'Selecione seu personagem';
+
+  @override
+  String get characterDog => 'Cachorro';
+
+  @override
+  String get characterCat => 'Gato';
+
+  @override
+  String get characterBird => 'Pássaro';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji está cochilando enquanto a conexão de idioma é restabelecida. Tente de novo em breve.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji está cochilando enquanto a conexão de idioma é restabelecida.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji está dormindo. Toque para acordá-lo.';
+
+  @override
+  String get mojiAwakeReady => 'Moji está acordado e pronto!';
+
+  @override
+  String get wardrobeTitle => 'Guarda-roupa';
+
+  @override
+  String get slotHat => 'Chapéu';
+
+  @override
+  String get slotNeck => 'Pescoço';
+
+  @override
+  String get slotFace => 'Rosto';
+
+  @override
+  String get bodyTailColor => 'Cor do corpo e da cauda';
+
+  @override
+  String get eyeColor => 'Cor dos olhos';
+
+  @override
+  String get eyeStyleSolid => 'Sólido';
+
+  @override
+  String get eyeStyleOddEyed => 'Olhos diferentes';
+
+  @override
+  String get leftEye => 'Olho esquerdo';
+
+  @override
+  String get rightEye => 'Olho direito';
+
+  @override
+  String get colorLabel => 'Cor';
+
+  @override
+  String get scenarioObjectives => 'Objetivos';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Concluído';
+
+  @override
+  String get scenarioBonusLabel => 'Bônus';
+
+  @override
+  String get scenarioCompleteTitle => 'Cenário concluído!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done de $total objetivos';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Primeira vez!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Recompensa de repetição — a primeira vez dá mais.';
+
+  @override
+  String get scenarioContinue => 'Continuar';
+
+  @override
+  String get objCoffeeOrder => 'Peça uma bebida';
+
+  @override
+  String get objCoffeeCustomize => 'Personalize seu pedido';
+
+  @override
+  String get objCoffeePrice => 'Pergunte quanto custa';
+
+  @override
+  String get objCoffeeSmallTalk => 'Converse um pouco com o barista';
+
+  @override
+  String get objInterviewGreet => 'Apresente-se';
+
+  @override
+  String get objInterviewExperience => 'Descreva sua experiência';
+
+  @override
+  String get objInterviewStrength => 'Explique por que você é a pessoa certa';
+
+  @override
+  String get objInterviewAsk => 'Faça uma pergunta sobre a vaga';
+
+  @override
+  String get objDirectionsAsk => 'Pergunte como chegar a um lugar';
+
+  @override
+  String get objDirectionsClarify =>
+      'Peça para repetirem ou falarem mais devagar';
+
+  @override
+  String get objDirectionsDistance => 'Descubra a que distância fica';
+
+  @override
+  String get objDirectionsThank => 'Agradeça direitinho';
+
+  @override
+  String get objDoctorSymptom => 'Descreva seus sintomas';
+
+  @override
+  String get objDoctorDuration => 'Diga há quanto tempo está assim';
+
+  @override
+  String get objDoctorQuestion => 'Pergunte o que você deve fazer';
+
+  @override
+  String get objDoctorAllergy => 'Mencione uma alergia ou medicação';
+
+  @override
+  String get objShoppingFind => 'Pergunte onde fica um produto';
+
+  @override
+  String get objShoppingSize => 'Pergunte sobre tamanho, cor ou caimento';
+
+  @override
+  String get objShoppingPrice => 'Pergunte o preço';
+
+  @override
+  String get objShoppingPay => 'Pague por isso';
+
+  @override
+  String get objRestaurantTable => 'Peça uma mesa';
+
+  @override
+  String get objRestaurantOrder => 'Peça comida';
+
+  @override
+  String get objRestaurantDrink => 'Peça algo para beber';
+
+  @override
+  String get objRestaurantBill => 'Peça a conta';
+
+  @override
+  String get notificationsTitle => 'Notificações';
+
+  @override
+  String get notificationsEnable => 'Lembrar-me do Moji';
+
+  @override
+  String get notificationsDesc =>
+      'Moji vai avisar quando precisar de você, quando houver revisões e quando sua recompensa diária estiver pronta.';
+
+  @override
+  String get notificationsBlocked =>
+      'As notificações estão desativadas nas configurações do dispositivo.';
+
+  @override
+  String get notifPetChannelName => 'Moji precisa de você';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Lembretes quando seu bichinho está com fome ou triste';
+
+  @override
+  String get notifReviewChannelName => 'Lembretes de revisão';
+
+  @override
+  String get notifReviewChannelDesc =>
+      'Lembretes quando há palavras para revisar';
+
+  @override
+  String get notifRewardChannelName => 'Recompensa diária';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Lembretes quando sua recompensa diária está pronta';
+
+  @override
+  String get notifPetHungryTitle => 'Moji está com fome';
+
+  @override
+  String get notifPetHungryBody =>
+      'Seu bichinho bem que precisava de um lanche agora.';
+
+  @override
+  String get notifPetSadTitle => 'Moji sente sua falta';
+
+  @override
+  String get notifPetSadBody => 'Anda tudo quieto sem você. Vem dar um oi?';
+
+  @override
+  String get notifReviewTitle => 'Hora de revisar';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count palavras estão esperando por você.',
+      one: '1 palavra está esperando por você.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Sua recompensa diária está pronta';
+
+  @override
+  String get notifRewardBody => 'Moji tem algo para você. Venha buscar!';
+
+  @override
+  String get careTitle => 'Como está o Moji?';
+
+  @override
+  String get careStatFullness => 'Saciedade';
+
+  @override
+  String get careStatHappiness => 'Felicidade';
+
+  @override
+  String get careStatHealth => 'Saúde';
+
+  @override
+  String get careAllWell => 'Moji está ótimo.';
+
+  @override
+  String get careNeedHungry => 'Moji está com fome';
+
+  @override
+  String get careNeedLonely => 'Moji está pra baixo';
+
+  @override
+  String get careNeedSick => 'Moji está doente';
+
+  @override
+  String get careSickPenalty =>
+      'Enquanto Moji estiver doente, todo o XP e as moedas caem pela metade.';
+
+  @override
+  String get careFeedTitle => 'Alimentar o Moji';
+
+  @override
+  String get careNoFood => 'Acabou a comida. Passe na loja.';
+
+  @override
+  String get careGoToShop => 'Ir à loja';
+
+  @override
+  String get carePlay => 'Fazer carinho no Moji';
+
+  @override
+  String get carePlayCooldown =>
+      'Moji já recebeu carinho suficiente por agora.';
+
+  @override
+  String get careClose => 'Fechar';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji comeu $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Saciedade agora: $value%';
+  }
+
+  @override
+  String get scenarioSickPenalty =>
+      'Moji está doente — recompensas pela metade';
+
+  @override
+  String get careDragToFeed => 'Arraste até o Moji para alimentar';
 }

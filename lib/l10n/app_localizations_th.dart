@@ -365,10 +365,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get proficiencyLevel => 'ระดับความชำนาญ';
 
   @override
-  String get shopItemAppleName => 'แอปเปิ้ล';
+  String get shopItemAppleName => 'Apple';
 
   @override
-  String get shopItemAppleDescription => 'ขนมที่มีสุขภาพดี';
+  String get shopItemAppleDescription => 'A healthy snack.';
 
   @override
   String get shopItemCroissantName => 'ครัวซองต์';
@@ -377,54 +377,479 @@ class AppLocalizationsTh extends AppLocalizations {
   String get shopItemCroissantDescription => 'ความเมตตาของเนย';
 
   @override
-  String get shopItemPizzaName => 'สไลซ์พิซซ่า';
+  String get shopItemPizzaName => 'Pizza Slice';
 
   @override
-  String get shopItemPizzaDescription => 'ชีสและอิ่ม';
+  String get shopItemPizzaDescription => 'Cheesy and filling.';
 
   @override
   String get shopItemSushiName => 'ชุดซูชิ';
 
   @override
-  String get shopItemSushiDescription => 'ปลาพรีเมียม';
+  String get shopItemSushiDescription => 'Premium fish.';
 
   @override
   String get shopItemCoffeeName => 'เอสเปรสโซ';
 
   @override
-  String get shopItemCoffeeDescription => 'การเพิ่มความแข็งแรงอย่างรวดเร็ว';
+  String get shopItemCoffeeDescription => 'Quick energy boost.';
+
+  @override
+  String get shopItemMedicineName => 'ยา';
+
+  @override
+  String get shopItemMedicineDescription => 'ช่วยให้โมจิหายป่วย';
+
+  @override
+  String get review => 'ทบทวน';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count รายการ';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current จาก $total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'ดูคำตอบ';
+
+  @override
+  String get reviewGradeAgain => 'อีกครั้ง';
+
+  @override
+  String get reviewGradeHard => 'ยาก';
+
+  @override
+  String get reviewGradeGood => 'ดี';
+
+  @override
+  String get reviewGradeEasy => 'ง่าย';
+
+  @override
+  String get reviewAllCaughtUp => 'เรียบร้อยหมดแล้ว!';
+
+  @override
+  String get reviewNothingDue =>
+      'ยังไม่มีอะไรให้ทบทวน ลองคุยหรือทำแบบทดสอบ แล้วโมจิจะจำสิ่งที่คุณไม่ถนัดไว้';
+
+  @override
+  String get reviewSessionComplete => 'ทบทวนเสร็จแล้ว!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return 'ทบทวนแล้ว $count';
+  }
+
+  @override
+  String get reviewDone => 'เสร็จ';
+
+  @override
+  String get reviewCorrectionPrompt => 'ที่ถูกต้องคืออะไร?';
+
+  @override
+  String get reviewVocabularyPrompt => 'นี่แปลว่าอะไร?';
 
   @override
   String get shopItemBgBlueName => 'น้ำเงินมหาสมุทร';
 
   @override
-  String get shopItemBgBlueDescription => 'การสั่นสะเทือนแบบสีน้ำเงินสงบ';
+  String get shopItemBgBlueDescription => 'Calming blue vibes.';
 
   @override
   String get shopItemBgForestName => 'เขียวป่า';
 
   @override
-  String get shopItemBgForestDescription => 'การรู้สึกตามธรรมชาติ';
+  String get shopItemBgForestDescription => 'Natural feeling.';
 
   @override
-  String get shopItemBgSunsetName => 'ส้มพระอาทิตย์ตกดิน';
+  String get shopItemBgSunsetName => 'Sunset Orange';
 
   @override
-  String get shopItemBgSunsetDescription => 'อบอุ่นและสะดวกสบาย';
+  String get shopItemBgSunsetDescription => 'Warm and cozy.';
 
   @override
-  String get shopItemBgGalaxyName => 'ม่วงดาราจักร';
+  String get shopItemBgGalaxyName => 'Galaxy Purple';
 
   @override
-  String get shopItemBgGalaxyDescription => 'นอกจากโลกนี้';
+  String get shopItemBgGalaxyDescription => 'Out of this world.';
 
   @override
   String purchaseSuccessSingle(Object itemName) {
-    return 'ซื้อแล้ว $itemName!';
+    return 'Purchased $itemName!';
   }
 
   @override
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
-    return 'ซื้อแล้ว $itemName x$quantity!';
+    return 'Purchased $itemName x$quantity!';
   }
+
+  @override
+  String get youLabel => 'คณ';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... โมจกำลงงบอยระหวางทการเชอมตอภาษากำลงเชอมใหม ลองอกครงในอกสกคร';
+
+  @override
+  String get mojiSleepNight => 'ชว... โมจกำลงหลบ แตะโมจเพอปลก';
+
+  @override
+  String get mojiSleepHintReconnect => 'MOJI กำลงงบ... กำลงเชอมตอภาษากลบมา';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI กำลงหลบ... แตะเพอปลก';
+
+  @override
+  String get mojiWakeSuccess => 'หาว... ตอนนโมจตนแลว! มาเรมฝกกน!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'โมจกำลงงบอยระหวางทการเชอมตอภาษากำลงเชอมใหม';
+
+  @override
+  String get mojiSleepReasonNight => 'โมจกำลงหลบ แตะเพอปลก';
+
+  @override
+  String get levelsScreenTitle => 'ระดับ';
+
+  @override
+  String get levelStatusCurrent => 'ระดับปัจจุบัน';
+
+  @override
+  String get levelStatusCompleted => 'เสร็จสิ้น';
+
+  @override
+  String get levelRewardLabel => 'รางวัล';
+
+  @override
+  String get quizPausedTitle => 'หยุดไว้ชั่วคราว';
+
+  @override
+  String get quizPausedPrompt => 'ต้องการดำเนินการต่อหรือออก?';
+
+  @override
+  String get quizPlay => 'เล่น';
+
+  @override
+  String get quizPause => 'หยุดไว้ชั่วคราว';
+
+  @override
+  String get quizExit => 'ออก';
+
+  @override
+  String get weeklyProgressTitle => 'ความก้าวหน้ารายสัปดาห์';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'วันที่ $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'กลับมาพรุ่งนี้เพื่อรับรางวัลรายวัน';
+
+  @override
+  String get resetAppButton => 'รีเซ็ต';
+
+  @override
+  String get resetAppTitle => 'รีเซ็ตแอป';
+
+  @override
+  String get resetAppWarning =>
+      'สิ่งนี้จะลบความก้าวหน้าทั้งหมดของคุณ\n\nคุณแน่ใจหรือไม่?';
+
+  @override
+  String get resetAction => 'รีเซ็ต';
+
+  @override
+  String get resetSuccessMessage => 'รีเซ็ตแอปเรียบร้อยแล้ว';
+
+  @override
+  String get selectYourCharacter => 'เลือกตัวละครของคุณ';
+
+  @override
+  String get characterDog => 'สุนัข';
+
+  @override
+  String get characterCat => 'แมว';
+
+  @override
+  String get characterBird => 'นก';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji กำลังงีบระหว่างรอการเชื่อมต่อภาษากลับมา ลองใหม่อีกครั้งเร็ว ๆ นี้';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji กำลังงีบระหว่างรอการเชื่อมต่อภาษากลับมา';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji กำลังหลับ แตะเพื่อปลุก';
+
+  @override
+  String get mojiAwakeReady => 'Moji ตื่นแล้วและพร้อมแล้ว!';
+
+  @override
+  String get wardrobeTitle => 'ตู้เสื้อผ้า';
+
+  @override
+  String get slotHat => 'หมวก';
+
+  @override
+  String get slotNeck => 'คอ';
+
+  @override
+  String get slotFace => 'ใบหน้า';
+
+  @override
+  String get bodyTailColor => 'สีลำตัวและหาง';
+
+  @override
+  String get eyeColor => 'สีตา';
+
+  @override
+  String get eyeStyleSolid => 'สีเดียว';
+
+  @override
+  String get eyeStyleOddEyed => 'ตาสองสี';
+
+  @override
+  String get leftEye => 'ตาซ้าย';
+
+  @override
+  String get rightEye => 'ตาขวา';
+
+  @override
+  String get colorLabel => 'สี';
+
+  @override
+  String get scenarioObjectives => 'เป้าหมาย';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'ผ่านแล้ว';
+
+  @override
+  String get scenarioBonusLabel => 'โบนัส';
+
+  @override
+  String get scenarioCompleteTitle => 'จบสถานการณ์แล้ว!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done จาก $total เป้าหมาย';
+  }
+
+  @override
+  String get scenarioFirstClear => 'ผ่านครั้งแรก!';
+
+  @override
+  String get scenarioReplayNote => 'รางวัลเล่นซ้ำ — ผ่านครั้งแรกได้มากกว่า';
+
+  @override
+  String get scenarioContinue => 'ต่อไป';
+
+  @override
+  String get objCoffeeOrder => 'สั่งเครื่องดื่ม';
+
+  @override
+  String get objCoffeeCustomize => 'ปรับรายการที่สั่ง';
+
+  @override
+  String get objCoffeePrice => 'ถามราคา';
+
+  @override
+  String get objCoffeeSmallTalk => 'คุยเล่นกับบาริสต้า';
+
+  @override
+  String get objInterviewGreet => 'แนะนำตัวเอง';
+
+  @override
+  String get objInterviewExperience => 'เล่าประสบการณ์ของคุณ';
+
+  @override
+  String get objInterviewStrength => 'อธิบายว่าทำไมคุณเหมาะกับงานนี้';
+
+  @override
+  String get objInterviewAsk => 'ถามคำถามเกี่ยวกับตำแหน่งงาน';
+
+  @override
+  String get objDirectionsAsk => 'ถามทางไปที่ไหนที่หนึ่ง';
+
+  @override
+  String get objDirectionsClarify => 'ขอให้พูดซ้ำหรือพูดช้าลง';
+
+  @override
+  String get objDirectionsDistance => 'หาว่าไกลแค่ไหน';
+
+  @override
+  String get objDirectionsThank => 'กล่าวขอบคุณอย่างสุภาพ';
+
+  @override
+  String get objDoctorSymptom => 'อธิบายอาการของคุณ';
+
+  @override
+  String get objDoctorDuration => 'บอกว่าเป็นมานานแค่ไหน';
+
+  @override
+  String get objDoctorQuestion => 'ถามว่าควรทำอย่างไร';
+
+  @override
+  String get objDoctorAllergy => 'บอกว่าแพ้อะไรหรือกินยาอะไรอยู่';
+
+  @override
+  String get objShoppingFind => 'ถามว่าของอยู่ที่ไหน';
+
+  @override
+  String get objShoppingSize => 'ถามเรื่องไซซ์ สี หรือใส่พอดีไหม';
+
+  @override
+  String get objShoppingPrice => 'ถามราคา';
+
+  @override
+  String get objShoppingPay => 'จ่ายเงิน';
+
+  @override
+  String get objRestaurantTable => 'ขอโต๊ะ';
+
+  @override
+  String get objRestaurantOrder => 'สั่งอาหาร';
+
+  @override
+  String get objRestaurantDrink => 'สั่งเครื่องดื่ม';
+
+  @override
+  String get objRestaurantBill => 'ขอบิล';
+
+  @override
+  String get notificationsTitle => 'การแจ้งเตือน';
+
+  @override
+  String get notificationsEnable => 'เตือนฉันเรื่องโมจิ';
+
+  @override
+  String get notificationsDesc =>
+      'โมจิจะบอกคุณเมื่อเขาต้องการคุณ เมื่อถึงเวลาทบทวน และเมื่อรางวัลประจำวันพร้อมแล้ว';
+
+  @override
+  String get notificationsBlocked =>
+      'การแจ้งเตือนถูกปิดอยู่ในการตั้งค่าเครื่อง';
+
+  @override
+  String get notifPetChannelName => 'โมจิต้องการคุณ';
+
+  @override
+  String get notifPetChannelDesc => 'การเตือนเมื่อสัตว์เลี้ยงหิวหรือไม่สบายใจ';
+
+  @override
+  String get notifReviewChannelName => 'การเตือนให้ทบทวน';
+
+  @override
+  String get notifReviewChannelDesc => 'การเตือนเมื่อมีคำที่ต้องทบทวน';
+
+  @override
+  String get notifRewardChannelName => 'รางวัลประจำวัน';
+
+  @override
+  String get notifRewardChannelDesc => 'การเตือนเมื่อรางวัลประจำวันพร้อมแล้ว';
+
+  @override
+  String get notifPetHungryTitle => 'โมจิหิวแล้ว';
+
+  @override
+  String get notifPetHungryBody => 'ตอนนี้สัตว์เลี้ยงของคุณอยากกินอะไรสักหน่อย';
+
+  @override
+  String get notifPetSadTitle => 'โมจิคิดถึงคุณ';
+
+  @override
+  String get notifPetSadBody => 'ที่นี่เงียบไปเลยเวลาไม่มีคุณ มาทักทายกันไหม?';
+
+  @override
+  String get notifReviewTitle => 'ถึงเวลาทบทวนแล้ว';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'มี $count คำรอคุณอยู่',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'รางวัลประจำวันของคุณพร้อมแล้ว';
+
+  @override
+  String get notifRewardBody => 'โมจิมีของให้คุณ มารับได้เลย!';
+
+  @override
+  String get careTitle => 'โมจิเป็นอย่างไรบ้าง?';
+
+  @override
+  String get careStatFullness => 'ความอิ่ม';
+
+  @override
+  String get careStatHappiness => 'ความสุข';
+
+  @override
+  String get careStatHealth => 'สุขภาพ';
+
+  @override
+  String get careAllWell => 'โมจิสบายดีมาก';
+
+  @override
+  String get careNeedHungry => 'โมจิหิว';
+
+  @override
+  String get careNeedLonely => 'โมจิรู้สึกเหงา ๆ';
+
+  @override
+  String get careNeedSick => 'โมจิป่วย';
+
+  @override
+  String get careSickPenalty =>
+      'ขณะที่โมจิป่วย XP และเหรียญทั้งหมดจะลดลงครึ่งหนึ่ง';
+
+  @override
+  String get careFeedTitle => 'ให้อาหารโมจิ';
+
+  @override
+  String get careNoFood => 'อาหารหมดแล้ว แวะไปที่ร้านค้าสิ';
+
+  @override
+  String get careGoToShop => 'ไปที่ร้านค้า';
+
+  @override
+  String get carePlay => 'ลูบโมจิ';
+
+  @override
+  String get carePlayCooldown => 'ตอนนี้โมจิได้รับความเอ็นดูพอแล้ว';
+
+  @override
+  String get careClose => 'ปิด';
+
+  @override
+  String careFedItem(String item) {
+    return 'โมจิกิน $item แล้ว';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'ความอิ่มตอนนี้: $value%';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'โมจิป่วย — รางวัลลดครึ่ง';
+
+  @override
+  String get careDragToFeed => 'ลากไปที่โมจิเพื่อให้อาหาร';
 }

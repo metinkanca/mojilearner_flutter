@@ -14,7 +14,6 @@ import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fi.dart';
 import 'app_localizations_fr.dart';
-import 'app_localizations_he.dart';
 import 'app_localizations_hi.dart';
 import 'app_localizations_hu.dart';
 import 'app_localizations_id.dart';
@@ -129,7 +128,6 @@ abstract class AppLocalizations {
     Locale('es'),
     Locale('fi'),
     Locale('fr'),
-    Locale('he'),
     Locale('hi'),
     Locale('hu'),
     Locale('id'),
@@ -906,6 +904,108 @@ abstract class AppLocalizations {
   /// **'Quick energy boost.'**
   String get shopItemCoffeeDescription;
 
+  /// No description provided for @shopItemMedicineName.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine'**
+  String get shopItemMedicineName;
+
+  /// No description provided for @shopItemMedicineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Nurses Moji back to health.'**
+  String get shopItemMedicineDescription;
+
+  /// No description provided for @review.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get review;
+
+  /// No description provided for @reviewDueCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} due'**
+  String reviewDueCount(int count);
+
+  /// No description provided for @reviewProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} of {total}'**
+  String reviewProgress(int current, int total);
+
+  /// No description provided for @reviewShowAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Show answer'**
+  String get reviewShowAnswer;
+
+  /// No description provided for @reviewGradeAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Again'**
+  String get reviewGradeAgain;
+
+  /// No description provided for @reviewGradeHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get reviewGradeHard;
+
+  /// No description provided for @reviewGradeGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get reviewGradeGood;
+
+  /// No description provided for @reviewGradeEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get reviewGradeEasy;
+
+  /// No description provided for @reviewAllCaughtUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up!'**
+  String get reviewAllCaughtUp;
+
+  /// No description provided for @reviewNothingDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to review right now. Chat or take a quiz and Moji will remember what you struggle with.'**
+  String get reviewNothingDue;
+
+  /// No description provided for @reviewSessionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Review complete!'**
+  String get reviewSessionComplete;
+
+  /// No description provided for @reviewSessionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} reviewed'**
+  String reviewSessionSummary(int count);
+
+  /// No description provided for @reviewDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get reviewDone;
+
+  /// No description provided for @reviewCorrectionPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s the correction?'**
+  String get reviewCorrectionPrompt;
+
+  /// No description provided for @reviewVocabularyPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'What does this mean?'**
+  String get reviewVocabularyPrompt;
+
   /// No description provided for @shopItemBgBlueName.
   ///
   /// In en, this message translates to:
@@ -965,6 +1065,690 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Purchased {itemName} x{quantity}!'**
   String purchaseSuccessMultiple(Object itemName, Object quantity);
+
+  /// No description provided for @youLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get youLabel;
+
+  /// No description provided for @mojiSleepReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Zzz... Moji is dozing while the language link reconnects. Try again soon.'**
+  String get mojiSleepReconnect;
+
+  /// No description provided for @mojiSleepNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Shhh... Moji is sleeping. Tap Moji to wake up.'**
+  String get mojiSleepNight;
+
+  /// No description provided for @mojiSleepHintReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'MOJI IS DOZING... LANGUAGE LINK RECONNECTING'**
+  String get mojiSleepHintReconnect;
+
+  /// No description provided for @mojiSleepHintNight.
+  ///
+  /// In en, this message translates to:
+  /// **'MOJI IS SLEEPING... TAP TO WAKE'**
+  String get mojiSleepHintNight;
+
+  /// No description provided for @mojiWakeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Yawn... Moji is awake now. Let\'s practice!'**
+  String get mojiWakeSuccess;
+
+  /// No description provided for @mojiSleepReasonReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is dozing while the language link reconnects.'**
+  String get mojiSleepReasonReconnect;
+
+  /// No description provided for @mojiSleepReasonNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is sleeping. Tap to wake up.'**
+  String get mojiSleepReasonNight;
+
+  /// No description provided for @levelsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Levels'**
+  String get levelsScreenTitle;
+
+  /// No description provided for @levelStatusCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get levelStatusCurrent;
+
+  /// No description provided for @levelStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get levelStatusCompleted;
+
+  /// No description provided for @levelRewardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reward'**
+  String get levelRewardLabel;
+
+  /// No description provided for @quizPausedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get quizPausedTitle;
+
+  /// No description provided for @quizPausedPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue quiz or exit?'**
+  String get quizPausedPrompt;
+
+  /// No description provided for @quizPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get quizPlay;
+
+  /// No description provided for @quizPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get quizPause;
+
+  /// No description provided for @quizExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get quizExit;
+
+  /// No description provided for @weeklyProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Progress'**
+  String get weeklyProgressTitle;
+
+  /// Label for a day number in weekly rewards view
+  ///
+  /// In en, this message translates to:
+  /// **'Day {dayNum}'**
+  String dayLabel(int dayNum);
+
+  /// No description provided for @dailyRewardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim once per day. Your weekly track continues where you left off.'**
+  String get dailyRewardHint;
+
+  /// No description provided for @resetAppButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset App'**
+  String get resetAppButton;
+
+  /// No description provided for @resetAppTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset App?'**
+  String get resetAppTitle;
+
+  /// No description provided for @resetAppWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete all your progress, calibration data, and settings.\\n\\nYou\'ll restart from the beginning.\\n\\nAre you sure?'**
+  String get resetAppWarning;
+
+  /// No description provided for @resetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get resetAction;
+
+  /// No description provided for @resetSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'App reset! Restarting...'**
+  String get resetSuccessMessage;
+
+  /// No description provided for @selectYourCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Your Character'**
+  String get selectYourCharacter;
+
+  /// No description provided for @characterDog.
+  ///
+  /// In en, this message translates to:
+  /// **'Dog'**
+  String get characterDog;
+
+  /// No description provided for @characterCat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get characterCat;
+
+  /// No description provided for @characterBird.
+  ///
+  /// In en, this message translates to:
+  /// **'Bird'**
+  String get characterBird;
+
+  /// No description provided for @aiUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Zzz... Moji is dozing while the language link reconnects. Try again soon.'**
+  String get aiUnavailableMessage;
+
+  /// No description provided for @mojiDozingReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is dozing while the language link reconnects.'**
+  String get mojiDozingReconnect;
+
+  /// No description provided for @mojiSleepingTapWake.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is sleeping. Tap to wake up.'**
+  String get mojiSleepingTapWake;
+
+  /// No description provided for @mojiAwakeReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is awake and ready!'**
+  String get mojiAwakeReady;
+
+  /// No description provided for @wardrobeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wardrobe'**
+  String get wardrobeTitle;
+
+  /// No description provided for @slotHat.
+  ///
+  /// In en, this message translates to:
+  /// **'Hat'**
+  String get slotHat;
+
+  /// No description provided for @slotNeck.
+  ///
+  /// In en, this message translates to:
+  /// **'Neck'**
+  String get slotNeck;
+
+  /// No description provided for @slotFace.
+  ///
+  /// In en, this message translates to:
+  /// **'Face'**
+  String get slotFace;
+
+  /// No description provided for @bodyTailColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Body & Tail Color'**
+  String get bodyTailColor;
+
+  /// No description provided for @eyeColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Eye Color'**
+  String get eyeColor;
+
+  /// No description provided for @eyeStyleSolid.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid'**
+  String get eyeStyleSolid;
+
+  /// No description provided for @eyeStyleOddEyed.
+  ///
+  /// In en, this message translates to:
+  /// **'Odd-Eyed'**
+  String get eyeStyleOddEyed;
+
+  /// No description provided for @leftEye.
+  ///
+  /// In en, this message translates to:
+  /// **'Left Eye'**
+  String get leftEye;
+
+  /// No description provided for @rightEye.
+  ///
+  /// In en, this message translates to:
+  /// **'Right Eye'**
+  String get rightEye;
+
+  /// No description provided for @colorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get colorLabel;
+
+  /// No description provided for @scenarioObjectives.
+  ///
+  /// In en, this message translates to:
+  /// **'Objectives'**
+  String get scenarioObjectives;
+
+  /// Objectives completed out of the scenario total
+  ///
+  /// In en, this message translates to:
+  /// **'{done}/{total}'**
+  String scenarioProgress(int done, int total);
+
+  /// No description provided for @scenarioCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleared'**
+  String get scenarioCleared;
+
+  /// No description provided for @scenarioBonusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus'**
+  String get scenarioBonusLabel;
+
+  /// No description provided for @scenarioCompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario complete!'**
+  String get scenarioCompleteTitle;
+
+  /// Objective tally shown on the scenario completion popup
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} objectives'**
+  String scenarioCompleteSummary(int done, int total);
+
+  /// No description provided for @scenarioFirstClear.
+  ///
+  /// In en, this message translates to:
+  /// **'First clear!'**
+  String get scenarioFirstClear;
+
+  /// No description provided for @scenarioReplayNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay reward — first clears pay more.'**
+  String get scenarioReplayNote;
+
+  /// No description provided for @scenarioContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get scenarioContinue;
+
+  /// No description provided for @objCoffeeOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order a drink'**
+  String get objCoffeeOrder;
+
+  /// No description provided for @objCoffeeCustomize.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize your order'**
+  String get objCoffeeCustomize;
+
+  /// No description provided for @objCoffeePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask what it costs'**
+  String get objCoffeePrice;
+
+  /// No description provided for @objCoffeeSmallTalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Make small talk with the barista'**
+  String get objCoffeeSmallTalk;
+
+  /// No description provided for @objInterviewGreet.
+  ///
+  /// In en, this message translates to:
+  /// **'Introduce yourself'**
+  String get objInterviewGreet;
+
+  /// No description provided for @objInterviewExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your experience'**
+  String get objInterviewExperience;
+
+  /// No description provided for @objInterviewStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain why you\'re a good fit'**
+  String get objInterviewStrength;
+
+  /// No description provided for @objInterviewAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question about the role'**
+  String get objInterviewAsk;
+
+  /// No description provided for @objDirectionsAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask how to get somewhere'**
+  String get objDirectionsAsk;
+
+  /// No description provided for @objDirectionsClarify.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask them to repeat or slow down'**
+  String get objDirectionsClarify;
+
+  /// No description provided for @objDirectionsDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Find out how far it is'**
+  String get objDirectionsDistance;
+
+  /// No description provided for @objDirectionsThank.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank them properly'**
+  String get objDirectionsThank;
+
+  /// No description provided for @objDoctorSymptom.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your symptoms'**
+  String get objDoctorSymptom;
+
+  /// No description provided for @objDoctorDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Say how long it has been going on'**
+  String get objDoctorDuration;
+
+  /// No description provided for @objDoctorQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask what you should do'**
+  String get objDoctorQuestion;
+
+  /// No description provided for @objDoctorAllergy.
+  ///
+  /// In en, this message translates to:
+  /// **'Mention an allergy or medication'**
+  String get objDoctorAllergy;
+
+  /// No description provided for @objShoppingFind.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask where an item is'**
+  String get objShoppingFind;
+
+  /// No description provided for @objShoppingSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about size, color, or fit'**
+  String get objShoppingSize;
+
+  /// No description provided for @objShoppingPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the price'**
+  String get objShoppingPrice;
+
+  /// No description provided for @objShoppingPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay for it'**
+  String get objShoppingPay;
+
+  /// No description provided for @objRestaurantTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for a table'**
+  String get objRestaurantTable;
+
+  /// No description provided for @objRestaurantOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order food'**
+  String get objRestaurantOrder;
+
+  /// No description provided for @objRestaurantDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Order something to drink'**
+  String get objRestaurantDrink;
+
+  /// No description provided for @objRestaurantBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for the bill'**
+  String get objRestaurantBill;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me about Moji'**
+  String get notificationsEnable;
+
+  /// No description provided for @notificationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji will let you know when they need you, when reviews are due, and when your daily reward is ready.'**
+  String get notificationsDesc;
+
+  /// No description provided for @notificationsBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are turned off in your device settings.'**
+  String get notificationsBlocked;
+
+  /// No description provided for @notifPetChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji needs you'**
+  String get notifPetChannelName;
+
+  /// No description provided for @notifPetChannelDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders when your pet is hungry or unhappy'**
+  String get notifPetChannelDesc;
+
+  /// No description provided for @notifReviewChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Review reminders'**
+  String get notifReviewChannelName;
+
+  /// No description provided for @notifReviewChannelDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders when words are due for review'**
+  String get notifReviewChannelDesc;
+
+  /// No description provided for @notifRewardChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reward'**
+  String get notifRewardChannelName;
+
+  /// No description provided for @notifRewardChannelDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders when your daily reward is ready'**
+  String get notifRewardChannelDesc;
+
+  /// No description provided for @notifPetHungryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is hungry'**
+  String get notifPetHungryTitle;
+
+  /// No description provided for @notifPetHungryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pet could really use a snack right about now.'**
+  String get notifPetHungryBody;
+
+  /// No description provided for @notifPetSadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji misses you'**
+  String get notifPetSadTitle;
+
+  /// No description provided for @notifPetSadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It has been quiet without you. Come say hello?'**
+  String get notifPetSadBody;
+
+  /// No description provided for @notifReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to review'**
+  String get notifReviewTitle;
+
+  /// Body of the review-due notification
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 word is waiting for you.} other{{count} words are waiting for you.}}'**
+  String notifReviewBody(int count);
+
+  /// No description provided for @notifRewardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your daily reward is ready'**
+  String get notifRewardTitle;
+
+  /// No description provided for @notifRewardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji has something for you. Come and collect it!'**
+  String get notifRewardBody;
+
+  /// No description provided for @careTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How is Moji?'**
+  String get careTitle;
+
+  /// No description provided for @careStatFullness.
+  ///
+  /// In en, this message translates to:
+  /// **'Fullness'**
+  String get careStatFullness;
+
+  /// No description provided for @careStatHappiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Happiness'**
+  String get careStatHappiness;
+
+  /// No description provided for @careStatHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get careStatHealth;
+
+  /// No description provided for @careAllWell.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is doing great.'**
+  String get careAllWell;
+
+  /// No description provided for @careNeedHungry.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is hungry'**
+  String get careNeedHungry;
+
+  /// No description provided for @careNeedLonely.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is feeling low'**
+  String get careNeedLonely;
+
+  /// No description provided for @careNeedSick.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is sick'**
+  String get careNeedSick;
+
+  /// No description provided for @careSickPenalty.
+  ///
+  /// In en, this message translates to:
+  /// **'While Moji is sick, all XP and coins are halved.'**
+  String get careSickPenalty;
+
+  /// No description provided for @careFeedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Feed Moji'**
+  String get careFeedTitle;
+
+  /// No description provided for @careNoFood.
+  ///
+  /// In en, this message translates to:
+  /// **'No food left. Visit the shop to stock up.'**
+  String get careNoFood;
+
+  /// No description provided for @careGoToShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to shop'**
+  String get careGoToShop;
+
+  /// No description provided for @carePlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet Moji'**
+  String get carePlay;
+
+  /// No description provided for @carePlayCooldown.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji has had enough fuss for now.'**
+  String get carePlayCooldown;
+
+  /// No description provided for @careClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get careClose;
+
+  /// Confirmation after feeding an inventory item
+  ///
+  /// In en, this message translates to:
+  /// **'Moji ate the {item}.'**
+  String careFedItem(String item);
+
+  /// Shows the player their current fullness while shopping for food
+  ///
+  /// In en, this message translates to:
+  /// **'Fullness now: {value}%'**
+  String careCurrentFullness(int value);
+
+  /// No description provided for @scenarioSickPenalty.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji is sick — rewards halved'**
+  String get scenarioSickPenalty;
+
+  /// No description provided for @careDragToFeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag onto Moji to feed'**
+  String get careDragToFeed;
 }
 
 class _AppLocalizationsDelegate
@@ -987,7 +1771,6 @@ class _AppLocalizationsDelegate
         'es',
         'fi',
         'fr',
-        'he',
         'hi',
         'hu',
         'id',
@@ -1033,8 +1816,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsFi();
     case 'fr':
       return AppLocalizationsFr();
-    case 'he':
-      return AppLocalizationsHe();
     case 'hi':
       return AppLocalizationsHi();
     case 'hu':

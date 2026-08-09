@@ -374,60 +374,497 @@ class AppLocalizationsEl extends AppLocalizations {
   String get shopItemAppleDescription => 'Ένα υγιεινό σνακ.';
 
   @override
-  String get shopItemCroissantName => 'Κρουασάν';
+  String get shopItemCroissantName => 'Croissant';
 
   @override
-  String get shopItemCroissantDescription => 'Βουτυρωμένη αγαθότητα.';
+  String get shopItemCroissantDescription => 'Buttery goodness.';
 
   @override
   String get shopItemPizzaName => 'Κομμάτι πίτσας';
 
   @override
-  String get shopItemPizzaDescription => 'Τυρένια και γεμάτη.';
+  String get shopItemPizzaDescription => 'Cheesy and filling.';
 
   @override
-  String get shopItemSushiName => 'Σετ σούσι';
+  String get shopItemSushiName => 'Sushi Set';
 
   @override
-  String get shopItemSushiDescription => 'Ψάρι ανώτερης ποιότητας.';
+  String get shopItemSushiDescription => 'Premium fish.';
 
   @override
-  String get shopItemCoffeeName => 'Εσπρέσο';
+  String get shopItemCoffeeName => 'Espresso';
 
   @override
-  String get shopItemCoffeeDescription => 'Γρήγορη ενεργειακή ώθηση.';
+  String get shopItemCoffeeDescription => 'Quick energy boost.';
+
+  @override
+  String get shopItemMedicineName => 'Φάρμακο';
+
+  @override
+  String get shopItemMedicineDescription =>
+      'Επαναφέρει τον Moji στα πόδια του.';
+
+  @override
+  String get review => 'Επανάληψη';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count για επανάληψη';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current από $total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Δείξε την απάντηση';
+
+  @override
+  String get reviewGradeAgain => 'Ξανά';
+
+  @override
+  String get reviewGradeHard => 'Δύσκολο';
+
+  @override
+  String get reviewGradeGood => 'Καλό';
+
+  @override
+  String get reviewGradeEasy => 'Εύκολο';
+
+  @override
+  String get reviewAllCaughtUp => 'Όλα έτοιμα!';
+
+  @override
+  String get reviewNothingDue =>
+      'Δεν υπάρχει τίποτα για επανάληψη τώρα. Συνομίλησε ή κάνε ένα κουίζ και ο Moji θα θυμάται τι σε δυσκολεύει.';
+
+  @override
+  String get reviewSessionComplete => 'Η επανάληψη ολοκληρώθηκε!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '$count επαναλήφθηκαν';
+  }
+
+  @override
+  String get reviewDone => 'Έτοιμο';
+
+  @override
+  String get reviewCorrectionPrompt => 'Ποια είναι η σωστή μορφή;';
+
+  @override
+  String get reviewVocabularyPrompt => 'Τι σημαίνει αυτό;';
 
   @override
   String get shopItemBgBlueName => 'Ωκεάνιο μπλε';
 
   @override
-  String get shopItemBgBlueDescription => 'Ηρεμιστικές μπλε ιδιοτροπίες.';
+  String get shopItemBgBlueDescription => 'Calming blue vibes.';
 
   @override
-  String get shopItemBgForestName => 'Δασικό πράσινο';
+  String get shopItemBgForestName => 'Forest Green';
 
   @override
   String get shopItemBgForestDescription => 'Φυσικό αίσθημα.';
 
   @override
-  String get shopItemBgSunsetName => 'Ηλιοβασίλεμα πορτοκαλί';
+  String get shopItemBgSunsetName => 'Sunset Orange';
 
   @override
   String get shopItemBgSunsetDescription => 'Ζεστό και άνετο.';
 
   @override
-  String get shopItemBgGalaxyName => 'Γαλαξιακό ιώδες';
+  String get shopItemBgGalaxyName => 'Galaxy Purple';
 
   @override
   String get shopItemBgGalaxyDescription => 'Έξω από αυτό τον κόσμο.';
 
   @override
   String purchaseSuccessSingle(Object itemName) {
-    return 'Αγοράστηκε $itemName!';
+    return 'Purchased $itemName!';
   }
 
   @override
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
-    return 'Αγοράστηκε $itemName x$quantity!';
+    return 'Purchased $itemName x$quantity!';
   }
+
+  @override
+  String get youLabel => 'Εσύ';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Ζζζ... Ο Moji νυστάζει όσο επανασυνδέεται ο σύνδεσμος γλώσσας. Δοκίμασε ξανά σύντομα.';
+
+  @override
+  String get mojiSleepNight =>
+      'Σσσ... Ο Moji κοιμάται. Πάτησε τον Moji για να ξυπνήσει.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'Ο MOJI ΝΥΣΤΑΖΕΙ... ΕΠΑΝΑΣΥΝΔΕΣΗ ΣΥΝΔΕΣΜΟΥ ΓΛΩΣΣΑΣ';
+
+  @override
+  String get mojiSleepHintNight => 'Ο MOJI ΚΟΙΜΑΤΑΙ... ΠΑΤΗΣΕ ΓΙΑ ΞΥΠΝΗΜΑ';
+
+  @override
+  String get mojiWakeSuccess => 'Χασμουρητό... Ο Moji ξύπνησε! Ας εξασκηθούμε!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Ο Moji νυστάζει όσο επανασυνδέεται ο σύνδεσμος γλώσσας.';
+
+  @override
+  String get mojiSleepReasonNight => 'Ο Moji κοιμάται. Πάτησε για ξύπνημα.';
+
+  @override
+  String get levelsScreenTitle => 'Επίπεδα';
+
+  @override
+  String get levelStatusCurrent => 'Τρέχον επίπεδο';
+
+  @override
+  String get levelStatusCompleted => 'Ολοκληρωμένο';
+
+  @override
+  String get levelRewardLabel => 'Ανταμοιβή';
+
+  @override
+  String get quizPausedTitle => 'Σε παύση';
+
+  @override
+  String get quizPausedPrompt => 'Θέλετε να συνεχίσετε ή να κλείσετε;';
+
+  @override
+  String get quizPlay => 'Παίξε';
+
+  @override
+  String get quizPause => 'Παύση';
+
+  @override
+  String get quizExit => 'Έξοδος';
+
+  @override
+  String get weeklyProgressTitle => 'Εβδομαδιαία πρόοδος';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'Ημέρα $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Επιστρέψτε αύριο για καθημερινή ανταμοιβή';
+
+  @override
+  String get resetAppButton => 'Επαναφορά';
+
+  @override
+  String get resetAppTitle => 'Επαναφορά εφαρμογής';
+
+  @override
+  String get resetAppWarning =>
+      'Αυτό θα διαγράψει όλη σας την πρόοδο.\n\nΕίστε σίγουρος;';
+
+  @override
+  String get resetAction => 'Επαναφορά';
+
+  @override
+  String get resetSuccessMessage => 'Η εφαρμογή επαναφέρθηκε με επιτυχία';
+
+  @override
+  String get selectYourCharacter => 'Επιλέξτε τον χαρακτήρα σας';
+
+  @override
+  String get characterDog => 'Σκύλος';
+
+  @override
+  String get characterCat => 'Γάτα';
+
+  @override
+  String get characterBird => 'Πουλί';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Ο Moji λαγοκοιμάται όσο επανασυνδέεται η γλωσσική σύνδεση. Δοκίμασε ξανά σύντομα.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Ο Moji λαγοκοιμάται όσο επανασυνδέεται η γλωσσική σύνδεση.';
+
+  @override
+  String get mojiSleepingTapWake =>
+      'Ο Moji κοιμάται. Πάτησε για να τον ξυπνήσεις.';
+
+  @override
+  String get mojiAwakeReady => 'Ο Moji είναι ξύπνιος και έτοιμος!';
+
+  @override
+  String get wardrobeTitle => 'Ντουλάπα';
+
+  @override
+  String get slotHat => 'Καπέλο';
+
+  @override
+  String get slotNeck => 'Λαιμός';
+
+  @override
+  String get slotFace => 'Πρόσωπο';
+
+  @override
+  String get bodyTailColor => 'Χρώμα σώματος & ουράς';
+
+  @override
+  String get eyeColor => 'Χρώμα ματιών';
+
+  @override
+  String get eyeStyleSolid => 'Μονόχρωμα';
+
+  @override
+  String get eyeStyleOddEyed => 'Ετεροχρωμία';
+
+  @override
+  String get leftEye => 'Αριστερό μάτι';
+
+  @override
+  String get rightEye => 'Δεξί μάτι';
+
+  @override
+  String get colorLabel => 'Χρώμα';
+
+  @override
+  String get scenarioObjectives => 'Στόχοι';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Ολοκληρώθηκε';
+
+  @override
+  String get scenarioBonusLabel => 'Μπόνους';
+
+  @override
+  String get scenarioCompleteTitle => 'Το σενάριο ολοκληρώθηκε!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done από $total στόχους';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Πρώτη ολοκλήρωση!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Ανταμοιβή επανάληψης — η πρώτη ολοκλήρωση δίνει περισσότερα.';
+
+  @override
+  String get scenarioContinue => 'Συνέχεια';
+
+  @override
+  String get objCoffeeOrder => 'Παράγγειλε ένα ρόφημα';
+
+  @override
+  String get objCoffeeCustomize => 'Προσάρμοσε την παραγγελία σου';
+
+  @override
+  String get objCoffeePrice => 'Ρώτα πόσο κάνει';
+
+  @override
+  String get objCoffeeSmallTalk => 'Πιάσε ψιλοκουβέντα με τον μπαρίστα';
+
+  @override
+  String get objInterviewGreet => 'Παρουσιάσου';
+
+  @override
+  String get objInterviewExperience => 'Περιέγραψε την εμπειρία σου';
+
+  @override
+  String get objInterviewStrength => 'Εξήγησε γιατί ταιριάζεις';
+
+  @override
+  String get objInterviewAsk => 'Κάνε μια ερώτηση για τη θέση';
+
+  @override
+  String get objDirectionsAsk => 'Ρώτα πώς να πας κάπου';
+
+  @override
+  String get objDirectionsClarify =>
+      'Ζήτα να το επαναλάβουν ή να μιλήσουν πιο αργά';
+
+  @override
+  String get objDirectionsDistance => 'Μάθε πόσο μακριά είναι';
+
+  @override
+  String get objDirectionsThank => 'Ευχαρίστησέ τους σωστά';
+
+  @override
+  String get objDoctorSymptom => 'Περίγραψε τα συμπτώματά σου';
+
+  @override
+  String get objDoctorDuration => 'Πες πόσο καιρό συμβαίνει';
+
+  @override
+  String get objDoctorQuestion => 'Ρώτα τι πρέπει να κάνεις';
+
+  @override
+  String get objDoctorAllergy => 'Ανάφερε μια αλλεργία ή φάρμακο';
+
+  @override
+  String get objShoppingFind => 'Ρώτα πού βρίσκεται ένα προϊόν';
+
+  @override
+  String get objShoppingSize => 'Ρώτα για μέγεθος, χρώμα ή εφαρμογή';
+
+  @override
+  String get objShoppingPrice => 'Ρώτα την τιμή';
+
+  @override
+  String get objShoppingPay => 'Πλήρωσέ το';
+
+  @override
+  String get objRestaurantTable => 'Ζήτα ένα τραπέζι';
+
+  @override
+  String get objRestaurantOrder => 'Παράγγειλε φαγητό';
+
+  @override
+  String get objRestaurantDrink => 'Παράγγειλε κάτι να πιεις';
+
+  @override
+  String get objRestaurantBill => 'Ζήτα τον λογαριασμό';
+
+  @override
+  String get notificationsTitle => 'Ειδοποιήσεις';
+
+  @override
+  String get notificationsEnable => 'Θύμισέ μου τον Moji';
+
+  @override
+  String get notificationsDesc =>
+      'Ο Moji θα σε ειδοποιεί όταν σε χρειάζεται, όταν είναι ώρα για επανάληψη και όταν είναι έτοιμη η ημερήσια ανταμοιβή.';
+
+  @override
+  String get notificationsBlocked =>
+      'Οι ειδοποιήσεις είναι απενεργοποιημένες στις ρυθμίσεις της συσκευής.';
+
+  @override
+  String get notifPetChannelName => 'Ο Moji σε χρειάζεται';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Υπενθυμίσεις όταν το κατοικίδιο πεινάει ή στενοχωριέται';
+
+  @override
+  String get notifReviewChannelName => 'Υπενθυμίσεις επανάληψης';
+
+  @override
+  String get notifReviewChannelDesc =>
+      'Υπενθυμίσεις όταν λέξεις χρειάζονται επανάληψη';
+
+  @override
+  String get notifRewardChannelName => 'Ημερήσια ανταμοιβή';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Υπενθυμίσεις όταν η ημερήσια ανταμοιβή είναι έτοιμη';
+
+  @override
+  String get notifPetHungryTitle => 'Ο Moji πεινάει';
+
+  @override
+  String get notifPetHungryBody =>
+      'Το κατοικίδιό σου θα ήθελε πολύ ένα σνακ τώρα.';
+
+  @override
+  String get notifPetSadTitle => 'Ο Moji σου λείπει';
+
+  @override
+  String get notifPetSadBody =>
+      'Χωρίς εσένα έχει ησυχία. Έρχεσαι να πεις ένα γεια;';
+
+  @override
+  String get notifReviewTitle => 'Ώρα για επανάληψη';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count λέξεις σε περιμένουν.',
+      one: '1 λέξη σε περιμένει.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Η ημερήσια ανταμοιβή σου είναι έτοιμη';
+
+  @override
+  String get notifRewardBody => 'Ο Moji έχει κάτι για σένα. Έλα να το πάρεις!';
+
+  @override
+  String get careTitle => 'Πώς είναι ο Moji;';
+
+  @override
+  String get careStatFullness => 'Χορτασμός';
+
+  @override
+  String get careStatHappiness => 'Χαρά';
+
+  @override
+  String get careStatHealth => 'Υγεία';
+
+  @override
+  String get careAllWell => 'Ο Moji είναι μια χαρά.';
+
+  @override
+  String get careNeedHungry => 'Ο Moji πεινάει';
+
+  @override
+  String get careNeedLonely => 'Ο Moji έχει πέσει ψυχολογικά';
+
+  @override
+  String get careNeedSick => 'Ο Moji είναι άρρωστος';
+
+  @override
+  String get careSickPenalty =>
+      'Όσο ο Moji είναι άρρωστος, XP και νομίσματα μειώνονται στο μισό.';
+
+  @override
+  String get careFeedTitle => 'Τάισε τον Moji';
+
+  @override
+  String get careNoFood => 'Δεν έμεινε φαγητό. Πέρνα από το κατάστημα.';
+
+  @override
+  String get careGoToShop => 'Στο κατάστημα';
+
+  @override
+  String get carePlay => 'Χάιδεψε τον Moji';
+
+  @override
+  String get carePlayCooldown => 'Ο Moji χόρτασε χάδια προς το παρόν.';
+
+  @override
+  String get careClose => 'Κλείσιμο';
+
+  @override
+  String careFedItem(String item) {
+    return 'Ο Moji έφαγε $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Χορτασμός τώρα: $value%';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Ο Moji είναι άρρωστος — μισές ανταμοιβές';
+
+  @override
+  String get careDragToFeed => 'Σύρε πάνω στον Moji για να τον ταΐσεις';
 }

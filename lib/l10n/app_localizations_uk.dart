@@ -51,13 +51,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get profile => 'Профіль';
 
   @override
-  String get shop => 'Shop';
+  String get shop => 'Крамниця';
 
   @override
-  String get mistakes => 'MISTAKES';
+  String get mistakes => 'ПОМИЛКИ';
 
   @override
-  String get noMistakesYet => 'NO MISTAKES YET!';
+  String get noMistakesYet => 'ЩЕ НЕМАЄ ПОМИЛОК!';
 
   @override
   String get profileDesc => 'Статистика та налаштування.';
@@ -215,218 +215,653 @@ class AppLocalizationsUk extends AppLocalizations {
   String get typeHere => 'Введіть тут...';
 
   @override
-  String get shopTitle => 'Shop';
+  String get shopTitle => 'Крамниця';
 
   @override
-  String get categoryAll => 'All';
+  String get categoryAll => 'Усі';
 
   @override
-  String get categoryFood => 'Food';
+  String get categoryFood => 'Їжа';
 
   @override
-  String get categoryDecor => 'Decor';
+  String get categoryDecor => 'Декор';
 
   @override
-  String get hideOwnedCosmetics => 'Hide Owned Cosmetics';
+  String get hideOwnedCosmetics => 'Приховати придбані аксесуари';
 
   @override
-  String get noItems => 'No Items';
+  String get noItems => 'Немає предметів';
 
   @override
-  String get owned => 'Owned';
+  String get owned => 'Придбано';
 
   @override
-  String get alreadyOwned => 'Already Owned';
+  String get alreadyOwned => 'Вже придбано';
 
   @override
-  String get alreadyOwnedMessage => 'You already own this item!';
+  String get alreadyOwnedMessage => 'Ти вже маєш цей предмет!';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Кількість';
 
   @override
-  String get totalPrice => 'Total Price';
+  String get totalPrice => 'Загальна ціна';
 
   @override
-  String get notEnoughCoins => 'Not Enough Coins!';
+  String get notEnoughCoins => 'Недостатньо монет!';
 
   @override
-  String get purchaseFailed => 'Purchase Failed';
+  String get purchaseFailed => 'Покупка не вдалася';
 
   @override
-  String get notEnoughCoinsMessage => 'Not enough coins!';
+  String get notEnoughCoinsMessage => 'Недостатньо монет!';
 
   @override
-  String get buy => 'Buy';
+  String get buy => 'Купити';
 
   @override
-  String get tooPoor => 'Too Poor';
+  String get tooPoor => 'Замало монет';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get daily_reward => 'Daily Reward';
+  String get daily_reward => 'Щоденна нагорода';
 
   @override
-  String get claim_reward => 'Claim Reward';
+  String get claim_reward => 'Отримати нагороду';
 
   @override
   String day_streak(Object X) {
-    return 'Day $X Streak';
+    return 'День $X серії';
   }
 
   @override
-  String get come_back_tomorrow => 'Come back tomorrow!';
+  String get come_back_tomorrow => 'Повертайся завтра!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
+  String get streak_broken => 'З поверненням! Починаємо спочатку';
 
   @override
-  String get keep_going => 'Keep it going!';
+  String get keep_going => 'Так тримати!';
 
   @override
-  String get reward_claimed => 'Reward Claimed!';
+  String get reward_claimed => 'Нагороду отримано!';
 
   @override
   String amazing_streak(Object X) {
-    return 'Amazing! Day $X streak!';
+    return 'Чудово! Серія $X днів!';
   }
 
   @override
-  String get whatsYourName => 'WHAT\'S YOUR NAME?';
+  String get whatsYourName => 'ЯК ТЕБЕ ЗВАТИ?';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Введи своє ім\'я';
 
   @override
-  String get continueBtn => 'CONTINUE';
+  String get continueBtn => 'ДАЛІ';
 
   @override
-  String get howWouldYouRate => 'HOW WOULD YOU RATE';
+  String get howWouldYouRate => 'ЯК ТИ ОЦІНЮЄШ';
 
   @override
-  String get yourLevel => 'YOUR LEVEL?';
+  String get yourLevel => 'СВІЙ РІВЕНЬ?';
 
   @override
-  String get beginner => 'BEGINNER';
+  String get beginner => 'ПОЧАТКІВЕЦЬ';
 
   @override
-  String get intermediate => 'INTERMEDIATE';
+  String get intermediate => 'СЕРЕДНІЙ';
 
   @override
-  String get advanced => 'ADVANCED';
+  String get advanced => 'ПРОСУНУТИЙ';
 
   @override
-  String get beginnerDesc => 'Just starting. I know very few words.';
+  String get beginnerDesc => 'Тільки починаю. Знаю дуже мало слів.';
 
   @override
   String get intermediateDesc =>
-      'I can hold basic conversations and understand simple texts.';
+      'Можу вести прості розмови й розумію прості тексти.';
 
   @override
   String get advancedDesc =>
-      'I\'m fluent or near-fluent. I can discuss complex topics.';
+      'Володію вільно або майже вільно. Можу обговорювати складні теми.';
 
   @override
-  String get whichLanguage => 'WHICH LANGUAGE';
+  String get whichLanguage => 'ЯКУ МОВУ';
 
   @override
-  String get doYouWantToLearn => 'DO YOU WANT TO LEARN?';
+  String get doYouWantToLearn => 'ТИ ХОЧЕШ ВИВЧАТИ?';
 
   @override
-  String get changeAnytime => 'You can change this anytime in settings';
+  String get changeAnytime => 'Це можна змінити будь-коли в налаштуваннях';
 
   @override
   String get dontWorryVerify =>
-      'Don\'t worry, we\'ll verify this with a quick chat!';
+      'Не хвилюйся, ми перевіримо це в короткій розмові!';
 
   @override
-  String get startAssessment => 'START ASSESSMENT';
+  String get startAssessment => 'ПОЧАТИ ОЦІНЮВАННЯ';
 
   @override
-  String get chatAssessment => 'CHAT ASSESSMENT';
+  String get chatAssessment => 'ОЦІНЮВАННЯ В ЧАТІ';
 
   @override
-  String get typeYourAnswer => 'Type your answer...';
+  String get typeYourAnswer => 'Введи свою відповідь...';
 
   @override
-  String get mojiIsTyping => 'Moji is typing...';
+  String get mojiIsTyping => 'Moji друкує...';
 
   @override
-  String get send => 'SEND';
+  String get send => 'НАДІСЛАТИ';
 
   @override
-  String get calibrationComplete => 'Calibration Complete!';
+  String get calibrationComplete => 'Калібрування завершено!';
 
   @override
   String get basedOnYourAnswers =>
-      'Based on your answers, your recommended starting level is:';
+      'На основі твоїх відповідей рекомендований початковий рівень:';
 
   @override
-  String get proficiencyLevel => 'Proficiency Level';
+  String get proficiencyLevel => 'Рівень володіння';
 
   @override
-  String get shopItemAppleName => 'Яблуко';
+  String get shopItemAppleName => 'Apple';
 
   @override
-  String get shopItemAppleDescription => 'Здорова закуска.';
+  String get shopItemAppleDescription => 'A healthy snack.';
 
   @override
-  String get shopItemCroissantName => 'Круасан';
+  String get shopItemCroissantName => 'Croissant';
 
   @override
-  String get shopItemCroissantDescription => 'Масляна доброта.';
+  String get shopItemCroissantDescription => 'Buttery goodness.';
 
   @override
-  String get shopItemPizzaName => 'Шматок піци';
+  String get shopItemPizzaName => 'Pizza Slice';
 
   @override
-  String get shopItemPizzaDescription => 'Сирна та заситна.';
+  String get shopItemPizzaDescription => 'Cheesy and filling.';
 
   @override
-  String get shopItemSushiName => 'Набір суші';
+  String get shopItemSushiName => 'Sushi Set';
 
   @override
-  String get shopItemSushiDescription => 'Преміум риба.';
+  String get shopItemSushiDescription => 'Premium fish.';
 
   @override
-  String get shopItemCoffeeName => 'Еспресо';
+  String get shopItemCoffeeName => 'Espresso';
 
   @override
-  String get shopItemCoffeeDescription => 'Швидкий поштовх енергії.';
+  String get shopItemCoffeeDescription => 'Quick energy boost.';
 
   @override
-  String get shopItemBgBlueName => 'Блакитний океан';
+  String get shopItemMedicineName => 'Ліки';
 
   @override
-  String get shopItemBgBlueDescription => 'Заспокійливі блакитні волни.';
+  String get shopItemMedicineDescription => 'Повертає Моджі здоровʼя.';
 
   @override
-  String get shopItemBgForestName => 'Зелена гойдалка';
+  String get review => 'Повторення';
 
   @override
-  String get shopItemBgForestDescription => 'Природне відчуття.';
+  String reviewDueCount(int count) {
+    return '$count до повтору';
+  }
 
   @override
-  String get shopItemBgSunsetName => 'Помаранчевий закат';
+  String reviewProgress(int current, int total) {
+    return '$current з $total';
+  }
 
   @override
-  String get shopItemBgSunsetDescription => 'Тепло та затишно.';
+  String get reviewShowAnswer => 'Показати відповідь';
 
   @override
-  String get shopItemBgGalaxyName => 'Фіолетова галактика';
+  String get reviewGradeAgain => 'Ще раз';
 
   @override
-  String get shopItemBgGalaxyDescription => 'За межами цього світу.';
+  String get reviewGradeHard => 'Важко';
+
+  @override
+  String get reviewGradeGood => 'Добре';
+
+  @override
+  String get reviewGradeEasy => 'Легко';
+
+  @override
+  String get reviewAllCaughtUp => 'Усе повторено!';
+
+  @override
+  String get reviewNothingDue =>
+      'Зараз немає чого повторювати. Поспілкуйся або пройди тест — Моджі запамʼятає, що дається тобі важко.';
+
+  @override
+  String get reviewSessionComplete => 'Повторення завершено!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return 'Повторено: $count';
+  }
+
+  @override
+  String get reviewDone => 'Готово';
+
+  @override
+  String get reviewCorrectionPrompt => 'Як правильно?';
+
+  @override
+  String get reviewVocabularyPrompt => 'Що це означає?';
+
+  @override
+  String get shopItemBgBlueName => 'Ocean Blue';
+
+  @override
+  String get shopItemBgBlueDescription => 'Calming blue vibes.';
+
+  @override
+  String get shopItemBgForestName => 'Forest Green';
+
+  @override
+  String get shopItemBgForestDescription => 'Natural feeling.';
+
+  @override
+  String get shopItemBgSunsetName => 'Sunset Orange';
+
+  @override
+  String get shopItemBgSunsetDescription => 'Warm and cozy.';
+
+  @override
+  String get shopItemBgGalaxyName => 'Galaxy Purple';
+
+  @override
+  String get shopItemBgGalaxyDescription => 'Out of this world.';
 
   @override
   String purchaseSuccessSingle(Object itemName) {
-    return '$itemName куплено!';
+    return 'Purchased $itemName!';
   }
 
   @override
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
-    return '$itemName x$quantity куплено!';
+    return 'Purchased $itemName x$quantity!';
   }
+
+  @override
+  String get youLabel => 'Ти';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... Модзі дрімає, поки мовний звязок перепідключається. Спробуй ще раз незабаром.';
+
+  @override
+  String get mojiSleepNight =>
+      'Тсс... Модзі спить. Торкнися Модзі, щоб розбудити.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI ДРІМАЄ... МОВНИЙ ЗВЯЗОК ПЕРЕПІДКЛЮЧАЄТЬСЯ';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI СПИТЬ... ТОРКНИСЯ, ЩОБ РОЗБУДИТИ';
+
+  @override
+  String get mojiWakeSuccess =>
+      'Позіх... Модзі вже прокинувся! Давай практикуватися!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Модзі дрімає, поки мовний звязок перепідключається.';
+
+  @override
+  String get mojiSleepReasonNight => 'Модзі спить. Торкнися, щоб розбудити.';
+
+  @override
+  String get levelsScreenTitle => 'Рівні';
+
+  @override
+  String get levelStatusCurrent => 'Поточний рівень';
+
+  @override
+  String get levelStatusCompleted => 'Завершено';
+
+  @override
+  String get levelRewardLabel => 'Винагорода';
+
+  @override
+  String get quizPausedTitle => 'На паузі';
+
+  @override
+  String get quizPausedPrompt => 'Продовжити чи вийти?';
+
+  @override
+  String get quizPlay => 'Грати';
+
+  @override
+  String get quizPause => 'Пауза';
+
+  @override
+  String get quizExit => 'Вихід';
+
+  @override
+  String get weeklyProgressTitle => 'Тижневий прогрес';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'День $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Повернись завтра для щоденної винагороди';
+
+  @override
+  String get resetAppButton => 'Скидання';
+
+  @override
+  String get resetAppTitle => 'Скинути додаток';
+
+  @override
+  String get resetAppWarning => 'Це видалить весь ваш прогрес.\n\nВи впевнені?';
+
+  @override
+  String get resetAction => 'Скидання';
+
+  @override
+  String get resetSuccessMessage => 'Додаток успішно скинуто';
+
+  @override
+  String get selectYourCharacter => 'Виберіть свого персонажа';
+
+  @override
+  String get characterDog => 'Собака';
+
+  @override
+  String get characterCat => 'Кіт';
+
+  @override
+  String get characterBird => 'Птах';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji дрімає, поки відновлюється мовний зв\'язок. Спробуй ще раз трохи згодом.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji дрімає, поки відновлюється мовний зв\'язок.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji спить. Торкнись, щоб розбудити.';
+
+  @override
+  String get mojiAwakeReady => 'Moji прокинувся і готовий!';
+
+  @override
+  String get wardrobeTitle => 'Гардероб';
+
+  @override
+  String get slotHat => 'Капелюх';
+
+  @override
+  String get slotNeck => 'Шия';
+
+  @override
+  String get slotFace => 'Обличчя';
+
+  @override
+  String get bodyTailColor => 'Колір тіла й хвоста';
+
+  @override
+  String get eyeColor => 'Колір очей';
+
+  @override
+  String get eyeStyleSolid => 'Однотонні';
+
+  @override
+  String get eyeStyleOddEyed => 'Різні очі';
+
+  @override
+  String get leftEye => 'Ліве око';
+
+  @override
+  String get rightEye => 'Праве око';
+
+  @override
+  String get colorLabel => 'Колір';
+
+  @override
+  String get scenarioObjectives => 'Цілі';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Пройдено';
+
+  @override
+  String get scenarioBonusLabel => 'Бонус';
+
+  @override
+  String get scenarioCompleteTitle => 'Сценарій пройдено!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done з $total цілей';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Перше проходження!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Нагорода за повтор — перше проходження дає більше.';
+
+  @override
+  String get scenarioContinue => 'Продовжити';
+
+  @override
+  String get objCoffeeOrder => 'Замов напій';
+
+  @override
+  String get objCoffeeCustomize => 'Зміни своє замовлення';
+
+  @override
+  String get objCoffeePrice => 'Запитай, скільки коштує';
+
+  @override
+  String get objCoffeeSmallTalk => 'Поговори трохи з баристою';
+
+  @override
+  String get objInterviewGreet => 'Представся';
+
+  @override
+  String get objInterviewExperience => 'Розкажи про свій досвід';
+
+  @override
+  String get objInterviewStrength => 'Поясни, чому ти підходиш';
+
+  @override
+  String get objInterviewAsk => 'Задай питання про посаду';
+
+  @override
+  String get objDirectionsAsk => 'Запитай, як кудись дістатися';
+
+  @override
+  String get objDirectionsClarify =>
+      'Попроси повторити або говорити повільніше';
+
+  @override
+  String get objDirectionsDistance => 'Дізнайся, як далеко це';
+
+  @override
+  String get objDirectionsThank => 'Належно подякуй';
+
+  @override
+  String get objDoctorSymptom => 'Опиши свої симптоми';
+
+  @override
+  String get objDoctorDuration => 'Скажи, як давно це триває';
+
+  @override
+  String get objDoctorQuestion => 'Запитай, що тобі робити';
+
+  @override
+  String get objDoctorAllergy => 'Згадай алергію або ліки';
+
+  @override
+  String get objShoppingFind => 'Запитай, де лежить товар';
+
+  @override
+  String get objShoppingSize => 'Запитай про розмір, колір або як сидить';
+
+  @override
+  String get objShoppingPrice => 'Запитай ціну';
+
+  @override
+  String get objShoppingPay => 'Оплати покупку';
+
+  @override
+  String get objRestaurantTable => 'Попроси столик';
+
+  @override
+  String get objRestaurantOrder => 'Замов їжу';
+
+  @override
+  String get objRestaurantDrink => 'Замов щось випити';
+
+  @override
+  String get objRestaurantBill => 'Попроси рахунок';
+
+  @override
+  String get notificationsTitle => 'Сповіщення';
+
+  @override
+  String get notificationsEnable => 'Нагадувати про Моджі';
+
+  @override
+  String get notificationsDesc =>
+      'Моджі повідомить, коли ти йому потрібен, коли час повторювати і коли готова щоденна нагорода.';
+
+  @override
+  String get notificationsBlocked =>
+      'Сповіщення вимкнено в налаштуваннях пристрою.';
+
+  @override
+  String get notifPetChannelName => 'Моджі потребує тебе';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Нагадування, коли улюбленець голодний або сумує';
+
+  @override
+  String get notifReviewChannelName => 'Нагадування про повторення';
+
+  @override
+  String get notifReviewChannelDesc => 'Нагадування, коли слова час повторити';
+
+  @override
+  String get notifRewardChannelName => 'Щоденна нагорода';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Нагадування, коли готова щоденна нагорода';
+
+  @override
+  String get notifPetHungryTitle => 'Моджі зголоднів';
+
+  @override
+  String get notifPetHungryBody =>
+      'Твоєму улюбленцю зараз дуже не завадив би перекус.';
+
+  @override
+  String get notifPetSadTitle => 'Моджі сумує за тобою';
+
+  @override
+  String get notifPetSadBody => 'Без тебе стало тихо. Зазирнеш привітатися?';
+
+  @override
+  String get notifReviewTitle => 'Час повторити';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count слова чекають на тебе.',
+      many: '$count слів чекають на тебе.',
+      few: '$count слова чекають на тебе.',
+      one: '$count слово чекає на тебе.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Твоя щоденна нагорода готова';
+
+  @override
+  String get notifRewardBody => 'У Моджі дещо є для тебе. Заходь забрати!';
+
+  @override
+  String get careTitle => 'Як справи у Моджі?';
+
+  @override
+  String get careStatFullness => 'Ситість';
+
+  @override
+  String get careStatHappiness => 'Настрій';
+
+  @override
+  String get careStatHealth => 'Здоровʼя';
+
+  @override
+  String get careAllWell => 'У Моджі все чудово.';
+
+  @override
+  String get careNeedHungry => 'Моджі голодний';
+
+  @override
+  String get careNeedLonely => 'Моджі засумував';
+
+  @override
+  String get careNeedSick => 'Моджі хворіє';
+
+  @override
+  String get careSickPenalty =>
+      'Поки Моджі хворіє, увесь досвід і монети зменшуються вдвічі.';
+
+  @override
+  String get careFeedTitle => 'Погодувати Моджі';
+
+  @override
+  String get careNoFood => 'Їжа скінчилася. Загляни до магазину.';
+
+  @override
+  String get careGoToShop => 'До магазину';
+
+  @override
+  String get carePlay => 'Погладити Моджі';
+
+  @override
+  String get carePlayCooldown => 'Моджі поки досить пестощів.';
+
+  @override
+  String get careClose => 'Закрити';
+
+  @override
+  String careFedItem(String item) {
+    return 'Моджі зʼїв: $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Ситість зараз: $value%';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Моджі хворіє — нагороди вдвічі менші';
+
+  @override
+  String get careDragToFeed => 'Перетягни на Моджі, щоб погодувати';
 }

@@ -215,82 +215,82 @@ class AppLocalizationsDa extends AppLocalizations {
   String get typeHere => 'Skriv her...';
 
   @override
-  String get shopTitle => 'Shop';
+  String get shopTitle => 'Butik';
 
   @override
-  String get categoryAll => 'All';
+  String get categoryAll => 'Alle';
 
   @override
-  String get categoryFood => 'Food';
+  String get categoryFood => 'Mad';
 
   @override
-  String get categoryDecor => 'Decor';
+  String get categoryDecor => 'Dekoration';
 
   @override
-  String get hideOwnedCosmetics => 'Hide Owned Cosmetics';
+  String get hideOwnedCosmetics => 'Skjul ejet kosmetik';
 
   @override
-  String get noItems => 'No Items';
+  String get noItems => 'Ingen genstande';
 
   @override
-  String get owned => 'Owned';
+  String get owned => 'Ejet';
 
   @override
-  String get alreadyOwned => 'Already Owned';
+  String get alreadyOwned => 'Allerede ejet';
 
   @override
-  String get alreadyOwnedMessage => 'You already own this item!';
+  String get alreadyOwnedMessage => 'Du ejer allerede denne genstand!';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Antal';
 
   @override
-  String get totalPrice => 'Total Price';
+  String get totalPrice => 'Samlet pris';
 
   @override
-  String get notEnoughCoins => 'Not Enough Coins!';
+  String get notEnoughCoins => 'Ikke nok mønter!';
 
   @override
-  String get purchaseFailed => 'Purchase Failed';
+  String get purchaseFailed => 'Købet mislykkedes';
 
   @override
-  String get notEnoughCoinsMessage => 'Not enough coins!';
+  String get notEnoughCoinsMessage => 'Ikke nok mønter!';
 
   @override
-  String get buy => 'Buy';
+  String get buy => 'Køb';
 
   @override
-  String get tooPoor => 'Too Poor';
+  String get tooPoor => 'For fattig';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get daily_reward => 'Daily Reward';
+  String get daily_reward => 'Daglig belønning';
 
   @override
-  String get claim_reward => 'Claim Reward';
+  String get claim_reward => 'Hent belønning';
 
   @override
   String day_streak(Object X) {
-    return 'Day $X Streak';
+    return 'Dag $X i træk';
   }
 
   @override
-  String get come_back_tomorrow => 'Come back tomorrow!';
+  String get come_back_tomorrow => 'Kom tilbage i morgen!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
+  String get streak_broken => 'Velkommen tilbage! Vi starter forfra';
 
   @override
-  String get keep_going => 'Keep it going!';
+  String get keep_going => 'Fortsæt sådan!';
 
   @override
-  String get reward_claimed => 'Reward Claimed!';
+  String get reward_claimed => 'Belønning hentet!';
 
   @override
   String amazing_streak(Object X) {
-    return 'Amazing! Day $X streak!';
+    return 'Fantastisk! $X dage i træk!';
   }
 
   @override
@@ -398,6 +398,64 @@ class AppLocalizationsDa extends AppLocalizations {
   String get shopItemCoffeeDescription => 'Hurtig energibooost.';
 
   @override
+  String get shopItemMedicineName => 'Medicin';
+
+  @override
+  String get shopItemMedicineDescription => 'Plejer Moji rask igen.';
+
+  @override
+  String get review => 'Repetition';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count klar';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current af $total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Vis svar';
+
+  @override
+  String get reviewGradeAgain => 'Igen';
+
+  @override
+  String get reviewGradeHard => 'Svær';
+
+  @override
+  String get reviewGradeGood => 'God';
+
+  @override
+  String get reviewGradeEasy => 'Let';
+
+  @override
+  String get reviewAllCaughtUp => 'Alt er klaret!';
+
+  @override
+  String get reviewNothingDue =>
+      'Der er intet at repetere lige nu. Chat eller tag en quiz, så husker Moji, hvad du har svært ved.';
+
+  @override
+  String get reviewSessionComplete => 'Repetition færdig!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '$count gennemgået';
+  }
+
+  @override
+  String get reviewDone => 'Færdig';
+
+  @override
+  String get reviewCorrectionPrompt => 'Hvad er rettelsen?';
+
+  @override
+  String get reviewVocabularyPrompt => 'Hvad betyder det?';
+
+  @override
   String get shopItemBgBlueName => 'Oceanblå';
 
   @override
@@ -430,4 +488,379 @@ class AppLocalizationsDa extends AppLocalizations {
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
     return 'Købt $itemName x$quantity!';
   }
+
+  @override
+  String get youLabel => 'Dig';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... Moji døser, mens sprogforbindelsen genoprettes. Prøv igen snart.';
+
+  @override
+  String get mojiSleepNight =>
+      'Shhh... Moji sover. Tryk på Moji for at vække ham.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI DØSER... SPROGFORBINDELSEN GENOPRETTES';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI SOVER... TRYK FOR AT VÆKKE';
+
+  @override
+  String get mojiWakeSuccess => 'Gaaab... Moji er vågen nu! Lad os øve!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Moji døser, mens sprogforbindelsen genoprettes.';
+
+  @override
+  String get mojiSleepReasonNight => 'Moji sover. Tryk for at vække.';
+
+  @override
+  String get levelsScreenTitle => 'Niveauer';
+
+  @override
+  String get levelStatusCurrent => 'Nuværende niveau';
+
+  @override
+  String get levelStatusCompleted => 'Fuldført';
+
+  @override
+  String get levelRewardLabel => 'Belønning';
+
+  @override
+  String get quizPausedTitle => 'Pauseret';
+
+  @override
+  String get quizPausedPrompt => 'Vil du fortsætte eller afslutte?';
+
+  @override
+  String get quizPlay => 'Spil';
+
+  @override
+  String get quizPause => 'Pause';
+
+  @override
+  String get quizExit => 'Afslut';
+
+  @override
+  String get weeklyProgressTitle => 'Ugentlig fremgang';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'Dag $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Kom tilbage i morgen for daglig belønning';
+
+  @override
+  String get resetAppButton => 'Nulstil';
+
+  @override
+  String get resetAppTitle => 'Nulstil app';
+
+  @override
+  String get resetAppWarning =>
+      'Dette sletter al din fremgang.\n\nEr du sikker?';
+
+  @override
+  String get resetAction => 'Nulstil';
+
+  @override
+  String get resetSuccessMessage => 'Appen blev nulstillet';
+
+  @override
+  String get selectYourCharacter => 'Vælg din karakter';
+
+  @override
+  String get characterDog => 'Hund';
+
+  @override
+  String get characterCat => 'Kat';
+
+  @override
+  String get characterBird => 'Fugl';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji døser, mens sprogforbindelsen genoprettes. Prøv igen snart.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji døser, mens sprogforbindelsen genoprettes.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji sover. Tryk for at vække den.';
+
+  @override
+  String get mojiAwakeReady => 'Moji er vågen og klar!';
+
+  @override
+  String get wardrobeTitle => 'Garderobe';
+
+  @override
+  String get slotHat => 'Hat';
+
+  @override
+  String get slotNeck => 'Hals';
+
+  @override
+  String get slotFace => 'Ansigt';
+
+  @override
+  String get bodyTailColor => 'Krops- og halefarve';
+
+  @override
+  String get eyeColor => 'Øjenfarve';
+
+  @override
+  String get eyeStyleSolid => 'Ensfarvet';
+
+  @override
+  String get eyeStyleOddEyed => 'Forskellige øjne';
+
+  @override
+  String get leftEye => 'Venstre øje';
+
+  @override
+  String get rightEye => 'Højre øje';
+
+  @override
+  String get colorLabel => 'Farve';
+
+  @override
+  String get scenarioObjectives => 'Mål';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Gennemført';
+
+  @override
+  String get scenarioBonusLabel => 'Bonus';
+
+  @override
+  String get scenarioCompleteTitle => 'Scenarie gennemført!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done af $total mål';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Første gennemførsel!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Genspilsbelønning — første gennemførsel giver mest.';
+
+  @override
+  String get scenarioContinue => 'Fortsæt';
+
+  @override
+  String get objCoffeeOrder => 'Bestil en drik';
+
+  @override
+  String get objCoffeeCustomize => 'Tilpas din ordre';
+
+  @override
+  String get objCoffeePrice => 'Spørg hvad det koster';
+
+  @override
+  String get objCoffeeSmallTalk => 'Small talk med baristaen';
+
+  @override
+  String get objInterviewGreet => 'Præsenter dig selv';
+
+  @override
+  String get objInterviewExperience => 'Beskriv din erfaring';
+
+  @override
+  String get objInterviewStrength => 'Forklar hvorfor du passer til jobbet';
+
+  @override
+  String get objInterviewAsk => 'Stil et spørgsmål om stillingen';
+
+  @override
+  String get objDirectionsAsk => 'Spørg om vej til et sted';
+
+  @override
+  String get objDirectionsClarify => 'Bed dem gentage eller tale langsommere';
+
+  @override
+  String get objDirectionsDistance => 'Find ud af hvor langt der er';
+
+  @override
+  String get objDirectionsThank => 'Sig ordentligt tak';
+
+  @override
+  String get objDoctorSymptom => 'Beskriv dine symptomer';
+
+  @override
+  String get objDoctorDuration => 'Sig hvor længe det har varet';
+
+  @override
+  String get objDoctorQuestion => 'Spørg hvad du skal gøre';
+
+  @override
+  String get objDoctorAllergy => 'Nævn en allergi eller medicin';
+
+  @override
+  String get objShoppingFind => 'Spørg hvor en vare står';
+
+  @override
+  String get objShoppingSize => 'Spørg om størrelse, farve eller pasform';
+
+  @override
+  String get objShoppingPrice => 'Spørg om prisen';
+
+  @override
+  String get objShoppingPay => 'Betal for det';
+
+  @override
+  String get objRestaurantTable => 'Bed om et bord';
+
+  @override
+  String get objRestaurantOrder => 'Bestil mad';
+
+  @override
+  String get objRestaurantDrink => 'Bestil noget at drikke';
+
+  @override
+  String get objRestaurantBill => 'Bed om regningen';
+
+  @override
+  String get notificationsTitle => 'Notifikationer';
+
+  @override
+  String get notificationsEnable => 'Mind mig om Moji';
+
+  @override
+  String get notificationsDesc =>
+      'Moji giver besked, når han har brug for dig, når der er repetition, og når din daglige belønning er klar.';
+
+  @override
+  String get notificationsBlocked =>
+      'Notifikationer er slået fra i dine enhedsindstillinger.';
+
+  @override
+  String get notifPetChannelName => 'Moji har brug for dig';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Påmindelser når dit kæledyr er sultent eller ked af det';
+
+  @override
+  String get notifReviewChannelName => 'Repetitionspåmindelser';
+
+  @override
+  String get notifReviewChannelDesc => 'Påmindelser når ord skal repeteres';
+
+  @override
+  String get notifRewardChannelName => 'Daglig belønning';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Påmindelser når din daglige belønning er klar';
+
+  @override
+  String get notifPetHungryTitle => 'Moji er sulten';
+
+  @override
+  String get notifPetHungryBody =>
+      'Dit kæledyr kunne godt bruge en snack lige nu.';
+
+  @override
+  String get notifPetSadTitle => 'Moji savner dig';
+
+  @override
+  String get notifPetSadBody =>
+      'Der har været stille uden dig. Kommer du og siger hej?';
+
+  @override
+  String get notifReviewTitle => 'Tid til repetition';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ord venter på dig.',
+      one: '1 ord venter på dig.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Din daglige belønning er klar';
+
+  @override
+  String get notifRewardBody => 'Moji har noget til dig. Kom og hent det!';
+
+  @override
+  String get careTitle => 'Hvordan har Moji det?';
+
+  @override
+  String get careStatFullness => 'Mæthed';
+
+  @override
+  String get careStatHappiness => 'Glæde';
+
+  @override
+  String get careStatHealth => 'Helbred';
+
+  @override
+  String get careAllWell => 'Moji har det rigtig godt.';
+
+  @override
+  String get careNeedHungry => 'Moji er sulten';
+
+  @override
+  String get careNeedLonely => 'Moji er lidt nedtrykt';
+
+  @override
+  String get careNeedSick => 'Moji er syg';
+
+  @override
+  String get careSickPenalty =>
+      'Mens Moji er syg, halveres al XP og alle mønter.';
+
+  @override
+  String get careFeedTitle => 'Fodr Moji';
+
+  @override
+  String get careNoFood => 'Ingen mad tilbage. Kig forbi butikken.';
+
+  @override
+  String get careGoToShop => 'Til butikken';
+
+  @override
+  String get carePlay => 'Kæl med Moji';
+
+  @override
+  String get carePlayCooldown => 'Moji har fået kæl nok for nu.';
+
+  @override
+  String get careClose => 'Luk';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji spiste $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Mæthed nu: $value %';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Moji er syg — belønninger halveret';
+
+  @override
+  String get careDragToFeed => 'Træk over på Moji for at fodre';
 }

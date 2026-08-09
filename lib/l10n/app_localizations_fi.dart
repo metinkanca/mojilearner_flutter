@@ -57,7 +57,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mistakes => 'VIRHEET';
 
   @override
-  String get noMistakesYet => 'EI VIELÄ VIRHEITÄ!';
+  String get noMistakesYet => 'EI VIELÃ„ VIRHEITÃ„!';
 
   @override
   String get profileDesc => 'Katso tilastot ja asetukset.';
@@ -215,86 +215,86 @@ class AppLocalizationsFi extends AppLocalizations {
   String get typeHere => 'Kirjoita tähän...';
 
   @override
-  String get shopTitle => 'Shop';
+  String get shopTitle => 'Kauppa';
 
   @override
-  String get categoryAll => 'All';
+  String get categoryAll => 'Kaikki';
 
   @override
-  String get categoryFood => 'Food';
+  String get categoryFood => 'Ruoka';
 
   @override
-  String get categoryDecor => 'Decor';
+  String get categoryDecor => 'Koristeet';
 
   @override
-  String get hideOwnedCosmetics => 'Hide Owned Cosmetics';
+  String get hideOwnedCosmetics => 'Piilota omistetut asusteet';
 
   @override
-  String get noItems => 'No Items';
+  String get noItems => 'Ei esineitä';
 
   @override
-  String get owned => 'Owned';
+  String get owned => 'Omistettu';
 
   @override
-  String get alreadyOwned => 'Already Owned';
+  String get alreadyOwned => 'Jo omistettu';
 
   @override
-  String get alreadyOwnedMessage => 'You already own this item!';
+  String get alreadyOwnedMessage => 'Omistat jo tämän esineen!';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Määrä';
 
   @override
-  String get totalPrice => 'Total Price';
+  String get totalPrice => 'Kokonaishinta';
 
   @override
-  String get notEnoughCoins => 'Not Enough Coins!';
+  String get notEnoughCoins => 'Ei tarpeeksi kolikoita!';
 
   @override
-  String get purchaseFailed => 'Purchase Failed';
+  String get purchaseFailed => 'Osto epäonnistui';
 
   @override
-  String get notEnoughCoinsMessage => 'Not enough coins!';
+  String get notEnoughCoinsMessage => 'Ei tarpeeksi kolikoita!';
 
   @override
-  String get buy => 'Buy';
+  String get buy => 'Osta';
 
   @override
-  String get tooPoor => 'Too Poor';
+  String get tooPoor => 'Liian köyhä';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get daily_reward => 'Daily Reward';
+  String get daily_reward => 'Päivittäinen palkinto';
 
   @override
-  String get claim_reward => 'Claim Reward';
+  String get claim_reward => 'Lunasta palkinto';
 
   @override
   String day_streak(Object X) {
-    return 'Day $X Streak';
+    return 'Päivän $X putki';
   }
 
   @override
-  String get come_back_tomorrow => 'Come back tomorrow!';
+  String get come_back_tomorrow => 'Tule takaisin huomenna!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
+  String get streak_broken => 'Tervetuloa takaisin! Aloitetaan alusta';
 
   @override
-  String get keep_going => 'Keep it going!';
+  String get keep_going => 'Jatka samaan malliin!';
 
   @override
-  String get reward_claimed => 'Reward Claimed!';
+  String get reward_claimed => 'Palkinto lunastettu!';
 
   @override
   String amazing_streak(Object X) {
-    return 'Amazing! Day $X streak!';
+    return 'Mahtavaa! $X päivän putki!';
   }
 
   @override
-  String get whatsYourName => 'MIKÄ SINUN NIMESI ON?';
+  String get whatsYourName => 'MIKÃ„ SINUN NIMESI ON?';
 
   @override
   String get enterYourName => 'Kirjoita nimesi';
@@ -330,7 +330,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Olen sujuva tai lähes sujuva. Voin keskustella monimutkaisista aiheista.';
 
   @override
-  String get whichLanguage => 'MIKÄ KIELI';
+  String get whichLanguage => 'MIKÃ„ KIELI';
 
   @override
   String get doYouWantToLearn => 'HALUAT OPPIA?';
@@ -340,7 +340,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get dontWorryVerify =>
-      'Älä huoli, vahvistamme tämän nopealla chatillä!';
+      'Ã„lÃ¤ huoli, vahvistamme tÃ¤mÃ¤n nopealla chatillÃ¤!';
 
   @override
   String get startAssessment => 'ALOITA ARVIOINTI';
@@ -355,7 +355,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mojiIsTyping => 'Moji kirjoittaa...';
 
   @override
-  String get send => 'LÄHETÄ';
+  String get send => 'LÃ„HETÃ„';
 
   @override
   String get calibrationComplete => 'Kalibrointi Valmis!';
@@ -398,6 +398,64 @@ class AppLocalizationsFi extends AppLocalizations {
   String get shopItemCoffeeDescription => 'Nopea energiapohja.';
 
   @override
+  String get shopItemMedicineName => 'Lääke';
+
+  @override
+  String get shopItemMedicineDescription => 'Hoitaa Mojin takaisin terveeksi.';
+
+  @override
+  String get review => 'Kertaus';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count odottaa';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Näytä vastaus';
+
+  @override
+  String get reviewGradeAgain => 'Uudestaan';
+
+  @override
+  String get reviewGradeHard => 'Vaikea';
+
+  @override
+  String get reviewGradeGood => 'Hyvä';
+
+  @override
+  String get reviewGradeEasy => 'Helppo';
+
+  @override
+  String get reviewAllCaughtUp => 'Kaikki tehty!';
+
+  @override
+  String get reviewNothingDue =>
+      'Ei kerrattavaa juuri nyt. Juttele tai tee tietovisa, niin Moji muistaa, mikä on sinulle vaikeaa.';
+
+  @override
+  String get reviewSessionComplete => 'Kertaus valmis!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '$count kerrattu';
+  }
+
+  @override
+  String get reviewDone => 'Valmis';
+
+  @override
+  String get reviewCorrectionPrompt => 'Mikä on oikea muoto?';
+
+  @override
+  String get reviewVocabularyPrompt => 'Mitä tämä tarkoittaa?';
+
+  @override
   String get shopItemBgBlueName => 'Valtameren sininen';
 
   @override
@@ -430,4 +488,381 @@ class AppLocalizationsFi extends AppLocalizations {
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
     return '$itemName x$quantity ostettu!';
   }
+
+  @override
+  String get youLabel => 'Sinä';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... Moji torkkuu, kun kieliyhteys muodostetaan uudelleen. Yritä pian uudelleen.';
+
+  @override
+  String get mojiSleepNight =>
+      'Shhh... Moji nukkuu. Napauta Mojia herättääksesi hänet.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI TORKKUU... KIELIYHTEYS MUODOSTETAAN UUDELLEEN';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI NUKKUU... NAPAUTA HERÄTTÄÄKSESI';
+
+  @override
+  String get mojiWakeSuccess =>
+      'Haukotus... Moji on nyt hereillä! Harjoitellaan!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Moji torkkuu, kun kieliyhteys muodostetaan uudelleen.';
+
+  @override
+  String get mojiSleepReasonNight => 'Moji nukkuu. Napauta herättääksesi.';
+
+  @override
+  String get levelsScreenTitle => 'Tasot';
+
+  @override
+  String get levelStatusCurrent => 'Nykyinen taso';
+
+  @override
+  String get levelStatusCompleted => 'Valmis';
+
+  @override
+  String get levelRewardLabel => 'Palkinto';
+
+  @override
+  String get quizPausedTitle => 'Tauotettu';
+
+  @override
+  String get quizPausedPrompt => 'Jatketaanko vai poistutaanko?';
+
+  @override
+  String get quizPlay => 'Pelaa';
+
+  @override
+  String get quizPause => 'Tauko';
+
+  @override
+  String get quizExit => 'Poistu';
+
+  @override
+  String get weeklyProgressTitle => 'Viikon edistyminen';
+
+  @override
+  String dayLabel(int dayNum) {
+    return 'Päivä $dayNum';
+  }
+
+  @override
+  String get dailyRewardHint => 'Palaa huomenna päivittäiselle palkinnolle';
+
+  @override
+  String get resetAppButton => 'Nollaa';
+
+  @override
+  String get resetAppTitle => 'Nollaa sovellus';
+
+  @override
+  String get resetAppWarning =>
+      'Tämä poistaa kaikki edistymisesi.\n\nOletko varma?';
+
+  @override
+  String get resetAction => 'Nollaa';
+
+  @override
+  String get resetSuccessMessage => 'Sovellus nollattu onnistuneesti';
+
+  @override
+  String get selectYourCharacter => 'Valitse hahmo';
+
+  @override
+  String get characterDog => 'Koira';
+
+  @override
+  String get characterCat => 'Kissa';
+
+  @override
+  String get characterBird => 'Lintu';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji torkkuu, kunnes kieliyhteys palautuu. Yritä pian uudelleen.';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji torkkuu, kunnes kieliyhteys palautuu.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji nukkuu. Herätä napauttamalla.';
+
+  @override
+  String get mojiAwakeReady => 'Moji on hereillä ja valmiina!';
+
+  @override
+  String get wardrobeTitle => 'Vaatekaappi';
+
+  @override
+  String get slotHat => 'Hattu';
+
+  @override
+  String get slotNeck => 'Kaula';
+
+  @override
+  String get slotFace => 'Kasvot';
+
+  @override
+  String get bodyTailColor => 'Vartalon ja hännän väri';
+
+  @override
+  String get eyeColor => 'Silmien väri';
+
+  @override
+  String get eyeStyleSolid => 'Yksivärinen';
+
+  @override
+  String get eyeStyleOddEyed => 'Eriväriset silmät';
+
+  @override
+  String get leftEye => 'Vasen silmä';
+
+  @override
+  String get rightEye => 'Oikea silmä';
+
+  @override
+  String get colorLabel => 'Väri';
+
+  @override
+  String get scenarioObjectives => 'Tavoitteet';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Suoritettu';
+
+  @override
+  String get scenarioBonusLabel => 'Bonus';
+
+  @override
+  String get scenarioCompleteTitle => 'Skenaario suoritettu!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$done/$total tavoitetta';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Ensimmäinen suoritus!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Uusintapalkinto — ensimmäisestä suorituksesta saa enemmän.';
+
+  @override
+  String get scenarioContinue => 'Jatka';
+
+  @override
+  String get objCoffeeOrder => 'Tilaa juoma';
+
+  @override
+  String get objCoffeeCustomize => 'Muokkaa tilaustasi';
+
+  @override
+  String get objCoffeePrice => 'Kysy hintaa';
+
+  @override
+  String get objCoffeeSmallTalk => 'Rupattele baristan kanssa';
+
+  @override
+  String get objInterviewGreet => 'Esittele itsesi';
+
+  @override
+  String get objInterviewExperience => 'Kerro kokemuksestasi';
+
+  @override
+  String get objInterviewStrength => 'Perustele, miksi sovit tehtävään';
+
+  @override
+  String get objInterviewAsk => 'Kysy jotain tehtävästä';
+
+  @override
+  String get objDirectionsAsk => 'Kysy tietä johonkin';
+
+  @override
+  String get objDirectionsClarify => 'Pyydä toistamaan tai puhumaan hitaammin';
+
+  @override
+  String get objDirectionsDistance => 'Selvitä, kuinka kaukana se on';
+
+  @override
+  String get objDirectionsThank => 'Kiitä kunnolla';
+
+  @override
+  String get objDoctorSymptom => 'Kerro oireistasi';
+
+  @override
+  String get objDoctorDuration => 'Kerro, kuinka kauan sitä on jatkunut';
+
+  @override
+  String get objDoctorQuestion => 'Kysy, mitä sinun pitäisi tehdä';
+
+  @override
+  String get objDoctorAllergy => 'Mainitse allergia tai lääkitys';
+
+  @override
+  String get objShoppingFind => 'Kysy, missä tuote on';
+
+  @override
+  String get objShoppingSize => 'Kysy koosta, väristä tai istuvuudesta';
+
+  @override
+  String get objShoppingPrice => 'Kysy hinta';
+
+  @override
+  String get objShoppingPay => 'Maksa se';
+
+  @override
+  String get objRestaurantTable => 'Pyydä pöytää';
+
+  @override
+  String get objRestaurantOrder => 'Tilaa ruokaa';
+
+  @override
+  String get objRestaurantDrink => 'Tilaa jotain juotavaa';
+
+  @override
+  String get objRestaurantBill => 'Pyydä lasku';
+
+  @override
+  String get notificationsTitle => 'Ilmoitukset';
+
+  @override
+  String get notificationsEnable => 'Muistuta minua Mojista';
+
+  @override
+  String get notificationsDesc =>
+      'Moji kertoo, kun se tarvitsee sinua, kun kertaus odottaa ja kun päivittäinen palkintosi on valmis.';
+
+  @override
+  String get notificationsBlocked =>
+      'Ilmoitukset on poistettu käytöstä laitteen asetuksissa.';
+
+  @override
+  String get notifPetChannelName => 'Moji tarvitsee sinua';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Muistutukset, kun lemmikkisi on nälkäinen tai surullinen';
+
+  @override
+  String get notifReviewChannelName => 'Kertausmuistutukset';
+
+  @override
+  String get notifReviewChannelDesc =>
+      'Muistutukset, kun sanoja on kerrattavana';
+
+  @override
+  String get notifRewardChannelName => 'Päivittäinen palkinto';
+
+  @override
+  String get notifRewardChannelDesc =>
+      'Muistutukset, kun päivittäinen palkintosi on valmis';
+
+  @override
+  String get notifPetHungryTitle => 'Mojilla on nälkä';
+
+  @override
+  String get notifPetHungryBody =>
+      'Lemmikkisi kaipaisi nyt kunnolla naposteltavaa.';
+
+  @override
+  String get notifPetSadTitle => 'Moji kaipaa sinua';
+
+  @override
+  String get notifPetSadBody =>
+      'Ilman sinua on ollut hiljaista. Tuletko moikkaamaan?';
+
+  @override
+  String get notifReviewTitle => 'Kertauksen aika';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sanaa odottaa sinua.',
+      one: '1 sana odottaa sinua.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Päivittäinen palkintosi on valmis';
+
+  @override
+  String get notifRewardBody => 'Mojilla on sinulle jotain. Tule hakemaan!';
+
+  @override
+  String get careTitle => 'Miten Mojilla menee?';
+
+  @override
+  String get careStatFullness => 'Kylläisyys';
+
+  @override
+  String get careStatHappiness => 'Onnellisuus';
+
+  @override
+  String get careStatHealth => 'Terveys';
+
+  @override
+  String get careAllWell => 'Mojilla menee hienosti.';
+
+  @override
+  String get careNeedHungry => 'Mojilla on nälkä';
+
+  @override
+  String get careNeedLonely => 'Moji on alakuloinen';
+
+  @override
+  String get careNeedSick => 'Moji on sairas';
+
+  @override
+  String get careSickPenalty =>
+      'Kun Moji on sairas, kaikki XP ja kolikot puolittuvat.';
+
+  @override
+  String get careFeedTitle => 'Ruoki Mojia';
+
+  @override
+  String get careNoFood => 'Ruoka loppui. Käy kaupassa täydentämässä.';
+
+  @override
+  String get careGoToShop => 'Kauppaan';
+
+  @override
+  String get carePlay => 'Silitä Mojia';
+
+  @override
+  String get carePlayCooldown => 'Moji on saanut tarpeekseen rapsutuksista.';
+
+  @override
+  String get careClose => 'Sulje';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji söi: $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Kylläisyys nyt: $value %';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Moji on sairas — palkinnot puolittuvat';
+
+  @override
+  String get careDragToFeed => 'Vedä Mojin päälle ruokkiaksesi';
 }

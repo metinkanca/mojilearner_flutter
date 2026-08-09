@@ -14,6 +14,8 @@ class ShopItemLocalizer {
         return l10n.shopItemSushiName;
       case 'coffee':
         return l10n.shopItemCoffeeName;
+      case 'medicine':
+        return l10n.shopItemMedicineName;
       case 'bg_blue':
         return l10n.shopItemBgBlueName;
       case 'bg_forest':
@@ -39,6 +41,8 @@ class ShopItemLocalizer {
         return l10n.shopItemSushiDescription;
       case 'coffee':
         return l10n.shopItemCoffeeDescription;
+      case 'medicine':
+        return l10n.shopItemMedicineDescription;
       case 'bg_blue':
         return l10n.shopItemBgBlueDescription;
       case 'bg_forest':

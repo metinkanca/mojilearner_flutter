@@ -51,13 +51,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get profile => 'Profil';
 
   @override
-  String get shop => 'Shop';
+  String get shop => 'Bolt';
 
   @override
-  String get mistakes => 'MISTAKES';
+  String get mistakes => 'HIBÁK';
 
   @override
-  String get noMistakesYet => 'NO MISTAKES YET!';
+  String get noMistakesYet => 'MÉG NINCSENEK HIBÁK!';
 
   @override
   String get profileDesc => 'Statisztikák és beállítások.';
@@ -66,10 +66,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get voiceCall => 'Hanghívás';
 
   @override
-  String get voiceCallDesc => 'Gyakorolj valós időben beszélni.';
+  String get voiceCallDesc => 'Gyakorolj valÃ³s idÅ‘ben beszÃ©lni.';
 
   @override
-  String get practiceRealLife => 'Gyakorlat a való életből';
+  String get practiceRealLife => 'Gyakorlat a valÃ³ Ã©letbÅ‘l';
 
   @override
   String get chooseSituation => 'Válassz helyzetet';
@@ -81,7 +81,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get startCustom => 'Egyéni forgatókönyv indítása';
 
   @override
-  String get customPlaceholder => 'Pl. Taxisofőr vagy...';
+  String get customPlaceholder => 'Pl. TaxisofÅ‘r vagy...';
 
   @override
   String get orderingCoffee => 'Kávé rendelés';
@@ -90,7 +90,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get jobInterview => 'Állásinterjú';
 
   @override
-  String get askingDirections => 'Útbaigazítás kérése';
+  String get askingDirections => 'ÃštbaigazÃ­tÃ¡s kÃ©rÃ©se';
 
   @override
   String get atTheDoctor => 'Az orvosnál';
@@ -99,16 +99,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shopping => 'Vásárlás';
 
   @override
-  String get restaurant => 'Étterem';
+  String get restaurant => 'Ã‰tterem';
 
   @override
   String get chats => 'Beszélgetések';
 
   @override
-  String get searchPlaceholder => 'Üzenetek keresése...';
+  String get searchPlaceholder => 'Ãœzenetek keresÃ©se...';
 
   @override
-  String get newChat => 'Új beszélgetés';
+  String get newChat => 'Ãšj beszÃ©lgetÃ©s';
 
   @override
   String get noChats => 'Még nincs beszélgetés';
@@ -117,7 +117,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get startNewConversation => 'Kezdj új beszélgetést';
 
   @override
-  String get blankChat => 'Üres beszélgetés';
+  String get blankChat => 'Ãœres beszÃ©lgetÃ©s';
 
   @override
   String get blankChatDesc => 'Kezdés kontextus nélkül';
@@ -144,7 +144,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get fullCustomization => 'Teljes testreszabás';
 
   @override
-  String get tapToChange => 'Érintsd meg a váltáshoz';
+  String get tapToChange => 'Ã‰rintsd meg a vÃ¡ltÃ¡shoz';
 
   @override
   String get mascotColor => 'Kabala színe';
@@ -166,7 +166,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String unlockMessage(Object level) {
-    return 'Érd el a(z) $level. szintet a feloldáshoz!';
+    return 'Ã‰rd el a(z) $level. szintet a feloldÃ¡shoz!';
   }
 
   @override
@@ -176,7 +176,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get learnFromWrong => 'Tanulj a hibákból';
 
   @override
-  String get all => 'Összes';
+  String get all => 'Ã–sszes';
 
   @override
   String get grammar => 'Nyelvtan';
@@ -188,7 +188,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get close => 'Bezárás';
 
   @override
-  String get noGrammarAnalysis => 'Nincs elérhető nyelvtani elemzés.';
+  String get noGrammarAnalysis => 'Nincs elÃ©rhetÅ‘ nyelvtani elemzÃ©s.';
 
   @override
   String get vocabulary => 'Szókincs';
@@ -215,156 +215,156 @@ class AppLocalizationsHu extends AppLocalizations {
   String get typeHere => 'Írjon ide...';
 
   @override
-  String get shopTitle => 'Shop';
+  String get shopTitle => 'Bolt';
 
   @override
-  String get categoryAll => 'All';
+  String get categoryAll => 'Összes';
 
   @override
-  String get categoryFood => 'Food';
+  String get categoryFood => 'Étel';
 
   @override
-  String get categoryDecor => 'Decor';
+  String get categoryDecor => 'Dekoráció';
 
   @override
-  String get hideOwnedCosmetics => 'Hide Owned Cosmetics';
+  String get hideOwnedCosmetics => 'Megvásárolt kiegészítők elrejtése';
 
   @override
-  String get noItems => 'No Items';
+  String get noItems => 'Nincsenek tárgyak';
 
   @override
-  String get owned => 'Owned';
+  String get owned => 'Megvan';
 
   @override
-  String get alreadyOwned => 'Already Owned';
+  String get alreadyOwned => 'Már megvan';
 
   @override
-  String get alreadyOwnedMessage => 'You already own this item!';
+  String get alreadyOwnedMessage => 'Ez a tárgy már a tiéd!';
 
   @override
-  String get quantity => 'Quantity';
+  String get quantity => 'Mennyiség';
 
   @override
-  String get totalPrice => 'Total Price';
+  String get totalPrice => 'Teljes ár';
 
   @override
-  String get notEnoughCoins => 'Not Enough Coins!';
+  String get notEnoughCoins => 'Nincs elég érme!';
 
   @override
-  String get purchaseFailed => 'Purchase Failed';
+  String get purchaseFailed => 'Sikertelen vásárlás';
 
   @override
-  String get notEnoughCoinsMessage => 'Not enough coins!';
+  String get notEnoughCoinsMessage => 'Nincs elég érméd!';
 
   @override
-  String get buy => 'Buy';
+  String get buy => 'Vásárlás';
 
   @override
-  String get tooPoor => 'Too Poor';
+  String get tooPoor => 'Túl szegény';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get daily_reward => 'Daily Reward';
+  String get daily_reward => 'Napi jutalom';
 
   @override
-  String get claim_reward => 'Claim Reward';
+  String get claim_reward => 'Jutalom átvétele';
 
   @override
   String day_streak(Object X) {
-    return 'Day $X Streak';
+    return '$X. napi sorozat';
   }
 
   @override
-  String get come_back_tomorrow => 'Come back tomorrow!';
+  String get come_back_tomorrow => 'Gyere vissza holnap!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
+  String get streak_broken => 'Üdv újra! Kezdjük elölről';
 
   @override
-  String get keep_going => 'Keep it going!';
+  String get keep_going => 'Csak így tovább!';
 
   @override
-  String get reward_claimed => 'Reward Claimed!';
+  String get reward_claimed => 'Jutalom átvéve!';
 
   @override
   String amazing_streak(Object X) {
-    return 'Amazing! Day $X streak!';
+    return 'Fantasztikus! $X napos sorozat!';
   }
 
   @override
-  String get whatsYourName => 'WHAT\'S YOUR NAME?';
+  String get whatsYourName => 'HOGY HÍVNAK?';
 
   @override
-  String get enterYourName => 'Enter your name';
+  String get enterYourName => 'Írd be a neved';
 
   @override
-  String get continueBtn => 'CONTINUE';
+  String get continueBtn => 'TOVÁBB';
 
   @override
-  String get howWouldYouRate => 'HOW WOULD YOU RATE';
+  String get howWouldYouRate => 'HOGYAN ÉRTÉKELNÉD';
 
   @override
-  String get yourLevel => 'YOUR LEVEL?';
+  String get yourLevel => 'A SZINTEDET?';
 
   @override
-  String get beginner => 'BEGINNER';
+  String get beginner => 'KEZDŐ';
 
   @override
-  String get intermediate => 'INTERMEDIATE';
+  String get intermediate => 'KÖZÉPHALADÓ';
 
   @override
-  String get advanced => 'ADVANCED';
+  String get advanced => 'HALADÓ';
 
   @override
-  String get beginnerDesc => 'Just starting. I know very few words.';
+  String get beginnerDesc => 'Most kezdem. Nagyon kevés szót ismerek.';
 
   @override
   String get intermediateDesc =>
-      'I can hold basic conversations and understand simple texts.';
+      'Egyszerű beszélgetéseket tudok folytatni, és megértem az egyszerű szövegeket.';
 
   @override
   String get advancedDesc =>
-      'I\'m fluent or near-fluent. I can discuss complex topics.';
+      'Folyékonyan vagy majdnem folyékonyan beszélek. Összetett témákról is tudok beszélgetni.';
 
   @override
-  String get whichLanguage => 'WHICH LANGUAGE';
+  String get whichLanguage => 'MELYIK NYELVET';
 
   @override
-  String get doYouWantToLearn => 'DO YOU WANT TO LEARN?';
+  String get doYouWantToLearn => 'SZERETNÉD TANULNI?';
 
   @override
-  String get changeAnytime => 'You can change this anytime in settings';
+  String get changeAnytime => 'Ezt bármikor megváltoztathatod a beállításokban';
 
   @override
   String get dontWorryVerify =>
-      'Don\'t worry, we\'ll verify this with a quick chat!';
+      'Ne aggódj, egy gyors beszélgetéssel ellenőrizzük!';
 
   @override
-  String get startAssessment => 'START ASSESSMENT';
+  String get startAssessment => 'FELMÉRÉS INDÍTÁSA';
 
   @override
-  String get chatAssessment => 'CHAT ASSESSMENT';
+  String get chatAssessment => 'BESZÉLGETÉSES FELMÉRÉS';
 
   @override
-  String get typeYourAnswer => 'Type your answer...';
+  String get typeYourAnswer => 'Írd be a válaszod...';
 
   @override
-  String get mojiIsTyping => 'Moji is typing...';
+  String get mojiIsTyping => 'Moji gépel...';
 
   @override
-  String get send => 'SEND';
+  String get send => 'KÜLDÉS';
 
   @override
-  String get calibrationComplete => 'Calibration Complete!';
+  String get calibrationComplete => 'Kalibráció kész!';
 
   @override
   String get basedOnYourAnswers =>
-      'Based on your answers, your recommended starting level is:';
+      'A válaszaid alapján az ajánlott kezdő szinted:';
 
   @override
-  String get proficiencyLevel => 'Proficiency Level';
+  String get proficiencyLevel => 'Nyelvi szint';
 
   @override
   String get shopItemAppleName => 'Alma';
@@ -382,7 +382,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shopItemPizzaName => 'Pizza szelet';
 
   @override
-  String get shopItemPizzaDescription => 'Sajtos és teltető.';
+  String get shopItemPizzaDescription => 'Sajtos Ã©s teltetÅ‘.';
 
   @override
   String get shopItemSushiName => 'Szusi szett';
@@ -397,13 +397,71 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shopItemCoffeeDescription => 'Gyors energialökét.';
 
   @override
-  String get shopItemBgBlueName => 'Óceán kék';
+  String get shopItemMedicineName => 'Gyógyszer';
+
+  @override
+  String get shopItemMedicineDescription => 'Visszahozza Moji egészségét.';
+
+  @override
+  String get review => 'Ismétlés';
+
+  @override
+  String reviewDueCount(int count) {
+    return '$count esedékes';
+  }
+
+  @override
+  String reviewProgress(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get reviewShowAnswer => 'Válasz mutatása';
+
+  @override
+  String get reviewGradeAgain => 'Újra';
+
+  @override
+  String get reviewGradeHard => 'Nehéz';
+
+  @override
+  String get reviewGradeGood => 'Jó';
+
+  @override
+  String get reviewGradeEasy => 'Könnyű';
+
+  @override
+  String get reviewAllCaughtUp => 'Mindennel megvagy!';
+
+  @override
+  String get reviewNothingDue =>
+      'Most nincs mit ismételni. Beszélgess vagy tölts ki egy kvízt, és Moji megjegyzi, mi megy nehezen.';
+
+  @override
+  String get reviewSessionComplete => 'Ismétlés kész!';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '$count ismételve';
+  }
+
+  @override
+  String get reviewDone => 'Kész';
+
+  @override
+  String get reviewCorrectionPrompt => 'Mi a helyes alak?';
+
+  @override
+  String get reviewVocabularyPrompt => 'Mit jelent ez?';
+
+  @override
+  String get shopItemBgBlueName => 'Ã“ceÃ¡n kÃ©k';
 
   @override
   String get shopItemBgBlueDescription => 'Megnyugtató kék vibrációk.';
 
   @override
-  String get shopItemBgForestName => 'Erdő zöld';
+  String get shopItemBgForestName => 'ErdÅ‘ zÃ¶ld';
 
   @override
   String get shopItemBgForestDescription => 'Természetes érzés.';
@@ -429,4 +487,380 @@ class AppLocalizationsHu extends AppLocalizations {
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
     return '$itemName x$quantity megvásárolt!';
   }
+
+  @override
+  String get youLabel => 'Te';
+
+  @override
+  String get mojiSleepReconnect =>
+      'Zzz... Moji szundikál, miközben a nyelvi kapcsolat újracsatlakozik. Próbáld újra hamarosan.';
+
+  @override
+  String get mojiSleepNight =>
+      'Psszt... Moji alszik. Koppints Mojira az ébresztéshez.';
+
+  @override
+  String get mojiSleepHintReconnect =>
+      'MOJI SZUNDIKÁL... A NYELVI KAPCSOLAT ÚJRACSATLAKOZIK';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI ALSZIK... KOPPINTS AZ ÉBRESZTÉSHEZ';
+
+  @override
+  String get mojiWakeSuccess =>
+      'Ásítás... Moji most már ébren van! Gyakoroljunk!';
+
+  @override
+  String get mojiSleepReasonReconnect =>
+      'Moji szundikál, miközben a nyelvi kapcsolat újracsatlakozik.';
+
+  @override
+  String get mojiSleepReasonNight => 'Moji alszik. Koppints az ébresztéshez.';
+
+  @override
+  String get levelsScreenTitle => 'Szintek';
+
+  @override
+  String get levelStatusCurrent => 'Jelenlegi szint';
+
+  @override
+  String get levelStatusCompleted => 'Befejezve';
+
+  @override
+  String get levelRewardLabel => 'Jutalom';
+
+  @override
+  String get quizPausedTitle => 'Szünetelt';
+
+  @override
+  String get quizPausedPrompt => 'Folytatja vagy kilép?';
+
+  @override
+  String get quizPlay => 'Játszol';
+
+  @override
+  String get quizPause => 'Szünet';
+
+  @override
+  String get quizExit => 'Kilépés';
+
+  @override
+  String get weeklyProgressTitle => 'Heti előrehaladás';
+
+  @override
+  String dayLabel(int dayNum) {
+    return '$dayNum. nap';
+  }
+
+  @override
+  String get dailyRewardHint => 'Gyere vissza holnap a napi jutalomért';
+
+  @override
+  String get resetAppButton => 'Visszaállítás';
+
+  @override
+  String get resetAppTitle => 'Alkalmazás visszaállítása';
+
+  @override
+  String get resetAppWarning =>
+      'Ez törli az összes előrehaladásod.\n\nBiztos vagy?';
+
+  @override
+  String get resetAction => 'Visszaállítás';
+
+  @override
+  String get resetSuccessMessage => 'Alkalmazás sikeresen visszaállítva';
+
+  @override
+  String get selectYourCharacter => 'Válaszd ki a karaktered';
+
+  @override
+  String get characterDog => 'Kutya';
+
+  @override
+  String get characterCat => 'Macska';
+
+  @override
+  String get characterBird => 'Madár';
+
+  @override
+  String get aiUnavailableMessage =>
+      'Zzz... Moji szundikál, amíg a nyelvi kapcsolat helyreáll. Próbáld újra hamarosan!';
+
+  @override
+  String get mojiDozingReconnect =>
+      'Moji szundikál, amíg a nyelvi kapcsolat helyreáll.';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji alszik. Koppints, hogy felébreszd!';
+
+  @override
+  String get mojiAwakeReady => 'Moji ébren van és készen áll!';
+
+  @override
+  String get wardrobeTitle => 'Ruhásszekrény';
+
+  @override
+  String get slotHat => 'Kalap';
+
+  @override
+  String get slotNeck => 'Nyak';
+
+  @override
+  String get slotFace => 'Arc';
+
+  @override
+  String get bodyTailColor => 'Test- és farokszín';
+
+  @override
+  String get eyeColor => 'Szemszín';
+
+  @override
+  String get eyeStyleSolid => 'Egyszínű';
+
+  @override
+  String get eyeStyleOddEyed => 'Felemás szemek';
+
+  @override
+  String get leftEye => 'Bal szem';
+
+  @override
+  String get rightEye => 'Jobb szem';
+
+  @override
+  String get colorLabel => 'Szín';
+
+  @override
+  String get scenarioObjectives => 'Célok';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => 'Teljesítve';
+
+  @override
+  String get scenarioBonusLabel => 'Bónusz';
+
+  @override
+  String get scenarioCompleteTitle => 'Helyzet teljesítve!';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '$total célból $done';
+  }
+
+  @override
+  String get scenarioFirstClear => 'Első teljesítés!';
+
+  @override
+  String get scenarioReplayNote =>
+      'Ismétlési jutalom — az első teljesítés többet ér.';
+
+  @override
+  String get scenarioContinue => 'Tovább';
+
+  @override
+  String get objCoffeeOrder => 'Rendelj egy italt';
+
+  @override
+  String get objCoffeeCustomize => 'Alakítsd a rendelésed';
+
+  @override
+  String get objCoffeePrice => 'Kérdezd meg, mennyibe kerül';
+
+  @override
+  String get objCoffeeSmallTalk => 'Beszélgess kicsit a baristával';
+
+  @override
+  String get objInterviewGreet => 'Mutatkozz be';
+
+  @override
+  String get objInterviewExperience => 'Mesélj a tapasztalatodról';
+
+  @override
+  String get objInterviewStrength => 'Magyarázd el, miért vagy megfelelő';
+
+  @override
+  String get objInterviewAsk => 'Kérdezz valamit az állásról';
+
+  @override
+  String get objDirectionsAsk => 'Kérdezd meg az utat';
+
+  @override
+  String get objDirectionsClarify =>
+      'Kérd, hogy ismételjék meg vagy beszéljenek lassabban';
+
+  @override
+  String get objDirectionsDistance => 'Tudd meg, milyen messze van';
+
+  @override
+  String get objDirectionsThank => 'Köszönd meg rendesen';
+
+  @override
+  String get objDoctorSymptom => 'Mondd el a panaszaidat';
+
+  @override
+  String get objDoctorDuration => 'Mondd el, mióta tart';
+
+  @override
+  String get objDoctorQuestion => 'Kérdezd meg, mit kell tenned';
+
+  @override
+  String get objDoctorAllergy => 'Említs allergiát vagy gyógyszert';
+
+  @override
+  String get objShoppingFind => 'Kérdezd meg, hol van egy termék';
+
+  @override
+  String get objShoppingSize => 'Kérdezz méretről, színről vagy szabásról';
+
+  @override
+  String get objShoppingPrice => 'Kérdezd meg az árat';
+
+  @override
+  String get objShoppingPay => 'Fizesd ki';
+
+  @override
+  String get objRestaurantTable => 'Kérj egy asztalt';
+
+  @override
+  String get objRestaurantOrder => 'Rendelj ételt';
+
+  @override
+  String get objRestaurantDrink => 'Rendelj valamit inni';
+
+  @override
+  String get objRestaurantBill => 'Kérd a számlát';
+
+  @override
+  String get notificationsTitle => 'Értesítések';
+
+  @override
+  String get notificationsEnable => 'Emlékeztess Mojira';
+
+  @override
+  String get notificationsDesc =>
+      'Moji szól, ha szüksége van rád, ha ismétlés vár, és ha kész a napi jutalmad.';
+
+  @override
+  String get notificationsBlocked =>
+      'Az értesítések ki vannak kapcsolva az eszköz beállításaiban.';
+
+  @override
+  String get notifPetChannelName => 'Mojinak szüksége van rád';
+
+  @override
+  String get notifPetChannelDesc =>
+      'Emlékeztetők, ha a kedvenced éhes vagy szomorú';
+
+  @override
+  String get notifReviewChannelName => 'Ismétlési emlékeztetők';
+
+  @override
+  String get notifReviewChannelDesc =>
+      'Emlékeztetők, ha szavakat kell ismételni';
+
+  @override
+  String get notifRewardChannelName => 'Napi jutalom';
+
+  @override
+  String get notifRewardChannelDesc => 'Emlékeztetők, ha kész a napi jutalmad';
+
+  @override
+  String get notifPetHungryTitle => 'Moji éhes';
+
+  @override
+  String get notifPetHungryBody =>
+      'A kedvencednek most nagyon jólesne egy falat.';
+
+  @override
+  String get notifPetSadTitle => 'Moji hiányol téged';
+
+  @override
+  String get notifPetSadBody => 'Nélküled csend van. Beugrasz köszönni?';
+
+  @override
+  String get notifReviewTitle => 'Ismétlés ideje';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count szó vár rád.',
+      one: '1 szó vár rád.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => 'Kész a napi jutalmad';
+
+  @override
+  String get notifRewardBody => 'Moji tartogat neked valamit. Gyere érte!';
+
+  @override
+  String get careTitle => 'Hogy van Moji?';
+
+  @override
+  String get careStatFullness => 'Jóllakottság';
+
+  @override
+  String get careStatHappiness => 'Boldogság';
+
+  @override
+  String get careStatHealth => 'Egészség';
+
+  @override
+  String get careAllWell => 'Moji remekül van.';
+
+  @override
+  String get careNeedHungry => 'Moji éhes';
+
+  @override
+  String get careNeedLonely => 'Moji le van törve';
+
+  @override
+  String get careNeedSick => 'Moji beteg';
+
+  @override
+  String get careSickPenalty => 'Amíg Moji beteg, minden XP és érme feleződik.';
+
+  @override
+  String get careFeedTitle => 'Etesd meg Mojit';
+
+  @override
+  String get careNoFood => 'Elfogyott az étel. Nézz be a boltba.';
+
+  @override
+  String get careGoToShop => 'Irány a bolt';
+
+  @override
+  String get carePlay => 'Simogasd meg Mojit';
+
+  @override
+  String get carePlayCooldown =>
+      'Moji egyelőre eleget kapott a kényeztetésből.';
+
+  @override
+  String get careClose => 'Bezárás';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji megette: $item.';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return 'Jóllakottság most: $value%';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Moji beteg — feleannyi jutalom';
+
+  @override
+  String get careDragToFeed => 'Húzd Mojira az etetéshez';
 }

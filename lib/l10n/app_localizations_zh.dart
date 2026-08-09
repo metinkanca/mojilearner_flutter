@@ -363,66 +363,482 @@ class AppLocalizationsZh extends AppLocalizations {
   String get proficiencyLevel => '熟练程度';
 
   @override
-  String get shopItemAppleName => '苹果';
+  String get shopItemAppleName => 'Apple';
 
   @override
-  String get shopItemAppleDescription => '一份健康的零食。';
+  String get shopItemAppleDescription => 'A healthy snack.';
 
   @override
-  String get shopItemCroissantName => '羊角面包';
+  String get shopItemCroissantName => 'Croissant';
 
   @override
-  String get shopItemCroissantDescription => '黄油的美味。';
+  String get shopItemCroissantDescription => 'Buttery goodness.';
 
   @override
-  String get shopItemPizzaName => '披萨片';
+  String get shopItemPizzaName => 'Pizza Slice';
 
   @override
-  String get shopItemPizzaDescription => '奶酪和饱满。';
+  String get shopItemPizzaDescription => 'Cheesy and filling.';
 
   @override
-  String get shopItemSushiName => '寿司套装';
+  String get shopItemSushiName => 'Sushi Set';
 
   @override
-  String get shopItemSushiDescription => '优质鱼。';
+  String get shopItemSushiDescription => 'Premium fish.';
 
   @override
-  String get shopItemCoffeeName => '浓缩咖啡';
+  String get shopItemCoffeeName => 'Espresso';
 
   @override
-  String get shopItemCoffeeDescription => '快速能量补充。';
+  String get shopItemCoffeeDescription => 'Quick energy boost.';
 
   @override
-  String get shopItemBgBlueName => '海洋蓝';
+  String get shopItemMedicineName => '药';
 
   @override
-  String get shopItemBgBlueDescription => '舒缓的蓝色氛围。';
+  String get shopItemMedicineDescription => '让 Moji 恢复健康。';
 
   @override
-  String get shopItemBgForestName => '森林绿';
+  String get review => '复习';
 
   @override
-  String get shopItemBgForestDescription => '自然的感觉。';
+  String reviewDueCount(int count) {
+    return '$count 个待复习';
+  }
 
   @override
-  String get shopItemBgSunsetName => '日落橙';
+  String reviewProgress(int current, int total) {
+    return '$current/$total';
+  }
+
+  @override
+  String get reviewShowAnswer => '显示答案';
+
+  @override
+  String get reviewGradeAgain => '重来';
+
+  @override
+  String get reviewGradeHard => '困难';
+
+  @override
+  String get reviewGradeGood => '一般';
+
+  @override
+  String get reviewGradeEasy => '简单';
+
+  @override
+  String get reviewAllCaughtUp => '全部完成！';
+
+  @override
+  String get reviewNothingDue => '现在没有需要复习的内容。聊聊天或做个测验，Moji 会记住你不熟的地方。';
+
+  @override
+  String get reviewSessionComplete => '复习完成！';
+
+  @override
+  String reviewSessionSummary(int count) {
+    return '已复习 $count 个';
+  }
+
+  @override
+  String get reviewDone => '完成';
+
+  @override
+  String get reviewCorrectionPrompt => '正确说法是什么？';
+
+  @override
+  String get reviewVocabularyPrompt => '这是什么意思？';
+
+  @override
+  String get shopItemBgBlueName => 'Ocean Blue';
+
+  @override
+  String get shopItemBgBlueDescription => 'Calming blue vibes.';
+
+  @override
+  String get shopItemBgForestName => 'Forest Green';
+
+  @override
+  String get shopItemBgForestDescription => 'Natural feeling.';
+
+  @override
+  String get shopItemBgSunsetName => 'Sunset Orange';
 
   @override
   String get shopItemBgSunsetDescription => '温暖舒适。';
 
   @override
-  String get shopItemBgGalaxyName => '星系紫';
+  String get shopItemBgGalaxyName => 'Galaxy Purple';
 
   @override
   String get shopItemBgGalaxyDescription => '超越这个世界。';
 
   @override
   String purchaseSuccessSingle(Object itemName) {
-    return '购买了$itemName！';
+    return 'Purchased $itemName!';
   }
 
   @override
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
-    return '购买了$itemName x$quantity！';
+    return 'Purchased $itemName x$quantity!';
   }
+
+  @override
+  String get youLabel => '你';
+
+  @override
+  String get mojiSleepReconnect => 'Zzz... Moji 正在打盹，语言连接正在重新连接。请稍后再试。';
+
+  @override
+  String get mojiSleepNight => '嘘... Moji 在睡觉。点击 Moji 把它叫醒。';
+
+  @override
+  String get mojiSleepHintReconnect => 'MOJI 正在打盹... 语言连接正在重连';
+
+  @override
+  String get mojiSleepHintNight => 'MOJI 正在睡觉... 点击唤醒';
+
+  @override
+  String get mojiWakeSuccess => '哈欠... Moji 现在醒啦！我们来练习吧！';
+
+  @override
+  String get mojiSleepReasonReconnect => 'Moji 正在打盹，语言连接正在重新连接。';
+
+  @override
+  String get mojiSleepReasonNight => 'Moji 在睡觉。点击唤醒。';
+
+  @override
+  String get levelsScreenTitle => '关卡';
+
+  @override
+  String get levelStatusCurrent => '当前关卡';
+
+  @override
+  String get levelStatusCompleted => '已完成';
+
+  @override
+  String get levelRewardLabel => '奖励';
+
+  @override
+  String get quizPausedTitle => '已暂停';
+
+  @override
+  String get quizPausedPrompt => '继续还是退出?';
+
+  @override
+  String get quizPlay => '开始';
+
+  @override
+  String get quizPause => '暂停';
+
+  @override
+  String get quizExit => '退出';
+
+  @override
+  String get weeklyProgressTitle => '周进度';
+
+  @override
+  String dayLabel(int dayNum) {
+    return '第$dayNum天';
+  }
+
+  @override
+  String get dailyRewardHint => '明天回来领取每日奖励';
+
+  @override
+  String get resetAppButton => '重置';
+
+  @override
+  String get resetAppTitle => '重置应用';
+
+  @override
+  String get resetAppWarning => '这将删除您的所有进度。\n\n您确定吗?';
+
+  @override
+  String get resetAction => '重置';
+
+  @override
+  String get resetSuccessMessage => '应用已成功重置';
+
+  @override
+  String get selectYourCharacter => '选择您的角色';
+
+  @override
+  String get characterDog => '狗';
+
+  @override
+  String get characterCat => '猫';
+
+  @override
+  String get characterBird => '鸟';
+
+  @override
+  String get aiUnavailableMessage => 'Zzz…语言连接恢复期间，Moji正在打盹。请稍后再试。';
+
+  @override
+  String get mojiDozingReconnect => '语言连接恢复期间，Moji正在打盹。';
+
+  @override
+  String get mojiSleepingTapWake => 'Moji正在睡觉。点一下叫醒它。';
+
+  @override
+  String get mojiAwakeReady => 'Moji醒了，准备就绪！';
+
+  @override
+  String get wardrobeTitle => '衣柜';
+
+  @override
+  String get slotHat => '帽子';
+
+  @override
+  String get slotNeck => '颈部';
+
+  @override
+  String get slotFace => '脸部';
+
+  @override
+  String get bodyTailColor => '身体和尾巴颜色';
+
+  @override
+  String get eyeColor => '眼睛颜色';
+
+  @override
+  String get eyeStyleSolid => '单色';
+
+  @override
+  String get eyeStyleOddEyed => '异色瞳';
+
+  @override
+  String get leftEye => '左眼';
+
+  @override
+  String get rightEye => '右眼';
+
+  @override
+  String get colorLabel => '颜色';
+
+  @override
+  String get scenarioObjectives => '目标';
+
+  @override
+  String scenarioProgress(int done, int total) {
+    return '$done/$total';
+  }
+
+  @override
+  String get scenarioCleared => '已通关';
+
+  @override
+  String get scenarioBonusLabel => '额外';
+
+  @override
+  String get scenarioCompleteTitle => '情景通关！';
+
+  @override
+  String scenarioCompleteSummary(int done, int total) {
+    return '目标 $done/$total';
+  }
+
+  @override
+  String get scenarioFirstClear => '首次通关！';
+
+  @override
+  String get scenarioReplayNote => '重玩奖励 — 首次通关给得更多。';
+
+  @override
+  String get scenarioContinue => '继续';
+
+  @override
+  String get objCoffeeOrder => '点一杯饮料';
+
+  @override
+  String get objCoffeeCustomize => '调整你的点单';
+
+  @override
+  String get objCoffeePrice => '问一下多少钱';
+
+  @override
+  String get objCoffeeSmallTalk => '和店员闲聊几句';
+
+  @override
+  String get objInterviewGreet => '介绍你自己';
+
+  @override
+  String get objInterviewExperience => '介绍你的经验';
+
+  @override
+  String get objInterviewStrength => '说明你为什么合适';
+
+  @override
+  String get objInterviewAsk => '问一个关于这份工作的问题';
+
+  @override
+  String get objDirectionsAsk => '问路怎么走';
+
+  @override
+  String get objDirectionsClarify => '请对方重复或说慢一点';
+
+  @override
+  String get objDirectionsDistance => '弄清楚有多远';
+
+  @override
+  String get objDirectionsThank => '好好道谢';
+
+  @override
+  String get objDoctorSymptom => '描述你的症状';
+
+  @override
+  String get objDoctorDuration => '说明持续多久了';
+
+  @override
+  String get objDoctorQuestion => '问你该怎么做';
+
+  @override
+  String get objDoctorAllergy => '提到过敏或正在吃的药';
+
+  @override
+  String get objShoppingFind => '问某样商品在哪里';
+
+  @override
+  String get objShoppingSize => '问尺码、颜色或合不合身';
+
+  @override
+  String get objShoppingPrice => '问价格';
+
+  @override
+  String get objShoppingPay => '付款';
+
+  @override
+  String get objRestaurantTable => '要一张桌子';
+
+  @override
+  String get objRestaurantOrder => '点菜';
+
+  @override
+  String get objRestaurantDrink => '点些喝的';
+
+  @override
+  String get objRestaurantBill => '要账单';
+
+  @override
+  String get notificationsTitle => '通知';
+
+  @override
+  String get notificationsEnable => '提醒我关于 Moji 的事';
+
+  @override
+  String get notificationsDesc => '当 Moji 需要你、有内容要复习、每日奖励准备好时，它都会通知你。';
+
+  @override
+  String get notificationsBlocked => '通知已在设备设置中关闭。';
+
+  @override
+  String get notifPetChannelName => 'Moji 需要你';
+
+  @override
+  String get notifPetChannelDesc => '宠物饿了或不开心时提醒你';
+
+  @override
+  String get notifReviewChannelName => '复习提醒';
+
+  @override
+  String get notifReviewChannelDesc => '有单词需要复习时提醒你';
+
+  @override
+  String get notifRewardChannelName => '每日奖励';
+
+  @override
+  String get notifRewardChannelDesc => '每日奖励准备好时提醒你';
+
+  @override
+  String get notifPetHungryTitle => 'Moji 饿了';
+
+  @override
+  String get notifPetHungryBody => '你的宠物现在很想吃点东西。';
+
+  @override
+  String get notifPetSadTitle => 'Moji 想你了';
+
+  @override
+  String get notifPetSadBody => '你不在的时候安静极了。要不要来打个招呼？';
+
+  @override
+  String get notifReviewTitle => '该复习了';
+
+  @override
+  String notifReviewBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '有 $count 个单词在等你。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifRewardTitle => '你的每日奖励准备好了';
+
+  @override
+  String get notifRewardBody => 'Moji 有东西要给你，快来领取吧！';
+
+  @override
+  String get careTitle => 'Moji 怎么样？';
+
+  @override
+  String get careStatFullness => '饱食度';
+
+  @override
+  String get careStatHappiness => '心情';
+
+  @override
+  String get careStatHealth => '健康';
+
+  @override
+  String get careAllWell => 'Moji 状态很好。';
+
+  @override
+  String get careNeedHungry => 'Moji 饿了';
+
+  @override
+  String get careNeedLonely => 'Moji 情绪低落';
+
+  @override
+  String get careNeedSick => 'Moji 生病了';
+
+  @override
+  String get careSickPenalty => 'Moji 生病期间，所有经验和金币减半。';
+
+  @override
+  String get careFeedTitle => '喂 Moji';
+
+  @override
+  String get careNoFood => '没有食物了，去商店补货吧。';
+
+  @override
+  String get careGoToShop => '去商店';
+
+  @override
+  String get carePlay => '摸摸 Moji';
+
+  @override
+  String get carePlayCooldown => 'Moji 暂时被摸够了。';
+
+  @override
+  String get careClose => '关闭';
+
+  @override
+  String careFedItem(String item) {
+    return 'Moji 吃掉了$item。';
+  }
+
+  @override
+  String careCurrentFullness(int value) {
+    return '当前饱食度：$value%';
+  }
+
+  @override
+  String get scenarioSickPenalty => 'Moji 生病了 — 奖励减半';
+
+  @override
+  String get careDragToFeed => '拖到 Moji 身上喂食';
 }
