@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../l10n/app_localizations.dart';
 import '../constants/theme.dart';
 import '../components/character_sprite.dart';
 import '../components/quiz_rewards_popup.dart';
 import '../providers/user_provider.dart';
 import '../providers/quiz_provider.dart';
 import '../providers/character_provider.dart';
+import '../providers/language_provider.dart';
+import '../providers/vocab_provider.dart';
+import '../providers/calibration_provider.dart';
 import '../utils/progression_utils.dart';
+import '../services/ai_guard.dart';
+import '../services/ai_service.dart';
+import '../utils/srs_quiz_builder.dart';
+import '../utils/quiz_briefing.dart';
+import '../utils/quiz_response_parser.dart';
+import '../utils/quiz_cache.dart';
+import '../utils/srs_scheduler.dart';
+import '../utils/rtl_locale.dart';
+import '../../utils/fonts.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -62,34 +74,211 @@ class _QuizScreenState extends State<QuizScreen> {
   bool _showExplanation = false;
   String? _selectedAnswer;
 
-  List<Map<String, dynamic>> get _questions => _stockQuestions;
+  /// Questions built from the review queue. Empty until
+  /// [_buildSrsQuestions] runs, and left empty when the queue is too thin
+  /// to build a fair set.
+  List<QuizQuestion> _srsQuestions = [];
+
+  late final List<QuizQuestion> _stockFallback =
+      _stockQuestions.map(QuizQuestion.fromStock).toList();
+
+  List<QuizQuestion> get _questions =>
+      _srsQuestions.isNotEmpty ? _srsQuestions : _stockFallback;
+
+  /// True while the AI is being asked for a quiz. The stock set is showing
+  /// underneath, so this only drives a subtle indicator rather than blocking
+  /// the screen.
+  bool _isGenerating = false;
 
   @override
   void initState() {
     super.initState();
-    // Check for saved progress
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final quizProvider = Provider.of<QuizProvider>(context, listen: false);
-      if (quizProvider.hasSavedProgress) {
-        setState(() {
-          _currentQuestionIndex = quizProvider.savedQuestionIndex ?? 0;
-          _score = quizProvider.savedScore ?? 0;
-        });
-        // Don't clear progress here - it will be cleared when quiz is completed or explicitly exited
+      if (!mounted) return;
+      _loadQuestions();
+    });
+  }
+
+  /// Sources a quiz, best first.
+  ///
+  /// 1. AI, briefed on the learner's level and review queue — the only source
+  ///    that can test grammar and usage rather than recognition alone.
+  /// 2. Questions built locally from the review queue — works offline, but
+  ///    can only ask "what does this mean".
+  /// 3. The stock set, for a learner who has met nothing yet.
+  Future<void> _loadQuestions() async {
+    final quizProvider = Provider.of<QuizProvider>(context, listen: false);
+
+    // Show the locally-built quiz immediately so the screen is never empty
+    // while the request is in flight.
+    final local = _buildSrsQuestions();
+    setState(() {
+      _srsQuestions = local;
+      _isGenerating = true;
+      _restoreProgress(quizProvider);
+    });
+
+    final generated = await _generateWithAi();
+
+    if (!mounted) return;
+    setState(() {
+      _isGenerating = false;
+      if (generated.isNotEmpty) {
+        _srsQuestions = generated;
+        // A new set invalidates a saved position from the previous one.
+        _currentQuestionIndex = 0;
+        _score = 0;
+        _showExplanation = false;
+        _selectedAnswer = null;
       }
     });
   }
 
+  void _restoreProgress(QuizProvider quizProvider) {
+    if (!quizProvider.hasSavedProgress) return;
+    // The queue may have shrunk since the quiz was paused, so a saved index
+    // can point past the end of the new set.
+    final total = _questions.length;
+    _currentQuestionIndex =
+        (quizProvider.savedQuestionIndex ?? 0).clamp(0, total - 1);
+    _score = (quizProvider.savedScore ?? 0).clamp(0, total);
+    // Don't clear progress here - it will be cleared when quiz is completed or explicitly exited
+  }
+
+  /// Asks the tutor for a quiz aimed at this learner.
+  ///
+  /// Returns an empty list on any failure — unavailable AI, rate limit,
+  /// malformed JSON — so the caller silently keeps the local quiz. A learner
+  /// who is offline should get a quiz, not an error.
+  Future<List<QuizQuestion>> _generateWithAi() async {
+    final language = Provider.of<LanguageProvider>(context, listen: false);
+    final vocab = Provider.of<VocabProvider>(context, listen: false);
+    final calibration =
+        Provider.of<CalibrationProvider>(context, listen: false);
+    final quizProvider = Provider.of<QuizProvider>(context, listen: false);
+
+    final code = language.targetLanguage?.code;
+    if (code == null) return const [];
+
+    final level =
+        calibration.getLanguageProficiency(code)?.aiDeterminedLevel ??
+            'beginner';
+    final troubleSpots = vocab.troubleSpots(languageCode: code);
+    final dueItems = vocab.nextSession(languageCode: code);
+
+    // Reuse today's set when the learner's state hasn't moved. Checked before
+    // the availability and rate-limit gates so a cached quiz still works
+    // offline, and so bouncing in and out of the screen costs nothing.
+    final fingerprint = QuizCache.fingerprint(
+      languageCode: code,
+      level: level,
+      troubleSpots: troubleSpots,
+      dueItems: dueItems,
+    );
+    final cached = quizProvider.usableCachedQuiz(
+      languageCode: code,
+      fingerprint: fingerprint,
+    );
+    if (cached != null) return cached.questions;
+
+    if (!AiService.instance.isAiAvailable) return const [];
+
+    final guard = AiGuard.checkRequest(
+      kind: AiRequestKind.quiz,
+      source: 'quiz_screen',
+    );
+    if (!guard.allowed) return const [];
+    AiGuard.recordRequest('quiz_screen');
+
+    final prompt = QuizBriefing.build(
+      targetLanguage: language.targetLanguage?.name ?? 'Spanish',
+      nativeLanguage: language.nativeLanguage.name,
+      level: level,
+      troubleSpots: troubleSpots,
+      dueItems: dueItems,
+      languageCode: code,
+    );
+
+    try {
+      final response = await AiService.instance.generateText(
+        prompt: prompt,
+        source: 'quiz_screen',
+        // A fixed JSON schema gains nothing from the model reasoning first,
+        // and that reasoning bills at the output rate.
+        config: AiGenerationConfig.structuredJson,
+      );
+      if (response.isEmpty ||
+          AiService.instance.isUnavailableResponse(response)) {
+        return const [];
+      }
+
+      final questions = QuizResponseParser.parse(
+        response,
+        // Only ids the model was actually shown may reschedule an item.
+        allowedReviewItemIds: QuizBriefing.offeredIds(
+          troubleSpots: troubleSpots,
+          dueItems: dueItems,
+        ),
+      );
+
+      if (questions.isNotEmpty) {
+        await quizProvider.cacheQuiz(CachedQuiz(
+          languageCode: code,
+          fingerprint: fingerprint,
+          generatedAt: DateTime.now(),
+          questions: questions,
+        ));
+      }
+      return questions;
+    } catch (e) {
+      debugPrint('⚠️ QUIZ: AI generation failed, using local quiz - $e');
+      return const [];
+    }
+  }
+
+  /// Builds the quiz from what's due for review. Returns an empty list when
+  /// the learner hasn't met enough words yet, in which case the stock set
+  /// stands in.
+  List<QuizQuestion> _buildSrsQuestions() {
+    final vocab = Provider.of<VocabProvider>(context, listen: false);
+    final language = Provider.of<LanguageProvider>(context, listen: false);
+    final l10n = AppLocalizations.of(context)!;
+    final code = language.targetLanguage?.code;
+
+    return SrsQuizBuilder.build(
+      due: vocab.nextSession(languageCode: code),
+      pool: vocab.items
+          .where((item) => code == null || item.languageCode == code)
+          .toList(),
+      vocabularyPrompt: l10n.reviewVocabularyPrompt,
+      correctionPrompt: l10n.reviewCorrectionPrompt,
+    );
+  }
+
   void _handleAnswer(String answer) {
     if (_showExplanation) return;
-    
+
+    final question = _questions[_currentQuestionIndex];
+    final isCorrect = answer == question.correct;
+
     setState(() {
       _selectedAnswer = answer;
       _showExplanation = true;
-      if (answer == _questions[_currentQuestionIndex]['correct']) {
+      if (isCorrect) {
         _score++;
       }
     });
+
+    // Feed the answer back into the schedule. A recognition question is
+    // easier than the review screen's free recall, so a hit only earns
+    // "good" — never "easy" — while a miss is a genuine lapse.
+    final reviewItemId = question.reviewItemId;
+    if (reviewItemId != null) {
+      Provider.of<VocabProvider>(context, listen: false).grade(
+        reviewItemId,
+        isCorrect ? ReviewGrade.good : ReviewGrade.again,
+      );
+    }
   }
 
   Future<void> _goToNextQuestion() async {
@@ -104,12 +293,19 @@ class _QuizScreenState extends State<QuizScreen> {
         totalQuestions: _questions.length,
       );
 
+      // Scale before applying the pet deltas, while the pet is still in its
+      // pre-quiz condition — a sick pet earns half.
+      final wasSick = characterProvider.isSick;
+      final grantedXp = characterProvider.scaleReward(reward.xpReward);
+      final grantedCoins = characterProvider.scaleReward(reward.coinReward);
+
       characterProvider.applyQuizRewards(
         happinessDelta: reward.happinessDelta,
         hungerDelta: reward.hungerDelta,
       );
-      await userProvider.addXp(reward.xpReward);
-      
+      await userProvider.addXp(grantedXp);
+      await userProvider.addCoins(grantedCoins);
+
       quizProvider.clearProgress();
 
       if (!mounted) return;
@@ -122,10 +318,12 @@ class _QuizScreenState extends State<QuizScreen> {
           score: _score,
           totalQuestions: _questions.length,
           level: reward.level,
-          xpReward: reward.xpReward,
+          xpReward: grantedXp,
+          coinReward: grantedCoins,
           happinessDelta: reward.happinessDelta,
           hungerDelta: reward.hungerDelta,
           passed: reward.passed,
+          sickPenaltyApplied: wasSick,
           onContinue: () => Navigator.of(context, rootNavigator: true).pop(),
         ),
       );
@@ -148,18 +346,26 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     // Safety check just in case
     if (_questions.isEmpty) return const SizedBox.shrink();
 
     final questionData = _questions[_currentQuestionIndex];
-    final mainTopic = questionData['topic'] ?? '';
-    final subText = questionData['question'] ?? 'Select the correct option';
-    final options = (questionData['options'] as List).cast<String>();
+    final mainTopic = questionData.topic;
+    final subText = questionData.question.isEmpty
+        ? 'Select the correct option'
+        : questionData.question;
+    final options = questionData.options;
     
     // Bubble logic
     final bubbleText = _showExplanation 
-        ? (questionData['explanation'] ?? "Great job!")
+        ? (questionData.explanation.isEmpty
+            ? "Great job!"
+            : questionData.explanation)
         : "You got this!";
 
     return Container(
@@ -205,7 +411,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   child: Stack(
                     children: [
                         Align(alignment: Alignment.topCenter, child: Container(height: 4, color: AppTheme.retroDark)),
-                        Positioned(top: 8, left: 0, right: 0, child: Container(height: 16, color: AppTheme.retroGrassDark.withOpacity(0.2))),
+                        Positioned(top: 8, left: 0, right: 0, child: Container(height: 16, color: AppTheme.retroGrassDark.withValues(alpha: 0.2))),
                         Positioned(top: 40, left: 40, child: _pixel(AppTheme.retroGrassDark)),
                         Positioned(top: 48, left: 48, child: _pixel(AppTheme.retroGrassDark)),
                         Positioned(top: 80, right: 80, child: _pixel(AppTheme.retroGrassDark)),
@@ -252,7 +458,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                       child: Center(
                                         child: Text(
                                           '${userProvider.stats.level}', 
-                                          style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)
+                                          textDirection: TextDirection.ltr,
+                                          textAlign: TextAlign.left,
+                                          style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)
                                         ),
                                       ),
                                     ),
@@ -261,8 +469,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'XP: ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
-                                          style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                                          '${l10n.xp}: ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
+                                          textDirection: TextDirection.ltr,
+                                          textAlign: TextAlign.left,
+                                          style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                                         ),
                                         const SizedBox(height: 4),
                                         Container(
@@ -292,6 +502,12 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 child: IconButton(
                                   padding: EdgeInsets.zero,
+                                  // No round ink ripple inside the square
+                                  // retro frame.
+                                  style: const ButtonStyle(
+                                    overlayColor: WidgetStatePropertyAll(
+                                        Colors.transparent),
+                                  ),
                                   icon: const Icon(Icons.pause, color: AppTheme.retroDark),
                                   onPressed: () {
                                      // Use standard dialog
@@ -306,17 +522,20 @@ class _QuizScreenState extends State<QuizScreen> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
-                                                "PAUSED",
-                                                style: GoogleFonts.pressStart2p(
+                                                l10n.quizPausedTitle.toUpperCase(),
+                                                textDirection: textDirection,
+                                                textAlign: TextAlign.center,
+                                                style: AppFonts.pressStart2p(
                                                   fontSize: 16,
                                                   color: AppTheme.retroDark,
                                                 ),
                                               ),
                                               const SizedBox(height: 16),
                                               Text(
-                                                "Continue quiz or exit?",
+                                                l10n.quizPausedPrompt,
+                                                textDirection: textDirection,
                                                 textAlign: TextAlign.center,
-                                                style: GoogleFonts.pressStart2p(
+                                                style: AppFonts.pressStart2p(
                                                   fontSize: 10,
                                                   height: 1.5,
                                                   color: Colors.grey[700],
@@ -337,8 +556,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
                                                       ),
                                                       child: Text(
-                                                        "PLAY",
-                                                        style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                                                        l10n.quizPlay.toUpperCase(),
+                                                        textDirection: textDirection,
+                                                        textAlign: TextAlign.center,
+                                                        style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                                                       ),
                                                     ),
                                                   ),
@@ -361,8 +582,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
                                                       ),
                                                       child: Text(
-                                                        "PAUSE",
-                                                        style: GoogleFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
+                                                        l10n.quizPause.toUpperCase(),
+                                                        textDirection: textDirection,
+                                                        textAlign: TextAlign.center,
+                                                        style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
                                                       ),
                                                     ),
                                                   ),
@@ -384,8 +607,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
                                                       ),
                                                       child: Text(
-                                                        "EXIT",
-                                                        style: GoogleFonts.pressStart2p(fontSize: 8, color: Colors.white),
+                                                        l10n.quizExit.toUpperCase(),
+                                                        textDirection: textDirection,
+                                                        textAlign: TextAlign.center,
+                                                        style: AppFonts.pressStart2p(fontSize: 8, color: Colors.white),
                                                       ),
                                                     ),
                                                   ),
@@ -425,8 +650,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                     const SizedBox(height: 32), // Space for header overlap
                                     Text(
                                       subText, // e.g. "How do you say..."
+                                      textDirection: textDirection,
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.pressStart2p(
+                                      style: AppFonts.pressStart2p(
                                         fontSize: 10,
                                         height: 1.8,
                                         color: Colors.grey[600],
@@ -436,8 +662,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                     const SizedBox(height: 16),
                                     Text(
                                       mainTopic, // e.g. "Greetings"
+                                      textDirection: textDirection,
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.pressStart2p(
+                                      style: AppFonts.pressStart2p(
                                         fontSize: 20,
                                         height: 1.4,
                                         color: AppTheme.retroDark,
@@ -457,8 +684,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                     border: Border.all(color: AppTheme.retroDark, width: 4),
                                   ),
                                   child: Text(
-                                    "QUESTION ${_currentQuestionIndex + 1}/${_questions.length}",
-                                    style: GoogleFonts.pressStart2p(
+                                    // While the tailored quiz is still being
+                                    // written, say so rather than counting
+                                    // questions that are about to be replaced.
+                                    _isGenerating
+                                        ? "PREPARING..."
+                                        : "QUESTION ${_currentQuestionIndex + 1}/${_questions.length}",
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.left,
+                                    style: AppFonts.pressStart2p(
                                       fontSize: 10,
                                       color: Colors.white,
                                     ),
@@ -523,7 +757,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                  ),
                                  child: Text(
                                    bubbleText,
-                                   style: GoogleFonts.pressStart2p(fontSize: 8, height: 1.5, color: AppTheme.retroDark),
+                                   textDirection: textDirection,
+                                   textAlign: textAlign,
+                                   style: AppFonts.pressStart2p(fontSize: 8, height: 1.5, color: AppTheme.retroDark),
                                  ),
                                ),
                                // Pet Avatar
@@ -557,10 +793,12 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 child: Text(
                                   'CONTINUE',
+                                  textDirection: textDirection,
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.pressStart2p(
+                                  style: AppFonts.pressStart2p(
                                     fontSize: 12,
                                     color: Colors.white,
+                                    decoration: TextDecoration.none,
                                   ),
                                 ),
                               ),
@@ -578,9 +816,9 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  Widget _buildOption(String opt, Map<String, dynamic> questionData) {
+  Widget _buildOption(String opt, QuizQuestion questionData) {
     bool isSelected = _selectedAnswer == opt;
-    bool isCorrect = opt == questionData['correct'];
+    bool isCorrect = opt == questionData.correct;
     Color bgColor = Colors.white;
     
     if (_showExplanation) {
@@ -601,8 +839,9 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           child: Text(
             opt,
+            textDirection: textDirectionForLocale(Localizations.localeOf(context)),
             textAlign: TextAlign.center,
-            style: GoogleFonts.pressStart2p(
+            style: AppFonts.pressStart2p(
               fontSize: 10,
               color: AppTheme.retroDark,
               height: 1.5,

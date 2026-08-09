@@ -1,10 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../providers/settings_provider.dart';
+import '../utils/fonts.dart';
+import '../utils/rtl_locale.dart';
 
 class _PixelParticle {
   final double angle;
@@ -84,9 +85,14 @@ class QuizRewardsPopup extends StatefulWidget {
   final int totalQuestions;
   final String level;
   final int xpReward;
+  final int coinReward;
   final int happinessDelta;
   final int hungerDelta;
   final bool passed;
+
+  /// True when the pet was sick and the rewards shown are the halved ones,
+  /// so the popup can explain why the numbers look low.
+  final bool sickPenaltyApplied;
   final VoidCallback onContinue;
 
   const QuizRewardsPopup({
@@ -95,9 +101,11 @@ class QuizRewardsPopup extends StatefulWidget {
     required this.totalQuestions,
     required this.level,
     required this.xpReward,
+    required this.coinReward,
     required this.happinessDelta,
     required this.hungerDelta,
     required this.passed,
+    this.sickPenaltyApplied = false,
     required this.onContinue,
   });
 
@@ -244,7 +252,10 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
   Widget build(BuildContext context) {
     final settings = Provider.of<SettingsProvider>(context, listen: false);
     final fontFunction =
-        settings.usePixelFont ? GoogleFonts.pressStart2p : GoogleFonts.spaceMono;
+      settings.usePixelFont ? AppFonts.pressStart2p : AppFonts.spaceMono;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
 
     return AnimatedBuilder(
       animation: _controller,
@@ -293,6 +304,8 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                       widget.passed
                                           ? 'QUIZ COMPLETE!'
                                           : 'KEEP GOING!',
+                                      textDirection: textDirection,
+                                      textAlign: TextAlign.center,
                                       style: fontFunction(
                                         fontSize: 12,
                                         color: AppTheme.retroDark,
@@ -312,6 +325,8 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                         children: [
                                           Text(
                                             'Score: ${widget.score}/${widget.totalQuestions}',
+                                            textDirection: TextDirection.ltr,
+                                            textAlign: TextAlign.left,
                                             style: fontFunction(
                                               fontSize: 10,
                                               color: AppTheme.retroDark,
@@ -321,6 +336,8 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                           const SizedBox(height: 8),
                                           Text(
                                             'Level: ${widget.level}',
+                                            textDirection: textDirection,
+                                            textAlign: textAlign,
                                             style: fontFunction(
                                               fontSize: 9,
                                               color: AppTheme.retroDark,
@@ -351,6 +368,8 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                           children: [
                                             Text(
                                               'REWARDS',
+                                              textDirection: textDirection,
+                                              textAlign: textAlign,
                                               style: fontFunction(
                                                 fontSize: 9,
                                                 color: AppTheme.retroDark,
@@ -360,6 +379,8 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                             const SizedBox(height: 8),
                                             Text(
                                               '+${widget.xpReward} XP',
+                                              textDirection: TextDirection.ltr,
+                                              textAlign: TextAlign.left,
                                               style: fontFunction(
                                                 fontSize: 9,
                                                 color: AppTheme.retroDark,
@@ -370,6 +391,18 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                               widget.happinessDelta >= 0
                                                   ? '+${widget.happinessDelta} Happiness'
                                                   : '${widget.happinessDelta} Happiness',
+                                              textDirection: TextDirection.ltr,
+                                              textAlign: TextAlign.left,
+                                              style: fontFunction(
+                                                fontSize: 9,
+                                                color: AppTheme.retroDark,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              '+${widget.coinReward} Coins',
+                                              textDirection: TextDirection.ltr,
+                                              textAlign: TextAlign.left,
                                               style: fontFunction(
                                                 fontSize: 9,
                                                 color: AppTheme.retroDark,
@@ -378,11 +411,26 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                             const SizedBox(height: 4),
                                             Text(
                                               '+${widget.hungerDelta} Hunger',
+                                              textDirection: TextDirection.ltr,
+                                              textAlign: TextAlign.left,
                                               style: fontFunction(
                                                 fontSize: 9,
                                                 color: AppTheme.retroDark,
                                               ),
                                             ),
+                                            if (widget.sickPenaltyApplied) ...[
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                'Moji is sick — rewards halved',
+                                                textDirection: textDirection,
+                                                textAlign: textAlign,
+                                                style: fontFunction(
+                                                  fontSize: 8,
+                                                  color: AppTheme.retroAccent,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
                                           ],
                                         ),
                                       ),
@@ -410,10 +458,13 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
                                         child: Center(
                                           child: Text(
                                             'CONTINUE',
+                                            textDirection: textDirection,
+                                            textAlign: TextAlign.center,
                                             style: fontFunction(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
+                                              decoration: TextDecoration.none,
                                             ),
                                           ),
                                         ),
