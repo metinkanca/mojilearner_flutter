@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../constants/shop.dart';
@@ -8,7 +7,9 @@ import '../providers/user_provider.dart';
 import '../providers/character_provider.dart';
 import '../providers/settings_provider.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/fonts.dart';
 import '../utils/shop_item_localizer.dart';
+import '../utils/rtl_locale.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -55,10 +56,13 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     final characterProvider = Provider.of<CharacterProvider>(context);
     final settingsProvider = Provider.of<SettingsProvider>(context);
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     final fontFunction = settingsProvider.usePixelFont
-        ? GoogleFonts.pressStart2p
-        : GoogleFonts.spaceMono;
+      ? AppFonts.pressStart2p
+      : AppFonts.spaceMono;
 
     final filteredItems = _getFilteredItems();
 
@@ -67,6 +71,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
       appBar: AppBar(
         title: Text(
           l10n.shopTitle.toUpperCase(),
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
           style: fontFunction(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -100,6 +106,10 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
               }
             },
             padding: EdgeInsets.zero,
+            // No round ink ripple inside the square retro frame.
+            style: const ButtonStyle(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            ),
           ),
         ),
         actions: [
@@ -123,6 +133,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                 const SizedBox(width: 4),
                 Text(
                   '${userProvider.coins}',
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.left,
                   style: fontFunction(
                     fontSize: 10,
                     color: AppTheme.retroDark,
@@ -192,6 +204,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                     const SizedBox(width: 8),
                     Text(
                       l10n.hideOwnedCosmetics.toUpperCase(),
+                      textDirection: textDirection,
+                      textAlign: textAlign,
                       style: fontFunction(
                         fontSize: 8,
                         color: AppTheme.retroDark,
@@ -211,6 +225,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                 ? Center(
                     child: Text(
                       l10n.noItems.toUpperCase(),
+                      textDirection: textDirection,
+                      textAlign: TextAlign.center,
                       style: fontFunction(
                         fontSize: 12,
                         color: AppTheme.retroDark,
@@ -272,6 +288,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                                 child: Text(
                                   ShopItemLocalizer.localizedName(l10n, item)
                                       .toUpperCase(),
+                                  textDirection: textDirection,
                                   textAlign: TextAlign.center,
                                   style: fontFunction(
                                     fontSize: 10,
@@ -305,6 +322,10 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                                   isOwned
                                       ? l10n.owned.toUpperCase()
                                       : '${item.price} 🪙',
+                                  textDirection: isOwned
+                                      ? textDirection
+                                      : TextDirection.ltr,
+                                  textAlign: isOwned ? textAlign : TextAlign.left,
                                   style: fontFunction(
                                     fontSize: 8,
                                     color: isOwned ? Colors.white : AppTheme.retroDark,
@@ -326,6 +347,9 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
 
   Widget _buildCategoryTab(String label, String category, TextStyle Function({required double fontSize, Color? color, FontWeight? fontWeight, double? letterSpacing}) fontFunction) {
     final isSelected = _selectedCategory == category;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     return Expanded(
       child: GestureDetector(
@@ -348,6 +372,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
           child: Center(
             child: Text(
               label,
+              textDirection: textDirection,
+              textAlign: textAlign,
               style: fontFunction(
                 fontSize: 10,
                 color: AppTheme.retroDark,
@@ -368,6 +394,13 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     TextStyle Function({required double fontSize, Color? color, FontWeight? fontWeight, double? letterSpacing}) fontFunction,
   ) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
+    final currentFullness =
+        (100 - Provider.of<CharacterProvider>(context, listen: false).hunger)
+            .clamp(0, 100)
+            .toInt();
     
     if (isOwned && item.type != 'food') {
       _showInfoDialog(context, l10n.alreadyOwned, l10n.alreadyOwnedMessage, fontFunction);
@@ -403,6 +436,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
               // Item Name
               Text(
                 ShopItemLocalizer.localizedName(l10n, item).toUpperCase(),
+                textDirection: textDirection,
                 textAlign: TextAlign.center,
                 style: fontFunction(
                   fontSize: 14,
@@ -415,6 +449,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
               // Description
               Text(
                 ShopItemLocalizer.localizedDescription(l10n, item),
+                textDirection: textDirection,
                 textAlign: TextAlign.center,
                 style: fontFunction(
                   fontSize: 9,
@@ -440,7 +475,12 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                             const Text('🍔', style: TextStyle(fontSize: 16)),
                             const SizedBox(width: 8),
                             Text(
-                              '-${item.hungerRestore}',
+                              // Shown as a gain: the care panel measures
+                              // Fullness, not hunger, so "-10" here would
+                              // contradict the bar it moves.
+                              '+${item.hungerRestore}',
+                              textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.left,
                               style: fontFunction(
                                 fontSize: 10,
                                 color: AppTheme.retroDark,
@@ -457,6 +497,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                             const SizedBox(width: 8),
                             Text(
                               '+${item.happinessRestore}',
+                              textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.left,
                               style: fontFunction(
                                 fontSize: 10,
                                 color: AppTheme.retroDark,
@@ -464,6 +506,40 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                             ),
                           ],
                         ),
+                      if (item.healthRestore != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('💊', style: TextStyle(fontSize: 16)),
+                            const SizedBox(width: 8),
+                            Text(
+                              '+${item.healthRestore}',
+                              textDirection: TextDirection.ltr,
+                              textAlign: TextAlign.left,
+                              style: fontFunction(
+                                fontSize: 10,
+                                color: AppTheme.retroDark,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      if (item.hungerRestore != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          // Without this the restore value is unreadable:
+                          // you cannot judge "+10" without knowing where
+                          // you start from.
+                          l10n.careCurrentFullness(currentFullness),
+                          textDirection: textDirection,
+                          textAlign: TextAlign.center,
+                          style: fontFunction(
+                            fontSize: 8,
+                            color: AppTheme.retroDark.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -478,6 +554,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                   const SizedBox(width: 8),
                   Text(
                     '${item.price}',
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.left,
                     style: fontFunction(
                       fontSize: 16,
                       color: AppTheme.retroDark,
@@ -508,6 +586,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                         ),
                         child: Text(
                           l10n.cancel.toUpperCase(),
+                          textDirection: textDirection,
                           textAlign: TextAlign.center,
                           style: fontFunction(
                             fontSize: 10,
@@ -540,6 +619,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                         ),
                         child: Text(
                             canAfford ? l10n.buy.toUpperCase() : l10n.tooPoor.toUpperCase(),
+                          textDirection: textDirection,
                           textAlign: TextAlign.center,
                           style: fontFunction(
                             fontSize: 10,
@@ -568,6 +648,9 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     int quantity = 1;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     
     showDialog(
       context: context,
@@ -598,6 +681,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                   Text(
                     ShopItemLocalizer.localizedName(l10n, item)
                         .toUpperCase(),
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
                     style: fontFunction(
                       fontSize: 14,
@@ -610,6 +694,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                   // Description
                   Text(
                     ShopItemLocalizer.localizedDescription(l10n, item),
+                    textDirection: textDirection,
                     textAlign: TextAlign.center,
                     style: fontFunction(
                       fontSize: 9,
@@ -635,6 +720,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                               const SizedBox(width: 8),
                               Text(
                                 '-${item.hungerRestore}',
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
                                 style: fontFunction(
                                   fontSize: 10,
                                   color: AppTheme.retroDark,
@@ -651,6 +738,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                               const SizedBox(width: 8),
                               Text(
                                 '+${item.happinessRestore}',
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
                                 style: fontFunction(
                                   fontSize: 10,
                                   color: AppTheme.retroDark,
@@ -658,6 +747,25 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                               ),
                             ],
                           ),
+                        if (item.healthRestore != null) ...[
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('💊', style: TextStyle(fontSize: 16)),
+                              const SizedBox(width: 8),
+                              Text(
+                                '+${item.healthRestore}',
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
+                                style: fontFunction(
+                                  fontSize: 10,
+                                  color: AppTheme.retroDark,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -666,6 +774,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                   // Quantity Selector
                   Text(
                     l10n.quantity.toUpperCase(),
+                    textDirection: textDirection,
+                    textAlign: textAlign,
                     style: fontFunction(
                       fontSize: 10,
                       color: AppTheme.retroDark,
@@ -713,6 +823,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                         ),
                         child: Text(
                           '$quantity',
+                          textDirection: TextDirection.ltr,
+                          textAlign: TextAlign.left,
                           style: fontFunction(
                             fontSize: 16,
                             color: AppTheme.retroDark,
@@ -761,6 +873,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                       const SizedBox(width: 8),
                       Text(
                         '$totalPrice',
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.left,
                         style: fontFunction(
                           fontSize: 16,
                           color: canAffordQuantity ? AppTheme.retroDark : Colors.red,
@@ -773,6 +887,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                     const SizedBox(height: 8),
                     Text(
                       l10n.notEnoughCoins.toUpperCase(),
+                      textDirection: textDirection,
+                      textAlign: textAlign,
                       style: fontFunction(
                         fontSize: 8,
                         color: Colors.red,
@@ -801,6 +917,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                             ),
                             child: Text(
                             l10n.cancel.toUpperCase(),
+                              textDirection: textDirection,
                               textAlign: TextAlign.center,
                               style: fontFunction(
                                 fontSize: 10,
@@ -833,6 +950,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                             ),
                             child: Text(
                               canAffordQuantity ? l10n.buy.toUpperCase() : l10n.tooPoor.toUpperCase(),
+                              textDirection: textDirection,
                               textAlign: TextAlign.center,
                               style: fontFunction(
                                 fontSize: 10,
@@ -854,21 +972,24 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     );
   }
 
-  void _handlePurchase(
+  Future<void> _handlePurchase(
     BuildContext context,
     ShopItem item,
     TextStyle Function({required double fontSize, Color? color, FontWeight? fontWeight, double? letterSpacing}) fontFunction,
     {int quantity = 1}
-  ) {
+  ) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+    final textAlign = textAlignForLocale(locale);
     final localizedItemName = ShopItemLocalizer.localizedName(l10n, item);
 
-    final success = characterProvider.purchaseItem(item, userProvider.coins, quantity: quantity);
-    
+    final success = await characterProvider.purchaseItem(item, userProvider, quantity: quantity);
+    if (!context.mounted) return;
+
     if (success) {
-      userProvider.spendCoins(item.price * quantity);
       Navigator.pop(context);
       
       ScaffoldMessenger.of(context).showSnackBar(
@@ -877,6 +998,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             quantity > 1
                 ? l10n.purchaseSuccessMultiple(localizedItemName, quantity)
                 : l10n.purchaseSuccessSingle(localizedItemName),
+            textDirection: textDirection,
+            textAlign: textAlign,
             style: fontFunction(fontSize: 10, color: Colors.white),
           ),
           backgroundColor: AppTheme.retroGreen,
@@ -901,6 +1024,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     TextStyle Function({required double fontSize, Color? color, FontWeight? fontWeight, double? letterSpacing}) fontFunction,
   ) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
     
     showDialog(
       context: context,
@@ -917,6 +1042,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             children: [
               Text(
                 title.toUpperCase(),
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
                 style: fontFunction(
                   fontSize: 14,
                   color: AppTheme.retroDark,
@@ -926,6 +1053,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
               const SizedBox(height: 16),
               Text(
                 message,
+                textDirection: textDirection,
                 textAlign: TextAlign.center,
                 style: fontFunction(
                   fontSize: 10,
@@ -952,6 +1080,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                   ),
                   child: Text(
                     l10n.ok.toUpperCase(),
+                    textDirection: textDirection,
+                    textAlign: TextAlign.center,
                     style: fontFunction(
                       fontSize: 12,
                       color: Colors.white,

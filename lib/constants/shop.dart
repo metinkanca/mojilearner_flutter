@@ -7,6 +7,10 @@ class ShopItem {
   final String icon; // Emoji character
   final int? hungerRestore;
   final int? happinessRestore;
+
+  /// Direct health restore. Food only nudges health back up as a side effect
+  /// of keeping the pet fed and happy; medicine is the deliberate cure.
+  final int? healthRestore;
   final String? value; // Hex code for background, or style ID for accessory
 
   const ShopItem({
@@ -18,6 +22,7 @@ class ShopItem {
     required this.icon,
     this.hungerRestore,
     this.happinessRestore,
+    this.healthRestore,
     this.value,
   });
 }
@@ -31,6 +36,10 @@ const List<ShopItem> shopItems = [
 
   // DRINKS
   ShopItem(id: 'coffee', type: 'food', name: 'Espresso', price: 8, description: 'Quick energy boost.', icon: '☕', hungerRestore: 5, happinessRestore: 5),
+
+  // MEDICINE — the cure for a neglected pet. Priced as a real setback (about
+  // a day of quiz income) so letting health fall actually costs the player.
+  ShopItem(id: 'medicine', type: 'food', name: 'Medicine', price: 40, description: 'Nurses Moji back to health.', icon: '💊', happinessRestore: 5, healthRestore: 50),
 
   // BACKGROUNDS
   ShopItem(id: 'bg_blue', type: 'background', name: 'Ocean Blue', price: 100, description: 'Calming blue vibes.', icon: '🌊', value: '#1e3a8a'),
