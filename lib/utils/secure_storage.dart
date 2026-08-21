@@ -15,6 +15,7 @@
 /// // Check if key exists
 /// final hasData = await SecureStorage.hasKey('chat_history');
 /// ```
+library;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -35,7 +36,7 @@ class SecureStorage {
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock,
       // Additional security: require device authentication
-      // accessGroup: 'com.mojilearner.app', // For sharing between apps
+      // accessGroup: 'com.mimikin.app', // For sharing between apps
     ),
   );
 

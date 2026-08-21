@@ -119,6 +119,13 @@ class AiService {
       }
     }
 
+    if (key == 'AI_PROXY_TOKEN') {
+      final value = AppRuntimeConfig.aiProxyToken.trim();
+      if (value.isNotEmpty) {
+        return value;
+      }
+    }
+
     if (key == 'ALLOW_CLIENT_AI_FALLBACK') {
       return AppRuntimeConfig.allowClientAiFallback ? 'true' : 'false';
     }
