@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="test_mustache.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.50835204"
+     inkscape:cx="491.78518"
+     inkscape:cy="508.50588"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="Adsız_degrade_6"
+       data-name="Adsız degrade 6"
+       x1="756"
+       y1="607.5"
+       x2="1071"
+       y2="607.5"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#925a36"
+         id="stop3" />
+      <stop
+         offset="1"
+         stop-color="#7a4933"
+         id="stop4" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="Katman 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <polygon
+       class="st14"
+       points="936,648 954,648 954,657 1017,657 1017,648 1044,648 1044,639 1062,639 1062,621 1071,621 1071,585 1052.96,585 1053,594 1044,594 1044,603 1035,603 1035,594 1026,594 1017,594 1017,585 1008,585 1008,576 999,576 999,567 990,567 981,567 981,558 927,558 927,567 918,567 918,576 913,576 913,567 918,567 918,558 927,558 927,549 990,549 990,558 999,558 999,567 1008,567 1017,567 1017,576 1026,576 1026,585 1035,585 1035,594 1044,594 1044,585 1044,576 1080,576 1080,630 1071,630 1071,639 1071,648 1062,648 1053,648 1053,657 1026,657 1026,666 963,666 954,666 945,666 945,657 936,657 927,657 927,648 918,648 918,639 909,639 909,612 918,612 918,639 927,639 927,648 "
+       id="polygon7"
+       style="fill:#201f2b"
+       transform="matrix(0.26458333,0,0,0.26458333,-137.8875,-3.8999981)" />
+    <polyline
+       class="st14"
+       points="1071 639 1062 639 1062 648"
+       id="polyline13"
+       style="fill:#201f2b"
+       transform="matrix(0.26458333,0,0,0.26458333,-137.8875,-3.8999981)" />
+    <polygon
+       class="st14"
+       points="891,648 873,648 873,657 810,657 810,648 783,648 783,639 765,639 765,621 756,621 756,585 774.04,585 774,594 783,594 783,603 792,603 792,594 801,594 810,594 810,585 819,585 819,576 828,576 828,567 837,567 846,567 846,558 900,558 900,567 909,567 909,576 913,576 913,567 909,567 909,558 900,558 900,549 837,549 837,558 828,558 828,567 819,567 810,567 810,576 801,576 801,585 792,585 792,594 783,594 783,585 783,576 747,576 747,630 756,630 756,639 756,648 765,648 774,648 774,657 801,657 801,666 864,666 873,666 882,666 882,657 891,657 900,657 900,648 909,648 909,639 918,639 918,612 909,612 909,639 900,639 900,648 "
+       id="polygon28"
+       style="fill:#201f2b"
+       transform="matrix(0.26458333,0,0,0.26458333,-137.8875,-3.8999981)" />
+    <polygon
+       class="st1"
+       points="810,594 810,585 819,585 819,576 828,576 828,567 846,567 846,558 900,558 900,567 909,567 909,576 918,576 918,567 927,567 927,558 981,558 981,567 999,567 999,576 1008,576 1008,585 1017,585 1017,594 1035,594 1035,603 1044,603 1044,594 1053,594 1053,585 1071,585 1071,621 1062,621 1062,639 1044,639 1044,648 1017,648 1017,657 954,657 954,648 927,648 927,639 918,639 918,612 909,612 909,639 900,639 900,648 873,648 873,657 810,657 810,648 783,648 783,639 765,639 765,621 756,621 756,585 774.04,585 774.04,594 783,594 783,603 792,603 792,594 "
+       id="polygon29"
+       style="fill:url(#Ads%C4%B1z_degrade_6)"
+       transform="matrix(0.26458333,0,0,0.26458333,-137.8875,-3.8999981)" />
+  </g>
+</svg>

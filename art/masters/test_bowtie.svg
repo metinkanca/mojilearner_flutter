@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="test_bowtie.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.0167041"
+     inkscape:cx="406.21456"
+     inkscape:cy="569.97902"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Katman 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       class="st7"
+       x="95.474998"
+       y="140.16563"
+       width="9.5249996"
+       height="16.668749"
+       id="rect13"
+       style="fill:#e16f71;stroke-width:0.264583" />
+    <polygon
+       class="st7"
+       points="477,297 405,297 405,351 414,351 414,360 423,360 423,369 414,369 414,378 405,378 405,441 468,441 468,432 477,432 477,423 486,423 486,414 495,414 495,405 513,405 513,396 504,396 504,378 495,378 495,387 486,387 486,396 477,396 477,387 486,387 486,378 495,378 495,369 504,369 504,360 495,360 495,351 486,351 486,342 477,342 477,333 486,333 486,342 495,342 495,351 504,351 504,333 504,324 495,324 495,315 486,315 486,306 477,306 "
+       id="polygon31"
+       style="fill:#e16f71"
+       transform="matrix(0.26458333,0,0,0.26458333,-42.637498,52.059376)" />
+    <polygon
+       class="st7"
+       points="603,297 675,297 675,351 666,351 666,360 657,360 657,369 666,369 666,378 675,378 675,441 612,441 612,432 603,432 603,423 594,423 594,414 585,414 585,405 567,405 567,396 576,396 576,378 585,378 585,387 594,387 594,396 603,396 603,387 594,387 594,378 585,378 585,369 576,369 576,360 585,360 585,351 594,351 594,342 603,342 603,333 594,333 594,342 585,342 585,351 576,351 576,333 576,324 585,324 585,315 594,315 594,306 603,306 "
+       id="polygon32"
+       style="fill:#e16f71"
+       transform="matrix(0.26458333,0,0,0.26458333,-42.637498,52.059376)" />
+    <polygon
+       class="st8"
+       points="603,351 603,342 603,342 603,333 594,333 594,342 585,342 585,351 576,351 576,333 558,333 558,396 576,396 576,369 594,369 594,360 594,351 "
+       id="polygon33"
+       style="fill:#793d52"
+       transform="matrix(0.26458333,0,0,0.26458333,-42.637498,52.059376)" />
+    <rect
+       class="st8"
+       x="90.712494"
+       y="140.16563"
+       width="4.7624998"
+       height="16.668749"
+       id="rect33"
+       style="fill:#793d52;stroke-width:0.264583" />
+    <polyline
+       class="st8"
+       points="576 369 585 369 594 369 594 378 603 378 603 387 603 396 594 396 594 387 585 387 585 378 576 378"
+       id="polyline33"
+       style="fill:#793d52"
+       transform="matrix(0.26458333,0,0,0.26458333,-42.637498,52.059376)" />
+    <polyline
+       class="st8"
+       points="504 378 495 378 495 387 486 387 486 396 477 396 477 387 477 387 477 378 486 378 486 369 504 369"
+       id="polyline34"
+       style="fill:#793d52"
+       transform="matrix(0.26458333,0,0,0.26458333,-42.637498,52.059376)" />
+    <polyline
+       class="st8"
+       points="504 369 486 369 486 360 486 360 486 351 477 351 477 333 486 333 486 342 495 342 495 351 504 351"
+       id="polyline35"
+       style="fill:#793d52"
+       transform="matrix(0.26458333,0,0,0.26458333,-42.637498,52.059376)" />
+  </g>
+</svg>

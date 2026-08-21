@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   sodipodi:docname="test_tophat.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.71891835"
+     inkscape:cx="396.42889"
+     inkscape:cy="561.25984"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Katman 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <polygon
+       class="st18"
+       points="621,18 621,27 630,27 630,135 621,135 621,144 468,144 459,144 459,135 450,135 450,27 459,27 459,18 477,18 477,9 545,9 603,9 603,18 "
+       id="polygon14"
+       transform="matrix(0.26458333,0,0,0.26458333,-35.380576,126.86472)"
+       style="fill:#242e38" />
+    <polygon
+       class="st21"
+       points="621,153 621,162 468,162 459,162 459,153 441,153 441,144 441,135 459,135 459,144 621,144 621,135 639,135 639,144 639,153 "
+       id="polygon16"
+       transform="matrix(0.26458333,0,0,0.26458333,-35.380576,126.86472)"
+       style="fill:#727072" />
+    <polygon
+       class="st18"
+       points="666,144 666,153 675,153 675,180 666,180 666,189 657,189 657,198 648,198 648,207 432,207 432,198 423,198 423,189 414,189 414,180 405,180 405,153 414,153 414,144 441,144 441,153 459,153 459,162 621,162 621,153 639,153 639,144 "
+       id="polygon17"
+       transform="matrix(0.26458333,0,0,0.26458333,-35.380576,126.86472)"
+       style="fill:#242e38" />
+  </g>
+</svg>

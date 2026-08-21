@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   sodipodi:docname="test_hat.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.35945918"
+     inkscape:cx="-422.85748"
+     inkscape:cy="630.11328"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="Adsız_degrade_14"
+       data-name="Adsız degrade 14"
+       x1="70.959999"
+       y1="66.580002"
+       x2="298.04001"
+       y2="229.39"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,64.224093,120.74952)">
+      <stop
+         offset="1"
+         stop-color="#e3664f"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#942f38"
+         id="stop2" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:label="Katman 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       class="st10"
+       d="m 121.63867,130.27452 h 11.64167 v 2.38125 h 2.38125 v 2.38125 h 2.38125 v 2.38125 h 2.38125 v 2.38125 h 2.38125 v 2.38125 h 3.175 v 7.40833 h 1.85208 v 2.11667 h 2.91042 v 19.05 H 66.605343 v -9.525 h 7.14375 v -2.38125 h 28.574997 v -2.38125 H 83.274093 v -9.525 h 2.38125 v -2.38125 h 2.38125 v -4.7625 h 2.38125 v -2.38125 h 2.38125 v -2.38125 h 4.7625 v -2.38125 h 2.38125 v -2.38125 z"
+       id="path11"
+       style="fill:#e3664f;stroke-width:0.264583;fill-opacity:1" />
+  </g>
+</svg>

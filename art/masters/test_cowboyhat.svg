@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="test_cowboyhat.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.0167041"
+     inkscape:cx="406.21456"
+     inkscape:cy="569.97902"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Katman 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <polygon
+       class="st15"
+       points="783,117 783,144 801,144 801,153 837,153 837,162 981,162 981,153 1017,153 1017,144 1035,144 1035,117 1044,117 1044,108 1053,108 1053,99 1062,99 1062,90 1089,90 1089,144 1080,144 1080,153 1071,153 1071,162 1062,162 1062,171 1053,171 1053,180 1008,180 1008,189 972,189 972,198 846,198 846,189 810,189 810,180 765,180 765,171 756,171 756,162 747,162 747,153 738,153 738,144 729,144 729,90 756,90 756,99 765,99 765,108 774,108 774,117 "
+       id="polygon45"
+       style="fill:#7b4b36"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.50625,117.54375)" />
+    <polygon
+       class="st15"
+       points="837,27 882,27 882,36 900,36 900,45 918,45 918,36 936,36 936,27 981,27 981,36 990,36 990,45 999,45 999,90 1008,90 1008,108 981,108 981,117 837,117 837,108 810,108 810,90 819,90 819,45 828,45 828,36 837,36 "
+       id="polygon46"
+       style="fill:#7b4b36"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.50625,117.54375)" />
+    <polygon
+       class="st19"
+       points="981,144 981,153 837,153 837,144 801,144 801,117 828,117 828,126 990,126 990,117 1017,117 1017,144 "
+       id="polygon47"
+       style="fill:#492b21"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.50625,117.54375)" />
+  </g>
+</svg>

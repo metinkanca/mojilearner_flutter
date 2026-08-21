@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="test_crown.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.4378367"
+     inkscape:cx="198.21444"
+     inkscape:cy="443.37441"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Katman 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <polygon
+       class="st0"
+       points="1026,396 1026,351 1035,351 1035,315 1016.83,315.02 1017,324 1008,324 1008,333 999,333 999,342 990,342 990,351 981,351 981,360 972.02,360 963,360 963,351 954.02,351 954.02,342 945,342 945,333 936,333 936,324 927,324 927,297 918,297 918,288 891,288 891,297 882,297 882,315.13 882,324 873,324 873,333 864,333 864,342 855,342 855,351 846,351 846,360 828,360 828,351 819,351 819,342 810,342 810,333 801,333 801,324 792,324 792,315 774,315 774,351 783,351 783,396 792,396 792,441 810,441 810,450 999,450 999,441 1017,441 1017,396 "
+       id="polygon27"
+       style="fill:#f8b230"
+       transform="matrix(0.26458333,0,0,0.26458333,-141.72363,48.957779)" />
+  </g>
+</svg>
