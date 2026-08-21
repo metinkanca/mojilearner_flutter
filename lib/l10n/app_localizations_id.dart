@@ -511,6 +511,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get mojiWakeSuccess => 'Huaa... Moji sudah bangun! Ayo berlatih!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Bangun $minutes mnt lagi';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji sedang mengantuk saat tautan bahasa tersambung kembali.';
 
@@ -864,4 +869,171 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Seret ke Moji untuk memberi makan';
+
+  @override
+  String get bondLabel => 'IKATAN';
+
+  @override
+  String get bondStageCurious => 'Penasaran';
+
+  @override
+  String get bondStageFriendly => 'Ramah';
+
+  @override
+  String get bondStageAttached => 'Lekat';
+
+  @override
+  String get bondStageDevoted => 'Setia';
+
+  @override
+  String get bondStageInseparable => 'Tak Terpisahkan';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points lagi ke $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Terus belajar agar makin dekat';
+
+  @override
+  String get bondMissesYou => 'Moji merindukanmu';
+
+  @override
+  String get bondLonely => 'Moji sudah lama menunggumu';
+
+  @override
+  String get categoryStyle => 'Gaya';
+
+  @override
+  String get accessoryDescription => 'Sesuatu yang kecil untuk dipakai Moji.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Terbuka di $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Didapat, bukan dibeli';
+
+  @override
+  String get accessoryCapName => 'Topi';
+
+  @override
+  String get accessoryTopHatName => 'Topi tinggi';
+
+  @override
+  String get accessoryCowboyHatName => 'Topi koboi';
+
+  @override
+  String get accessoryCrownName => 'Mahkota';
+
+  @override
+  String get accessoryPartyHatName => 'Topi pesta';
+
+  @override
+  String get accessoryBowTieName => 'Dasi kupu-kupu';
+
+  @override
+  String get accessoryNecklaceName => 'Kalung';
+
+  @override
+  String get accessoryMustacheName => 'Kumis';
+
+  @override
+  String get accessoryBeanieName => 'Kupluk';
+
+  @override
+  String get accessoryMortarboardName => 'Topi Toga';
+
+  @override
+  String get accessoryCollarName => 'Kalung Lonceng';
+
+  @override
+  String get accessoryGlassesName => 'Kacamata';
+
+  @override
+  String get accessorySunglassesName => 'Kacamata Hitam';
+
+  @override
+  String get accessoryMaskName => 'Topeng Pesta';
+
+  @override
+  String get accessoryMedalName => 'Medali';
+
+  @override
+  String get accessoryScarfName => 'Syal';
+
+  @override
+  String get accessoryHeadphonesName => 'Headphone';
+
+  @override
+  String get accessoryWizardHatName => 'Topi Penyihir';
+
+  @override
+  String get accessoryFlowerCrownName => 'Mahkota Bunga';
+
+  @override
+  String get accessoryDevilHornsName => 'Tanduk Setan';
+
+  @override
+  String get onboardingLanguageQuestion => 'Bahasa apa yang kamu gunakan?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Lanjutkan';
+
+  @override
+  String get onboardingPetQuestion => 'Siapa yang akan kamu bawa pulang?';
+
+  @override
+  String get onboardingPetConfirm => 'Pilih';
+
+  @override
+  String get onboardingLoginTitle => 'Simpan peliharaanmu';
+
+  @override
+  String get onboardingLoginGoogle => 'Lanjutkan dengan Google';
+
+  @override
+  String get onboardingLoginEmail => 'Lanjutkan dengan email';
+
+  @override
+  String get onboardingLoginSkip => 'Nanti saja';
+
+  @override
+  String get onboardingLoginSubtitle =>
+      'Masuk supaya kamu tidak pernah kehilangan mereka.';
+
+  @override
+  String get accountEmailLabel => 'Email';
+
+  @override
+  String get accountPasswordLabel => 'Kata sandi';
+
+  @override
+  String get accountContinueAction => 'Lanjutkan';
+
+  @override
+  String get accountConflictTitle => 'Dua peliharaan';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email sudah punya peliharaan, begitu juga ponsel ini. Hanya satu yang bisa disimpan.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'Simpan peliharaan di ponsel ini';
+
+  @override
+  String get accountConflictUseSaved => 'Gunakan peliharaan tersimpan';
+
+  @override
+  String get accountErrorInvalidEmail => 'Alamat email tidak valid.';
+
+  @override
+  String get accountErrorWeakPassword => 'Gunakan minimal 6 karakter.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Tidak bisa masuk. Periksa datamu dan coba lagi.';
 }

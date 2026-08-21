@@ -512,6 +512,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mojiWakeSuccess => 'Χασμουρητό... Ο Moji ξύπνησε! Ας εξασκηθούμε!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Ξύπνιος για $minutes λεπτά';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Ο Moji νυστάζει όσο επανασυνδέεται ο σύνδεσμος γλώσσας.';
 
@@ -867,4 +872,173 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Σύρε πάνω στον Moji για να τον ταΐσεις';
+
+  @override
+  String get bondLabel => 'ΔΕΣΜΟΣ';
+
+  @override
+  String get bondStageCurious => 'Περίεργος';
+
+  @override
+  String get bondStageFriendly => 'Φιλικός';
+
+  @override
+  String get bondStageAttached => 'Δεμένος';
+
+  @override
+  String get bondStageDevoted => 'Αφοσιωμένος';
+
+  @override
+  String get bondStageInseparable => 'Αχώριστοι';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points για $stage';
+  }
+
+  @override
+  String get bondKeepLearning =>
+      'Συνέχισε να μαθαίνεις για να έρθετε πιο κοντά';
+
+  @override
+  String get bondMissesYou => 'Λείπεις στον Moji';
+
+  @override
+  String get bondLonely => 'Ο Moji σε περιμένει καιρό';
+
+  @override
+  String get categoryStyle => 'Στιλ';
+
+  @override
+  String get accessoryDescription => 'Κάτι μικρό για να φοράει ο Moji.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Ξεκλειδώνει στο $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Κερδίζεται, δεν πωλείται';
+
+  @override
+  String get accessoryCapName => 'Καπέλο';
+
+  @override
+  String get accessoryTopHatName => 'Ημίψηλο';
+
+  @override
+  String get accessoryCowboyHatName => 'Καπέλο καουμπόη';
+
+  @override
+  String get accessoryCrownName => 'Κορώνα';
+
+  @override
+  String get accessoryPartyHatName => 'Καπελάκι πάρτι';
+
+  @override
+  String get accessoryBowTieName => 'Παπιγιόν';
+
+  @override
+  String get accessoryNecklaceName => 'Κολιέ';
+
+  @override
+  String get accessoryMustacheName => 'Μουστάκι';
+
+  @override
+  String get accessoryBeanieName => 'Σκούφος';
+
+  @override
+  String get accessoryMortarboardName => 'Καπέλο αποφοίτησης';
+
+  @override
+  String get accessoryCollarName => 'Κολάρο με κουδούνι';
+
+  @override
+  String get accessoryGlassesName => 'Γυαλιά';
+
+  @override
+  String get accessorySunglassesName => 'Γυαλιά ηλίου';
+
+  @override
+  String get accessoryMaskName => 'Μάσκα μεταμφίεσης';
+
+  @override
+  String get accessoryMedalName => 'Μετάλλιο';
+
+  @override
+  String get accessoryScarfName => 'Κασκόλ';
+
+  @override
+  String get accessoryHeadphonesName => 'Ακουστικά';
+
+  @override
+  String get accessoryWizardHatName => 'Καπέλο μάγου';
+
+  @override
+  String get accessoryFlowerCrownName => 'Στεφάνι λουλουδιών';
+
+  @override
+  String get accessoryDevilHornsName => 'Κέρατα διαβόλου';
+
+  @override
+  String get onboardingLanguageQuestion => 'Τι γλώσσα μιλάς;';
+
+  @override
+  String get onboardingLanguageConfirm => 'Συνέχεια';
+
+  @override
+  String get onboardingPetQuestion => 'Ποιον θα πάρεις σπίτι;';
+
+  @override
+  String get onboardingPetConfirm => 'Επιλογή';
+
+  @override
+  String get onboardingLoginTitle => 'Αποθήκευσε το κατοικίδιό σου';
+
+  @override
+  String get onboardingLoginGoogle => 'Συνέχεια με Google';
+
+  @override
+  String get onboardingLoginEmail => 'Συνέχεια με email';
+
+  @override
+  String get onboardingLoginSkip => 'Ίσως αργότερα';
+
+  @override
+  String get onboardingLoginSubtitle => 'Σύνδεσου για να μην τα χάσεις ποτέ.';
+
+  @override
+  String get accountEmailLabel => 'Email';
+
+  @override
+  String get accountPasswordLabel => 'Κωδικός';
+
+  @override
+  String get accountContinueAction => 'Συνέχεια';
+
+  @override
+  String get accountConflictTitle => 'Δύο κατοικίδια';
+
+  @override
+  String accountConflictBody(String email) {
+    return 'Ο λογαριασμός $email έχει ήδη κατοικίδιο, όπως και αυτό το τηλέφωνο. Μόνο ένα μπορεί να μείνει.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'Κράτα το κατοικίδιο αυτού του τηλεφώνου';
+
+  @override
+  String get accountConflictUseSaved => 'Χρήση αποθηκευμένου κατοικίδιου';
+
+  @override
+  String get accountErrorInvalidEmail => 'Μη έγκυρη διεύθυνση email.';
+
+  @override
+  String get accountErrorWeakPassword =>
+      'Χρησιμοποίησε τουλάχιστον 6 χαρακτήρες.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Η σύνδεση απέτυχε. Έλεγξε τα στοιχεία και δοκίμασε ξανά.';
 }

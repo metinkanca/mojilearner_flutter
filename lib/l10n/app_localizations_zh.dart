@@ -502,6 +502,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mojiWakeSuccess => '哈欠... Moji 现在醒啦！我们来练习吧！';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return '还能醒着 $minutes 分钟';
+  }
+
+  @override
   String get mojiSleepReasonReconnect => 'Moji 正在打盹，语言连接正在重新连接。';
 
   @override
@@ -841,4 +846,169 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get careDragToFeed => '拖到 Moji 身上喂食';
+
+  @override
+  String get bondLabel => '羁绊';
+
+  @override
+  String get bondStageCurious => '好奇';
+
+  @override
+  String get bondStageFriendly => '友好';
+
+  @override
+  String get bondStageAttached => '依恋';
+
+  @override
+  String get bondStageDevoted => '忠诚';
+
+  @override
+  String get bondStageInseparable => '形影不离';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '距离$stage还差$points';
+  }
+
+  @override
+  String get bondKeepLearning => '继续学习，越来越亲近';
+
+  @override
+  String get bondMissesYou => 'Moji 想你了';
+
+  @override
+  String get bondLonely => 'Moji 已经等你很久了';
+
+  @override
+  String get categoryStyle => '造型';
+
+  @override
+  String get accessoryDescription => '给 Moji 的小配饰。';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return '在$stage解锁';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => '靠羁绊获得，不出售';
+
+  @override
+  String get accessoryCapName => '鸭舌帽';
+
+  @override
+  String get accessoryTopHatName => '高礼帽';
+
+  @override
+  String get accessoryCowboyHatName => '牛仔帽';
+
+  @override
+  String get accessoryCrownName => '皇冠';
+
+  @override
+  String get accessoryPartyHatName => '派对帽';
+
+  @override
+  String get accessoryBowTieName => '领结';
+
+  @override
+  String get accessoryNecklaceName => '项链';
+
+  @override
+  String get accessoryMustacheName => '胡子';
+
+  @override
+  String get accessoryBeanieName => '毛线帽';
+
+  @override
+  String get accessoryMortarboardName => '学士帽';
+
+  @override
+  String get accessoryCollarName => '铃铛项圈';
+
+  @override
+  String get accessoryGlassesName => '眼镜';
+
+  @override
+  String get accessorySunglassesName => '墨镜';
+
+  @override
+  String get accessoryMaskName => '假面';
+
+  @override
+  String get accessoryMedalName => '奖牌';
+
+  @override
+  String get accessoryScarfName => '围巾';
+
+  @override
+  String get accessoryHeadphonesName => '耳机';
+
+  @override
+  String get accessoryWizardHatName => '巫师帽';
+
+  @override
+  String get accessoryFlowerCrownName => '花冠';
+
+  @override
+  String get accessoryDevilHornsName => '恶魔角';
+
+  @override
+  String get onboardingLanguageQuestion => '你说什么语言？';
+
+  @override
+  String get onboardingLanguageConfirm => '继续';
+
+  @override
+  String get onboardingPetQuestion => '你要带谁回家？';
+
+  @override
+  String get onboardingPetConfirm => '选择';
+
+  @override
+  String get onboardingLoginTitle => '保存你的宠物';
+
+  @override
+  String get onboardingLoginGoogle => '使用 Google 继续';
+
+  @override
+  String get onboardingLoginEmail => '使用邮箱继续';
+
+  @override
+  String get onboardingLoginSkip => '以后再说';
+
+  @override
+  String get onboardingLoginSubtitle => '登录后就再也不会失去它。';
+
+  @override
+  String get accountEmailLabel => '邮箱';
+
+  @override
+  String get accountPasswordLabel => '密码';
+
+  @override
+  String get accountContinueAction => '继续';
+
+  @override
+  String get accountConflictTitle => '两只宠物';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email 已经有一只宠物，这台手机也有。只能留下一只。';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => '保留这台手机上的宠物';
+
+  @override
+  String get accountConflictUseSaved => '使用已保存的宠物';
+
+  @override
+  String get accountErrorInvalidEmail => '邮箱地址无效。';
+
+  @override
+  String get accountErrorWeakPassword => '请使用至少 6 个字符。';
+
+  @override
+  String get accountErrorSignIn => '登录失败。请检查信息后重试。';
 }

@@ -511,6 +511,11 @@ class AppLocalizationsHu extends AppLocalizations {
       'Ásítás... Moji most már ébren van! Gyakoroljunk!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Még $minutes percig ébren';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji szundikál, miközben a nyelvi kapcsolat újracsatlakozik.';
 
@@ -863,4 +868,172 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Húzd Mojira az etetéshez';
+
+  @override
+  String get bondLabel => 'KÖTELÉK';
+
+  @override
+  String get bondStageCurious => 'Kíváncsi';
+
+  @override
+  String get bondStageFriendly => 'Barátságos';
+
+  @override
+  String get bondStageAttached => 'Ragaszkodó';
+
+  @override
+  String get bondStageDevoted => 'Odaadó';
+
+  @override
+  String get bondStageInseparable => 'Elválaszthatatlan';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points eddig: $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Tanulj tovább, hogy közelebb kerüljetek';
+
+  @override
+  String get bondMissesYou => 'Moji hiányol téged';
+
+  @override
+  String get bondLonely => 'Moji régóta vár rád';
+
+  @override
+  String get categoryStyle => 'Stílus';
+
+  @override
+  String get accessoryDescription => 'Egy apróság Mojinak.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Feloldás: $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Kiérdemelt, nem megvásárolható';
+
+  @override
+  String get accessoryCapName => 'Sapka';
+
+  @override
+  String get accessoryTopHatName => 'Cilinder';
+
+  @override
+  String get accessoryCowboyHatName => 'Cowboykalap';
+
+  @override
+  String get accessoryCrownName => 'Korona';
+
+  @override
+  String get accessoryPartyHatName => 'Partikalap';
+
+  @override
+  String get accessoryBowTieName => 'Csokornyakkendő';
+
+  @override
+  String get accessoryNecklaceName => 'Nyaklánc';
+
+  @override
+  String get accessoryMustacheName => 'Bajusz';
+
+  @override
+  String get accessoryBeanieName => 'Kötött sapka';
+
+  @override
+  String get accessoryMortarboardName => 'Ballagási kalap';
+
+  @override
+  String get accessoryCollarName => 'Csengős nyakörv';
+
+  @override
+  String get accessoryGlassesName => 'Szemüveg';
+
+  @override
+  String get accessorySunglassesName => 'Napszemüveg';
+
+  @override
+  String get accessoryMaskName => 'Álarc';
+
+  @override
+  String get accessoryMedalName => 'Érem';
+
+  @override
+  String get accessoryScarfName => 'Sál';
+
+  @override
+  String get accessoryHeadphonesName => 'Fejhallgató';
+
+  @override
+  String get accessoryWizardHatName => 'Varázslókalap';
+
+  @override
+  String get accessoryFlowerCrownName => 'Virágkoszorú';
+
+  @override
+  String get accessoryDevilHornsName => 'Ördögszarvak';
+
+  @override
+  String get onboardingLanguageQuestion => 'Milyen nyelven beszélsz?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Tovább';
+
+  @override
+  String get onboardingPetQuestion => 'Kit viszel haza?';
+
+  @override
+  String get onboardingPetConfirm => 'Kiválasztás';
+
+  @override
+  String get onboardingLoginTitle => 'Mentsd el a kedvenced';
+
+  @override
+  String get onboardingLoginGoogle => 'Folytatás Google-fiókkal';
+
+  @override
+  String get onboardingLoginEmail => 'Folytatás e-maillel';
+
+  @override
+  String get onboardingLoginSkip => 'Talán később';
+
+  @override
+  String get onboardingLoginSubtitle =>
+      'Jelentkezz be, hogy soha ne veszítsd el őket.';
+
+  @override
+  String get accountEmailLabel => 'E-mail';
+
+  @override
+  String get accountPasswordLabel => 'Jelszó';
+
+  @override
+  String get accountContinueAction => 'Tovább';
+
+  @override
+  String get accountConflictTitle => 'Két kedvenc';
+
+  @override
+  String accountConflictBody(String email) {
+    return 'A(z) $email fiókhoz már tartozik egy kedvenc, és ehhez a telefonhoz is. Csak az egyik maradhat.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'A telefon kedvencének megtartása';
+
+  @override
+  String get accountConflictUseSaved => 'A mentett kedvenc használata';
+
+  @override
+  String get accountErrorInvalidEmail => 'Ez nem érvényes e-mail-cím.';
+
+  @override
+  String get accountErrorWeakPassword => 'Használj legalább 6 karaktert.';
+
+  @override
+  String get accountErrorSignIn =>
+      'A bejelentkezés nem sikerült. Ellenőrizd az adatokat, és próbáld újra.';
 }

@@ -1102,6 +1102,12 @@ abstract class AppLocalizations {
   /// **'Yawn... Moji is awake now. Let\'s practice!'**
   String get mojiWakeSuccess;
 
+  /// No description provided for @mojiAwakeFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Awake for {minutes} min'**
+  String mojiAwakeFor(int minutes);
+
   /// No description provided for @mojiSleepReasonReconnect.
   ///
   /// In en, this message translates to:
@@ -1749,6 +1755,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drag onto Moji to feed'**
   String get careDragToFeed;
+
+  /// No description provided for @bondLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'BOND'**
+  String get bondLabel;
+
+  /// No description provided for @bondStageCurious.
+  ///
+  /// In en, this message translates to:
+  /// **'Curious'**
+  String get bondStageCurious;
+
+  /// No description provided for @bondStageFriendly.
+  ///
+  /// In en, this message translates to:
+  /// **'Friendly'**
+  String get bondStageFriendly;
+
+  /// No description provided for @bondStageAttached.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached'**
+  String get bondStageAttached;
+
+  /// No description provided for @bondStageDevoted.
+  ///
+  /// In en, this message translates to:
+  /// **'Devoted'**
+  String get bondStageDevoted;
+
+  /// No description provided for @bondStageInseparable.
+  ///
+  /// In en, this message translates to:
+  /// **'Inseparable'**
+  String get bondStageInseparable;
+
+  /// Bond meter caption: how much bond is left before the next pet stage
+  ///
+  /// In en, this message translates to:
+  /// **'{points} to {stage}'**
+  String bondToNextStage(int points, String stage);
+
+  /// No description provided for @bondKeepLearning.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep learning to grow closer'**
+  String get bondKeepLearning;
+
+  /// No description provided for @bondMissesYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji misses you'**
+  String get bondMissesYou;
+
+  /// No description provided for @bondLonely.
+  ///
+  /// In en, this message translates to:
+  /// **'Moji has been waiting for you'**
+  String get bondLonely;
+
+  /// No description provided for @categoryStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Style'**
+  String get categoryStyle;
+
+  /// No description provided for @accessoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A little something for Moji to wear.'**
+  String get accessoryDescription;
+
+  /// Shown on a wardrobe tile that a bond stage has not unlocked yet
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocks at {stage}'**
+  String accessoryUnlocksAt(String stage);
+
+  /// No description provided for @accessoryEarnedNotSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned, not sold'**
+  String get accessoryEarnedNotSold;
+
+  /// No description provided for @accessoryCapName.
+  ///
+  /// In en, this message translates to:
+  /// **'Cap'**
+  String get accessoryCapName;
+
+  /// No description provided for @accessoryTopHatName.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Hat'**
+  String get accessoryTopHatName;
+
+  /// No description provided for @accessoryCowboyHatName.
+  ///
+  /// In en, this message translates to:
+  /// **'Cowboy Hat'**
+  String get accessoryCowboyHatName;
+
+  /// No description provided for @accessoryCrownName.
+  ///
+  /// In en, this message translates to:
+  /// **'Crown'**
+  String get accessoryCrownName;
+
+  /// No description provided for @accessoryPartyHatName.
+  ///
+  /// In en, this message translates to:
+  /// **'Party Hat'**
+  String get accessoryPartyHatName;
+
+  /// No description provided for @accessoryBowTieName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bow Tie'**
+  String get accessoryBowTieName;
+
+  /// No description provided for @accessoryNecklaceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Necklace'**
+  String get accessoryNecklaceName;
+
+  /// No description provided for @accessoryMustacheName.
+  ///
+  /// In en, this message translates to:
+  /// **'Mustache'**
+  String get accessoryMustacheName;
+
+  /// No description provided for @accessoryBeanieName.
+  ///
+  /// In en, this message translates to:
+  /// **'Beanie'**
+  String get accessoryBeanieName;
+
+  /// No description provided for @accessoryMortarboardName.
+  ///
+  /// In en, this message translates to:
+  /// **'Graduation Cap'**
+  String get accessoryMortarboardName;
+
+  /// No description provided for @accessoryCollarName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bell Collar'**
+  String get accessoryCollarName;
+
+  /// No description provided for @accessoryGlassesName.
+  ///
+  /// In en, this message translates to:
+  /// **'Glasses'**
+  String get accessoryGlassesName;
+
+  /// No description provided for @accessorySunglassesName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunglasses'**
+  String get accessorySunglassesName;
+
+  /// No description provided for @accessoryMaskName.
+  ///
+  /// In en, this message translates to:
+  /// **'Masquerade Mask'**
+  String get accessoryMaskName;
+
+  /// No description provided for @accessoryMedalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Medal'**
+  String get accessoryMedalName;
+
+  /// No description provided for @accessoryScarfName.
+  ///
+  /// In en, this message translates to:
+  /// **'Scarf'**
+  String get accessoryScarfName;
+
+  /// No description provided for @accessoryHeadphonesName.
+  ///
+  /// In en, this message translates to:
+  /// **'Headphones'**
+  String get accessoryHeadphonesName;
+
+  /// No description provided for @accessoryWizardHatName.
+  ///
+  /// In en, this message translates to:
+  /// **'Wizard Hat'**
+  String get accessoryWizardHatName;
+
+  /// No description provided for @accessoryFlowerCrownName.
+  ///
+  /// In en, this message translates to:
+  /// **'Flower Crown'**
+  String get accessoryFlowerCrownName;
+
+  /// No description provided for @accessoryDevilHornsName.
+  ///
+  /// In en, this message translates to:
+  /// **'Devil Horns'**
+  String get accessoryDevilHornsName;
+
+  /// No description provided for @onboardingLanguageQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'What language do you speak?'**
+  String get onboardingLanguageQuestion;
+
+  /// No description provided for @onboardingLanguageConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingLanguageConfirm;
+
+  /// No description provided for @onboardingPetQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Who will you take home?'**
+  String get onboardingPetQuestion;
+
+  /// No description provided for @onboardingPetConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get onboardingPetConfirm;
+
+  /// No description provided for @onboardingLoginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your pet'**
+  String get onboardingLoginTitle;
+
+  /// No description provided for @onboardingLoginGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get onboardingLoginGoogle;
+
+  /// No description provided for @onboardingLoginEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with email'**
+  String get onboardingLoginEmail;
+
+  /// No description provided for @onboardingLoginSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get onboardingLoginSkip;
+
+  /// No description provided for @onboardingLoginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in so you never lose them.'**
+  String get onboardingLoginSubtitle;
+
+  /// No description provided for @accountEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get accountEmailLabel;
+
+  /// No description provided for @accountPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get accountPasswordLabel;
+
+  /// No description provided for @accountContinueAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get accountContinueAction;
+
+  /// No description provided for @accountConflictTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two pets'**
+  String get accountConflictTitle;
+
+  /// Shown when the account being linked already owns a save
+  ///
+  /// In en, this message translates to:
+  /// **'{email} already has a pet, and so does this phone. Only one can be kept.'**
+  String accountConflictBody(String email);
+
+  /// No description provided for @accountConflictKeepThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this phone\'s pet'**
+  String get accountConflictKeepThisDevice;
+
+  /// No description provided for @accountConflictUseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the saved pet'**
+  String get accountConflictUseSaved;
+
+  /// No description provided for @accountErrorInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not a valid email address.'**
+  String get accountErrorInvalidEmail;
+
+  /// No description provided for @accountErrorWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 6 characters.'**
+  String get accountErrorWeakPassword;
+
+  /// No description provided for @accountErrorSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign in. Check your details and try again.'**
+  String get accountErrorSignIn;
 }
 
 class _AppLocalizationsDelegate

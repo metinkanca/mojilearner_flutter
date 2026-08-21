@@ -183,6 +183,14 @@
   "mojiSleepHintReconnect": "MOJI IS DOZING... LANGUAGE LINK RECONNECTING",
   "mojiSleepHintNight": "MOJI IS SLEEPING... TAP TO WAKE",
   "mojiWakeSuccess": "Yawn... Moji is awake now. Let's practice!",
+  "mojiAwakeFor": "Awake for {minutes} min",
+  "@mojiAwakeFor": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "mojiSleepReasonReconnect": "Moji is dozing while the language link reconnects.",
   "mojiSleepReasonNight": "Moji is sleeping. Tap to wake up.",
   "levelsScreenTitle": "Levels",
@@ -310,7 +318,6 @@
   },
   "notifRewardTitle": "Your daily reward is ready",
   "notifRewardBody": "Moji has something for you. Come and collect it!",
-
   "careTitle": "How is Moji?",
   "careStatFullness": "Fullness",
   "careStatHappiness": "Happiness",
@@ -330,16 +337,100 @@
   "@careFedItem": {
     "description": "Confirmation after feeding an inventory item",
     "placeholders": {
-      "item": { "type": "String" }
+      "item": {
+        "type": "String"
+      }
     }
   },
   "careCurrentFullness": "Fullness now: {value}%",
   "@careCurrentFullness": {
     "description": "Shows the player their current fullness while shopping for food",
     "placeholders": {
-      "value": { "type": "int" }
+      "value": {
+        "type": "int"
+      }
     }
   },
   "scenarioSickPenalty": "Moji is sick — rewards halved",
-  "careDragToFeed": "Drag onto Moji to feed"
+  "careDragToFeed": "Drag onto Moji to feed",
+  "@bondToNextStage": {
+    "description": "Bond meter caption: how much bond is left before the next pet stage",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "stage": {
+        "type": "String"
+      }
+    }
+  },
+  "bondLabel": "BOND",
+  "bondStageCurious": "Curious",
+  "bondStageFriendly": "Friendly",
+  "bondStageAttached": "Attached",
+  "bondStageDevoted": "Devoted",
+  "bondStageInseparable": "Inseparable",
+  "bondToNextStage": "{points} to {stage}",
+  "bondKeepLearning": "Keep learning to grow closer",
+  "bondMissesYou": "Moji misses you",
+  "bondLonely": "Moji has been waiting for you",
+  "@accessoryUnlocksAt": {
+    "description": "Shown on a wardrobe tile that a bond stage has not unlocked yet",
+    "placeholders": {
+      "stage": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryStyle": "Style",
+  "accessoryDescription": "A little something for Moji to wear.",
+  "accessoryUnlocksAt": "Unlocks at {stage}",
+  "accessoryEarnedNotSold": "Earned, not sold",
+  "accessoryCapName": "Cap",
+  "accessoryTopHatName": "Top Hat",
+  "accessoryCowboyHatName": "Cowboy Hat",
+  "accessoryCrownName": "Crown",
+  "accessoryPartyHatName": "Party Hat",
+  "accessoryBowTieName": "Bow Tie",
+  "accessoryNecklaceName": "Necklace",
+  "accessoryMustacheName": "Mustache",
+  "accessoryBeanieName": "Beanie",
+  "accessoryMortarboardName": "Graduation Cap",
+  "accessoryCollarName": "Bell Collar",
+  "accessoryGlassesName": "Glasses",
+  "accessorySunglassesName": "Sunglasses",
+  "accessoryMaskName": "Masquerade Mask",
+  "accessoryMedalName": "Medal",
+  "accessoryScarfName": "Scarf",
+  "accessoryHeadphonesName": "Headphones",
+  "accessoryWizardHatName": "Wizard Hat",
+  "accessoryFlowerCrownName": "Flower Crown",
+  "accessoryDevilHornsName": "Devil Horns",
+  "onboardingLanguageQuestion": "What language do you speak?",
+  "onboardingLanguageConfirm": "Continue",
+  "onboardingPetQuestion": "Who will you take home?",
+  "onboardingPetConfirm": "Choose",
+  "onboardingLoginTitle": "Save your pet",
+  "onboardingLoginGoogle": "Continue with Google",
+  "onboardingLoginEmail": "Continue with email",
+  "onboardingLoginSkip": "Maybe later",
+  "onboardingLoginSubtitle": "Sign in so you never lose them.",
+  "accountEmailLabel": "Email",
+  "accountPasswordLabel": "Password",
+  "accountContinueAction": "Continue",
+  "accountConflictTitle": "Two pets",
+  "accountConflictBody": "{email} already has a pet, and so does this phone. Only one can be kept.",
+  "accountConflictKeepThisDevice": "Keep this phone's pet",
+  "accountConflictUseSaved": "Use the saved pet",
+  "accountErrorInvalidEmail": "That is not a valid email address.",
+  "accountErrorWeakPassword": "Use at least 6 characters.",
+  "accountErrorSignIn": "Could not sign in. Check your details and try again.",
+  "@accountConflictBody": {
+    "description": "Shown when the account being linked already owns a save",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -512,6 +512,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mojiWakeSuccess => 'Yawn... Moji is awake now. Let\'s practice!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Awake for $minutes min';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji is dozing while the language link reconnects.';
 
@@ -866,4 +871,170 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Drag onto Moji to feed';
+
+  @override
+  String get bondLabel => 'BOND';
+
+  @override
+  String get bondStageCurious => 'Curious';
+
+  @override
+  String get bondStageFriendly => 'Friendly';
+
+  @override
+  String get bondStageAttached => 'Attached';
+
+  @override
+  String get bondStageDevoted => 'Devoted';
+
+  @override
+  String get bondStageInseparable => 'Inseparable';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points to $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Keep learning to grow closer';
+
+  @override
+  String get bondMissesYou => 'Moji misses you';
+
+  @override
+  String get bondLonely => 'Moji has been waiting for you';
+
+  @override
+  String get categoryStyle => 'Style';
+
+  @override
+  String get accessoryDescription => 'A little something for Moji to wear.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Unlocks at $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Earned, not sold';
+
+  @override
+  String get accessoryCapName => 'Cap';
+
+  @override
+  String get accessoryTopHatName => 'Top Hat';
+
+  @override
+  String get accessoryCowboyHatName => 'Cowboy Hat';
+
+  @override
+  String get accessoryCrownName => 'Crown';
+
+  @override
+  String get accessoryPartyHatName => 'Party Hat';
+
+  @override
+  String get accessoryBowTieName => 'Bow Tie';
+
+  @override
+  String get accessoryNecklaceName => 'Necklace';
+
+  @override
+  String get accessoryMustacheName => 'Mustache';
+
+  @override
+  String get accessoryBeanieName => 'Beanie';
+
+  @override
+  String get accessoryMortarboardName => 'Graduation Cap';
+
+  @override
+  String get accessoryCollarName => 'Bell Collar';
+
+  @override
+  String get accessoryGlassesName => 'Glasses';
+
+  @override
+  String get accessorySunglassesName => 'Sunglasses';
+
+  @override
+  String get accessoryMaskName => 'Masquerade Mask';
+
+  @override
+  String get accessoryMedalName => 'Medal';
+
+  @override
+  String get accessoryScarfName => 'Scarf';
+
+  @override
+  String get accessoryHeadphonesName => 'Headphones';
+
+  @override
+  String get accessoryWizardHatName => 'Wizard Hat';
+
+  @override
+  String get accessoryFlowerCrownName => 'Flower Crown';
+
+  @override
+  String get accessoryDevilHornsName => 'Devil Horns';
+
+  @override
+  String get onboardingLanguageQuestion => 'What language do you speak?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Continue';
+
+  @override
+  String get onboardingPetQuestion => 'Who will you take home?';
+
+  @override
+  String get onboardingPetConfirm => 'Choose';
+
+  @override
+  String get onboardingLoginTitle => 'Save your pet';
+
+  @override
+  String get onboardingLoginGoogle => 'Continue with Google';
+
+  @override
+  String get onboardingLoginEmail => 'Continue with email';
+
+  @override
+  String get onboardingLoginSkip => 'Maybe later';
+
+  @override
+  String get onboardingLoginSubtitle => 'Sign in so you never lose them.';
+
+  @override
+  String get accountEmailLabel => 'Email';
+
+  @override
+  String get accountPasswordLabel => 'Password';
+
+  @override
+  String get accountContinueAction => 'Continue';
+
+  @override
+  String get accountConflictTitle => 'Two pets';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email already has a pet, and so does this phone. Only one can be kept.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'Keep this phone\'s pet';
+
+  @override
+  String get accountConflictUseSaved => 'Use the saved pet';
+
+  @override
+  String get accountErrorInvalidEmail => 'That is not a valid email address.';
+
+  @override
+  String get accountErrorWeakPassword => 'Use at least 6 characters.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Could not sign in. Check your details and try again.';
 }

@@ -508,6 +508,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mojiWakeSuccess => 'Zív... Moji je teď vzhůru! Pojďme trénovat!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Vzhůru ještě $minutes min';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji podřimuje, zatímco se jazykové spojení obnovuje.';
 
@@ -861,4 +866,171 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Přetáhni na Mojiho a nakrm ho';
+
+  @override
+  String get bondLabel => 'POUTO';
+
+  @override
+  String get bondStageCurious => 'Zvědavý';
+
+  @override
+  String get bondStageFriendly => 'Přátelský';
+
+  @override
+  String get bondStageAttached => 'Připoutaný';
+
+  @override
+  String get bondStageDevoted => 'Oddaný';
+
+  @override
+  String get bondStageInseparable => 'Nerozluční';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points do $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Uč se dál, ať se sblížíte';
+
+  @override
+  String get bondMissesYou => 'Mojimu chybíš';
+
+  @override
+  String get bondLonely => 'Moji na tebe už dlouho čeká';
+
+  @override
+  String get categoryStyle => 'Styl';
+
+  @override
+  String get accessoryDescription => 'Drobnost, kterou si Moji vezme na sebe.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Odemkne se na $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Získává se, neprodává';
+
+  @override
+  String get accessoryCapName => 'Kšiltovka';
+
+  @override
+  String get accessoryTopHatName => 'Cylindr';
+
+  @override
+  String get accessoryCowboyHatName => 'Kovbojský klobouk';
+
+  @override
+  String get accessoryCrownName => 'Koruna';
+
+  @override
+  String get accessoryPartyHatName => 'Party čepice';
+
+  @override
+  String get accessoryBowTieName => 'Motýlek';
+
+  @override
+  String get accessoryNecklaceName => 'Náhrdelník';
+
+  @override
+  String get accessoryMustacheName => 'Knír';
+
+  @override
+  String get accessoryBeanieName => 'Čepice';
+
+  @override
+  String get accessoryMortarboardName => 'Absolventský klobouk';
+
+  @override
+  String get accessoryCollarName => 'Obojek se zvonkem';
+
+  @override
+  String get accessoryGlassesName => 'Brýle';
+
+  @override
+  String get accessorySunglassesName => 'Sluneční brýle';
+
+  @override
+  String get accessoryMaskName => 'Škraboška';
+
+  @override
+  String get accessoryMedalName => 'Medaile';
+
+  @override
+  String get accessoryScarfName => 'Šála';
+
+  @override
+  String get accessoryHeadphonesName => 'Sluchátka';
+
+  @override
+  String get accessoryWizardHatName => 'Čarodějnický klobouk';
+
+  @override
+  String get accessoryFlowerCrownName => 'Věnec z květin';
+
+  @override
+  String get accessoryDevilHornsName => 'Čertovské rohy';
+
+  @override
+  String get onboardingLanguageQuestion => 'Jakým jazykem mluvíš?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Pokračovat';
+
+  @override
+  String get onboardingPetQuestion => 'Koho si vezmeš domů?';
+
+  @override
+  String get onboardingPetConfirm => 'Vybrat';
+
+  @override
+  String get onboardingLoginTitle => 'Ulož si mazlíčka';
+
+  @override
+  String get onboardingLoginGoogle => 'Pokračovat přes Google';
+
+  @override
+  String get onboardingLoginEmail => 'Pokračovat e-mailem';
+
+  @override
+  String get onboardingLoginSkip => 'Možná později';
+
+  @override
+  String get onboardingLoginSubtitle => 'Přihlas se, ať o ně nikdy nepřijdeš.';
+
+  @override
+  String get accountEmailLabel => 'E-mail';
+
+  @override
+  String get accountPasswordLabel => 'Heslo';
+
+  @override
+  String get accountContinueAction => 'Pokračovat';
+
+  @override
+  String get accountConflictTitle => 'Dva mazlíčci';
+
+  @override
+  String accountConflictBody(String email) {
+    return 'Účet $email už mazlíčka má a tenhle telefon taky. Zůstat může jen jeden.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'Nechat mazlíčka z tohoto telefonu';
+
+  @override
+  String get accountConflictUseSaved => 'Použít uloženého mazlíčka';
+
+  @override
+  String get accountErrorInvalidEmail => 'Tohle není platná e-mailová adresa.';
+
+  @override
+  String get accountErrorWeakPassword => 'Použij aspoň 6 znaků.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Přihlášení se nezdařilo. Zkontroluj údaje a zkus to znovu.';
 }

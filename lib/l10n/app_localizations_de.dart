@@ -512,6 +512,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mojiWakeSuccess => 'Gähn... Moji ist jetzt wach! Lass uns üben!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Noch $minutes Min wach';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji döst, während die Sprachverbindung wiederhergestellt wird.';
 
@@ -867,4 +872,173 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Zum Füttern auf Moji ziehen';
+
+  @override
+  String get bondLabel => 'BINDUNG';
+
+  @override
+  String get bondStageCurious => 'Neugierig';
+
+  @override
+  String get bondStageFriendly => 'Freundlich';
+
+  @override
+  String get bondStageAttached => 'Verbunden';
+
+  @override
+  String get bondStageDevoted => 'Ergeben';
+
+  @override
+  String get bondStageInseparable => 'Unzertrennlich';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points bis $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Lerne weiter, um euch näherzubringen';
+
+  @override
+  String get bondMissesYou => 'Moji vermisst dich';
+
+  @override
+  String get bondLonely => 'Moji wartet schon lange auf dich';
+
+  @override
+  String get categoryStyle => 'Stil';
+
+  @override
+  String get accessoryDescription => 'Eine Kleinigkeit für Moji.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Freigeschaltet bei $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Verdient, nicht gekauft';
+
+  @override
+  String get accessoryCapName => 'Kappe';
+
+  @override
+  String get accessoryTopHatName => 'Zylinder';
+
+  @override
+  String get accessoryCowboyHatName => 'Cowboyhut';
+
+  @override
+  String get accessoryCrownName => 'Krone';
+
+  @override
+  String get accessoryPartyHatName => 'Partyhut';
+
+  @override
+  String get accessoryBowTieName => 'Fliege';
+
+  @override
+  String get accessoryNecklaceName => 'Halskette';
+
+  @override
+  String get accessoryMustacheName => 'Schnurrbart';
+
+  @override
+  String get accessoryBeanieName => 'Mütze';
+
+  @override
+  String get accessoryMortarboardName => 'Doktorhut';
+
+  @override
+  String get accessoryCollarName => 'Halsband mit Glöckchen';
+
+  @override
+  String get accessoryGlassesName => 'Brille';
+
+  @override
+  String get accessorySunglassesName => 'Sonnenbrille';
+
+  @override
+  String get accessoryMaskName => 'Venezianische Maske';
+
+  @override
+  String get accessoryMedalName => 'Medaille';
+
+  @override
+  String get accessoryScarfName => 'Schal';
+
+  @override
+  String get accessoryHeadphonesName => 'Kopfhörer';
+
+  @override
+  String get accessoryWizardHatName => 'Zaubererhut';
+
+  @override
+  String get accessoryFlowerCrownName => 'Blumenkranz';
+
+  @override
+  String get accessoryDevilHornsName => 'Teufelshörner';
+
+  @override
+  String get onboardingLanguageQuestion => 'Welche Sprache sprichst du?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Weiter';
+
+  @override
+  String get onboardingPetQuestion => 'Wen nimmst du mit nach Hause?';
+
+  @override
+  String get onboardingPetConfirm => 'Auswählen';
+
+  @override
+  String get onboardingLoginTitle => 'Sichere dein Haustier';
+
+  @override
+  String get onboardingLoginGoogle => 'Weiter mit Google';
+
+  @override
+  String get onboardingLoginEmail => 'Weiter mit E-Mail';
+
+  @override
+  String get onboardingLoginSkip => 'Vielleicht später';
+
+  @override
+  String get onboardingLoginSubtitle =>
+      'Melde dich an, damit du sie nie verlierst.';
+
+  @override
+  String get accountEmailLabel => 'E-Mail';
+
+  @override
+  String get accountPasswordLabel => 'Passwort';
+
+  @override
+  String get accountContinueAction => 'Weiter';
+
+  @override
+  String get accountConflictTitle => 'Zwei Haustiere';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email hat bereits ein Haustier, dieses Handy auch. Nur eines kann bleiben.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'Haustier auf diesem Handy behalten';
+
+  @override
+  String get accountConflictUseSaved => 'Gespeichertes Haustier verwenden';
+
+  @override
+  String get accountErrorInvalidEmail =>
+      'Das ist keine gültige E-Mail-Adresse.';
+
+  @override
+  String get accountErrorWeakPassword => 'Verwende mindestens 6 Zeichen.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Anmeldung fehlgeschlagen. Prüfe deine Daten und versuche es erneut.';
 }

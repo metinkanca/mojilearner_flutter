@@ -509,6 +509,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mojiWakeSuccess => 'जभई... मज अब जग गय ह! चल अभयस कर!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return '$minutes मिनट तक जागा';
+  }
+
+  @override
   String get mojiSleepReasonReconnect => 'मज ऊघ रह ह जबक भष लक फर स जड रह ह';
 
   @override
@@ -858,4 +863,170 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'खिलाने के लिए मोजी पर खींचें';
+
+  @override
+  String get bondLabel => 'बंधन';
+
+  @override
+  String get bondStageCurious => 'जिज्ञासु';
+
+  @override
+  String get bondStageFriendly => 'मिलनसार';
+
+  @override
+  String get bondStageAttached => 'लगाव';
+
+  @override
+  String get bondStageDevoted => 'समर्पित';
+
+  @override
+  String get bondStageInseparable => 'अभिन्न';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$stage तक $points';
+  }
+
+  @override
+  String get bondKeepLearning => 'सीखते रहें, और करीब आएँ';
+
+  @override
+  String get bondMissesYou => 'मोजी को आपकी याद आ रही है';
+
+  @override
+  String get bondLonely => 'मोजी काफ़ी समय से आपका इंतज़ार कर रहा है';
+
+  @override
+  String get categoryStyle => 'स्टाइल';
+
+  @override
+  String get accessoryDescription => 'मोजी के पहनने के लिए एक छोटी-सी चीज़।';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return '$stage पर अनलॉक होगा';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'कमाया जाता है, बिकता नहीं';
+
+  @override
+  String get accessoryCapName => 'कैप';
+
+  @override
+  String get accessoryTopHatName => 'टॉप हैट';
+
+  @override
+  String get accessoryCowboyHatName => 'काउबॉय हैट';
+
+  @override
+  String get accessoryCrownName => 'ताज';
+
+  @override
+  String get accessoryPartyHatName => 'पार्टी हैट';
+
+  @override
+  String get accessoryBowTieName => 'बो टाई';
+
+  @override
+  String get accessoryNecklaceName => 'हार';
+
+  @override
+  String get accessoryMustacheName => 'मूँछ';
+
+  @override
+  String get accessoryBeanieName => 'बीनी टोपी';
+
+  @override
+  String get accessoryMortarboardName => 'स्नातक टोपी';
+
+  @override
+  String get accessoryCollarName => 'घंटी वाला पट्टा';
+
+  @override
+  String get accessoryGlassesName => 'चश्मा';
+
+  @override
+  String get accessorySunglassesName => 'धूप का चश्मा';
+
+  @override
+  String get accessoryMaskName => 'नकाब';
+
+  @override
+  String get accessoryMedalName => 'पदक';
+
+  @override
+  String get accessoryScarfName => 'स्कार्फ';
+
+  @override
+  String get accessoryHeadphonesName => 'हेडफ़ोन';
+
+  @override
+  String get accessoryWizardHatName => 'जादूगर टोपी';
+
+  @override
+  String get accessoryFlowerCrownName => 'फूलों का मुकुट';
+
+  @override
+  String get accessoryDevilHornsName => 'शैतानी सींग';
+
+  @override
+  String get onboardingLanguageQuestion => 'आप कौन सी भाषा बोलते हैं?';
+
+  @override
+  String get onboardingLanguageConfirm => 'जारी रखें';
+
+  @override
+  String get onboardingPetQuestion => 'आप किसे घर ले जाएंगे?';
+
+  @override
+  String get onboardingPetConfirm => 'चुनें';
+
+  @override
+  String get onboardingLoginTitle => 'अपने साथी को सहेजें';
+
+  @override
+  String get onboardingLoginGoogle => 'Google से जारी रखें';
+
+  @override
+  String get onboardingLoginEmail => 'ईमेल से जारी रखें';
+
+  @override
+  String get onboardingLoginSkip => 'शायद बाद में';
+
+  @override
+  String get onboardingLoginSubtitle => 'साइन इन करें ताकि वे कभी न खोएँ।';
+
+  @override
+  String get accountEmailLabel => 'ईमेल';
+
+  @override
+  String get accountPasswordLabel => 'पासवर्ड';
+
+  @override
+  String get accountContinueAction => 'जारी रखें';
+
+  @override
+  String get accountConflictTitle => 'दो साथी';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email के पास पहले से एक साथी है, और इस फ़ोन पर भी। सिर्फ़ एक ही रह सकता है।';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'इस फ़ोन वाला साथी रखें';
+
+  @override
+  String get accountConflictUseSaved => 'सहेजा हुआ साथी लें';
+
+  @override
+  String get accountErrorInvalidEmail => 'यह मान्य ईमेल पता नहीं है।';
+
+  @override
+  String get accountErrorWeakPassword => 'कम से कम 6 अक्षर इस्तेमाल करें।';
+
+  @override
+  String get accountErrorSignIn =>
+      'साइन इन नहीं हो सका। जानकारी जाँचें और फिर कोशिश करें।';
 }

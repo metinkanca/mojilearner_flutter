@@ -506,6 +506,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get mojiWakeSuccess => 'หาว... ตอนนโมจตนแลว! มาเรมฝกกน!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'ตื่นอีก $minutes นาที';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'โมจกำลงงบอยระหวางทการเชอมตอภาษากำลงเชอมใหม';
 
@@ -852,4 +857,170 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'ลากไปที่โมจิเพื่อให้อาหาร';
+
+  @override
+  String get bondLabel => 'สายสัมพันธ์';
+
+  @override
+  String get bondStageCurious => 'อยากรู้อยากเห็น';
+
+  @override
+  String get bondStageFriendly => 'เป็นมิตร';
+
+  @override
+  String get bondStageAttached => 'ผูกพัน';
+
+  @override
+  String get bondStageDevoted => 'ทุ่มเท';
+
+  @override
+  String get bondStageInseparable => 'แยกกันไม่ออก';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return 'อีก $points ถึง $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'เรียนต่อไปเพื่อสนิทกันมากขึ้น';
+
+  @override
+  String get bondMissesYou => 'โมจิคิดถึงคุณ';
+
+  @override
+  String get bondLonely => 'โมจิรอคุณมานานแล้ว';
+
+  @override
+  String get categoryStyle => 'สไตล์';
+
+  @override
+  String get accessoryDescription => 'ของชิ้นเล็ก ๆ ให้โมจิใส่';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'ปลดล็อกที่ $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'ได้มาด้วยความผูกพัน ไม่ได้ขาย';
+
+  @override
+  String get accessoryCapName => 'หมวกแก๊ป';
+
+  @override
+  String get accessoryTopHatName => 'หมวกทรงสูง';
+
+  @override
+  String get accessoryCowboyHatName => 'หมวกคาวบอย';
+
+  @override
+  String get accessoryCrownName => 'มงกุฎ';
+
+  @override
+  String get accessoryPartyHatName => 'หมวกปาร์ตี้';
+
+  @override
+  String get accessoryBowTieName => 'หูกระต่าย';
+
+  @override
+  String get accessoryNecklaceName => 'สร้อยคอ';
+
+  @override
+  String get accessoryMustacheName => 'หนวด';
+
+  @override
+  String get accessoryBeanieName => 'หมวกไหมพรม';
+
+  @override
+  String get accessoryMortarboardName => 'หมวกบัณฑิต';
+
+  @override
+  String get accessoryCollarName => 'ปลอกคอกระดิ่ง';
+
+  @override
+  String get accessoryGlassesName => 'แว่นตา';
+
+  @override
+  String get accessorySunglassesName => 'แว่นกันแดด';
+
+  @override
+  String get accessoryMaskName => 'หน้ากากแฟนซี';
+
+  @override
+  String get accessoryMedalName => 'เหรียญรางวัล';
+
+  @override
+  String get accessoryScarfName => 'ผ้าพันคอ';
+
+  @override
+  String get accessoryHeadphonesName => 'หูฟัง';
+
+  @override
+  String get accessoryWizardHatName => 'หมวกพ่อมด';
+
+  @override
+  String get accessoryFlowerCrownName => 'มงกุฎดอกไม้';
+
+  @override
+  String get accessoryDevilHornsName => 'เขาปีศาจ';
+
+  @override
+  String get onboardingLanguageQuestion => 'คุณพูดภาษาอะไร?';
+
+  @override
+  String get onboardingLanguageConfirm => 'ต่อไป';
+
+  @override
+  String get onboardingPetQuestion => 'คุณจะพาใครกลับบ้าน?';
+
+  @override
+  String get onboardingPetConfirm => 'เลือก';
+
+  @override
+  String get onboardingLoginTitle => 'บันทึกสัตว์เลี้ยงของคุณ';
+
+  @override
+  String get onboardingLoginGoogle => 'ดำเนินการต่อด้วย Google';
+
+  @override
+  String get onboardingLoginEmail => 'ดำเนินการต่อด้วยอีเมล';
+
+  @override
+  String get onboardingLoginSkip => 'ไว้ทีหลัง';
+
+  @override
+  String get onboardingLoginSubtitle => 'เข้าสู่ระบบเพื่อไม่ให้สูญหาย';
+
+  @override
+  String get accountEmailLabel => 'อีเมล';
+
+  @override
+  String get accountPasswordLabel => 'รหัสผ่าน';
+
+  @override
+  String get accountContinueAction => 'ต่อไป';
+
+  @override
+  String get accountConflictTitle => 'สัตว์เลี้ยงสองตัว';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email มีสัตว์เลี้ยงอยู่แล้ว และเครื่องนี้ก็มี เก็บไว้ได้เพียงตัวเดียว';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'เก็บตัวในเครื่องนี้';
+
+  @override
+  String get accountConflictUseSaved => 'ใช้ตัวที่บันทึกไว้';
+
+  @override
+  String get accountErrorInvalidEmail => 'อีเมลไม่ถูกต้อง';
+
+  @override
+  String get accountErrorWeakPassword => 'ใช้อย่างน้อย 6 ตัวอักษร';
+
+  @override
+  String get accountErrorSignIn =>
+      'เข้าสู่ระบบไม่สำเร็จ ตรวจสอบข้อมูลแล้วลองใหม่';
 }

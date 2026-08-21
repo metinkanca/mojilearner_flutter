@@ -512,6 +512,11 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sbadiglio... Moji ora è sveglio! Facciamo pratica!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Sveglio per $minutes min';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji sonnecchia mentre il collegamento linguistico si riconnette.';
 
@@ -866,4 +871,170 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Trascina su Moji per dargli da mangiare';
+
+  @override
+  String get bondLabel => 'LEGAME';
+
+  @override
+  String get bondStageCurious => 'Curioso';
+
+  @override
+  String get bondStageFriendly => 'Amichevole';
+
+  @override
+  String get bondStageAttached => 'Affezionato';
+
+  @override
+  String get bondStageDevoted => 'Devoto';
+
+  @override
+  String get bondStageInseparable => 'Inseparabile';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points a $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Continua a imparare per avvicinarvi';
+
+  @override
+  String get bondMissesYou => 'Moji sente la tua mancanza';
+
+  @override
+  String get bondLonely => 'Moji ti aspetta da tempo';
+
+  @override
+  String get categoryStyle => 'Stile';
+
+  @override
+  String get accessoryDescription => 'Un pensierino da far indossare a Moji.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Si sblocca a $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Si guadagna, non si compra';
+
+  @override
+  String get accessoryCapName => 'Berretto';
+
+  @override
+  String get accessoryTopHatName => 'Cilindro';
+
+  @override
+  String get accessoryCowboyHatName => 'Cappello da cowboy';
+
+  @override
+  String get accessoryCrownName => 'Corona';
+
+  @override
+  String get accessoryPartyHatName => 'Cappellino di festa';
+
+  @override
+  String get accessoryBowTieName => 'Papillon';
+
+  @override
+  String get accessoryNecklaceName => 'Collana';
+
+  @override
+  String get accessoryMustacheName => 'Baffi';
+
+  @override
+  String get accessoryBeanieName => 'Berretto';
+
+  @override
+  String get accessoryMortarboardName => 'Tocco accademico';
+
+  @override
+  String get accessoryCollarName => 'Collare con campanello';
+
+  @override
+  String get accessoryGlassesName => 'Occhiali';
+
+  @override
+  String get accessorySunglassesName => 'Occhiali da sole';
+
+  @override
+  String get accessoryMaskName => 'Maschera veneziana';
+
+  @override
+  String get accessoryMedalName => 'Medaglia';
+
+  @override
+  String get accessoryScarfName => 'Sciarpa';
+
+  @override
+  String get accessoryHeadphonesName => 'Cuffie';
+
+  @override
+  String get accessoryWizardHatName => 'Cappello da mago';
+
+  @override
+  String get accessoryFlowerCrownName => 'Corona di fiori';
+
+  @override
+  String get accessoryDevilHornsName => 'Corna da diavolo';
+
+  @override
+  String get onboardingLanguageQuestion => 'Che lingua parli?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Continua';
+
+  @override
+  String get onboardingPetQuestion => 'Chi porti a casa?';
+
+  @override
+  String get onboardingPetConfirm => 'Scegli';
+
+  @override
+  String get onboardingLoginTitle => 'Salva il tuo amico';
+
+  @override
+  String get onboardingLoginGoogle => 'Continua con Google';
+
+  @override
+  String get onboardingLoginEmail => 'Continua con l\'email';
+
+  @override
+  String get onboardingLoginSkip => 'Forse più tardi';
+
+  @override
+  String get onboardingLoginSubtitle => 'Accedi per non perderli mai.';
+
+  @override
+  String get accountEmailLabel => 'Email';
+
+  @override
+  String get accountPasswordLabel => 'Password';
+
+  @override
+  String get accountContinueAction => 'Continua';
+
+  @override
+  String get accountConflictTitle => 'Due amici';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email ha già un amico, e anche questo telefono. Solo uno può restare.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'Tieni quello di questo telefono';
+
+  @override
+  String get accountConflictUseSaved => 'Usa l\'amico salvato';
+
+  @override
+  String get accountErrorInvalidEmail => 'Questo indirizzo email non è valido.';
+
+  @override
+  String get accountErrorWeakPassword => 'Usa almeno 6 caratteri.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Accesso non riuscito. Controlla i dati e riprova.';
 }

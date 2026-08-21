@@ -512,6 +512,11 @@ class AppLocalizationsFi extends AppLocalizations {
       'Haukotus... Moji on nyt hereillä! Harjoitellaan!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Hereillä $minutes min';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji torkkuu, kun kieliyhteys muodostetaan uudelleen.';
 
@@ -865,4 +870,171 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Vedä Mojin päälle ruokkiaksesi';
+
+  @override
+  String get bondLabel => 'SIDE';
+
+  @override
+  String get bondStageCurious => 'Utelias';
+
+  @override
+  String get bondStageFriendly => 'Ystävällinen';
+
+  @override
+  String get bondStageAttached => 'Kiintynyt';
+
+  @override
+  String get bondStageDevoted => 'Omistautunut';
+
+  @override
+  String get bondStageInseparable => 'Erottamattomat';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points tasoon $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Jatka oppimista, niin lähennytte';
+
+  @override
+  String get bondMissesYou => 'Moji kaipaa sinua';
+
+  @override
+  String get bondLonely => 'Moji on odottanut sinua';
+
+  @override
+  String get categoryStyle => 'Tyyli';
+
+  @override
+  String get accessoryDescription => 'Pieni asuste Mojille.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Aukeaa tasolla $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Ansaitaan, ei osteta';
+
+  @override
+  String get accessoryCapName => 'Lippalakki';
+
+  @override
+  String get accessoryTopHatName => 'Silinteri';
+
+  @override
+  String get accessoryCowboyHatName => 'Cowboyhattu';
+
+  @override
+  String get accessoryCrownName => 'Kruunu';
+
+  @override
+  String get accessoryPartyHatName => 'Juhlahattu';
+
+  @override
+  String get accessoryBowTieName => 'Rusetti';
+
+  @override
+  String get accessoryNecklaceName => 'Kaulakoru';
+
+  @override
+  String get accessoryMustacheName => 'Viikset';
+
+  @override
+  String get accessoryBeanieName => 'Pipo';
+
+  @override
+  String get accessoryMortarboardName => 'Akateeminen hattu';
+
+  @override
+  String get accessoryCollarName => 'Kulkuspanta';
+
+  @override
+  String get accessoryGlassesName => 'Silmälasit';
+
+  @override
+  String get accessorySunglassesName => 'Aurinkolasit';
+
+  @override
+  String get accessoryMaskName => 'Naamiaisnaamio';
+
+  @override
+  String get accessoryMedalName => 'Mitali';
+
+  @override
+  String get accessoryScarfName => 'Kaulahuivi';
+
+  @override
+  String get accessoryHeadphonesName => 'Kuulokkeet';
+
+  @override
+  String get accessoryWizardHatName => 'Velhonhattu';
+
+  @override
+  String get accessoryFlowerCrownName => 'Kukkaseppele';
+
+  @override
+  String get accessoryDevilHornsName => 'Pirunsarvet';
+
+  @override
+  String get onboardingLanguageQuestion => 'Mitä kieltä puhut?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Jatka';
+
+  @override
+  String get onboardingPetQuestion => 'Kenet otat kotiin?';
+
+  @override
+  String get onboardingPetConfirm => 'Valitse';
+
+  @override
+  String get onboardingLoginTitle => 'Tallenna lemmikkisi';
+
+  @override
+  String get onboardingLoginGoogle => 'Jatka Googlella';
+
+  @override
+  String get onboardingLoginEmail => 'Jatka sähköpostilla';
+
+  @override
+  String get onboardingLoginSkip => 'Ehkä myöhemmin';
+
+  @override
+  String get onboardingLoginSubtitle =>
+      'Kirjaudu sisään, niin et menetä heitä koskaan.';
+
+  @override
+  String get accountEmailLabel => 'Sähköposti';
+
+  @override
+  String get accountPasswordLabel => 'Salasana';
+
+  @override
+  String get accountContinueAction => 'Jatka';
+
+  @override
+  String get accountConflictTitle => 'Kaksi lemmikkiä';
+
+  @override
+  String accountConflictBody(String email) {
+    return 'Tilillä $email on jo lemmikki, ja tällä puhelimella myös. Vain toinen voi jäädä.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'Pidä tämän puhelimen lemmikki';
+
+  @override
+  String get accountConflictUseSaved => 'Käytä tallennettua lemmikkiä';
+
+  @override
+  String get accountErrorInvalidEmail => 'Sähköpostiosoite ei kelpaa.';
+
+  @override
+  String get accountErrorWeakPassword => 'Käytä vähintään 6 merkkiä.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Kirjautuminen epäonnistui. Tarkista tiedot ja yritä uudelleen.';
 }

@@ -504,6 +504,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mojiWakeSuccess => '하암... Moji가 이제 깼어요! 연습해요!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return '$minutes분 더 깨어 있음';
+  }
+
+  @override
   String get mojiSleepReasonReconnect => '언어 연결을 다시 연결하는 동안 Moji가 꾸벅꾸벅 졸고 있어요.';
 
   @override
@@ -845,4 +850,169 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get careDragToFeed => '모지에게 끌어다 놓아 먹이기';
+
+  @override
+  String get bondLabel => '유대';
+
+  @override
+  String get bondStageCurious => '호기심';
+
+  @override
+  String get bondStageFriendly => '친근함';
+
+  @override
+  String get bondStageAttached => '애착';
+
+  @override
+  String get bondStageDevoted => '헌신';
+
+  @override
+  String get bondStageInseparable => '단짝';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$stage까지 $points';
+  }
+
+  @override
+  String get bondKeepLearning => '계속 배우면 더 가까워져요';
+
+  @override
+  String get bondMissesYou => '모지가 보고 싶어 해요';
+
+  @override
+  String get bondLonely => '모지가 오랫동안 기다렸어요';
+
+  @override
+  String get categoryStyle => '스타일';
+
+  @override
+  String get accessoryDescription => '모지가 쓸 작은 소품이에요.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return '$stage에서 잠금 해제';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => '살 수 없어요, 유대로 얻어요';
+
+  @override
+  String get accessoryCapName => '모자';
+
+  @override
+  String get accessoryTopHatName => '실크햇';
+
+  @override
+  String get accessoryCowboyHatName => '카우보이 모자';
+
+  @override
+  String get accessoryCrownName => '왕관';
+
+  @override
+  String get accessoryPartyHatName => '파티 모자';
+
+  @override
+  String get accessoryBowTieName => '나비넥타이';
+
+  @override
+  String get accessoryNecklaceName => '목걸이';
+
+  @override
+  String get accessoryMustacheName => '콧수염';
+
+  @override
+  String get accessoryBeanieName => '비니';
+
+  @override
+  String get accessoryMortarboardName => '학사모';
+
+  @override
+  String get accessoryCollarName => '방울 목걸이';
+
+  @override
+  String get accessoryGlassesName => '안경';
+
+  @override
+  String get accessorySunglassesName => '선글라스';
+
+  @override
+  String get accessoryMaskName => '가면';
+
+  @override
+  String get accessoryMedalName => '메달';
+
+  @override
+  String get accessoryScarfName => '목도리';
+
+  @override
+  String get accessoryHeadphonesName => '헤드폰';
+
+  @override
+  String get accessoryWizardHatName => '마법사 모자';
+
+  @override
+  String get accessoryFlowerCrownName => '꽃 왕관';
+
+  @override
+  String get accessoryDevilHornsName => '악마 뿔';
+
+  @override
+  String get onboardingLanguageQuestion => '어떤 언어를 사용하나요?';
+
+  @override
+  String get onboardingLanguageConfirm => '계속하기';
+
+  @override
+  String get onboardingPetQuestion => '누구를 데려갈까요?';
+
+  @override
+  String get onboardingPetConfirm => '선택';
+
+  @override
+  String get onboardingLoginTitle => '반려동물 저장하기';
+
+  @override
+  String get onboardingLoginGoogle => 'Google로 계속하기';
+
+  @override
+  String get onboardingLoginEmail => '이메일로 계속하기';
+
+  @override
+  String get onboardingLoginSkip => '나중에';
+
+  @override
+  String get onboardingLoginSubtitle => '로그인하면 절대 잃어버리지 않아요.';
+
+  @override
+  String get accountEmailLabel => '이메일';
+
+  @override
+  String get accountPasswordLabel => '비밀번호';
+
+  @override
+  String get accountContinueAction => '계속하기';
+
+  @override
+  String get accountConflictTitle => '두 마리';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email 계정에도 이 휴대폰에도 반려동물이 있어요. 한 마리만 남길 수 있어요.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => '이 휴대폰의 반려동물 남기기';
+
+  @override
+  String get accountConflictUseSaved => '저장된 반려동물 사용하기';
+
+  @override
+  String get accountErrorInvalidEmail => '올바른 이메일 주소가 아니에요.';
+
+  @override
+  String get accountErrorWeakPassword => '6자 이상 입력해 주세요.';
+
+  @override
+  String get accountErrorSignIn => '로그인하지 못했어요. 정보를 확인하고 다시 시도해 주세요.';
 }

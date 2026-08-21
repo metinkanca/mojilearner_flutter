@@ -511,6 +511,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mojiWakeSuccess => 'Gaaab... Moji er vågen nu! Lad os øve!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Vågen i $minutes min';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji døser, mens sprogforbindelsen genoprettes.';
 
@@ -863,4 +868,171 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Træk over på Moji for at fodre';
+
+  @override
+  String get bondLabel => 'BÅND';
+
+  @override
+  String get bondStageCurious => 'Nysgerrig';
+
+  @override
+  String get bondStageFriendly => 'Venlig';
+
+  @override
+  String get bondStageAttached => 'Knyttet';
+
+  @override
+  String get bondStageDevoted => 'Hengiven';
+
+  @override
+  String get bondStageInseparable => 'Uadskillelige';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points til $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Bliv ved med at lære for at komme tættere på';
+
+  @override
+  String get bondMissesYou => 'Moji savner dig';
+
+  @override
+  String get bondLonely => 'Moji har ventet på dig';
+
+  @override
+  String get categoryStyle => 'Stil';
+
+  @override
+  String get accessoryDescription => 'Noget småt, som Moji kan have på.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Låses op ved $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Optjent, ikke købt';
+
+  @override
+  String get accessoryCapName => 'Kasket';
+
+  @override
+  String get accessoryTopHatName => 'Høj hat';
+
+  @override
+  String get accessoryCowboyHatName => 'Cowboyhat';
+
+  @override
+  String get accessoryCrownName => 'Krone';
+
+  @override
+  String get accessoryPartyHatName => 'Festhat';
+
+  @override
+  String get accessoryBowTieName => 'Butterfly';
+
+  @override
+  String get accessoryNecklaceName => 'Halskæde';
+
+  @override
+  String get accessoryMustacheName => 'Overskæg';
+
+  @override
+  String get accessoryBeanieName => 'Hue';
+
+  @override
+  String get accessoryMortarboardName => 'Akademisk hue';
+
+  @override
+  String get accessoryCollarName => 'Halsbånd med bjelde';
+
+  @override
+  String get accessoryGlassesName => 'Briller';
+
+  @override
+  String get accessorySunglassesName => 'Solbriller';
+
+  @override
+  String get accessoryMaskName => 'Maskerademaske';
+
+  @override
+  String get accessoryMedalName => 'Medalje';
+
+  @override
+  String get accessoryScarfName => 'Halstørklæde';
+
+  @override
+  String get accessoryHeadphonesName => 'Hovedtelefoner';
+
+  @override
+  String get accessoryWizardHatName => 'Troldmandshat';
+
+  @override
+  String get accessoryFlowerCrownName => 'Blomsterkrans';
+
+  @override
+  String get accessoryDevilHornsName => 'Djævlehorn';
+
+  @override
+  String get onboardingLanguageQuestion => 'Hvilket sprog taler du?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Fortsæt';
+
+  @override
+  String get onboardingPetQuestion => 'Hvem tager du med hjem?';
+
+  @override
+  String get onboardingPetConfirm => 'Vælg';
+
+  @override
+  String get onboardingLoginTitle => 'Gem dit kæledyr';
+
+  @override
+  String get onboardingLoginGoogle => 'Fortsæt med Google';
+
+  @override
+  String get onboardingLoginEmail => 'Fortsæt med e-mail';
+
+  @override
+  String get onboardingLoginSkip => 'Måske senere';
+
+  @override
+  String get onboardingLoginSubtitle => 'Log ind, så du aldrig mister dem.';
+
+  @override
+  String get accountEmailLabel => 'E-mail';
+
+  @override
+  String get accountPasswordLabel => 'Adgangskode';
+
+  @override
+  String get accountContinueAction => 'Fortsæt';
+
+  @override
+  String get accountConflictTitle => 'To kæledyr';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email har allerede et kæledyr, og det har denne telefon også. Kun ét kan blive.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'Behold kæledyret på denne telefon';
+
+  @override
+  String get accountConflictUseSaved => 'Brug det gemte kæledyr';
+
+  @override
+  String get accountErrorInvalidEmail => 'Det er ikke en gyldig e-mailadresse.';
+
+  @override
+  String get accountErrorWeakPassword => 'Brug mindst 6 tegn.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Kunne ikke logge ind. Tjek dine oplysninger, og prøv igen.';
 }

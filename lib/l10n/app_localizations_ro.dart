@@ -511,6 +511,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mojiWakeSuccess => 'Căscat... Moji este treaz acum! Să exersăm!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Treaz încă $minutes min';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji moțăie în timp ce legătura de limbă se reconectează.';
 
@@ -863,4 +868,173 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Trage peste Moji ca să-l hrănești';
+
+  @override
+  String get bondLabel => 'LEGĂTURĂ';
+
+  @override
+  String get bondStageCurious => 'Curios';
+
+  @override
+  String get bondStageFriendly => 'Prietenos';
+
+  @override
+  String get bondStageAttached => 'Atașat';
+
+  @override
+  String get bondStageDevoted => 'Devotat';
+
+  @override
+  String get bondStageInseparable => 'Nedespărțiți';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points până la $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Continuă să înveți ca să vă apropiați';
+
+  @override
+  String get bondMissesYou => 'Lui Moji îi este dor de tine';
+
+  @override
+  String get bondLonely => 'Moji te așteaptă de mult';
+
+  @override
+  String get categoryStyle => 'Stil';
+
+  @override
+  String get accessoryDescription => 'Ceva mic pentru Moji.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Se deblochează la $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Se câștigă, nu se cumpără';
+
+  @override
+  String get accessoryCapName => 'Șapcă';
+
+  @override
+  String get accessoryTopHatName => 'Joben';
+
+  @override
+  String get accessoryCowboyHatName => 'Pălărie de cowboy';
+
+  @override
+  String get accessoryCrownName => 'Coroană';
+
+  @override
+  String get accessoryPartyHatName => 'Pălărie de petrecere';
+
+  @override
+  String get accessoryBowTieName => 'Papion';
+
+  @override
+  String get accessoryNecklaceName => 'Colier';
+
+  @override
+  String get accessoryMustacheName => 'Mustață';
+
+  @override
+  String get accessoryBeanieName => 'Căciulă';
+
+  @override
+  String get accessoryMortarboardName => 'Tocă de absolvire';
+
+  @override
+  String get accessoryCollarName => 'Zgardă cu clopoțel';
+
+  @override
+  String get accessoryGlassesName => 'Ochelari';
+
+  @override
+  String get accessorySunglassesName => 'Ochelari de soare';
+
+  @override
+  String get accessoryMaskName => 'Mască de bal';
+
+  @override
+  String get accessoryMedalName => 'Medalie';
+
+  @override
+  String get accessoryScarfName => 'Fular';
+
+  @override
+  String get accessoryHeadphonesName => 'Căști';
+
+  @override
+  String get accessoryWizardHatName => 'Pălărie de vrăjitor';
+
+  @override
+  String get accessoryFlowerCrownName => 'Coroniță de flori';
+
+  @override
+  String get accessoryDevilHornsName => 'Coarne de diavol';
+
+  @override
+  String get onboardingLanguageQuestion => 'Ce limbă vorbești?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Continuă';
+
+  @override
+  String get onboardingPetQuestion => 'Pe cine iei acasă?';
+
+  @override
+  String get onboardingPetConfirm => 'Alege';
+
+  @override
+  String get onboardingLoginTitle => 'Salvează-ți animăluțul';
+
+  @override
+  String get onboardingLoginGoogle => 'Continuă cu Google';
+
+  @override
+  String get onboardingLoginEmail => 'Continuă cu e-mail';
+
+  @override
+  String get onboardingLoginSkip => 'Poate mai târziu';
+
+  @override
+  String get onboardingLoginSubtitle =>
+      'Conectează-te ca să nu îi pierzi niciodată.';
+
+  @override
+  String get accountEmailLabel => 'E-mail';
+
+  @override
+  String get accountPasswordLabel => 'Parolă';
+
+  @override
+  String get accountContinueAction => 'Continuă';
+
+  @override
+  String get accountConflictTitle => 'Doi prieteni';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email are deja un prieten, iar telefonul acesta la fel. Poate rămâne doar unul.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'Păstrează prietenul de pe acest telefon';
+
+  @override
+  String get accountConflictUseSaved => 'Folosește prietenul salvat';
+
+  @override
+  String get accountErrorInvalidEmail =>
+      'Aceasta nu este o adresă de e-mail validă.';
+
+  @override
+  String get accountErrorWeakPassword => 'Folosește cel puțin 6 caractere.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Conectarea a eșuat. Verifică datele și încearcă din nou.';
 }

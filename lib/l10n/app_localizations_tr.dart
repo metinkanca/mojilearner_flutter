@@ -515,6 +515,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Esneme... Moji şimdi uyanık! Hadi pratik yapalım!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return '$minutes dk daha uyanık';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Dil bağlantısı yeniden bağlanırken Moji kestiriyor.';
 
@@ -868,4 +873,170 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Beslemek için Moji’nin üstüne sürükle';
+
+  @override
+  String get bondLabel => 'BAĞ';
+
+  @override
+  String get bondStageCurious => 'Meraklı';
+
+  @override
+  String get bondStageFriendly => 'Arkadaş canlısı';
+
+  @override
+  String get bondStageAttached => 'Bağlı';
+
+  @override
+  String get bondStageDevoted => 'Sadık';
+
+  @override
+  String get bondStageInseparable => 'Ayrılmaz';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$stage için $points';
+  }
+
+  @override
+  String get bondKeepLearning => 'Yakınlaşmak için öğrenmeye devam et';
+
+  @override
+  String get bondMissesYou => 'Moji seni özledi';
+
+  @override
+  String get bondLonely => 'Moji uzun zamandır seni bekliyor';
+
+  @override
+  String get categoryStyle => 'Stil';
+
+  @override
+  String get accessoryDescription => 'Moji için ufak bir şey.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return '$stage aşamasında açılır';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Kazanılır, satılmaz';
+
+  @override
+  String get accessoryCapName => 'Şapka';
+
+  @override
+  String get accessoryTopHatName => 'Silindir şapka';
+
+  @override
+  String get accessoryCowboyHatName => 'Kovboy şapkası';
+
+  @override
+  String get accessoryCrownName => 'Taç';
+
+  @override
+  String get accessoryPartyHatName => 'Parti şapkası';
+
+  @override
+  String get accessoryBowTieName => 'Papyon';
+
+  @override
+  String get accessoryNecklaceName => 'Kolye';
+
+  @override
+  String get accessoryMustacheName => 'Bıyık';
+
+  @override
+  String get accessoryBeanieName => 'Bere';
+
+  @override
+  String get accessoryMortarboardName => 'Mezuniyet Kepi';
+
+  @override
+  String get accessoryCollarName => 'Çıngıraklı Tasma';
+
+  @override
+  String get accessoryGlassesName => 'Gözlük';
+
+  @override
+  String get accessorySunglassesName => 'Güneş Gözlüğü';
+
+  @override
+  String get accessoryMaskName => 'Maskeli Balo Maskesi';
+
+  @override
+  String get accessoryMedalName => 'Madalya';
+
+  @override
+  String get accessoryScarfName => 'Atkı';
+
+  @override
+  String get accessoryHeadphonesName => 'Kulaklık';
+
+  @override
+  String get accessoryWizardHatName => 'Büyücü Şapkası';
+
+  @override
+  String get accessoryFlowerCrownName => 'Çiçek Tacı';
+
+  @override
+  String get accessoryDevilHornsName => 'Şeytan Boynuzları';
+
+  @override
+  String get onboardingLanguageQuestion => 'Hangi dili konuşuyorsun?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Devam et';
+
+  @override
+  String get onboardingPetQuestion => 'Kimi eve götüreceksin?';
+
+  @override
+  String get onboardingPetConfirm => 'Seç';
+
+  @override
+  String get onboardingLoginTitle => 'Dostunu kaydet';
+
+  @override
+  String get onboardingLoginGoogle => 'Google ile devam et';
+
+  @override
+  String get onboardingLoginEmail => 'E-posta ile devam et';
+
+  @override
+  String get onboardingLoginSkip => 'Belki sonra';
+
+  @override
+  String get onboardingLoginSubtitle => 'Giriş yap ki onu asla kaybetme.';
+
+  @override
+  String get accountEmailLabel => 'E-posta';
+
+  @override
+  String get accountPasswordLabel => 'Şifre';
+
+  @override
+  String get accountContinueAction => 'Devam et';
+
+  @override
+  String get accountConflictTitle => 'İki dost';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email hesabının bir dostu var, bu telefonun da. Yalnızca biri kalabilir.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'Bu telefondaki dostu tut';
+
+  @override
+  String get accountConflictUseSaved => 'Kayıtlı dostu kullan';
+
+  @override
+  String get accountErrorInvalidEmail => 'Bu geçerli bir e-posta adresi değil.';
+
+  @override
+  String get accountErrorWeakPassword => 'En az 6 karakter kullan.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Giriş yapılamadı. Bilgilerini kontrol edip tekrar dene.';
 }

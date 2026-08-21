@@ -513,6 +513,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mojiWakeSuccess => 'Ngáp... Moji đã thức rồi! Cùng luyện tập nhé!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Thức thêm $minutes phút';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Moji đang lim dim khi kết nối ngôn ngữ đang kết nối lại.';
 
@@ -864,4 +869,170 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Kéo vào Moji để cho ăn';
+
+  @override
+  String get bondLabel => 'GẮN KẾT';
+
+  @override
+  String get bondStageCurious => 'Tò mò';
+
+  @override
+  String get bondStageFriendly => 'Thân thiện';
+
+  @override
+  String get bondStageAttached => 'Quyến luyến';
+
+  @override
+  String get bondStageDevoted => 'Tận tụy';
+
+  @override
+  String get bondStageInseparable => 'Không thể tách rời';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points nữa đến $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Tiếp tục học để gần nhau hơn';
+
+  @override
+  String get bondMissesYou => 'Moji nhớ bạn';
+
+  @override
+  String get bondLonely => 'Moji đã đợi bạn từ lâu';
+
+  @override
+  String get categoryStyle => 'Phong cách';
+
+  @override
+  String get accessoryDescription => 'Một món nhỏ cho Moji đeo.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Mở khóa ở $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Do gắn kết mà có, không bán';
+
+  @override
+  String get accessoryCapName => 'Mũ lưỡi trai';
+
+  @override
+  String get accessoryTopHatName => 'Mũ chóp cao';
+
+  @override
+  String get accessoryCowboyHatName => 'Mũ cao bồi';
+
+  @override
+  String get accessoryCrownName => 'Vương miện';
+
+  @override
+  String get accessoryPartyHatName => 'Mũ tiệc';
+
+  @override
+  String get accessoryBowTieName => 'Nơ cổ';
+
+  @override
+  String get accessoryNecklaceName => 'Vòng cổ';
+
+  @override
+  String get accessoryMustacheName => 'Ria mép';
+
+  @override
+  String get accessoryBeanieName => 'Mũ len';
+
+  @override
+  String get accessoryMortarboardName => 'Mũ tốt nghiệp';
+
+  @override
+  String get accessoryCollarName => 'Vòng cổ chuông';
+
+  @override
+  String get accessoryGlassesName => 'Kính';
+
+  @override
+  String get accessorySunglassesName => 'Kính râm';
+
+  @override
+  String get accessoryMaskName => 'Mặt nạ hóa trang';
+
+  @override
+  String get accessoryMedalName => 'Huy chương';
+
+  @override
+  String get accessoryScarfName => 'Khăn quàng cổ';
+
+  @override
+  String get accessoryHeadphonesName => 'Tai nghe';
+
+  @override
+  String get accessoryWizardHatName => 'Mũ phù thủy';
+
+  @override
+  String get accessoryFlowerCrownName => 'Vòng hoa';
+
+  @override
+  String get accessoryDevilHornsName => 'Sừng quỷ';
+
+  @override
+  String get onboardingLanguageQuestion => 'Bạn nói ngôn ngữ nào?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Tiếp tục';
+
+  @override
+  String get onboardingPetQuestion => 'Bạn sẽ đưa ai về nhà?';
+
+  @override
+  String get onboardingPetConfirm => 'Chọn';
+
+  @override
+  String get onboardingLoginTitle => 'Lưu thú cưng của bạn';
+
+  @override
+  String get onboardingLoginGoogle => 'Tiếp tục với Google';
+
+  @override
+  String get onboardingLoginEmail => 'Tiếp tục với email';
+
+  @override
+  String get onboardingLoginSkip => 'Để sau';
+
+  @override
+  String get onboardingLoginSubtitle => 'Đăng nhập để không bao giờ mất chúng.';
+
+  @override
+  String get accountEmailLabel => 'Email';
+
+  @override
+  String get accountPasswordLabel => 'Mật khẩu';
+
+  @override
+  String get accountContinueAction => 'Tiếp tục';
+
+  @override
+  String get accountConflictTitle => 'Hai thú cưng';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email đã có một thú cưng, điện thoại này cũng vậy. Chỉ giữ được một.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'Giữ thú cưng trên máy này';
+
+  @override
+  String get accountConflictUseSaved => 'Dùng thú cưng đã lưu';
+
+  @override
+  String get accountErrorInvalidEmail => 'Địa chỉ email không hợp lệ.';
+
+  @override
+  String get accountErrorWeakPassword => 'Dùng ít nhất 6 ký tự.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Không đăng nhập được. Kiểm tra thông tin và thử lại.';
 }

@@ -511,6 +511,11 @@ class AppLocalizationsUk extends AppLocalizations {
       'Позіх... Модзі вже прокинувся! Давай практикуватися!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'Не спить ще $minutes хв';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'Модзі дрімає, поки мовний звязок перепідключається.';
 
@@ -864,4 +869,171 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'Перетягни на Моджі, щоб погодувати';
+
+  @override
+  String get bondLabel => 'ЗВʼЯЗОК';
+
+  @override
+  String get bondStageCurious => 'Допитливий';
+
+  @override
+  String get bondStageFriendly => 'Дружній';
+
+  @override
+  String get bondStageAttached => 'Прив\'язаний';
+
+  @override
+  String get bondStageDevoted => 'Відданий';
+
+  @override
+  String get bondStageInseparable => 'Нерозлучні';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points до $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'Навчайся далі, щоб зблизитися';
+
+  @override
+  String get bondMissesYou => 'Моджі сумує за тобою';
+
+  @override
+  String get bondLonely => 'Моджі давно на тебе чекає';
+
+  @override
+  String get categoryStyle => 'Стиль';
+
+  @override
+  String get accessoryDescription => 'Дрібничка для Моджі.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'Відкриється на етапі $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'Заслуговується, а не купується';
+
+  @override
+  String get accessoryCapName => 'Кепка';
+
+  @override
+  String get accessoryTopHatName => 'Циліндр';
+
+  @override
+  String get accessoryCowboyHatName => 'Ковбойський капелюх';
+
+  @override
+  String get accessoryCrownName => 'Корона';
+
+  @override
+  String get accessoryPartyHatName => 'Святковий ковпак';
+
+  @override
+  String get accessoryBowTieName => 'Метелик';
+
+  @override
+  String get accessoryNecklaceName => 'Намисто';
+
+  @override
+  String get accessoryMustacheName => 'Вуса';
+
+  @override
+  String get accessoryBeanieName => 'Шапка';
+
+  @override
+  String get accessoryMortarboardName => 'Академічна шапочка';
+
+  @override
+  String get accessoryCollarName => 'Нашийник із дзвіночком';
+
+  @override
+  String get accessoryGlassesName => 'Окуляри';
+
+  @override
+  String get accessorySunglassesName => 'Темні окуляри';
+
+  @override
+  String get accessoryMaskName => 'Карнавальна маска';
+
+  @override
+  String get accessoryMedalName => 'Медаль';
+
+  @override
+  String get accessoryScarfName => 'Шарф';
+
+  @override
+  String get accessoryHeadphonesName => 'Навушники';
+
+  @override
+  String get accessoryWizardHatName => 'Капелюх чарівника';
+
+  @override
+  String get accessoryFlowerCrownName => 'Вінок із квітів';
+
+  @override
+  String get accessoryDevilHornsName => 'Ріжки диявола';
+
+  @override
+  String get onboardingLanguageQuestion => 'Якою мовою ти розмовляєш?';
+
+  @override
+  String get onboardingLanguageConfirm => 'Продовжити';
+
+  @override
+  String get onboardingPetQuestion => 'Кого ти забереш додому?';
+
+  @override
+  String get onboardingPetConfirm => 'Обрати';
+
+  @override
+  String get onboardingLoginTitle => 'Збережи улюбленця';
+
+  @override
+  String get onboardingLoginGoogle => 'Продовжити з Google';
+
+  @override
+  String get onboardingLoginEmail => 'Продовжити поштою';
+
+  @override
+  String get onboardingLoginSkip => 'Можливо, пізніше';
+
+  @override
+  String get onboardingLoginSubtitle => 'Увійди, щоб ніколи їх не втратити.';
+
+  @override
+  String get accountEmailLabel => 'Пошта';
+
+  @override
+  String get accountPasswordLabel => 'Пароль';
+
+  @override
+  String get accountContinueAction => 'Продовжити';
+
+  @override
+  String get accountConflictTitle => 'Два улюбленці';
+
+  @override
+  String accountConflictBody(String email) {
+    return 'У $email вже є улюбленець, і в цього телефона теж. Лишити можна тільки одного.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice =>
+      'Лишити улюбленця з цього телефона';
+
+  @override
+  String get accountConflictUseSaved => 'Взяти збереженого улюбленця';
+
+  @override
+  String get accountErrorInvalidEmail => 'Це недійсна адреса пошти.';
+
+  @override
+  String get accountErrorWeakPassword => 'Використай щонайменше 6 символів.';
+
+  @override
+  String get accountErrorSignIn =>
+      'Не вдалося увійти. Перевір дані та спробуй ще раз.';
 }

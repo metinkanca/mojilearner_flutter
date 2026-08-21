@@ -504,6 +504,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mojiWakeSuccess => 'ふぁぁ... Mojiは起きました！練習しよう！';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'あと$minutes分おきてる';
+  }
+
+  @override
   String get mojiSleepReasonReconnect => '言語リンクの再接続中、Mojiはうとうとしています。';
 
   @override
@@ -845,4 +850,169 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'モジにドラッグしてあげよう';
+
+  @override
+  String get bondLabel => 'きずな';
+
+  @override
+  String get bondStageCurious => 'きになる';
+
+  @override
+  String get bondStageFriendly => 'なかよし';
+
+  @override
+  String get bondStageAttached => 'なついた';
+
+  @override
+  String get bondStageDevoted => 'しんらい';
+
+  @override
+  String get bondStageInseparable => 'いつもいっしょ';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$stageまで あと$points';
+  }
+
+  @override
+  String get bondKeepLearning => '学び続けて もっと仲良くなろう';
+
+  @override
+  String get bondMissesYou => 'モジがさみしがっています';
+
+  @override
+  String get bondLonely => 'モジはずっと待っています';
+
+  @override
+  String get categoryStyle => 'スタイル';
+
+  @override
+  String get accessoryDescription => 'モジに似合う小物です。';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return '$stageで解放';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => '買えません、きずなで手に入ります';
+
+  @override
+  String get accessoryCapName => 'キャップ';
+
+  @override
+  String get accessoryTopHatName => 'シルクハット';
+
+  @override
+  String get accessoryCowboyHatName => 'カウボーイハット';
+
+  @override
+  String get accessoryCrownName => '王冠';
+
+  @override
+  String get accessoryPartyHatName => 'パーティー帽';
+
+  @override
+  String get accessoryBowTieName => 'ちょうネクタイ';
+
+  @override
+  String get accessoryNecklaceName => 'ネックレス';
+
+  @override
+  String get accessoryMustacheName => 'くちひげ';
+
+  @override
+  String get accessoryBeanieName => 'ニット帽';
+
+  @override
+  String get accessoryMortarboardName => '角帽';
+
+  @override
+  String get accessoryCollarName => '鈴の首輪';
+
+  @override
+  String get accessoryGlassesName => 'めがね';
+
+  @override
+  String get accessorySunglassesName => 'サングラス';
+
+  @override
+  String get accessoryMaskName => '仮面';
+
+  @override
+  String get accessoryMedalName => 'メダル';
+
+  @override
+  String get accessoryScarfName => 'マフラー';
+
+  @override
+  String get accessoryHeadphonesName => 'ヘッドホン';
+
+  @override
+  String get accessoryWizardHatName => 'まほうつかいの帽子';
+
+  @override
+  String get accessoryFlowerCrownName => '花かんむり';
+
+  @override
+  String get accessoryDevilHornsName => 'あくまのツノ';
+
+  @override
+  String get onboardingLanguageQuestion => '何語を話しますか？';
+
+  @override
+  String get onboardingLanguageConfirm => 'つづける';
+
+  @override
+  String get onboardingPetQuestion => 'だれをつれて帰る？';
+
+  @override
+  String get onboardingPetConfirm => 'きめる';
+
+  @override
+  String get onboardingLoginTitle => 'ペットを保存しよう';
+
+  @override
+  String get onboardingLoginGoogle => 'Googleでつづける';
+
+  @override
+  String get onboardingLoginEmail => 'メールでつづける';
+
+  @override
+  String get onboardingLoginSkip => 'あとで';
+
+  @override
+  String get onboardingLoginSubtitle => 'ログインすれば、ずっといっしょ。';
+
+  @override
+  String get accountEmailLabel => 'メール';
+
+  @override
+  String get accountPasswordLabel => 'パスワード';
+
+  @override
+  String get accountContinueAction => 'つづける';
+
+  @override
+  String get accountConflictTitle => 'ペットが2ひき';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email にもこのスマホにもペットがいます。のこせるのは1ひきだけ。';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'このスマホのペットをのこす';
+
+  @override
+  String get accountConflictUseSaved => 'ほぞんされたペットをつかう';
+
+  @override
+  String get accountErrorInvalidEmail => 'メールアドレスがただしくありません。';
+
+  @override
+  String get accountErrorWeakPassword => '6もじいじょうにしてください。';
+
+  @override
+  String get accountErrorSignIn => 'ログインできませんでした。もういちどためしてください。';
 }

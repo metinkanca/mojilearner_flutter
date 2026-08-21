@@ -509,6 +509,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mojiWakeSuccess => 'تثاؤب... موجي مستيقظ الآن! هيا نتدرّب!';
 
   @override
+  String mojiAwakeFor(int minutes) {
+    return 'مستيقظ لمدة $minutes د';
+  }
+
+  @override
   String get mojiSleepReasonReconnect =>
       'موجي يغفو بينما يعيد رابط اللغة الاتصال.';
 
@@ -861,4 +866,170 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get careDragToFeed => 'اسحبه إلى موجي لإطعامه';
+
+  @override
+  String get bondLabel => 'الرابط';
+
+  @override
+  String get bondStageCurious => 'فضولي';
+
+  @override
+  String get bondStageFriendly => 'ودود';
+
+  @override
+  String get bondStageAttached => 'متعلّق';
+
+  @override
+  String get bondStageDevoted => 'مخلص';
+
+  @override
+  String get bondStageInseparable => 'لا ينفصلان';
+
+  @override
+  String bondToNextStage(int points, String stage) {
+    return '$points حتى $stage';
+  }
+
+  @override
+  String get bondKeepLearning => 'واصل التعلّم لتقتربا أكثر';
+
+  @override
+  String get bondMissesYou => 'موجي يفتقدك';
+
+  @override
+  String get bondLonely => 'موجي ينتظرك منذ فترة';
+
+  @override
+  String get categoryStyle => 'الأناقة';
+
+  @override
+  String get accessoryDescription => 'شيء صغير يرتديه موجي.';
+
+  @override
+  String accessoryUnlocksAt(String stage) {
+    return 'يُفتح عند $stage';
+  }
+
+  @override
+  String get accessoryEarnedNotSold => 'يُكتسب ولا يُشترى';
+
+  @override
+  String get accessoryCapName => 'قبعة';
+
+  @override
+  String get accessoryTopHatName => 'قبعة عالية';
+
+  @override
+  String get accessoryCowboyHatName => 'قبعة رعاة البقر';
+
+  @override
+  String get accessoryCrownName => 'تاج';
+
+  @override
+  String get accessoryPartyHatName => 'قبعة حفلة';
+
+  @override
+  String get accessoryBowTieName => 'ربطة فراشة';
+
+  @override
+  String get accessoryNecklaceName => 'قلادة';
+
+  @override
+  String get accessoryMustacheName => 'شارب';
+
+  @override
+  String get accessoryBeanieName => 'قبعة صوفية';
+
+  @override
+  String get accessoryMortarboardName => 'قبعة التخرّج';
+
+  @override
+  String get accessoryCollarName => 'طوق بجرس';
+
+  @override
+  String get accessoryGlassesName => 'نظّارة';
+
+  @override
+  String get accessorySunglassesName => 'نظارة شمسية';
+
+  @override
+  String get accessoryMaskName => 'قناع تنكري';
+
+  @override
+  String get accessoryMedalName => 'ميدالية';
+
+  @override
+  String get accessoryScarfName => 'وشاح';
+
+  @override
+  String get accessoryHeadphonesName => 'سماعات';
+
+  @override
+  String get accessoryWizardHatName => 'قبعة ساحر';
+
+  @override
+  String get accessoryFlowerCrownName => 'إكليل زهور';
+
+  @override
+  String get accessoryDevilHornsName => 'قرون شيطان';
+
+  @override
+  String get onboardingLanguageQuestion => 'ما اللغة التي تتحدثها؟';
+
+  @override
+  String get onboardingLanguageConfirm => 'متابعة';
+
+  @override
+  String get onboardingPetQuestion => 'من ستأخذ معك إلى المنزل؟';
+
+  @override
+  String get onboardingPetConfirm => 'اختيار';
+
+  @override
+  String get onboardingLoginTitle => 'احفظ رفيقك';
+
+  @override
+  String get onboardingLoginGoogle => 'المتابعة باستخدام Google';
+
+  @override
+  String get onboardingLoginEmail => 'المتابعة بالبريد الإلكتروني';
+
+  @override
+  String get onboardingLoginSkip => 'ربما لاحقًا';
+
+  @override
+  String get onboardingLoginSubtitle => 'سجّل الدخول حتى لا تفقده أبدًا.';
+
+  @override
+  String get accountEmailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get accountPasswordLabel => 'كلمة المرور';
+
+  @override
+  String get accountContinueAction => 'متابعة';
+
+  @override
+  String get accountConflictTitle => 'رفيقان';
+
+  @override
+  String accountConflictBody(String email) {
+    return '$email لديه رفيق، وهذا الهاتف كذلك. يمكن الاحتفاظ بواحد فقط.';
+  }
+
+  @override
+  String get accountConflictKeepThisDevice => 'الاحتفاظ برفيق هذا الهاتف';
+
+  @override
+  String get accountConflictUseSaved => 'استخدام الرفيق المحفوظ';
+
+  @override
+  String get accountErrorInvalidEmail => 'هذا ليس بريدًا إلكترونيًا صالحًا.';
+
+  @override
+  String get accountErrorWeakPassword => 'استخدم 6 أحرف على الأقل.';
+
+  @override
+  String get accountErrorSignIn =>
+      'تعذّر تسجيل الدخول. تحقق من بياناتك وحاول مجددًا.';
 }
