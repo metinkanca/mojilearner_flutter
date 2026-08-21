@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../components/quiz_rewards_popup.dart';
@@ -405,8 +404,13 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
                         
                         Color bgColor = Colors.white;
                         if (_showExplanation) {
-                          if (isCorrect) bgColor = AppTheme.retroGrass;
-                          else if (isSelected) bgColor = AppTheme.retroPrimary; // Wrong answer color could be red but primary is redish
+                          if (isCorrect) {
+                            bgColor = AppTheme.retroGrass;
+                          } else if (isSelected) {
+                            // Wrong answer colour could be red, but primary is
+                            // already reddish.
+                            bgColor = AppTheme.retroPrimary;
+                          }
                         }
                         
                         return GestureDetector(

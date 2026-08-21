@@ -8,6 +8,7 @@ import '../providers/calibration_provider.dart';
 import '../providers/daily_reward_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
+import '../components/account_link_tile.dart';
 import '../components/character_sprite.dart';
 import '../components/daily_rewards_dialog.dart';
 import '../l10n/app_localizations.dart';
@@ -46,7 +47,6 @@ class ProfileScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale, ltr: TextAlign.center, rtl: TextAlign.center);
 
     showDialog(
       context: context,
@@ -165,9 +165,9 @@ class ProfileScreen extends StatelessWidget {
         barrierDismissible: false,
         builder: (dialogContext) => AlertDialog(
           backgroundColor: AppTheme.retroLight,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.zero,
-            side: const BorderSide(color: AppTheme.retroDark, width: 4),
+            side: BorderSide(color: AppTheme.retroDark, width: 4),
           ),
           title: Text(
             'NEW LANGUAGE!',
@@ -195,9 +195,9 @@ class ProfileScreen extends StatelessWidget {
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
-                  side: const BorderSide(color: AppTheme.retroDark, width: 2),
+                  side: BorderSide(color: AppTheme.retroDark, width: 2),
                 ),
               ),
               child: Text(
@@ -217,9 +217,9 @@ class ProfileScreen extends StatelessWidget {
               },
               style: TextButton.styleFrom(
                 backgroundColor: AppTheme.retroPrimary,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
-                  side: const BorderSide(color: AppTheme.retroDark, width: 2),
+                  side: BorderSide(color: AppTheme.retroDark, width: 2),
                 ),
               ),
               child: Text(
@@ -247,9 +247,9 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppTheme.retroLight,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,
-          side: const BorderSide(color: AppTheme.retroDark, width: 4),
+          side: BorderSide(color: AppTheme.retroDark, width: 4),
         ),
         title: Text(
           l10n.resetAppTitle.toUpperCase(),
@@ -275,9 +275,9 @@ class ProfileScreen extends StatelessWidget {
             onPressed: () => Navigator.of(dialogContext).pop(),
             style: TextButton.styleFrom(
               backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
-                side: const BorderSide(color: AppTheme.retroDark, width: 2),
+                side: BorderSide(color: AppTheme.retroDark, width: 2),
               ),
             ),
             child: Text(
@@ -297,9 +297,9 @@ class ProfileScreen extends StatelessWidget {
             },
             style: TextButton.styleFrom(
               backgroundColor: const Color(0xFFF44336),
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
-                side: const BorderSide(color: AppTheme.retroDark, width: 2),
+                side: BorderSide(color: AppTheme.retroDark, width: 2),
               ),
             ),
             child: Text(
@@ -554,7 +554,7 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const Spacer(),
-                                Icon(Icons.chevron_right, color: AppTheme.retroDark, size: 20),
+                                const Icon(Icons.chevron_right, color: AppTheme.retroDark, size: 20),
                               ],
                             ),
                           ),
@@ -601,6 +601,13 @@ class ProfileScreen extends StatelessWidget {
                      onSelect: (lang) => _handleTargetLanguageChange(context, lang),
                   ),
                   
+                  const SizedBox(height: 32),
+
+                  // The way back for a player who skipped signing in
+                  // during the opening. Hides itself when there is no
+                  // account layer to sign in to.
+                  const AccountLinkTile(),
+
                   const SizedBox(height: 32),
                   
                   // Reset App Button
@@ -690,7 +697,7 @@ class ProfileScreen extends StatelessWidget {
               canvasColor: AppTheme.retroLight, // Dropdown background
             ),
             child: DropdownButtonFormField<Language>(
-              value: selectedOption,
+              initialValue: selectedOption,
               decoration: const InputDecoration(
                  border: InputBorder.none,
                  contentPadding: EdgeInsets.zero,

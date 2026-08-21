@@ -9,10 +9,8 @@ import 'screens/wardrobe_screen.dart';
 import 'screens/scenarios_screen.dart';
 import 'screens/mistakes_screen.dart';
 import 'screens/shop_screen.dart';
-import 'screens/onboarding/welcome_screen.dart';
-import 'screens/onboarding/language_selection_screen.dart';
+import 'screens/onboarding/first_launch_screen.dart';
 import 'screens/onboarding/calibration_screen.dart';
-import 'screens/onboarding/native_language_screen.dart';
 import 'screens/onboarding/username_screen.dart';
 import 'screens/onboarding/target_language_screen.dart';
 import 'screens/onboarding/self_assessment_screen.dart';
@@ -35,7 +33,9 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 const String splashRoute = '/splash';
-const String welcomeRoute = '/onboarding/welcome';
+/// Where a player who has not finished onboarding belongs. Named for the
+/// role, not the screen, so the opening can be reshaped without renaming it.
+const String welcomeRoute = '/onboarding/start';
 
 /// Decides where the user belongs given the loaded startup state. Extracted
 /// so it can be unit-tested without building a widget tree.
@@ -100,12 +100,8 @@ GoRouter createRouter({required Listenable refreshListenable}) => GoRouter(
     ),
     // New onboarding flow
     GoRoute(
-      path: '/onboarding/welcome',
-      builder: (context, state) => const WelcomeScreen(),
-    ),
-    GoRoute(
-      path: '/onboarding/native-language',
-      builder: (context, state) => const NativeLanguageScreen(),
+      path: welcomeRoute,
+      builder: (context, state) => const FirstLaunchScreen(),
     ),
     GoRoute(
       path: '/onboarding/username',
@@ -152,15 +148,6 @@ GoRouter createRouter({required Listenable refreshListenable}) => GoRouter(
     GoRoute(
       path: '/onboarding/pet-farewell',
       builder: (context, state) => const PetFarewellScreen(),
-    ),
-    // Old onboarding routes (keep for backward compatibility)
-    GoRoute(
-      path: '/welcome',
-      builder: (context, state) => const WelcomeScreen(),
-    ),
-    GoRoute(
-      path: '/language-selection',
-      builder: (context, state) => const LanguageSelectionScreen(),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,

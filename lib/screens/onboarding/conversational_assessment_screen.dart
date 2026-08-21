@@ -28,7 +28,7 @@ class _ConversationalAssessmentScreenState
   final List<ChatAssessmentMessage> _messages = [];
   bool _isLoading = false;
   bool _assessmentComplete = false;
-  bool _showContinueButton = false;
+  final bool _showContinueButton = false;
   int _questionCount = 0;
   String? _aiSessionId;
   String _selfAssessedLevel = 'beginner';
@@ -297,6 +297,14 @@ Respond in $languageName only.''';
     final text = _controller.text.trim();
     if (text.isEmpty || _isLoading || _assessmentComplete) return;
 
+    // Read up front, while the tree is certainly still up. Everything below
+    // sits behind an AI round trip that the player can walk out of, and
+    // looking these up afterwards would either throw on a dead context or
+    // silently drop the assessment we just spent five questions earning.
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final calibrationProvider =
+        Provider.of<CalibrationProvider>(context, listen: false);
+
     try {
       // 🔒 SECURITY: full inbound pipeline (rate limit, sanitize, semantic
       // shift, PII redaction) via AiGuard.
@@ -397,15 +405,8 @@ Based on actual performance in this conversation, the level is:''',
         }
 
         // Save assessment results
-        final languageCode =
-            Provider.of<LanguageProvider>(context, listen: false)
-                    .targetLanguage
-                    ?.code ??
-                'en';
+        final languageCode = languageProvider.targetLanguage?.code ?? 'en';
 
-        // Store determined level in a temp variable to pass to quiz
-        final calibrationProvider =
-            Provider.of<CalibrationProvider>(context, listen: false);
         final existingProf =
             calibrationProvider.getLanguageProficiency(languageCode) ??
                 LanguageProficiency(
@@ -480,10 +481,7 @@ Based on actual performance in this conversation, the level is:''',
       );
       _addMessage(aiMessage);
     } catch (e) {
-      final languageName = Provider.of<LanguageProvider>(context, listen: false)
-              .targetLanguage
-              ?.name ??
-          'English';
+      final languageName = languageProvider.targetLanguage?.name ?? 'English';
 
       final errorMessage = ChatAssessmentMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -504,6 +502,13 @@ Based on actual performance in this conversation, the level is:''',
       _isLoading = true;
       _assessmentComplete = true;
     });
+
+    // Same reason as in [_sendMessage]: the level evaluation is an AI round
+    // trip, and the proficiency has to be saved whether or not the player is
+    // still looking at this screen when it returns.
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final calibrationProvider =
+        Provider.of<CalibrationProvider>(context, listen: false);
 
     try {
       String determinedLevel =
@@ -552,13 +557,8 @@ Based on actual performance in this conversation, the level is:''',
       }
 
       // Save assessment results
-      final languageCode = Provider.of<LanguageProvider>(context, listen: false)
-              .targetLanguage
-              ?.code ??
-          'en';
+      final languageCode = languageProvider.targetLanguage?.code ?? 'en';
 
-      final calibrationProvider =
-          Provider.of<CalibrationProvider>(context, listen: false);
       final existingProf =
           calibrationProvider.getLanguageProficiency(languageCode) ??
           LanguageProficiency(
@@ -805,7 +805,7 @@ Based on actual performance in this conversation, the level is:''',
               // Show input field during assessment
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   border: Border(
                     top: BorderSide(color: AppTheme.retroDark, width: 2),

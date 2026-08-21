@@ -532,8 +532,8 @@ Generate 5 questions now:''';
                     ),
                   ],
                 ),
-                child: Center(
-                  child: const CharacterSprite(
+                child: const Center(
+                  child: CharacterSprite(
                     width: 80,
                     height: 80,
                   ),

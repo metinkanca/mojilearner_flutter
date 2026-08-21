@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../providers/calibration_provider.dart';
@@ -238,8 +237,8 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
                     ),
                   ],
                 ),
-                child: Center(
-                  child: const CharacterSprite(
+                child: const Center(
+                  child: CharacterSprite(
                     width: 110,
                     height: 110,
                   ),

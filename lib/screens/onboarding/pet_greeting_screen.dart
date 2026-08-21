@@ -184,8 +184,8 @@ class _PetGreetingScreenState extends State<PetGreetingScreen>
                     ),
                   ],
                 ),
-                child: Center(
-                  child: const CharacterSprite(
+                child: const Center(
+                  child: CharacterSprite(
                     width: 120,
                     height: 120,
                   ),
