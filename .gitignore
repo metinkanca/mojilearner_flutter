@@ -74,10 +74,13 @@ app.*.map.json
 .claude/
 skills-lock.json
 
-# Tests and test plans
-test/
-integration_test/
-test_driver/
+# Test *code* is tracked on purpose: CI runs `flutter test`, and a fresh clone
+# on another machine is useless without it. What stays out is the internal
+# planning material -- agent instructions, master plans, run reports -- which
+# is the "how it is built, tested or hardened" the note above is about.
+test/**/*.md
+integration_test/**/*.md
+test_driver/**/*.md
 
 # Security and release documentation
 SECURITY_AGENT_PLAN.md
