@@ -1,0 +1,14 @@
+# Copy this file to android/key.properties and fill in your own values.
+#
+# key.properties is gitignored, and must stay that way: it holds the passwords
+# to the key that signs your Play Store uploads. Anyone with the keystore file
+# *and* these passwords can publish an update to your app.
+#
+# storeFile: keep the .jks OUTSIDE this repository. An absolute path is the
+# safest choice — a keystore living inside the project is one `git add -f` or
+# one careless zip away from being shared.
+
+storePassword=the password you typed for the keystore
+keyPassword=the password you typed for the key (usually the same)
+keyAlias=upload
+storeFile=C:/Users/genso/keys/mojilearner-upload.jks

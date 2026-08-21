@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "592310164564",
+    "project_id": "mojilearner-38de1",
+    "storage_bucket": "mojilearner-38de1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592310164564:android:b41de98e4902fed25a61c1",
+        "android_client_info": {
+          "package_name": "com.mimikin.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592310164564-ajva7dhqls5mhr845sqbdk54190kr4bu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mimikin.app",
+            "certificate_hash": "0a7f9220abc09390cbc54cdb812bc2bdabfbd53f"
+          }
+        },
+        {
+          "client_id": "592310164564-srsjcg8vh0e74k746rgv28mnhq6bgeth.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mimikin.app",
+            "certificate_hash": "8adb0931fc47537790b0a60dba9c21c1d4d56803"
+          }
+        },
+        {
+          "client_id": "592310164564-qegmiaj3nqvgidj0nkfjmnt9nussu6t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSU-UdxkSTrzicZLEkordZ7aU3cM4m3AE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592310164564-qegmiaj3nqvgidj0nkfjmnt9nussu6t2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "592310164564-lo9fh9gl2o13up5tju1lcm8bvra3b4tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mimikin.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592310164564:android:7ddb35a8cd8e80455a61c1",
+        "android_client_info": {
+          "package_name": "com.mojilearner.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592310164564-4m9blb07ivddofsukdgtjngt6d670g86.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mojilearner.app",
+            "certificate_hash": "8adb0931fc47537790b0a60dba9c21c1d4d56803"
+          }
+        },
+        {
+          "client_id": "592310164564-qe3nl8bh2ffvfebe3e5p7a21jpk1vrj4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mojilearner.app",
+            "certificate_hash": "0a7f9220abc09390cbc54cdb812bc2bdabfbd53f"
+          }
+        },
+        {
+          "client_id": "592310164564-qegmiaj3nqvgidj0nkfjmnt9nussu6t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSU-UdxkSTrzicZLEkordZ7aU3cM4m3AE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592310164564-qegmiaj3nqvgidj0nkfjmnt9nussu6t2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "592310164564-lo9fh9gl2o13up5tju1lcm8bvra3b4tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mimikin.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

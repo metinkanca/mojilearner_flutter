@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-        android:label="mojilearner_flutter"
+        android:label="Mimikin"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

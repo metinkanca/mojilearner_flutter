@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>mojilearner_flutter</string>
+    <string>Mimikin</string>
     <key>CFBundleDisplayName</key>
-    <string>mojilearner</string>
+    <string>Mimikin</string>
     <key>CFBundleIdentifier</key>
-    <string>com.example.mojilearner_flutter</string>
+    <string>com.mimikin.app</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>CFBundleShortVersionString</key>
@@ -25,6 +25,24 @@
     <array>
         <string>audio</string>
         <string>fetch</string>
+    </array>
+    <key>GIDClientID</key>
+    <!-- CLIENT_ID from GoogleService-Info.plist. Google Sign-In reads
+         it from here on Apple platforms; the matching URL scheme is
+         registered in CFBundleURLTypes below. -->
+    <string>592310164564-lo9fh9gl2o13up5tju1lcm8bvra3b4tp.apps.googleusercontent.com</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <!-- REVERSED_CLIENT_ID from GoogleService-Info.plist; the
+                     callback scheme Google Sign-In returns to. -->
+                <string>com.googleusercontent.apps.592310164564-lo9fh9gl2o13up5tju1lcm8bvra3b4tp</string>
+            </array>
+        </dict>
     </array>
 </dict>
 </plist>
