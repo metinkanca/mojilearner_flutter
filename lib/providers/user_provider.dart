@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/models.dart';
 import '../utils/progression_utils.dart';
 import '../constants/progression.dart';
+import '../constants/app_runtime_config.dart';
 
 class UserProvider extends ChangeNotifier {
   /// Coins a brand-new player starts with: roughly one day of food, so the
@@ -14,7 +15,7 @@ class UserProvider extends ChangeNotifier {
   int _coins = startingCoins;
   int _streak = 0;
   int _totalXP = 0;
-  bool _isPremium = false;
+  final bool _isPremium = false;
   bool _isLoading = true;
 
   // Onboarding tracking
@@ -70,6 +71,11 @@ class UserProvider extends ChangeNotifier {
     
     // Load onboarding status
     _hasCompletedOnboarding = prefs.getBool('onboarding_complete') ?? false;
+    // In-memory only: never persisted, so a test run cannot silently mark a
+    // real player as onboarded.
+    if (AppRuntimeConfig.skipOnboarding) {
+      _hasCompletedOnboarding = true;
+    }
 
     _isLoading = false;
     notifyListeners();

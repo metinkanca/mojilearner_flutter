@@ -8,6 +8,7 @@
 /// final sanitized = InputSanitizer.sanitizeUserInput(userMessage);
 /// await chatSession.sendMessage(Content.text(sanitized));
 /// ```
+library;
 
 import 'security_logger.dart';
 

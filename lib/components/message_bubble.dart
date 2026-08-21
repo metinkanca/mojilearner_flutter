@@ -103,9 +103,9 @@ class _MessageBubbleState extends State<MessageBubble> {
                 border: Border.all(color: AppTheme.retroDark, width: 4),
                 boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))]
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: const CharacterSprite(
+              child: const Padding(
+                padding: EdgeInsets.all(2.0),
+                child: CharacterSprite(
                   width: 36,
                   height: 36,
                 ),

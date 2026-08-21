@@ -30,6 +30,19 @@ class PetCarePanel extends StatelessWidget {
     );
   }
 
+  /// Just the food, for the home screen's feed button.
+  ///
+  /// Reuses [_FeedSection] rather than copying its tiles. The fiddly parts are
+  /// the empty state and the route it offers to the shop, and two copies of
+  /// those would drift apart the first time either changed.
+  static Future<void> showFeedPicker(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      builder: (_) => const _FeedPicker(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -53,7 +66,8 @@ class PetCarePanel extends StatelessWidget {
 
         return Dialog(
           backgroundColor: Colors.white,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           shape: const RoundedRectangleBorder(
             side: BorderSide(color: AppTheme.retroDark, width: 4),
             borderRadius: BorderRadius.zero,
@@ -110,8 +124,7 @@ class PetCarePanel extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: AppTheme.retroAccent.withValues(alpha: 0.25),
-                        border:
-                            Border.all(color: AppTheme.retroDark, width: 3),
+                        border: Border.all(color: AppTheme.retroDark, width: 3),
                       ),
                       child: Text(
                         l10n.careSickPenalty,
@@ -144,8 +157,7 @@ class PetCarePanel extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         color: AppTheme.retroLight,
-                        border:
-                            Border.all(color: AppTheme.retroDark, width: 3),
+                        border: Border.all(color: AppTheme.retroDark, width: 3),
                       ),
                       child: Text(
                         l10n.careClose.toUpperCase(),
@@ -270,6 +282,69 @@ class _StatBar extends StatelessWidget {
 }
 
 /// Lists the food the player owns and lets them use it.
+/// The food shelf on its own, without the stat readings around it.
+///
+/// The care panel answers "how is the pet doing"; this answers "feed it", and
+/// they are different enough errands that the home screen gives each its own
+/// button rather than routing both through the panel.
+class _FeedPicker extends StatelessWidget {
+  const _FeedPicker();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+    final fontFunction = AppFonts.getFont(settings.usePixelFont);
+    final locale = Localizations.localeOf(context);
+    final textDirection = textDirectionForLocale(locale);
+
+    return Dialog(
+      backgroundColor: Colors.white,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: AppTheme.retroDark, width: 4),
+        borderRadius: BorderRadius.zero,
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _FeedSection(
+                fontFunction: fontFunction,
+                textDirection: textDirection,
+              ),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.retroLight,
+                    border: Border.all(color: AppTheme.retroDark, width: 3),
+                  ),
+                  child: Text(
+                    l10n.close.toUpperCase(),
+                    textDirection: textDirection,
+                    textAlign: TextAlign.center,
+                    style: fontFunction(
+                      fontSize: 8,
+                      color: AppTheme.retroDark,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _FeedSection extends StatelessWidget {
   const _FeedSection({
     required this.fontFunction,
@@ -303,7 +378,8 @@ class _FeedSection extends StatelessWidget {
         .map((e) => MapEntry(_itemById(e.key), e.value))
         .where((e) => e.key != null)
         .map((e) => MapEntry(e.key!, e.value))
-        .where((e) => e.key.hungerRestore != null ||
+        .where((e) =>
+            e.key.hungerRestore != null ||
             e.key.happinessRestore != null ||
             e.key.healthRestore != null)
         .toList();
@@ -479,7 +555,22 @@ class _PetButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         GestureDetector(
-          onTap: canEarn ? character.petThePet : null,
+          // Always live, cooldown or not: petting is free, and a pet that
+          // could only be touched once every ten minutes was the wrong idea
+          // about what the button is for. The cooldown rations happiness, and
+          // the line below says so — it does not ration affection.
+          //
+          // Closes the panel first. It is a dialog over a dimmed barrier, so
+          // the reaction used to play entirely behind it and the button looked
+          // like it did nothing at all.
+          onTap: () {
+            // `canPop` guard, not a bare pop: the section is also pumped on
+            // its own, and there the only route to pop is whatever is
+            // underneath it.
+            final navigator = Navigator.of(context);
+            if (navigator.canPop()) navigator.pop();
+            character.petThePet();
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
@@ -498,7 +589,8 @@ class _PetButton extends StatelessWidget {
             ),
           ),
         ),
-        // Explains a button that would otherwise look broken.
+        // The button still works during the cooldown; this says what it will
+        // and will not do.
         if (!canEarn) ...[
           const SizedBox(height: 6),
           Text(

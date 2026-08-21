@@ -10,6 +10,7 @@ import '../../models/models.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../providers/mistakes_provider.dart';
+import '../constants/bond.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../providers/vocab_provider.dart';
@@ -532,7 +533,13 @@ Correct mistakes gently if they block understanding.
         }
 
         await _parseAndSaveBotResponse(_localizeAiText(response.text!));
-        
+
+        // Saving the reply is its own async gap, and leaving the chat during
+        // it is ordinary: the reply is already persisted, so dropping the
+        // rewards is the correct outcome rather than reaching for a dead
+        // context.
+        if (!mounted) return;
+
         // Reward pet and XP for chatting
         final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
         final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -547,6 +554,11 @@ Correct mistakes gently if they block understanding.
           characterProvider.rewardChat();
           userProvider.addXp(characterProvider.scaleReward(5));
         }
+
+        // Every exchange is a turn in the target language, scenario or not.
+        // The daily cap is what stops a long session from being the fastest
+        // route to a grown pet; there is no per-message limit here.
+        characterProvider.recordLearning(BondSource.conversation);
       }
     } catch (e) {
        if (mounted) {
@@ -612,17 +624,11 @@ Correct mistakes gently if they block understanding.
                 .targetLanguage
                 ?.code;
         if (languageCode != null) {
-          final vocabProvider =
-              Provider.of<VocabProvider>(context, listen: false);
-          for (final entry in vocabExtraction.entries) {
-            vocabProvider.addVocabulary(
-              languageCode: languageCode,
-              prompt: entry.term,
-              answer: entry.meaning,
-              context: entry.example,
-              reading: entry.reading,
-            );
-          }
+          Provider.of<VocabProvider>(context, listen: false)
+              .addVocabularyBatch(
+            vocabExtraction.entries,
+            languageCode: languageCode,
+          );
         }
       }
 
@@ -724,6 +730,9 @@ Correct mistakes gently if they block understanding.
       happinessDelta: reward.happinessDelta,
       hungerDelta: reward.hungerDelta,
     );
+    // Clearing the scenario, on top of the per-message bond already paid for
+    // the conversation that got here.
+    characterProvider.recordLearning(BondSource.scenario);
     await userProvider.addXp(grantedXp);
     await userProvider.addCoins(grantedCoins);
 
@@ -1024,7 +1033,7 @@ Correct mistakes gently if they block understanding.
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 color: Colors.black.withValues(alpha: 0.1),
                 child: Text(
-                  "${_formatTime(DateTime.now())}", 
+                  _formatTime(DateTime.now()), 
                   textDirection: TextDirection.ltr,
                   textAlign: TextAlign.center,
                   style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
@@ -1097,9 +1106,13 @@ Correct mistakes gently if they block understanding.
                   onSelectChat: (id) {
                     _closeSidebar();
                     if (id == _currentChatId) return;
+                    // Resolved now rather than after the delay: `mounted`
+                    // guards this State, not the builder's context, so the
+                    // router has to be captured while the tree is still up.
+                    final router = GoRouter.of(context);
                     Future.delayed(const Duration(milliseconds: 120), () {
                       if (!mounted) return;
-                      context.goNamed('chat', pathParameters: {'chatId': id});
+                      router.goNamed('chat', pathParameters: {'chatId': id});
                     });
                   },
                 ),

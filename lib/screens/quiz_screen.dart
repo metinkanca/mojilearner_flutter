@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/app_localizations.dart';
 import '../constants/theme.dart';
 import '../components/character_sprite.dart';
@@ -302,6 +301,13 @@ class _QuizScreenState extends State<QuizScreen> {
       characterProvider.applyQuizRewards(
         happinessDelta: reward.happinessDelta,
         hungerDelta: reward.hungerDelta,
+      );
+      // Bond, unlike the happiness bump above, is not scaled by sickness and
+      // not spendable — a quiz taken with a hungry pet still counts as
+      // learning together.
+      characterProvider.recordQuizLearning(
+        correctAnswers: _score,
+        totalQuestions: _questions.length,
       );
       await userProvider.addXp(grantedXp);
       await userProvider.addCoins(grantedCoins);
@@ -822,8 +828,11 @@ class _QuizScreenState extends State<QuizScreen> {
     Color bgColor = Colors.white;
     
     if (_showExplanation) {
-      if (isCorrect) bgColor = AppTheme.retroGrass;
-      else if (isSelected) bgColor = AppTheme.retroPrimary;
+      if (isCorrect) {
+        bgColor = AppTheme.retroGrass;
+      } else if (isSelected) {
+        bgColor = AppTheme.retroPrimary;
+      }
     }
 
     return GestureDetector(

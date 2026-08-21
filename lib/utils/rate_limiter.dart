@@ -12,6 +12,7 @@
 /// RateLimiter.recordRequest('chat_screen');
 /// // ... send message
 /// ```
+library;
 
 import 'security_logger.dart';
 

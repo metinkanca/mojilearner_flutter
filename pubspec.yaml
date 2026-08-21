@@ -48,6 +48,11 @@ dependencies:
   flutter_local_notifications: ^22.2.0
   timezone: ^0.11.1
   flutter_timezone: ^5.1.0
+  firebase_core: ^4.13.0
+  firebase_auth: ^6.5.7
+  cloud_firestore: ^6.8.0
+  crypto: ^3.0.7
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +85,27 @@ flutter:
     - family: SraPixelHigh
       fonts:
         - asset: assets/fonts/sra/PixelHigh.ttf
+    # Ark Pixel ships one face per design size. The 10px faces are for small
+    # UI text: the 16px face rendered at nav-bar sizes drops whole pixel rows,
+    # which is what made kana and kanji smear together.
+    - family: ArkPixelJa10
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-10px-proportional-ja.ttf
+    - family: ArkPixelKo10
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-10px-proportional-ko.ttf
+    - family: ArkPixelZhCn10
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_cn.ttf
+    - family: ArkPixelZhHk10
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_hk.ttf
+    - family: ArkPixelZhTw10
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_tw.ttf
+    - family: ArkPixelZhTr10
+      fonts:
+        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_tr.ttf
     - family: ArkPixelJa
       fonts:
         - asset: assets/fonts/ark/ark-pixel-16px-proportional-ja.ttf

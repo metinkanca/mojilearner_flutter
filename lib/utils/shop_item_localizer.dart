@@ -24,6 +24,42 @@ class ShopItemLocalizer {
         return l10n.shopItemBgSunsetName;
       case 'bg_galaxy':
         return l10n.shopItemBgGalaxyName;
+      case 'cap':
+        return l10n.accessoryCapName;
+      case 'tophat':
+        return l10n.accessoryTopHatName;
+      case 'cowboyhat':
+        return l10n.accessoryCowboyHatName;
+      case 'crown':
+        return l10n.accessoryCrownName;
+      case 'partyhat':
+        return l10n.accessoryPartyHatName;
+      case 'bowtie':
+        return l10n.accessoryBowTieName;
+      case 'necklace':
+        return l10n.accessoryNecklaceName;
+      case 'mustache':
+        return l10n.accessoryMustacheName;
+      case 'beanie':
+        return l10n.accessoryBeanieName;
+      case 'collar':
+        return l10n.accessoryCollarName;
+      case 'glasses':
+        return l10n.accessoryGlassesName;
+      case 'sunglasses':
+        return l10n.accessorySunglassesName;
+      case 'mask':
+        return l10n.accessoryMaskName;
+      case 'scarf':
+        return l10n.accessoryScarfName;
+      case 'headphones':
+        return l10n.accessoryHeadphonesName;
+      case 'wizardhat':
+        return l10n.accessoryWizardHatName;
+      case 'flowercrown':
+        return l10n.accessoryFlowerCrownName;
+      case 'devilhorns':
+        return l10n.accessoryDevilHornsName;
       default:
         return item.name;
     }
@@ -51,8 +87,12 @@ class ShopItemLocalizer {
         return l10n.shopItemBgSunsetDescription;
       case 'bg_galaxy':
         return l10n.shopItemBgGalaxyDescription;
+      // Accessories share one line — they are chosen by how they look on the
+      // pet, and eight variations on "a nice hat" would say nothing.
       default:
-        return item.description;
+        return item.type == 'accessory'
+            ? l10n.accessoryDescription
+            : item.description;
     }
   }
 }

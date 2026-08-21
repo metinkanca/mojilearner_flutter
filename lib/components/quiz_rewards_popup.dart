@@ -198,11 +198,11 @@ class _QuizRewardsPopupState extends State<QuizRewardsPopup>
       AppTheme.retroGrass,
     ];
 
-    final colors = <Color>[]
-      ..addAll(paletteA)
-      ..addAll(paletteB)
-      ..addAll(paletteC)
-      ..addAll(palettePixel);
+    final colors = <Color>[...paletteA, ...paletteB, ...paletteC, ...palettePixel]
+      
+      
+      
+      ;
 
     final random = math.Random(42);
     const particleCount = 64;

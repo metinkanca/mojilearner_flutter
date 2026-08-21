@@ -5,11 +5,17 @@ import 'package:provider/provider.dart';
 
 import '../components/character_sprite.dart';
 import '../constants/accessories.dart';
+import '../constants/bond.dart';
+import '../constants/shop.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/character_provider.dart';
 import '../providers/settings_provider.dart';
+import '../providers/user_provider.dart';
+import '../utils/accessory_ownership.dart';
+import '../utils/bond_context.dart';
 import '../utils/fonts.dart';
+import '../utils/shop_item_localizer.dart';
 import '../utils/pet_recolor.dart';
 import '../utils/rtl_locale.dart';
 
@@ -80,7 +86,8 @@ class WardrobeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final previewSize = (constraints.maxWidth * 0.62).clamp(140.0, 240.0);
+            final previewSize =
+                (constraints.maxWidth * 0.62).clamp(140.0, 240.0);
             final previewFrameHeight = (previewSize + 24).clamp(170.0, 280.0);
 
             return SingleChildScrollView(
@@ -93,15 +100,17 @@ class WardrobeScreen extends StatelessWidget {
                     height: previewFrameHeight,
                   ),
                   const SizedBox(height: 20),
-                  // Colours first — coat and eyes, cat only.
-                  if (characterProvider.currentCharacterType == 'cat') ...[
+                  // Colours first — coat and eyes. Only the pets split into
+                  // layers can be recoloured; an unrigged pet is one flat
+                  // sprite with no separable coat, so it gets no pickers.
+                  if (isLayeredPet(characterProvider.currentCharacterType)) ...[
                     _WardrobePanel(
                       title: l10n.bodyTailColor,
                       fontFunction: fontFunction,
                       textDirection: textDirection,
                       child: _SwatchRow(
                         swatches: kBodySwatches,
-                        selectedHex: characterProvider.customization.bodyColor,
+                        selectedHex: characterProvider.design.bodyColor,
                         onPick: characterProvider.updateBodyColor,
                       ),
                     ),
@@ -290,9 +299,21 @@ class _SlotSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = accessoriesForSlot(slot);
     final equippedId = context.select<CharacterProvider, String?>(
       (p) => p.equippedInSlot(slot),
+    );
+    // Watched rather than selected: unlockedItems hands back the provider's
+    // own set, so its identity never changes and a select would never notice
+    // a purchase.
+    final character = context.watch<CharacterProvider>();
+    final coins = context.select<UserProvider, int>((p) => p.coins);
+    final stage = petStageOf(context);
+
+    final statuses = AccessoryOwnership.statusesForSlot(
+      slot,
+      unlockedItemIds: character.unlockedItems,
+      stage: stage,
+      coins: coins,
     );
 
     return _WardrobePanel(
@@ -303,38 +324,358 @@ class _SlotSection extends StatelessWidget {
         spacing: 12,
         runSpacing: 12,
         children: [
-          for (final a in items)
+          for (final status in statuses)
             _AccessoryTile(
-              accessory: a,
-              equipped: equippedId == a.id,
-              iconAsset: iconAssetFor(a),
+              status: status,
+              equipped: equippedId == status.accessory.id,
+              iconAsset: iconAssetFor(status.accessory),
               fontFunction: fontFunction,
-              onTap: () =>
-                  context.read<CharacterProvider>().equipAccessory(a.id),
+              textDirection: textDirection,
+              onTap: () => _handleTap(context, status, stage),
             ),
         ],
+      ),
+    );
+  }
+
+  /// One tap, three meanings: wear it, buy it, or say why neither.
+  void _handleTap(
+    BuildContext context,
+    AccessoryStatus status,
+    PetStage stage,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (status.isOwned) {
+      context.read<CharacterProvider>().equipAccessory(
+            status.accessory.id,
+            stage: stage,
+          );
+      return;
+    }
+
+    if (status.isBondLocked) {
+      _showWardrobeDialog(
+        context: context,
+        fontFunction: fontFunction,
+        textDirection: textDirection,
+        title: accessoryName(l10n, status.accessory),
+        message: l10n.accessoryEarnedNotSold,
+        detail: l10n.accessoryUnlocksAt(
+          petStageName(l10n, status.accessory.requiredStage!),
+        ),
+      );
+      return;
+    }
+
+    _confirmPurchase(context, status, stage);
+  }
+
+  void _confirmPurchase(
+    BuildContext context,
+    AccessoryStatus status,
+    PetStage stage,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final item = accessoryShopItemById(status.accessory.id);
+    if (item == null) return;
+
+    if (!status.affordable) {
+      _showWardrobeDialog(
+        context: context,
+        fontFunction: fontFunction,
+        textDirection: textDirection,
+        title: accessoryName(l10n, status.accessory),
+        message: l10n.notEnoughCoinsMessage,
+        detail: '${AccessoryTileIcons.coin} ${item.price}',
+      );
+      return;
+    }
+
+    final character = context.read<CharacterProvider>();
+    final user = context.read<UserProvider>();
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => _BuyDialog(
+        status: status,
+        price: item.price,
+        fontFunction: fontFunction,
+        textDirection: textDirection,
+        onConfirm: () async {
+          Navigator.of(dialogContext).pop();
+          final bought = await character.purchaseItem(item, user);
+          // Straight onto the pet: the reason to buy it was to see it worn,
+          // and making the player find and tap it again adds nothing.
+          if (bought) {
+            character.equipAccessory(status.accessory.id, stage: stage);
+          }
+        },
+      ),
+    );
+  }
+}
+
+/// Glyphs used on the tiles. Kept together so the wardrobe and the shop can be
+/// checked against each other at a glance.
+class AccessoryTileIcons {
+  AccessoryTileIcons._();
+
+  static const String coin = '\u{1FA99}';
+  static const String locked = '\u{1F512}';
+}
+
+/// Accessory display name, routed through the shared shop localizer wherever
+/// there is a shop entry so the two screens cannot drift on what a hat is
+/// called.
+String accessoryName(AppLocalizations l10n, AccessoryDef accessory) {
+  final item = accessoryShopItemById(accessory.id);
+  if (item != null) return ShopItemLocalizer.localizedName(l10n, item);
+  switch (accessory.id) {
+    case 'cap':
+      return l10n.accessoryCapName;
+    case 'tophat':
+      return l10n.accessoryTopHatName;
+    case 'crown':
+      return l10n.accessoryCrownName;
+    case 'mortarboard':
+      return l10n.accessoryMortarboardName;
+    case 'medal':
+      return l10n.accessoryMedalName;
+    default:
+      return accessory.name;
+  }
+}
+
+/// Small retro dialog for the two "you cannot have this yet" answers.
+void _showWardrobeDialog({
+  required BuildContext context,
+  required _FontFn fontFunction,
+  required TextDirection textDirection,
+  required String title,
+  required String message,
+  String? detail,
+}) {
+  showDialog<void>(
+    context: context,
+    builder: (context) => Dialog(
+      backgroundColor: AppTheme.retroLight,
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: AppTheme.retroDark, width: 4),
+        borderRadius: BorderRadius.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title.toUpperCase(),
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: fontFunction(
+                fontSize: 11,
+                color: AppTheme.retroDark,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: fontFunction(fontSize: 8, color: AppTheme.retroDark),
+            ),
+            if (detail != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                detail,
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
+                style: fontFunction(
+                  fontSize: 8,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+class _BuyDialog extends StatelessWidget {
+  final AccessoryStatus status;
+  final int price;
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
+  final Future<void> Function() onConfirm;
+
+  const _BuyDialog({
+    required this.status,
+    required this.price,
+    required this.fontFunction,
+    required this.textDirection,
+    required this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Dialog(
+      backgroundColor: AppTheme.retroLight,
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(color: AppTheme.retroDark, width: 4),
+        borderRadius: BorderRadius.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              status.accessory.icon,
+              style: const TextStyle(fontSize: 48),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              accessoryName(l10n, status.accessory).toUpperCase(),
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: fontFunction(
+                fontSize: 11,
+                color: AppTheme.retroDark,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '${AccessoryTileIcons.coin} $price',
+              textDirection: textDirection,
+              style: fontFunction(
+                fontSize: 10,
+                color: AppTheme.retroDark,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _DialogButton(
+                    label: l10n.cancel.toUpperCase(),
+                    color: AppTheme.retroLight,
+                    fontFunction: fontFunction,
+                    textDirection: textDirection,
+                    onTap: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _DialogButton(
+                    label: l10n.buy.toUpperCase(),
+                    color: AppTheme.retroGrass,
+                    fontFunction: fontFunction,
+                    textDirection: textDirection,
+                    onTap: onConfirm,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DialogButton extends StatelessWidget {
+  final String label;
+  final Color color;
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
+  final VoidCallback onTap;
+
+  const _DialogButton({
+    required this.label,
+    required this.color,
+    required this.fontFunction,
+    required this.textDirection,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: color,
+          border: Border.all(color: AppTheme.retroDark, width: 3),
+          boxShadow: const [
+            BoxShadow(
+              color: AppTheme.retroDark,
+              offset: Offset(3, 3),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: Text(
+          label,
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: fontFunction(
+            fontSize: 8,
+            color: AppTheme.retroDark,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
 }
 
 class _AccessoryTile extends StatelessWidget {
-  final AccessoryDef accessory;
+  final AccessoryStatus status;
   final bool equipped;
   final String iconAsset;
   final _FontFn fontFunction;
+  final TextDirection textDirection;
   final VoidCallback onTap;
 
   const _AccessoryTile({
-    required this.accessory,
+    required this.status,
     required this.equipped,
     required this.iconAsset,
     required this.fontFunction,
+    required this.textDirection,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final locked = !status.isOwned;
+
+    // The footer is rendered at a fixed height whether or not it has anything
+    // to say. Letting it collapse for owned items would make buying one
+    // reflow every shelf below it.
+    final String footer;
+    if (status.isForSale) {
+      footer = '${AccessoryTileIcons.coin} ${status.accessory.price}';
+    } else if (status.isBondLocked) {
+      footer = '${AccessoryTileIcons.locked} '
+          '${petStageName(l10n, status.accessory.requiredStage!)}';
+    } else {
+      footer = '';
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -346,7 +687,9 @@ class _AccessoryTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: equipped
               ? AppTheme.wardrobeBrass.withValues(alpha: 0.45)
-              : AppTheme.retroLight,
+              : locked
+                  ? AppTheme.retroLight.withValues(alpha: 0.55)
+                  : AppTheme.retroLight,
           border: Border.all(
             color: AppTheme.retroDark,
             width: equipped ? 4 : 2,
@@ -364,18 +707,38 @@ class _AccessoryTile extends StatelessWidget {
           children: [
             SizedBox(
               height: 48,
-              child: SvgPicture.asset(iconAsset, fit: BoxFit.contain),
+              child: Opacity(
+                // Dimmed rather than hidden: a locked item you can see is a
+                // reason to keep earning, and a blank square is not.
+                opacity: locked ? 0.35 : 1.0,
+                child: SvgPicture.asset(iconAsset, fit: BoxFit.contain),
+              ),
             ),
             const SizedBox(height: 6),
             Text(
-              accessory.name,
+              accessoryName(l10n, status.accessory),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              textDirection: textDirection,
               textAlign: TextAlign.center,
               style: fontFunction(
                 fontSize: 7,
-                color: AppTheme.retroDark,
+                color: locked ? AppTheme.textSecondary : AppTheme.retroDark,
                 fontWeight: equipped ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            SizedBox(
+              height: 14,
+              child: Text(
+                footer,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
+                style: fontFunction(
+                  fontSize: 6,
+                  color: AppTheme.textSecondary,
+                ),
               ),
             ),
           ],

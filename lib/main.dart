@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,6 +23,11 @@ import 'constants/theme.dart';
 import 'l10n/app_localizations.dart';
 import 'utils/fonts.dart';
 import 'utils/security_logger.dart';
+import 'services/account_service.dart';
+import 'services/cloud_sync.dart';
+import 'services/firebase_account_backend.dart';
+import 'services/firebase_sync_backend.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +45,17 @@ Future<void> main() async {
   // Restore persisted security events (fire-and-forget; logging works
   // without it and later log calls await it internally before persisting).
   SecurityLogger.init();
-  
+
+  // Awaited, and it has to be: a restore rewrites local storage, and every
+  // provider below reads that storage once, at construction. Starting sync
+  // after them would show the player their old save until the next launch.
+  //
+  // Every failure path here is silent by design. Firebase being unreachable,
+  // misconfigured, or blocked is not a reason a pet game cannot open — the
+  // local save is untouched and the app behaves exactly as it did before any
+  // of this existed.
+  await _startCloudSync();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),
@@ -86,9 +102,45 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(create: (_) => ScenarioProvider()..load()),
       ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
+      // Nullable on purpose: when cloud sync could not start there is no
+      // account to attach anything to, and the screens that offer signing in
+      // hide themselves rather than failing at the tap.
+      Provider<AccountService?>.value(value: accountService),
     ],
     child: const MojiLearnerApp(),
   ));
+}
+
+/// Held so the flush timer and lifecycle observer outlive [main].
+CloudSync? cloudSync;
+
+/// Null when cloud sync did not start — there is then no uid to upgrade, so
+/// nothing offers to sign in.
+AccountService? accountService;
+
+/// Brings up Firebase and pulls down a save if this device has none.
+///
+/// Never throws. The three things that can go wrong — Firebase failing to
+/// initialise, sign-in being refused, the fetch timing out — all end with the
+/// app running on local storage alone, which is what it did before cloud save
+/// existed. A pet that opens is worth more than a pet that syncs.
+Future<void> _startCloudSync() async {
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    final sync = CloudSync(backend: FirebaseSyncBackend());
+    // Bounded: a slow network must not hold the splash screen open. Giving up
+    // costs one missed restore, and the next launch tries again.
+    await sync.start().timeout(const Duration(seconds: 8));
+    cloudSync = sync;
+    accountService = AccountService(
+      backend: FirebaseAccountBackend(),
+      sync: sync,
+    );
+  } catch (e) {
+    debugPrint('⚠️ SYNC: cloud save unavailable, running local-only - $e');
+  }
 }
 
 class MojiLearnerApp extends StatefulWidget {
@@ -156,7 +208,7 @@ class _MojiLearnerAppState extends State<MojiLearnerApp> {
         final appLocale = Locale(languageProvider.nativeLanguage.code);
         AppFonts.setAppLocale(appLocale);
         return MaterialApp.router(
-          title: 'MojiLearner',
+          title: 'Mimikin',
           theme: _buildTheme(),
           routerConfig: _router,
           debugShowCheckedModeBanner: false,

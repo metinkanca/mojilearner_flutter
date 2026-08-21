@@ -406,6 +406,113 @@ class UserStats {
   int get xpToNextLevel => nextLevelXP - currentLevelXP; // Remaining
 }
 
+/// Default coat + eye choices, shared by [CharacterCustomization] and
+/// [PetDesign] so an un-customised pet looks exactly like its source art.
+const String kDefaultBodyColor = '#959379'; // Original coat ("Smoke")
+const String kDefaultEyeMode = 'solid';
+const String kDefaultEyeColor1 =
+    '#F4C430'; // Gold — the most common cat eye colour
+const String kDefaultEyeColor2 =
+    '#5AA0E0'; // Blue — sensible second colour for odd-eyes
+
+/// Everything the player can change about how one pet looks: its coat, its
+/// eyes and what it is wearing.
+///
+/// Held per character type, so dressing the cat does not also dress the dog.
+/// Note that *owning* an accessory stays global — a hat bought once can be
+/// worn by any pet; only what is currently on is per pet.
+class PetDesign {
+  /// Flat fill for the body + tail (always shared between the two).
+  final String bodyColor;
+
+  /// 'solid' | 'heterochromia' — see [EyeMode] in pet_recolor.dart.
+  final String eyeMode;
+
+  /// Primary eye colour: both eyes (solid) or the left eye (heterochromia).
+  final String eyeColor1;
+
+  /// Secondary eye colour: the right eye (heterochromia). Ignored for solid.
+  final String eyeColor2;
+
+  /// Slot id -> equipped accessory id. A missing (or null) slot is empty.
+  final Map<String, String?> accessories;
+
+  const PetDesign({
+    this.bodyColor = kDefaultBodyColor,
+    this.eyeMode = kDefaultEyeMode,
+    this.eyeColor1 = kDefaultEyeColor1,
+    this.eyeColor2 = kDefaultEyeColor2,
+    this.accessories = const {},
+  });
+
+  PetDesign copyWith({
+    String? bodyColor,
+    String? eyeMode,
+    String? eyeColor1,
+    String? eyeColor2,
+    Map<String, String?>? accessories,
+  }) {
+    return PetDesign(
+      bodyColor: bodyColor ?? this.bodyColor,
+      eyeMode: eyeMode ?? this.eyeMode,
+      eyeColor1: eyeColor1 ?? this.eyeColor1,
+      eyeColor2: eyeColor2 ?? this.eyeColor2,
+      accessories: accessories ?? this.accessories,
+    );
+  }
+
+  /// The same design with [slot] set to [id] (or emptied when [id] is null).
+  PetDesign withSlot(String slot, String? id) {
+    final next = Map<String, String?>.from(accessories);
+    if (id == null) {
+      next.remove(slot);
+    } else {
+      next[slot] = id;
+    }
+    return copyWith(accessories: next);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'bodyColor': bodyColor,
+        'eyeMode': eyeMode,
+        'eyeColor1': eyeColor1,
+        'eyeColor2': eyeColor2,
+        'accessories': {
+          for (final e in accessories.entries)
+            if (e.value != null) e.key: e.value,
+        },
+      };
+
+  /// Rebuilds a design from storage. Anything missing or of the wrong type
+  /// falls back to the default rather than failing the whole load — cosmetic
+  /// data is never worth losing a save over.
+  ///
+  /// Accessory ids are *not* checked against the catalogue here; the provider
+  /// does that, since it is what knows the catalogue.
+  factory PetDesign.fromJson(Map<String, dynamic> json) {
+    String str(String key, String fallback) {
+      final v = json[key];
+      return v is String && v.isNotEmpty ? v : fallback;
+    }
+
+    final rawAccessories = json['accessories'];
+    final accessories = <String, String?>{};
+    if (rawAccessories is Map) {
+      rawAccessories.forEach((slot, id) {
+        if (slot is String && id is String) accessories[slot] = id;
+      });
+    }
+
+    return PetDesign(
+      bodyColor: str('bodyColor', kDefaultBodyColor),
+      eyeMode: str('eyeMode', kDefaultEyeMode),
+      eyeColor1: str('eyeColor1', kDefaultEyeColor1),
+      eyeColor2: str('eyeColor2', kDefaultEyeColor2),
+      accessories: accessories,
+    );
+  }
+}
+
 class CharacterCustomization {
   final String characterType; // 'dog', 'cat', 'bird'
   final String openFace;
@@ -413,20 +520,8 @@ class CharacterCustomization {
   final String color;
   final String backgroundColor;
 
-  /// Flat fill for the body + tail (always shared). Defaults to the pet's
-  /// original coat so an un-customised pet looks unchanged.
-  final String bodyColor;
-
-  /// 'solid' | 'heterochromia' | 'dichroic' — see [EyeMode] in pet_recolor.dart.
-  final String eyeMode;
-
-  /// Primary eye colour: both eyes (solid), the left eye (heterochromia) or
-  /// the outer ring (dichroic).
-  final String eyeColor1;
-
-  /// Secondary eye colour: the right eye (heterochromia) or the pupil
-  /// (dichroic). Ignored for solid.
-  final String eyeColor2;
+  // The coat and eye colours used to live here, shared by every pet. They are
+  // per character type now — see [PetDesign].
 
   CharacterCustomization({
     this.characterType = 'cat',
@@ -434,10 +529,6 @@ class CharacterCustomization {
     this.closedFace = '(-_-)',
     this.color = '#FFFFFF', // Default white
     this.backgroundColor = '#60A5FA', // Default blue-400 equivalent
-    this.bodyColor = '#959379', // Original coat ("Smoke")
-    this.eyeMode = 'solid',
-    this.eyeColor1 = '#F4C430', // Gold — the most common cat eye colour
-    this.eyeColor2 = '#5AA0E0', // Blue — sensible second colour for odd-eyes
   });
 
   CharacterCustomization copyWith({
@@ -446,10 +537,6 @@ class CharacterCustomization {
     String? closedFace,
     String? color,
     String? backgroundColor,
-    String? bodyColor,
-    String? eyeMode,
-    String? eyeColor1,
-    String? eyeColor2,
   }) {
     return CharacterCustomization(
       characterType: characterType ?? this.characterType,
@@ -457,10 +544,6 @@ class CharacterCustomization {
       closedFace: closedFace ?? this.closedFace,
       color: color ?? this.color,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      bodyColor: bodyColor ?? this.bodyColor,
-      eyeMode: eyeMode ?? this.eyeMode,
-      eyeColor1: eyeColor1 ?? this.eyeColor1,
-      eyeColor2: eyeColor2 ?? this.eyeColor2,
     );
   }
 }

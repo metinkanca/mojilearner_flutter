@@ -13,6 +13,25 @@ class AppFonts {
   static const String _arkPixelZhTwFamily = 'ArkPixelZhTw';
   static const String _arkPixelZhTrFamily = 'ArkPixelZhTr';
 
+  // Ark Pixel draws one face per design size, and a pixel face only renders
+  // cleanly at the size it was drawn for. The 16px face at nav-bar sizes was
+  // losing whole rows of pixels, which is what turned kana and kanji into
+  // smudges. Small text uses the 10px face instead -- the smallest size the
+  // family offers -- and is never drawn below that size.
+  static const double cjkSmallFontSize = 10.0;
+
+  /// Sizes below this use the 10px faces; at or above it, the 16px faces.
+  static const double _arkSmallFaceCutoff = 12.0;
+
+  static const String _arkPixelJa10Family = 'ArkPixelJa10';
+  static const String _arkPixelKo10Family = 'ArkPixelKo10';
+  static const String _arkPixelZhCn10Family = 'ArkPixelZhCn10';
+  static const String _arkPixelZhHk10Family = 'ArkPixelZhHk10';
+  static const String _arkPixelZhTw10Family = 'ArkPixelZhTw10';
+  static const String _arkPixelZhTr10Family = 'ArkPixelZhTr10';
+
+  static const Set<String> _cjkLanguageCodes = {'ja', 'ko', 'zh'};
+
   // SRA pixel families are used first for selected non-Latin locales.
   static const List<String> _sraPixelFamilies = [
     'SraPixelMiddle',
@@ -36,36 +55,67 @@ class AppFonts {
     _appLocale = locale;
   }
 
-  static List<String> _chineseArkFamiliesForLocale(Locale locale) {
+  static List<String> _chineseArkFamiliesForLocale(Locale locale,
+      {required bool small}) {
     final country = locale.countryCode?.toUpperCase();
     final script = locale.scriptCode?.toLowerCase();
 
-    final primaryFamily = switch (country) {
-      'TW' => _arkPixelZhTwFamily,
-      'HK' || 'MO' => _arkPixelZhHkFamily,
-      'CN' || 'SG' => _arkPixelZhCnFamily,
+    final region = switch (country) {
+      'TW' => 'tw',
+      'HK' || 'MO' => 'hk',
+      'CN' || 'SG' => 'cn',
       _ => switch (script) {
-          'hant' => _arkPixelZhTrFamily,
-          'hans' => _arkPixelZhCnFamily,
-          _ => _arkPixelZhCnFamily,
+          'hant' => 'tr',
+          'hans' => 'cn',
+          _ => 'cn',
         },
     };
 
+    final tw = small ? _arkPixelZhTw10Family : _arkPixelZhTwFamily;
+    final hk = small ? _arkPixelZhHk10Family : _arkPixelZhHkFamily;
+    final cn = small ? _arkPixelZhCn10Family : _arkPixelZhCnFamily;
+    final tr = small ? _arkPixelZhTr10Family : _arkPixelZhTrFamily;
+
+    final primaryFamily = switch (region) {
+      'tw' => tw,
+      'hk' => hk,
+      'tr' => tr,
+      _ => cn,
+    };
+
+    // The other regional cuts follow as fallbacks, then the CJK neighbours:
+    // between them they cover any character the primary cut is missing.
     return <String>{
       primaryFamily,
-      _arkPixelZhTrFamily,
-      _arkPixelZhTwFamily,
-      _arkPixelZhHkFamily,
-      _arkPixelZhCnFamily,
-      _arkPixelJaFamily,
-      _arkPixelKoFamily,
+      tr,
+      tw,
+      hk,
+      cn,
+      small ? _arkPixelJa10Family : _arkPixelJaFamily,
+      small ? _arkPixelKo10Family : _arkPixelKoFamily,
     }.toList();
   }
 
-  static List<String> _pixelFallbackFamiliesForLocale([Locale? locale]) {
-    final resolvedLocale =
-        locale ?? _appLocale ?? WidgetsBinding.instance.platformDispatcher.locale;
+  static Locale _resolveLocale([Locale? locale]) =>
+      locale ?? _appLocale ?? WidgetsBinding.instance.platformDispatcher.locale;
+
+  static bool _isCjk(Locale locale) =>
+      _cjkLanguageCodes.contains(locale.languageCode.toLowerCase());
+
+  /// The size text is actually drawn at. CJK scripts are never drawn below
+  /// [cjkSmallFontSize]: the Latin pixel face is drawn for 8px, but a kanji
+  /// needs more rows than that to stay a kanji.
+  static double? cjkAwareFontSize(double? fontSize, [Locale? locale]) {
+    if (fontSize == null || fontSize >= cjkSmallFontSize) return fontSize;
+    return _isCjk(_resolveLocale(locale)) ? cjkSmallFontSize : fontSize;
+  }
+
+  static List<String> _pixelFallbackFamiliesForLocale([Locale? locale,
+      double? fontSize]) {
+    final resolvedLocale = _resolveLocale(locale);
     final code = resolvedLocale.languageCode.toLowerCase();
+    // Which Ark Pixel face to reach for, by the size it will be drawn at.
+    final small = (fontSize ?? cjkSmallFontSize) < _arkSmallFaceCutoff;
 
     switch (code) {
       case 'ar':
@@ -98,7 +148,7 @@ class AppFonts {
         ];
       case 'ja':
         return [
-          _arkPixelJaFamily,
+          small ? _arkPixelJa10Family : _arkPixelJaFamily,
           ..._sraPixelFamilies,
           'Noto Sans JP',
           'Noto Sans SC',
@@ -107,7 +157,7 @@ class AppFonts {
         ];
       case 'ko':
         return [
-          _arkPixelKoFamily,
+          small ? _arkPixelKo10Family : _arkPixelKoFamily,
           ..._sraPixelFamilies,
           'Noto Sans KR',
           'Noto Sans',
@@ -115,7 +165,7 @@ class AppFonts {
         ];
       case 'zh':
         return [
-          ..._chineseArkFamiliesForLocale(resolvedLocale),
+          ..._chineseArkFamiliesForLocale(resolvedLocale, small: small),
           ..._sraPixelFamilies,
           'Noto Sans SC',
           'Noto Sans JP',
@@ -141,12 +191,13 @@ class AppFonts {
     List<Shadow>? shadows,
     Locale? locale,
   }) {
-    final pixelFallbackFamilies = _pixelFallbackFamiliesForLocale(locale);
+    final size = cjkAwareFontSize(fontSize, locale);
+    final pixelFallbackFamilies = _pixelFallbackFamiliesForLocale(locale, size);
     try {
       // Try using the local bundled font first
       return TextStyle(
         fontFamily: 'PressStart2P',
-        fontSize: fontSize,
+        fontSize: size,
         fontWeight: fontWeight,
         color: color,
         height: height,
@@ -159,7 +210,7 @@ class AppFonts {
     } catch (e) {
       // Fallback to google_fonts (requires internet on first use)
       return GoogleFonts.pressStart2p(
-        fontSize: fontSize,
+        fontSize: size,
         fontWeight: fontWeight,
         color: color,
         height: height,
@@ -184,7 +235,7 @@ class AppFonts {
     FontStyle? fontStyle,
   }) {
     return GoogleFonts.spaceMono(
-      fontSize: fontSize,
+      fontSize: cjkAwareFontSize(fontSize),
       fontWeight: fontWeight,
       color: color,
       height: height,

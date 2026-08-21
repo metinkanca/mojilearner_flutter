@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'MojiLearner',
+              'Mimikin',
               textDirection: TextDirection.ltr,
               style: TextStyle(
                 fontSize: 24,

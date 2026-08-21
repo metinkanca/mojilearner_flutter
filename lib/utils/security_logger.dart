@@ -18,6 +18,7 @@
 /// // Export logs for analysis
 /// final logs = SecurityLogger.exportToJson();
 /// ```
+library;
 
 import 'dart:async';
 import 'dart:convert';

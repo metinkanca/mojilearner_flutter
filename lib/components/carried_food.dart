@@ -36,10 +36,21 @@ class CarriedFood extends StatelessWidget {
               l10n?.careDragToFeed ?? 'Drag onto Moji to feed',
               textDirection: textDirection,
               textAlign: TextAlign.center,
+              // White on a hard dark shadow: the hint now floats over the
+              // pet and the ground rather than over chrome, and those change
+              // colour with the time of day.
               style: fontFunction(
                 fontSize: 7,
                 height: 1.6,
-                color: AppTheme.retroDark.withValues(alpha: 0.7),
+                color: Colors.white,
+              ).copyWith(
+                shadows: const [
+                  Shadow(
+                    color: AppTheme.retroDark,
+                    offset: Offset(1, 1),
+                    blurRadius: 0,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 6),
@@ -76,7 +87,7 @@ class CarriedFood extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.retroLight,
                       border: Border.all(color: AppTheme.retroDark, width: 3),
                     ),
                     child: const Icon(Icons.close,
@@ -100,6 +111,13 @@ class CarriedFood extends StatelessWidget {
   }
 }
 
+/// The food itself, as a bare glyph.
+///
+/// It used to sit in a bordered box the same off-white as the rest of the
+/// chrome, which read as a UI tile rather than as an apple the player is
+/// holding — and against the scene it was a white rectangle stamped on the
+/// grass. Now it is just the food, with a hard offset shadow in the pixel
+/// idiom to keep it legible on any sky or ground the time of day produces.
 class _Bubble extends StatelessWidget {
   const _Bubble({required this.icon, this.size = 44});
 
@@ -110,22 +128,26 @@ class _Bubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: Container(
+      child: SizedBox(
+        // Kept square at [size] so the tap target does not shrink to the
+        // glyph's own ink.
         width: size,
         height: size,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppTheme.retroLight,
-          border: Border.all(color: AppTheme.retroDark, width: 3),
-          boxShadow: const [
-            BoxShadow(
-              color: AppTheme.retroDark,
-              offset: Offset(3, 3),
-              blurRadius: 0,
-            )
-          ],
+        child: Center(
+          child: Text(
+            icon,
+            style: TextStyle(
+              fontSize: size * 0.78,
+              shadows: const [
+                Shadow(
+                  color: AppTheme.retroDark,
+                  offset: Offset(2, 2),
+                  blurRadius: 0,
+                ),
+              ],
+            ),
+          ),
         ),
-        child: Text(icon, style: TextStyle(fontSize: size * 0.5)),
       ),
     );
   }

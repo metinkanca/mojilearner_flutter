@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/models.dart';
+import '../constants/bond.dart';
 import '../providers/character_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/settings_provider.dart';
@@ -74,6 +75,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     vocab.grade(item.id, grade);
     await userProvider.addXp(characterProvider.scaleReward(_xpPerReview));
+    // Per card, not per session: acting on a correction is the single event
+    // most likely to be real learning rather than exposure.
+    characterProvider.recordLearning(BondSource.correction);
 
     if (!mounted) return;
     setState(() {

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../models/models.dart';
 import '../utils/secure_storage.dart';
+import '../utils/vocab_extractor.dart';
 import '../utils/srs_scheduler.dart';
 import 'mistakes_provider.dart';
 
@@ -96,6 +97,38 @@ class VocabProvider extends ChangeNotifier {
     );
   }
 
+  /// Records every word from one AI reply — one save and one notify, however
+  /// many words came back.
+  ///
+  /// The AI hands over a handful of terms at a time, and calling
+  /// [addVocabulary] in a loop re-encoded the learner's entire item list once
+  /// per word, on the main isolate. A learner a few hundred words in was
+  /// paying that several times per message. It is also what would make this
+  /// the most expensive path in the app once this state syncs to a backend,
+  /// where each of those saves is a billed write rather than just a slow one.
+  List<ReviewItem> addVocabularyBatch(
+    Iterable<ExtractedVocab> entries, {
+    required String languageCode,
+  }) {
+    final added = <ReviewItem>[];
+    for (final entry in entries) {
+      added.add(_upsert(
+        languageCode: languageCode,
+        prompt: entry.term,
+        answer: entry.meaning,
+        context: entry.example,
+        reading: entry.reading,
+        kind: ReviewItemKind.vocabulary,
+        flush: false,
+      ));
+    }
+    if (added.isNotEmpty) {
+      _save();
+      notifyListeners();
+    }
+    return added;
+  }
+
   /// Records a correction the learner should internalise.
   ReviewItem addFromMistake(Mistake mistake, {required String languageCode}) {
     return _upsert(
@@ -110,6 +143,8 @@ class VocabProvider extends ChangeNotifier {
     );
   }
 
+  /// [flush] is what [addVocabularyBatch] turns off: a save and a notify per
+  /// word is wrong when the words arrive together.
   ReviewItem _upsert({
     required String languageCode,
     required String prompt,
@@ -118,6 +153,7 @@ class VocabProvider extends ChangeNotifier {
     String? context,
     String? reading,
     bool resetScheduleOnDuplicate = false,
+    bool flush = true,
   }) {
     final key = ReviewItem.dedupeKey(
       languageCode: languageCode,
@@ -140,8 +176,10 @@ class VocabProvider extends ChangeNotifier {
           : existing.copyWith(
               answer: answer, context: context, reading: reading);
       _items[existingIndex] = updated;
-      _save();
-      notifyListeners();
+      if (flush) {
+        _save();
+        notifyListeners();
+      }
       return updated;
     }
 
@@ -155,8 +193,10 @@ class VocabProvider extends ChangeNotifier {
       kind: kind,
     );
     _items.add(item);
-    _save();
-    notifyListeners();
+    if (flush) {
+      _save();
+      notifyListeners();
+    }
     return item;
   }
 

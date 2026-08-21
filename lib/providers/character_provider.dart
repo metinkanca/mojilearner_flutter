@@ -5,12 +5,20 @@ import '../constants/faces.dart';
 import '../constants/shop.dart';
 import '../constants/progression.dart';
 import '../constants/accessories.dart';
+import '../constants/bond.dart';
+import '../constants/app_runtime_config.dart';
+import '../utils/accessory_ownership.dart';
+import '../utils/bond_progress.dart';
 import '../utils/pet_recolor.dart';
 import 'user_provider.dart';
 import 'dart:async';
 import 'dart:convert';
 
-enum PetVisualState { sleeping, eating, happy, sad, breathing }
+/// [petted] is the pet reacting to a hand on it right now, and is deliberately
+/// separate from [happy]: contentment is a mood the pet wears for a while,
+/// being petted is a thing happening to it this second, and they do not look
+/// alike. It outranks [happy] because a rub should read through a good mood.
+enum PetVisualState { sleeping, eating, petted, happy, sad, breathing }
 
 enum SleepReason { aiIssue, night, awake }
 
@@ -22,6 +30,11 @@ class CharacterProvider extends ChangeNotifier {
   static const Duration _awakeDuration = Duration(minutes: 30);
   static const Duration _happyBurstDuration = Duration(seconds: 2);
   static const Duration _eatingConsumeDuration = Duration(milliseconds: 900);
+
+  /// How long one rub of the head shows on the pet. Short on purpose: it is
+  /// refreshed by every rub, so a scratch that carries on holds the reaction
+  /// open, and it drops within a beat of the hand coming off.
+  static const Duration _pettedDuration = Duration(milliseconds: 900);
 
   /// How often petting actually pays happiness. Without this, tapping the pet
   /// is an unbounded happiness faucet that makes decay meaningless — taps
@@ -50,14 +63,24 @@ class CharacterProvider extends ChangeNotifier {
   final Set<String> _unlockedItems = {'apple', 'coffee'};
   final List<String> _inventory = ['apple', 'coffee']; // Owned items
 
-  // Equipped accessories, one per slot: {'hat': id?, 'neck': id?, 'face': id?}
-  final Map<String, String?> _equippedAccessories = {};
+  /// Appearance per character type: the coat, eyes and equipped accessories of
+  /// each pet, kept side by side so switching pets restores the look that pet
+  /// was last given instead of carrying one design across all of them.
+  /// A type with no entry has never been customised and uses the defaults.
+  final Map<String, PetDesign> _designs = {};
 
   // Pet Stats (0-100)
   int _hunger = 50;
   int _happiness = 70;
   int _health = 100;
-  DateTime _lastUpdate = DateTime.now();
+
+  // Bond: the slow axis. Monotonic by construction — nothing in this class
+  // subtracts from it. See lib/constants/bond.dart for why.
+  int _bondPoints = 0;
+  DateTime? _lastLearningAt;
+  int _bondEarnedToday = 0;
+  DateTime? _bondDay;
+  late DateTime _lastUpdate;
   Timer? _decayTimer;
   StreamSubscription<RewardDef>? _rewardSubscription;
   DateTime? _awakeUntil;
@@ -66,9 +89,12 @@ class CharacterProvider extends ChangeNotifier {
   bool _aiIssueSleepMode = false;
   PetEatingPhase _eatingPhase = PetEatingPhase.none;
   DateTime? _happyBurstUntil;
+  DateTime? _pettedUntil;
+  int _petPayouts = 0;
   double _chatMoodSignal = 0.0;
   Timer? _eatingTimer;
   Timer? _happyBurstTimer;
+  Timer? _pettedTimer;
 
   CharacterCustomization get customization => _customization;
   String get currentCharacterType => _customization.characterType;
@@ -77,86 +103,216 @@ class CharacterProvider extends ChangeNotifier {
   Set<String> get unlockedItems => _unlockedItems;
   List<String> get inventory => _inventory;
 
-  /// The pet's current recolour choices, for the sprite renderer + UI.
-  PetColorSpec get colorSpec => PetColorSpec(
-        bodyColor: _customization.bodyColor,
-        eyeMode: eyeModeFromString(_customization.eyeMode),
-        eyeColor1: _customization.eyeColor1,
-        eyeColor2: _customization.eyeColor2,
-      );
+  /// The design of the pet currently out — what every appearance getter below
+  /// reads and every customisation setter writes.
+  PetDesign get design => designFor(_customization.characterType);
+
+  /// The design of [type], whether or not it is the pet currently out, so the
+  /// character picker can show each pet as it was last dressed.
+  PetDesign designFor(String type) => _designs[type] ?? const PetDesign();
+
+  /// Replaces the current pet's design, persists it and notifies.
+  void _setDesign(PetDesign next) {
+    _designs[_customization.characterType] = next;
+    _savePetState();
+    notifyListeners();
+  }
+
+  /// The current pet's recolour choices, for the sprite renderer + UI.
+  PetColorSpec get colorSpec => colorSpecFor(_customization.characterType);
+
+  /// [colorSpec] for any pet, so a picker can preview each one as it was
+  /// dressed rather than in the un-customised source art.
+  PetColorSpec colorSpecFor(String type) {
+    final d = designFor(type);
+    return PetColorSpec(
+      bodyColor: d.bodyColor,
+      eyeMode: eyeModeFromString(d.eyeMode),
+      eyeColor1: d.eyeColor1,
+      eyeColor2: d.eyeColor2,
+    );
+  }
 
   // ==================== ACCESSORIES ====================
 
+  /// What the pet currently out is wearing, by slot.
   Map<String, String?> get equippedAccessories =>
-      Map.unmodifiable(_equippedAccessories);
+      Map.unmodifiable(design.accessories);
 
   /// The accessory id equipped in [slot], or null.
-  String? equippedInSlot(String slot) => _equippedAccessories[slot];
+  String? equippedInSlot(String slot) => design.accessories[slot];
 
-  bool isAccessoryEquipped(String id) =>
-      _equippedAccessories.values.contains(id);
+  bool isAccessoryEquipped(String id) => design.accessories.values.contains(id);
 
-  /// Asset paths of every currently equipped accessory (for the sprite),
-  /// drawn in slot order so the hat layers above the neck/face.
-  List<String> get equippedAccessoryAssets {
+  /// Asset paths of every accessory the current pet is wearing (for the
+  /// sprite), drawn in slot order so the hat layers above the neck/face.
+  List<String> get equippedAccessoryAssets =>
+      equippedAccessoryAssetsFor(_customization.characterType);
+
+  /// [equippedAccessoryAssets] for any pet, for the same reason as
+  /// [colorSpecFor].
+  List<String> equippedAccessoryAssetsFor(String type) {
+    final accessories = designFor(type).accessories;
     final assets = <String>[];
     for (final slot in AccessorySlots.all) {
-      final def = accessoryById(_equippedAccessories[slot]);
+      final def = accessoryById(accessories[slot]);
       if (def != null) assets.add(def.asset);
     }
     return assets;
   }
 
-  /// Equip an accessory, or toggle it off if it's already on in its slot.
-  void equipAccessory(String id) {
+  /// Whether [id] is wearable: a free starter, one that has been bought, or
+  /// one whose bond stage has been reached.
+  ///
+  /// [stage] comes from the caller because bond stages depend on the assessed
+  /// level, which is per-language and lives in CalibrationProvider — see
+  /// [bondStatusFor].
+  bool ownsAccessory(String id, {required PetStage stage}) {
     final def = accessoryById(id);
-    if (def == null) return;
-    if (_equippedAccessories[def.slot] == id) {
-      _equippedAccessories[def.slot] = null;
-    } else {
-      _equippedAccessories[def.slot] = id;
+    if (def == null) return false;
+    return AccessoryOwnership.isOwned(
+      def,
+      unlockedItemIds: _unlockedItems,
+      stage: stage,
+    );
+  }
+
+  /// Equip an accessory, or toggle it off if it is already on in its slot.
+  ///
+  /// Returns false and changes nothing when the accessory is not owned. The
+  /// guard lives here rather than only in the wardrobe so no future caller can
+  /// dress the pet in something the player has not earned or paid for.
+  bool equipAccessory(String id, {required PetStage stage}) {
+    final def = accessoryById(id);
+    if (def == null) return false;
+
+    // Taking something off is always allowed, whatever its current status —
+    // otherwise a retuned catalogue could leave a player stuck wearing it.
+    if (design.accessories[def.slot] == id) {
+      _setDesign(design.withSlot(def.slot, null));
+      return true;
     }
-    _saveAccessories();
-    notifyListeners();
+
+    if (!ownsAccessory(id, stage: stage)) return false;
+
+    _setDesign(design.withSlot(def.slot, id));
+    return true;
   }
 
   void unequipSlot(String slot) {
-    if (_equippedAccessories[slot] != null) {
-      _equippedAccessories[slot] = null;
-      _saveAccessories();
-      notifyListeners();
+    if (design.accessories[slot] != null) {
+      _setDesign(design.withSlot(slot, null));
     }
   }
 
-  Future<void> _saveAccessories() async {
-    final prefs = await SharedPreferences.getInstance();
-    final data = <String, String>{};
-    _equippedAccessories.forEach((slot, id) {
-      if (id != null) data[slot] = id;
-    });
-    await prefs.setString('equipped_accessories', jsonEncode(data));
-  }
-
-  Future<void> _loadAccessories() async {
-    final prefs = await SharedPreferences.getInstance();
-    final str = prefs.getString('equipped_accessories');
-    if (str == null) return;
-    try {
-      final map = jsonDecode(str) as Map<String, dynamic>;
-      map.forEach((slot, id) {
-        if (id is String && accessoryById(id) != null) {
-          _equippedAccessories[slot] = id;
+  /// Reads the per-pet designs, migrating the single shared design older
+  /// installs saved. Accessory ids are checked against the catalogue here, so
+  /// a retired item never reaches the sprite.
+  Future<void> _loadDesigns(SharedPreferences prefs) async {
+    final raw = prefs.getString('pet_designs');
+    if (raw != null) {
+      try {
+        final map = jsonDecode(raw) as Map<String, dynamic>;
+        map.forEach((type, value) {
+          if (value is Map<String, dynamic>) {
+            _designs[type] = _sanitizeDesign(PetDesign.fromJson(value));
+          }
+        });
+      } catch (_) {
+        // Ignore corrupt cosmetic data.
+      }
+    } else {
+      // Legacy save: one coat, one set of eyes and one outfit shared by every
+      // pet. It belongs to whichever pet was out when it was saved; the others
+      // start from the defaults.
+      final accessories = <String, String?>{};
+      final legacy = prefs.getString('equipped_accessories');
+      if (legacy != null) {
+        try {
+          final map = jsonDecode(legacy) as Map<String, dynamic>;
+          map.forEach((slot, id) {
+            if (id is String) accessories[slot] = id;
+          });
+        } catch (_) {
+          // Ignore corrupt cosmetic data.
         }
-      });
-    } catch (_) {
-      // Ignore corrupt cosmetic data.
+      }
+      _designs[_customization.characterType] = _sanitizeDesign(PetDesign(
+        bodyColor: prefs.getString('pet_body_color') ?? kDefaultBodyColor,
+        eyeMode: prefs.getString('pet_eye_mode') ?? kDefaultEyeMode,
+        eyeColor1: prefs.getString('pet_eye_color1') ?? kDefaultEyeColor1,
+        eyeColor2: prefs.getString('pet_eye_color2') ?? kDefaultEyeColor2,
+        accessories: accessories,
+      ));
     }
+
+    // Every accessory used to be free, so players who already dressed their
+    // pet have no purchase record for what it is wearing. Treat whatever is on
+    // as owned rather than stripping it at the next launch and asking them to
+    // buy it back.
+    var grandfathered = false;
+    for (final d in _designs.values) {
+      for (final id in d.accessories.values) {
+        if (id != null) grandfathered = _unlockedItems.add(id) || grandfathered;
+      }
+    }
+    // Written back rather than re-derived every launch, so taking the item off
+    // does not also lose the ownership just inferred from it — and so a
+    // migrated legacy design is stored in the new shape straight away.
+    if (grandfathered || raw == null) await _savePetState();
+  }
+
+  /// Drops accessories whose id is no longer in the catalogue.
+  PetDesign _sanitizeDesign(PetDesign design) {
+    final kept = <String, String?>{};
+    design.accessories.forEach((slot, id) {
+      if (id != null && accessoryById(id) != null) kept[slot] = id;
+    });
+    return design.copyWith(accessories: kept);
   }
 
   // Pet state getters
   int get hunger => _hunger;
   int get happiness => _happiness;
   int get health => _health;
+
+  /// Total bond ever earned. Only ever goes up.
+  int get bondPoints => _bondPoints;
+
+  /// When the player last did something in the target language, or null if
+  /// they never have.
+  DateTime? get lastLearningAt => _lastLearningAt;
+
+  /// Time since the last learning event, or null if there has never been one.
+  Duration? get sinceLastLearning {
+    final last = _lastLearningAt;
+    if (last == null) return null;
+    final elapsed = _now().difference(last);
+    return elapsed.isNegative ? Duration.zero : elapsed;
+  }
+
+  /// Whether the pet reads as missing the player. Costs nothing — see
+  /// [PetWarmth].
+  PetWarmth get warmth => BondProgress.warmthFor(sinceLastLearning);
+
+  /// Bond earned so far today, against [BondConstants.dailyCap].
+  int get bondEarnedToday =>
+      _isSameDay(_bondDay, _now()) ? _bondEarnedToday : 0;
+
+  /// Bond the rest of today can still pay.
+  int get bondRemainingToday => (BondConstants.dailyCap - bondEarnedToday)
+      .clamp(0, BondConstants.dailyCap);
+
+  /// The pet's stage and its distance from the next one.
+  ///
+  /// Takes the level rather than reading it, because proficiency belongs to
+  /// [CalibrationProvider] and is per-language — duplicating it here would
+  /// give the app two answers to the same question. Pass the assessed level
+  /// for the language currently being learned; null reads as beginner.
+  BondStatus bondStatusFor(String? assessedLevel) => BondProgress.statusFor(
+        bondPoints: _bondPoints,
+        tier: BondProgress.tierFromLevel(assessedLevel),
+      );
 
   // Pet mood based on stats
   String get mood {
@@ -182,6 +338,7 @@ class CharacterProvider extends ChangeNotifier {
     if (!isSick) return amount;
     return (amount * sickRewardMultiplier).round();
   }
+
   PetEatingPhase get eatingPhase => _eatingPhase;
   double get chatMoodSignal => _chatMoodSignal;
   bool get isFoodHovering => _eatingPhase == PetEatingPhase.waiting;
@@ -202,6 +359,9 @@ class CharacterProvider extends ChangeNotifier {
     if (isSleeping) {
       return PetVisualState.sleeping;
     }
+    if (isBeingPetted) {
+      return PetVisualState.petted;
+    }
     if (_isHappyBurstActive) {
       return PetVisualState.happy;
     }
@@ -221,16 +381,17 @@ class CharacterProvider extends ChangeNotifier {
   bool get isAiIssueSleepMode => _aiIssueSleepMode;
 
   bool get isNightHours {
-    final hour = DateTime.now().hour;
+    final hour = _now().hour;
     return hour >= _sleepStartHour || hour < _sleepEndHour;
   }
 
   bool get isTemporarilyAwake {
     if (_awakeUntil == null) return false;
-    return DateTime.now().isBefore(_awakeUntil!);
+    return _now().isBefore(_awakeUntil!);
   }
 
   bool get isSleepingForNight {
+    if (AppRuntimeConfig.keepPetAwake) return false;
     return isNightHours && !isTemporarilyAwake;
   }
 
@@ -253,10 +414,21 @@ class CharacterProvider extends ChangeNotifier {
   /// forever by design, and `testWidgets` fails any test that leaves a timer
   /// pending — so a test that needs a real provider would otherwise fail on
   /// the timer rather than on anything it was actually checking.
-  CharacterProvider({bool startDecayTimer = true}) {
+  ///
+  /// [now] exists for the same reason, one layer down. The pet's night is a
+  /// wall-clock fact — [isNightHours] is true between 22:00 and 07:00 — so a
+  /// test that renders the pet passes or fails depending on what time of day
+  /// it is run. Pin this and the pet's day is the test's to decide.
+  CharacterProvider({bool startDecayTimer = true, DateTime Function()? now})
+      : _now = now ?? DateTime.now {
+    _lastUpdate = _now();
     _loadPetState();
     if (startDecayTimer) _startDecayTimer();
   }
+
+  /// The clock this pet lives by. Every "what time is it" in this class goes
+  /// through here rather than [DateTime.now] directly.
+  final DateTime Function() _now;
 
   /// Call this to set up reward subscription from UserProvider
   void subscribeToRewards(UserProvider userProvider) {
@@ -292,6 +464,7 @@ class CharacterProvider extends ChangeNotifier {
     _rewardSubscription?.cancel();
     _eatingTimer?.cancel();
     _happyBurstTimer?.cancel();
+    _pettedTimer?.cancel();
     super.dispose();
   }
 
@@ -299,19 +472,45 @@ class CharacterProvider extends ChangeNotifier {
     if (_happyBurstUntil == null) {
       return false;
     }
-    return DateTime.now().isBefore(_happyBurstUntil!);
+    return _now().isBefore(_happyBurstUntil!);
   }
 
   void _forceWakeForInteraction() {
-    final now = DateTime.now();
+    final now = _now();
     _aiIssueSleepMode = false;
     _lastInteractionAt = now;
     _awakeUntil = now.add(_awakeDuration);
   }
 
+  /// Whether a hand is on the pet right now, as far as the art is concerned.
+  ///
+  /// Public because it is a visible state the pet is in, not an implementation
+  /// detail of one screen — anything drawing the pet can ask.
+  bool get isBeingPetted {
+    final until = _pettedUntil;
+    if (until == null) return false;
+    return _now().isBefore(until);
+  }
+
+  /// How many times petting has actually paid happiness this session.
+  ///
+  /// Carries no meaning beyond changing — it is what the hearts key off, and
+  /// living here rather than in the home screen is what makes them fire
+  /// wherever the petting came from, the care panel included.
+  int get petPayouts => _petPayouts;
+
+  void _startPettedReaction() {
+    _pettedTimer?.cancel();
+    _pettedUntil = _now().add(_pettedDuration);
+    _pettedTimer = Timer(_pettedDuration, () {
+      _pettedUntil = null;
+      notifyListeners();
+    });
+  }
+
   void _startHappyBurst({Duration duration = _happyBurstDuration}) {
     _happyBurstTimer?.cancel();
-    _happyBurstUntil = DateTime.now().add(duration);
+    _happyBurstUntil = _now().add(duration);
     _happyBurstTimer = Timer(duration, () {
       _happyBurstUntil = null;
       notifyListeners();
@@ -433,6 +632,18 @@ class CharacterProvider extends ChangeNotifier {
     _hunger = prefs.getInt('pet_hunger') ?? 50;
     _happiness = prefs.getInt('pet_happiness') ?? 70;
     _health = prefs.getInt('pet_health') ?? 100;
+    _bondPoints = prefs.getInt('pet_bond_points') ?? 0;
+    final lastLearningMs = prefs.getInt('pet_last_learning');
+    if (lastLearningMs != null) {
+      _lastLearningAt = DateTime.fromMillisecondsSinceEpoch(lastLearningMs);
+    }
+    // The daily cap is stored with the day it belongs to, so a restart cannot
+    // be used to clear it and a stale count from an earlier day is ignored.
+    final bondDayMs = prefs.getInt('pet_bond_day');
+    if (bondDayMs != null) {
+      _bondDay = DateTime.fromMillisecondsSinceEpoch(bondDayMs);
+      _bondEarnedToday = prefs.getInt('pet_bond_today') ?? 0;
+    }
     final lastUpdateMs = prefs.getInt('pet_last_update');
     if (lastUpdateMs != null) {
       _lastUpdate = DateTime.fromMillisecondsSinceEpoch(lastUpdateMs);
@@ -469,13 +680,11 @@ class CharacterProvider extends ChangeNotifier {
       characterType: {'dog', 'cat', 'bird'}.contains(savedCharacterType)
           ? savedCharacterType
           : 'cat',
-      bodyColor: prefs.getString('pet_body_color'),
-      eyeMode: prefs.getString('pet_eye_mode'),
-      eyeColor1: prefs.getString('pet_eye_color1'),
-      eyeColor2: prefs.getString('pet_eye_color2'),
     );
 
-    await _loadAccessories();
+    // After the character type, since a legacy design migrates onto whichever
+    // pet was out at the time.
+    await _loadDesigns(prefs);
 
     notifyListeners();
   }
@@ -485,6 +694,15 @@ class CharacterProvider extends ChangeNotifier {
     await prefs.setInt('pet_hunger', _hunger);
     await prefs.setInt('pet_happiness', _happiness);
     await prefs.setInt('pet_health', _health);
+    await prefs.setInt('pet_bond_points', _bondPoints);
+    if (_lastLearningAt != null) {
+      await prefs.setInt(
+          'pet_last_learning', _lastLearningAt!.millisecondsSinceEpoch);
+    }
+    if (_bondDay != null) {
+      await prefs.setInt('pet_bond_day', _bondDay!.millisecondsSinceEpoch);
+      await prefs.setInt('pet_bond_today', _bondEarnedToday);
+    }
     await prefs.setInt('pet_last_update', _lastUpdate.millisecondsSinceEpoch);
     if (_awakeUntil != null) {
       await prefs.setInt(
@@ -500,10 +718,16 @@ class CharacterProvider extends ChangeNotifier {
       await prefs.setInt('pet_last_petted', _lastPetAt!.millisecondsSinceEpoch);
     }
     await prefs.setString('character_type', _customization.characterType);
-    await prefs.setString('pet_body_color', _customization.bodyColor);
-    await prefs.setString('pet_eye_mode', _customization.eyeMode);
-    await prefs.setString('pet_eye_color1', _customization.eyeColor1);
-    await prefs.setString('pet_eye_color2', _customization.eyeColor2);
+    // One entry per pet. The legacy `pet_body_color` / `pet_eye_*` /
+    // `equipped_accessories` keys are left untouched: they are only read when
+    // `pet_designs` is absent, and keeping them means a half-finished
+    // migration can still be re-run.
+    await prefs.setString(
+      'pet_designs',
+      jsonEncode({
+        for (final e in _designs.entries) e.key: e.value.toJson(),
+      }),
+    );
     // persist unlocked items and inventory
     await prefs.setStringList('unlocked_items', _unlockedItems.toList());
     await prefs.setStringList('inventory', _inventory);
@@ -540,13 +764,13 @@ class CharacterProvider extends ChangeNotifier {
   }
 
   void _applyOfflineDecay() {
-    if (_applyElapsedDecay(DateTime.now())) {
+    if (_applyElapsedDecay(_now())) {
       _savePetState();
     }
   }
 
   void _applyDecay() {
-    final now = DateTime.now();
+    final now = _now();
     var changed = _applyElapsedDecay(now);
 
     if (_awakeUntil != null && now.isAfter(_awakeUntil!)) {
@@ -566,7 +790,7 @@ class CharacterProvider extends ChangeNotifier {
     if (_aiIssueSleepMode) {
       return;
     }
-    final now = DateTime.now();
+    final now = _now();
     _lastInteractionAt = now;
     _awakeUntil = now.add(_awakeDuration);
     _savePetState();
@@ -577,18 +801,34 @@ class CharacterProvider extends ChangeNotifier {
     if (_aiIssueSleepMode) {
       return;
     }
-    final now = DateTime.now();
-    _lastInteractionAt = now;
+    _touchInteraction();
 
-    if (isNightHours) {
-      _awakeUntil = now.add(_awakeDuration);
-    }
-
+    // Unconditional, and it has to stay that way: rewardChat, rewardScenario,
+    // rewardQuiz and applyQuizRewards all move happiness and hunger and then
+    // lean on this call to persist them.
     _savePetState();
     notifyListeners();
   }
 
+  /// The state half of [registerInteraction], without the save.
+  ///
+  /// Returns whether anything worth persisting moved. Only the night-time
+  /// wake window qualifies: [_lastInteractionAt] is written to disk and read
+  /// back on launch, but nothing consults it — absence is measured by
+  /// [warmth], which runs off `_lastLearningAt`.
+  bool _touchInteraction() {
+    final now = _now();
+    _lastInteractionAt = now;
+
+    if (!isNightHours) return false;
+    _awakeUntil = now.add(_awakeDuration);
+    return true;
+  }
+
   void setAiIssueSleepMode(bool enabled) {
+    if (AppRuntimeConfig.keepPetAwake) {
+      enabled = false;
+    }
     if (_aiIssueSleepMode == enabled) {
       return;
     }
@@ -607,6 +847,61 @@ class CharacterProvider extends ChangeNotifier {
       _animationState = state;
       notifyListeners();
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Bond
+  //
+  // Kept separate from the activity rewards below on purpose. Those move the
+  // fast survival stats and are called from anywhere something nice happened;
+  // these are only ever called for something the player did in the target
+  // language, so the ledger stays readable.
+  // ---------------------------------------------------------------------------
+
+  static bool _isSameDay(DateTime? a, DateTime b) =>
+      a != null && a.year == b.year && a.month == b.month && a.day == b.day;
+
+  /// Credits a learning event to the bond and returns the points actually
+  /// awarded, which is 0 once [BondConstants.dailyCap] is reached.
+  ///
+  /// [units] is how many of the thing happened — messages exchanged, cards
+  /// corrected — so callers can settle a whole session in one call.
+  int recordLearning(BondSource source, {int units = 1}) {
+    if (units <= 0) return 0;
+    return _awardBond(BondProgress.pointsFor(source) * units);
+  }
+
+  /// Bond for a finished quiz, which is worth more the better it went.
+  int recordQuizLearning({
+    required int correctAnswers,
+    required int totalQuestions,
+  }) {
+    return _awardBond(BondProgress.quizPoints(
+      correctAnswers: correctAnswers,
+      totalQuestions: totalQuestions,
+    ));
+  }
+
+  /// Adds [raw] bond, trimmed to what today has left.
+  ///
+  /// [_lastLearningAt] advances even when the cap pays nothing: the player did
+  /// learn, and the pet has no business acting like it missed them because
+  /// they studied too much.
+  int _awardBond(int raw) {
+    final now = _now();
+    if (!_isSameDay(_bondDay, now)) {
+      _bondDay = now;
+      _bondEarnedToday = 0;
+    }
+
+    final awarded = raw.clamp(0, bondRemainingToday);
+    _bondPoints += awarded;
+    _bondEarnedToday += awarded;
+    _lastLearningAt = now;
+
+    _savePetState();
+    notifyListeners();
+    return awarded;
   }
 
   // Activity rewards - called when user completes activities
@@ -679,34 +974,51 @@ class CharacterProvider extends ChangeNotifier {
   /// Whether petting would currently pay happiness, or is still on cooldown.
   bool get canEarnFromPetting {
     if (_lastPetAt == null) return true;
-    return DateTime.now().difference(_lastPetAt!) >= petCooldown;
+    return _now().difference(_lastPetAt!) >= petCooldown;
   }
 
   /// Time until petting pays out again, or [Duration.zero] when it's ready.
   Duration get petCooldownRemaining {
     if (_lastPetAt == null) return Duration.zero;
-    final elapsed = DateTime.now().difference(_lastPetAt!);
+    final elapsed = _now().difference(_lastPetAt!);
     final remaining = petCooldown - elapsed;
     return remaining.isNegative ? Duration.zero : remaining;
   }
 
-  /// Pets the pet. Always plays the happy reaction so the tap feels alive,
-  /// but only grants happiness once per [petCooldown]. Returns true when
-  /// happiness was actually granted.
+  /// Pets the pet. Always plays the reaction, however often it is asked for:
+  /// petting is free and unlimited, and a pet that stopped responding to a
+  /// hand after the first rub would read as broken. Only the *payout* is
+  /// rationed, once per [petCooldown].
+  ///
+  /// Returns whether happiness was actually granted, which is what callers
+  /// use to decide about hearts — the reward feedback belongs to the reward,
+  /// not to the rub.
   bool petThePet() {
     // A pet dozing through an AI outage shouldn't perk up — registerInteraction
     // ignores it too, so the burst would never be cleared by a notify.
     if (_aiIssueSleepMode) return false;
 
+    // Two reactions with different lifetimes: the rub itself, which lasts
+    // about as long as the hand is there, and the contentment it leaves
+    // behind, which outlives it.
+    _startPettedReaction();
     _startHappyBurst();
 
     if (!canEarnFromPetting) {
-      registerInteraction();
+      // The hot path, and the reason it does not just call
+      // registerInteraction: petting is deliberately unlimited, so a single
+      // sustained scratch lands here dozens of times. Nothing persisted has
+      // changed — no stats, no bond, and the reaction above is in-memory
+      // animation state — so the only save worth making is the one that
+      // moves the wake window.
+      if (_touchInteraction()) _savePetState();
+      notifyListeners();
       return false;
     }
 
-    _lastPetAt = DateTime.now();
+    _lastPetAt = _now();
     _happiness = (_happiness + _petHappinessGain).clamp(0, 100);
+    _petPayouts++;
     registerInteraction();
     return true;
   }
@@ -760,28 +1072,25 @@ class CharacterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Sets the body + tail coat colour (always shared between the two).
+  /// Sets the body + tail coat colour (always shared between the two) of the
+  /// pet currently out. Other pets keep their own coat.
   void updateBodyColor(String hex) {
-    if (_customization.bodyColor == hex) return;
-    _customization = _customization.copyWith(bodyColor: hex);
-    _savePetState();
-    notifyListeners();
+    if (design.bodyColor == hex) return;
+    _setDesign(design.copyWith(bodyColor: hex));
   }
 
-  /// Updates the eye colouring. [color2] is only meaningful for the
-  /// heterochromia (right eye) and dichroic (pupil) modes.
+  /// Updates the eye colouring of the pet currently out. [color2] is only
+  /// meaningful for the heterochromia (right eye) mode.
   void updateEyeColors({
     required EyeMode mode,
     required String color1,
     String? color2,
   }) {
-    _customization = _customization.copyWith(
+    _setDesign(design.copyWith(
       eyeMode: eyeModeToString(mode),
       eyeColor1: color1,
-      eyeColor2: color2 ?? _customization.eyeColor2,
-    );
-    _savePetState();
-    notifyListeners();
+      eyeColor2: color2 ?? design.eyeColor2,
+    ));
   }
 
   Future<void> updateCharacterType(String type) async {

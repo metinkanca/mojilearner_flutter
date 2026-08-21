@@ -11,6 +11,7 @@
 ///   // Use sanitized response
 /// }
 /// ```
+library;
 
 import 'security_logger.dart';
 

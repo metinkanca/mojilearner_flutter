@@ -167,6 +167,8 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                 _buildCategoryTab(l10n.categoryAll, 'all', fontFunction),
                 _buildCategoryTab(l10n.categoryFood, 'food', fontFunction),
                 _buildCategoryTab(l10n.categoryDecor, 'background', fontFunction),
+                _buildCategoryTab(l10n.categoryStyle, 'accessory', fontFunction,
+                    isLast: true),
               ],
             ),
           ),
@@ -345,12 +347,14 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     );
   }
 
-  Widget _buildCategoryTab(String label, String category, TextStyle Function({required double fontSize, Color? color, FontWeight? fontWeight, double? letterSpacing}) fontFunction) {
+  /// [isLast] drops the right-hand divider. Passed in rather than compared
+  /// against a category name, which is how adding the style tab left the
+  /// divider stranded in the middle of the row.
+  Widget _buildCategoryTab(String label, String category, TextStyle Function({required double fontSize, Color? color, FontWeight? fontWeight, double? letterSpacing}) fontFunction, {bool isLast = false}) {
     final isSelected = _selectedCategory == category;
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
-    
+
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -365,7 +369,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             border: Border(
               right: BorderSide(
                 color: AppTheme.retroDark,
-                width: category == 'background' ? 0 : 3,
+                width: isLast ? 0 : 3,
               ),
             ),
           ),
@@ -373,7 +377,11 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             child: Text(
               label,
               textDirection: textDirection,
-              textAlign: textAlign,
+              textAlign: TextAlign.center,
+              // Four tabs split a handset between them, and the longest
+              // locales do not fit one line at that width.
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: fontFunction(
                 fontSize: 10,
                 color: AppTheme.retroDark,
@@ -396,7 +404,6 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
     final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
     final currentFullness =
         (100 - Provider.of<CharacterProvider>(context, listen: false).hunger)
             .clamp(0, 100)

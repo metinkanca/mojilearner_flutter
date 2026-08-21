@@ -57,8 +57,9 @@ class PetSwatch {
   const PetSwatch(this.label, this.hex);
 }
 
-/// Curated cat-coat palette for the body + tail. The first entry (`Smoke`) is
-/// the pets' original flat fill, so an un-customised cat looks unchanged.
+/// Curated coat palette for the body + tail, shared by every recolourable pet.
+/// The first entry (`Smoke`) is the pets' original flat fill, so an
+/// un-customised pet looks unchanged.
 const List<PetSwatch> kBodySwatches = [
   PetSwatch('Smoke', '#959379'),
   PetSwatch('Charcoal', '#5A554F'),
@@ -69,8 +70,8 @@ const List<PetSwatch> kBodySwatches = [
   PetSwatch('Blue-grey', '#8C97A0'),
 ];
 
-/// Cat eye-colour palette, in the order described by the design brief
-/// (most common first).
+/// Eye-colour palette, in the order described by the design brief (most common
+/// first). Shared by every recolourable pet.
 const List<PetSwatch> kEyeSwatches = [
   PetSwatch('Gold', '#F4C430'),
   PetSwatch('Green', '#4CA65B'),
@@ -120,24 +121,44 @@ String recolorBodyLayer(String svg, String bodyColor) {
   return out;
 }
 
-// Eye geometry, lifted verbatim from assets/svgs/cat_eyes.svg so the generated
+// Eye geometry, lifted verbatim from each pet's `*_eyes.svg` so the generated
 // layer overlays the body pixel-perfectly and the blink transform still lines
-// up. Left/right are the two 16x20 eye cells.
-const String _eyeViewBox = '-20 -40 222 278';
-const _EyeRect _leftEye = _EyeRect(80, 69, 16, 20);
-const _EyeRect _rightEye = _EyeRect(141, 69, 16, 20);
+// up. All pets share the one canvas, so the rects are canvas coordinates.
+const String _eyeViewBox = '-20 -90 222 328';
 
-class _EyeRect {
-  final int x, y, w, h;
-  const _EyeRect(this.x, this.y, this.w, this.h);
+/// The two eye cells of one pet. Both eyes are the same size; only their x
+/// positions differ, so a squint/blink can scale the pair as a unit.
+class PetEyeGeometry {
+  final int leftX;
+  final int rightX;
+  final int y;
+  final int w;
+  final int h;
 
-  String rect(String fill) =>
+  const PetEyeGeometry({
+    required this.leftX,
+    required this.rightX,
+    required this.y,
+    required this.w,
+    required this.h,
+  });
+
+  String _rect(int x, String fill) =>
       '<rect fill="$fill" x="$x" y="$y" width="$w" height="$h"/>';
 }
 
+/// Cat eyes: two 16x20 cells. Also the fallback for any pet without an entry.
+const PetEyeGeometry kCatEyes =
+    PetEyeGeometry(leftX: 80, rightX: 141, y: 69, w: 16, h: 20);
+
+/// Dog eyes: taller and narrower than the cat's, and higher on the canvas
+/// because the dog's head sits higher (see the sprite's `_layeredPets`).
+const PetEyeGeometry kDogEyes =
+    PetEyeGeometry(leftX: 99, rightX: 148, y: 40, w: 11, h: 23);
+
 /// Builds the eyes layer SVG entirely from [spec], so solid / odd-eyed both
 /// share the exact eye geometry of the original asset.
-String buildEyesLayer(PetColorSpec spec) {
+String buildEyesLayer(PetColorSpec spec, [PetEyeGeometry eyes = kCatEyes]) {
   final buffer = StringBuffer(
     '<svg id="katman_1" xmlns="http://www.w3.org/2000/svg" version="1.1" '
     'viewBox="$_eyeViewBox" shape-rendering="crispEdges">',
@@ -145,12 +166,12 @@ String buildEyesLayer(PetColorSpec spec) {
 
   switch (spec.eyeMode) {
     case EyeMode.solid:
-      buffer.write(_leftEye.rect(spec.eyeColor1));
-      buffer.write(_rightEye.rect(spec.eyeColor1));
+      buffer.write(eyes._rect(eyes.leftX, spec.eyeColor1));
+      buffer.write(eyes._rect(eyes.rightX, spec.eyeColor1));
       break;
     case EyeMode.heterochromia:
-      buffer.write(_leftEye.rect(spec.eyeColor1));
-      buffer.write(_rightEye.rect(spec.eyeColor2));
+      buffer.write(eyes._rect(eyes.leftX, spec.eyeColor1));
+      buffer.write(eyes._rect(eyes.rightX, spec.eyeColor2));
       break;
   }
 

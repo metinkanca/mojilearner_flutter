@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
@@ -185,14 +187,19 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                       style: TextStyle(fontSize: 24),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      l10n.day_streak(widget.rewardInfo.dayNumber),
-                      textDirection: textDirection,
-                      textAlign: textAlign,
-                      style: fontFunction(
-                        fontSize: 12,
-                        color: AppTheme.retroDark,
-                        fontWeight: FontWeight.bold,
+                    // Flexible, not a bare Text: the label runs past the pill
+                    // on a 320pt handset, and in the longer locales sooner
+                    // than that. It wraps instead of overflowing.
+                    Flexible(
+                      child: Text(
+                        l10n.day_streak(widget.rewardInfo.dayNumber),
+                        textDirection: textDirection,
+                        textAlign: textAlign,
+                        style: fontFunction(
+                          fontSize: 12,
+                          color: AppTheme.retroDark,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -343,46 +350,63 @@ class _SevenDayCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(7, (index) {
-        final dayNumber = index + 1;
-        final isCompleted = dayNumber <= currentDayNumber;
-        final isToday = dayNumber == currentDayNumber;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Seven markers at their full 32pt, plus the gaps between them, need
+        // 280pt — more than the dialog leaves on a handset, where it gets 264.
+        // Shrink the markers and their gaps together to fit rather than
+        // dropping any, keeping full size wherever there is room for it.
+        const maxMarkerSize = 32.0;
+        const gapRatio = 0.25; // an 8pt gap at full marker size
+        final available = constraints.maxWidth;
+        final markerSize = available.isFinite
+            ? math.min(maxMarkerSize, available / (7 + 6 * gapRatio))
+            : maxMarkerSize;
+        // The check glyph is the one label sized off the marker: at 16pt its
+        // line box is taller than a shrunk marker's interior.
+        final checkFontSize =
+            (16.0 * markerSize / maxMarkerSize).clamp(10.0, 16.0);
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: isCompleted ? AppTheme.retroGrass : AppTheme.retroLight,
-              border: Border.all(
-                color: isToday ? AppTheme.retroAccent : AppTheme.retroDark,
-                width: isToday ? 3 : 2,
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: markerSize * gapRatio,
+          children: List.generate(7, (index) {
+            final dayNumber = index + 1;
+            final isCompleted = dayNumber <= currentDayNumber;
+            final isToday = dayNumber == currentDayNumber;
+
+            return Container(
+              width: markerSize,
+              height: markerSize,
+              decoration: BoxDecoration(
+                color: isCompleted ? AppTheme.retroGrass : AppTheme.retroLight,
+                border: Border.all(
+                  color: isToday ? AppTheme.retroAccent : AppTheme.retroDark,
+                  width: isToday ? 3 : 2,
+                ),
               ),
-            ),
-            child: Center(
-              child: isCompleted
-                  ? const Text(
-                      '✓',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+              child: Center(
+                child: isCompleted
+                    ? Text(
+                        '✓',
+                        style: TextStyle(
+                          fontSize: checkFontSize,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : Text(
+                        dayNumber.toString(),
+                        style: fontFunction(
+                          fontSize: 8,
+                          color: AppTheme.textSecondary,
+                        ),
                       ),
-                    )
-                  : Text(
-                      dayNumber.toString(),
-                      style: fontFunction(
-                        fontSize: 8,
-                        color: AppTheme.textSecondary,
-                      ),
-                    ),
-            ),
-          ),
+              ),
+            );
+          }),
         );
-      }),
+      },
     );
   }
 }
