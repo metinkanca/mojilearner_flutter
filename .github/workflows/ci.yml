@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # So a red main can be re-checked without an empty commit.
+  workflow_dispatch:
+
+# A new push to the same branch makes the in-flight run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze-and-test:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          # Pinned rather than tracking `stable`: a Flutter release should
+          # never be able to turn a green branch red on its own. Bump this
+          # deliberately, in a commit that can be reverted.
+          flutter-version: 3.41.6
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # No .env step needed: nothing calls `dotenv.load()`, so the gitignored
+      # .env configures nothing (see lib/constants/app_runtime_config.dart).
+      # Verified by running the full suite with the file moved away.
+
+      # No `dart format` gate on purpose: 109 of 203 files are currently
+      # unformatted, so turning it on would fail every run until someone
+      # reformats the tree. That reformat is a fine thing to do — but as its
+      # own commit, not as a surprise CI failure.
+
+      # --fatal-infos because the tree is at zero issues. Anything less and
+      # the 61 infos we just cleared creep back one at a time.
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+      - name: Test
+        run: flutter test --reporter github
+
+      # Not gating: `integration_test/` needs a device and is not run here.
+      # If that changes, it belongs in its own job with an emulator, not
+      # bolted onto this one.

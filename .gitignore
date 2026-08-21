@@ -49,10 +49,14 @@ app.*.map.json
 .env
 *.env
 .env.*
+# ...but the template is documentation, not configuration.
+!server/.env.example
 
-# Firebase secrets
-google-services.json
-GoogleService-Info.plist
+# Firebase client config is deliberately committed. These files hold client
+# identifiers, not secrets -- Google ships the same values inside every
+# published APK/IPA, and firebase_options.dart already carries them. Firestore
+# rules are the actual access boundary; App Check is the abuse boundary and is
+# a pre-launch task. Ignoring these only breaks fresh clones and CI.
 
 # Signing / Key files
 *.p12
@@ -62,9 +66,10 @@ GoogleService-Info.plist
 *.pem
 
 # Agent tooling, tests and internal reports.
-# The published repo carries the app only: lib/, assets/ and platform config.
-# Everything below documents how the app is built, tested or hardened, which
-# is not something to hand to anyone reading the public repo.
+# The published repo carries the app (lib/, assets/, platform config) and the
+# AI proxy it talks to (server/). Everything below documents how the app is
+# built, tested or hardened, which is not something to hand to anyone reading
+# the public repo.
 .agent/
 .claude/
 skills-lock.json
@@ -101,3 +106,7 @@ IOS_WHICH_METHOD.md
 OFFLINE_MODE.md
 QUICK_BUILD.md
 TESTER_GUIDE.md
+
+# Proxy dependencies and its real configuration (see server/.env.example).
+server/node_modules/
+server/.env

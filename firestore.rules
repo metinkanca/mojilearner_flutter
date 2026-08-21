@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// MojiLearner save data.
+//
+// One document per player at users/{uid}, written only by that player. There
+// is no shared or public data in this app, so nothing here needs to be
+// readable by anyone else — and on a public repo, where the Firebase config
+// is visible to everyone, these rules are the only thing standing between the
+// project and someone else's traffic.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      // Signed in, and only ever your own document. Anonymous auth counts:
+      // the uid is stable per install and is exactly the identity the save
+      // belongs to.
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      // No subcollections are used. Denying them explicitly means a future
+      // feature has to come back here on purpose rather than inheriting
+      // access by accident.
+      match /{document=**} {
+        allow read, write: if false;
+      }
+    }
+
+    // Anything not named above is denied. Firestore defaults to this, but
+    // saying it out loud keeps it true if a rule is added carelessly later.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

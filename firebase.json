@@ -1,0 +1,25 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mojilearner-38de1",
+          "appId": "1:592310164564:android:7ddb35a8cd8e80455a61c1",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mojilearner-38de1",
+          "configurations": {
+            "android": "1:592310164564:android:7ddb35a8cd8e80455a61c1",
+            "ios": "1:592310164564:ios:b461e4e997c338ba5a61c1"
+          }
+        }
+      }
+    }
+  }
+}

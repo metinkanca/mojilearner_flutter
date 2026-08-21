@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "MojiLearner",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "MojiLearner (art review)",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--dart-define=SKIP_ONBOARDING=true",
+        "--dart-define=KEEP_PET_AWAKE=true",
+        "--dart-define=UNLOCK_ALL_ACCESSORIES=true"
+      ]
+    }
+  ]
+}
