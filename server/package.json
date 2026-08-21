@@ -1,0 +1,17 @@
+{
+  "name": "mojilearner-ai-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Keeps the Gemini API key off the phone. Implements the three endpoints lib/services/ai_service.dart calls.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
