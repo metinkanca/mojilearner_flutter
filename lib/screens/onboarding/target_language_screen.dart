@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import '../../components/pixel_flag.dart';
 import '../../constants/theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/language_provider.dart';
@@ -17,31 +18,11 @@ class TargetLanguageScreen extends StatefulWidget {
 class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
   String? _selectedLanguage;
 
-  final List<Map<String, String>> _languages = [
-    {'code': 'en', 'name': 'English', 'flag': '🇬🇧'},
-    {'code': 'ja', 'name': 'Japanese', 'flag': '🇯🇵'},
-    {'code': 'es', 'name': 'Spanish', 'flag': '🇪🇸'},
-    {'code': 'fr', 'name': 'French', 'flag': '🇫🇷'},
-    {'code': 'de', 'name': 'German', 'flag': '🇩🇪'},
-    {'code': 'it', 'name': 'Italian', 'flag': '🇮🇹'},
-    {'code': 'pt', 'name': 'Portuguese', 'flag': '🇵🇹'},
-    {'code': 'ru', 'name': 'Russian', 'flag': '🇷🇺'},
-    {'code': 'ko', 'name': 'Korean', 'flag': '🇰🇷'},
-    {'code': 'zh', 'name': 'Chinese', 'flag': '🇨🇳'},
-    {'code': 'ar', 'name': 'Arabic', 'flag': '🇸🇦'},
-    {'code': 'hi', 'name': 'Hindi', 'flag': '🇮🇳'},
-    {'code': 'nl', 'name': 'Dutch', 'flag': '🇳🇱'},
-    {'code': 'pl', 'name': 'Polish', 'flag': '🇵🇱'},
-    {'code': 'tr', 'name': 'Turkish', 'flag': '🇹🇷'},
-    {'code': 'sv', 'name': 'Swedish', 'flag': '🇸🇪'},
-    {'code': 'no', 'name': 'Norwegian', 'flag': '🇳🇴'},
-    {'code': 'da', 'name': 'Danish', 'flag': '🇩🇰'},
-    {'code': 'fi', 'name': 'Finnish', 'flag': '🇫🇮'},
-    {'code': 'cs', 'name': 'Czech', 'flag': '🇨🇿'},
-    {'code': 'el', 'name': 'Greek', 'flag': '🇬🇷'},
-    {'code': 'th', 'name': 'Thai', 'flag': '🇹🇭'},
-    {'code': 'vi', 'name': 'Vietnamese', 'flag': '🇻🇳'},
-  ];
+
+  /// Straight from the provider, so this list cannot drift out of step with
+  /// the languages the app actually supports.
+  List<Language> _languages(BuildContext context) =>
+      context.read<LanguageProvider>().availableLanguages;
 
   void _continue(BuildContext context) {
     if (_selectedLanguage != null) {
@@ -56,9 +37,9 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languages = _languages(context);
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
     
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -161,15 +142,15 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
                 ),
-                itemCount: _languages.length,
+                itemCount: languages.length,
                 itemBuilder: (context, index) {
-                  final lang = _languages[index];
-                  final isSelected = _selectedLanguage == lang['code'];
+                  final lang = languages[index];
+                  final isSelected = _selectedLanguage == lang.code;
                   
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        _selectedLanguage = lang['code'];
+                        _selectedLanguage = lang.code;
                       });
                     },
                     child: Container(
@@ -193,20 +174,30 @@ class _TargetLanguageScreenState extends State<TargetLanguageScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            lang['flag']!,
-                            style: const TextStyle(fontSize: 20),
-                          ),
+                          PixelFlag(code: lang.code, height: 12),
                           const SizedBox(width: 8),
                           Flexible(
                             child: Text(
-                              lang['name']!,
-                              textDirection: textDirection,
-                              textAlign: textAlign,
+                              // Each language named in itself — the one form
+                              // that needs no translating into the other 26.
+                              lang.nativeName,
+                              // The row reads in its own language's direction,
+                              // not the app's: Arabic stays right-to-left in a
+                              // list an English speaker is scrolling.
+                              textDirection: textDirectionForLocale(
+                                Locale(lang.code),
+                              ),
+                              textAlign: TextAlign.center,
                               style: AppFonts.pressStart2p(
                                 fontSize: 8,
                                 color: isSelected ? Colors.white : AppTheme.retroDark,
+                                locale: Locale(lang.code),
                               ),
+                              // Two lines: the longest endonym ("Bahasa
+                              // Indonesia") does not fit a half-width tile on
+                              // one, and clipping it to "Bahasa In..." is
+                              // worse than wrapping.
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),

@@ -64,7 +64,7 @@ void main() {
     // The screen this replaced carried its own hardcoded list, which had
     // drifted from the catalogue and left four translated languages with no
     // way to reach them. Naming them keeps that from silently coming back.
-    for (final name in ['Indonesian', 'Ukrainian', 'Romanian', 'Hungarian']) {
+    for (final name in ['Bahasa Indonesia', 'Українська', 'Română', 'Magyar']) {
       await tester.scrollUntilVisible(
         find.text(name),
         120,
@@ -106,7 +106,7 @@ void main() {
   testWidgets('tapping a language locks the question to it', (tester) async {
     await pumpFirstLaunch(tester);
 
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
 
     expect(find.text(question('es')), findsOneWidget);
@@ -123,7 +123,7 @@ void main() {
     final language = await pumpFirstLaunch(tester);
     final before = language.nativeLanguage.code;
 
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
 
     // Tapping the row shows the language; it does not commit it.
@@ -140,7 +140,7 @@ void main() {
   testWidgets('confirming moves on to choosing a pet', (tester) async {
     await pumpFirstLaunch(tester);
 
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
     await tester.tap(find.text(
       lookupAppLocalizations(const Locale('es')).onboardingLanguageConfirm,
@@ -157,7 +157,7 @@ void main() {
 
   /// Walks past the language step so the pets are what is being chosen.
   Future<void> reachPetPhase(WidgetTester tester) async {
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
     await tester.tap(find.text(
       lookupAppLocalizations(const Locale('es')).onboardingLanguageConfirm,
@@ -242,7 +242,7 @@ void main() {
     // Hidden on the language step — there is no rank to be a position in.
     expect(dots().opacity, 0.0);
 
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
     await tester.tap(find.text(
       lookupAppLocalizations(const Locale('es')).onboardingLanguageConfirm,
@@ -260,7 +260,7 @@ void main() {
     // and a greyed control reads as something broken.
     expect(find.byType(RetroButton), findsNothing);
 
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
 
     expect(find.byType(RetroButton), findsOneWidget);

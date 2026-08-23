@@ -28,8 +28,11 @@ class SecureStorage {
 
   // Singleton instance with encryption options
   static const FlutterSecureStorage _storage = FlutterSecureStorage(
+    // flutter_secure_storage 11 removed `encryptedSharedPreferences`: the
+    // Jetpack Security backend is gone and custom cipher storage (AES-GCM
+    // under a Keystore RSA key) is now the only Android backend, so the
+    // encryption this flag used to request is on by default.
     aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
       // Additional security: require authentication to access
       // screenshotProtection: true, // Android 13+
     ),

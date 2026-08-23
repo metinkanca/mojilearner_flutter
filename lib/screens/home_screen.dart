@@ -27,6 +27,9 @@ import '../services/ai_service.dart';
 import '../utils/fonts.dart';
 import '../utils/rtl_locale.dart';
 
+/// The level and XP pill on the home screen's top row.
+const Key levelPillKey = Key('home-level-pill');
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -422,8 +425,13 @@ class _HomeScreenState extends State<HomeScreen> {
         // The gap is a Padding rather than a margin on the badge so the badge
         // itself stays exactly 40x40 — that square is the property the layout
         // test measures, and a margin would quietly fold into it.
+        //
+        // 6 rather than 8: three of these plus the settings square leave the
+        // level pill 168pt, and "経験値: 72/100" at the 10px CJK face wants
+        // 174. Six points across the row is what keeps the XP numbers from
+        // ellipsising in the CJK locales.
         child: Padding(
-          padding: const EdgeInsetsDirectional.only(end: 8),
+          padding: const EdgeInsetsDirectional.only(end: 6),
           child: Container(
             width: 40,
             height: 40,
@@ -861,6 +869,25 @@ You should feel like a friendly companion, not a teacher or chatbot.
         ? AppFonts.pressStart2p
         : AppFonts.spaceMono;
 
+    /// Digits and other Latin inside an otherwise translated string.
+    ///
+    /// A [TextStyle] carries one size for the whole run, so a string like
+    /// "経験値: 72/100" would draw its numbers at the size the kanji were
+    /// scaled to — see [AppFonts.nonLatinOpticalScale]. Press Start 2P draws
+    /// those digits, and Press Start 2P is what the scale is measured
+    /// against, so they belong at the size the caller asked for.
+    TextStyle latinStyle(
+            {required double fontSize, Color? color, FontWeight? fontWeight}) =>
+        settingsProvider.usePixelFont
+            ? AppFonts.pressStart2p(
+                fontSize: fontSize,
+                color: color,
+                fontWeight: fontWeight,
+                locale: const Locale('en'),
+              )
+            : AppFonts.spaceMono(
+                fontSize: fontSize, color: color, fontWeight: fontWeight);
+
     final canChat = !characterProvider.isSleeping &&
         !characterProvider.isAiIssueSleepMode &&
         _aiSessionId != null;
@@ -1233,88 +1260,146 @@ You should feel like a friendly companion, not a teacher or chatbot.
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       // Level Pill (Retro Style)
-                                      GestureDetector(
-                                        onTap: () =>
-                                            context.pushNamed('level_rewards'),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 8),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: AppTheme.retroDark,
-                                                width: 4),
-                                            boxShadow: const [
-                                              BoxShadow(
+                                      //
+                                      // Flexible because the XP label is the
+                                      // one piece of this row that translates:
+                                      // in the CJK locales it is drawn at the
+                                      // 10px face floor and pushed the row 9px
+                                      // off the side of a handset. It gives way
+                                      // now instead of overflowing.
+                                      Flexible(
+                                        child: GestureDetector(
+                                          key: levelPillKey,
+                                          onTap: () => context
+                                              .pushNamed('level_rewards'),
+                                          child: Container(
+                                            // 10 rather than 12 for the same
+                                            // reason as the badge gaps below.
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
                                                   color: AppTheme.retroDark,
-                                                  offset: Offset(4, 4),
-                                                  blurRadius: 0)
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                width: 24,
-                                                height: 24,
-                                                decoration: BoxDecoration(
-                                                  color: AppTheme.retroAccent,
-                                                  border: Border.all(
-                                                      color: AppTheme.retroDark,
-                                                      width: 2),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    '${userProvider.stats.level}',
-                                                    style: fontFunction(
-                                                      fontSize: 8,
-                                                      color: AppTheme.retroDark,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                              // XP Info
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    '${l10n?.xp ?? 'XP'}: ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
-                                                    style: fontFunction(
-                                                      fontSize: 8,
-                                                      color: AppTheme.retroDark,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  // XP Bar
-                                                  Container(
-                                                    width: 80,
-                                                    height: 8,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey[300],
-                                                      border: Border.all(
-                                                          color: AppTheme
-                                                              .retroDark,
-                                                          width: 2),
-                                                    ),
-                                                    child: FractionallySizedBox(
-                                                      widthFactor: userProvider
-                                                          .stats.progress,
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: Container(
+                                                  width: 4),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                    color: AppTheme.retroDark,
+                                                    offset: Offset(4, 4),
+                                                    blurRadius: 0)
+                                              ],
+                                            ),
+                                            child: Row(
+                                              // Hugs its contents. Left to
+                                              // fill, the pill stretched to
+                                              // whatever the badges did not
+                                              // use, which on a screen with
+                                              // no care or review badge is
+                                              // most of the row: a short
+                                              // "XP: 0/100" adrift in white.
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: 24,
+                                                  height: 24,
+                                                  decoration: BoxDecoration(
+                                                    color: AppTheme.retroAccent,
+                                                    border: Border.all(
                                                         color:
-                                                            AppTheme.retroGreen,
+                                                            AppTheme.retroDark,
+                                                        width: 2),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      '${userProvider.stats.level}',
+                                                      style: fontFunction(
+                                                        fontSize: 8,
+                                                        color:
+                                                            AppTheme.retroDark,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
+                                                ),
+                                                const SizedBox(width: 8),
+                                                // XP Info
+                                                Flexible(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text.rich(
+                                                        TextSpan(children: [
+                                                          TextSpan(
+                                                            text: l10n?.xp ??
+                                                                'XP',
+                                                            style: fontFunction(
+                                                              fontSize: 8,
+                                                              color: AppTheme
+                                                                  .retroDark,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                ': ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
+                                                            style: latinStyle(
+                                                              fontSize: 8,
+                                                              color: AppTheme
+                                                                  .retroDark,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      // XP Bar
+                                                      //
+                                                      // 72 is how wide "XP:
+                                                      // 72/100" is at the size
+                                                      // above it, so the bar
+                                                      // ends where its own
+                                                      // label does rather than
+                                                      // running past it.
+                                                      Container(
+                                                        width: 72,
+                                                        height: 8,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Colors.grey[300],
+                                                          border: Border.all(
+                                                              color: AppTheme
+                                                                  .retroDark,
+                                                              width: 2),
+                                                        ),
+                                                        child:
+                                                            FractionallySizedBox(
+                                                          widthFactor:
+                                                              userProvider.stats
+                                                                  .progress,
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Container(
+                                                            color: AppTheme
+                                                                .retroGreen,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

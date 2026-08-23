@@ -9,6 +9,16 @@ import '../l10n/app_localizations.dart';
 import '../utils/rtl_locale.dart';
 import '../../utils/fonts.dart';
 
+/// The label slot inside a nav item.
+///
+/// A [FittedBox] sits behind it, so a label too wide for this does not
+/// overflow — it shrinks, which puts a pixel font off its grid. Named so the
+/// tests that guard against that measure the real number.
+///
+/// The full width of the item, not the 64 it used to be: East Asian labels are
+/// drawn on a 12px grid now, and "プロフィール" is six of those wide.
+const double navLabelSlotWidth = 72;
+
 class NavigationWrapper extends StatelessWidget {
   final Widget child;
 
@@ -355,7 +365,7 @@ class NavigationWrapper extends StatelessWidget {
             if (navLabel != null && navLabel.isNotEmpty) ...[
               const SizedBox(height: 8),
               SizedBox(
-                width: 64,
+                width: navLabelSlotWidth,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(

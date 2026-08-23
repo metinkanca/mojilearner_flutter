@@ -10,6 +10,7 @@ import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
 import '../components/account_link_tile.dart';
 import '../components/character_sprite.dart';
+import '../components/pixel_flag.dart';
 import '../components/daily_rewards_dialog.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/rtl_locale.dart';
@@ -698,27 +699,54 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: DropdownButtonFormField<Language>(
               initialValue: selectedOption,
+              // DropdownButtonFormField is dense by default, which pins the
+              // closed button to a 24pt box — shorter than the line it holds,
+              // so "English" lost the tail of its g and 한국어 lost more than
+              // that. The row is a settings row, not a compact form field.
+              isDense: false,
+              // Fills the row rather than shrink-wrapping the widest option:
+              // the button lays every option out at its own width, so without
+              // this the longest name in the catalogue decides how wide the
+              // closed button is and pushes the arrow off the card.
+              isExpanded: true,
               decoration: const InputDecoration(
                  border: InputBorder.none,
-                 contentPadding: EdgeInsets.zero,
+                 contentPadding: EdgeInsets.symmetric(vertical: 4),
               ),
               icon: const Icon(Icons.arrow_drop_down, color: AppTheme.retroDark, size: 32),
               items: options.map((lang) {
                 return DropdownMenuItem(
                   value: lang,
                   child: Row(
+                    // The open menu measures its items against unbounded
+                    // width, where a flex child is an error; min lets the
+                    // name below size itself in both places.
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                       Text(lang.flag, style: const TextStyle(fontSize: 24)),
+                       PixelFlag(code: lang.code, height: 18),
                        const SizedBox(width: 12),
-                       Text(
-                         lang.name.toUpperCase(), 
-                         textDirection: textDirection,
-                         textAlign: textAlign,
-                         style: AppFonts.spaceMono(
-                           fontSize: 22, 
-                           fontWeight: FontWeight.bold,
-                           color: AppTheme.retroDark
-                         )
+                       // Named in itself, and left as the language writes it:
+                       // upper-casing an endonym mangles scripts that have no
+                       // case and Turkish dotted i alike.
+                       //
+                       // Flexible because the dropdown lays every option out
+                       // at the width of the closed button: without it the
+                       // longest name in the catalogue — "Bahasa Indonesia" —
+                       // runs off the side of the row it is not even in yet.
+                       Flexible(
+                         child: Text(
+                           lang.nativeName,
+                           textDirection: textDirectionForLocale(
+                             Locale(lang.code),
+                           ),
+                           maxLines: 1,
+                           overflow: TextOverflow.ellipsis,
+                           style: AppFonts.spaceMono(
+                             fontSize: 16,
+                             fontWeight: FontWeight.bold,
+                             color: AppTheme.retroDark
+                           )
+                         ),
                        ),
                     ],
                   ),

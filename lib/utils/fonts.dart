@@ -7,29 +7,22 @@ class AppFonts {
 
   static const String _pixelAeArabicFamily = 'PixelAEArabic';
   static const String _arkPixelJaFamily = 'ArkPixelJa';
-  static const String _arkPixelKoFamily = 'ArkPixelKo';
   static const String _arkPixelZhCnFamily = 'ArkPixelZhCn';
-  static const String _arkPixelZhHkFamily = 'ArkPixelZhHk';
   static const String _arkPixelZhTwFamily = 'ArkPixelZhTw';
-  static const String _arkPixelZhTrFamily = 'ArkPixelZhTr';
+  static const String _galmuriKoFamily = 'GalmuriKo';
 
-  // Ark Pixel draws one face per design size, and a pixel face only renders
-  // cleanly at the size it was drawn for. The 16px face at nav-bar sizes was
-  // losing whole rows of pixels, which is what turned kana and kanji into
-  // smudges. Small text uses the 10px face instead -- the smallest size the
-  // family offers -- and is never drawn below that size.
-  static const double cjkSmallFontSize = 10.0;
+  /// The size CJK and Hangul are never drawn below.
+  ///
+  /// A pixel face only renders cleanly at the size it was drawn for, and both
+  /// bundled East Asian faces — Ark Pixel 12px and Galmuri11 — are drawn on a
+  /// 12px em. Below this they lose whole rows, which is what turns a kanji
+  /// into a smudge. It is also close to what the optical scale asks for
+  /// anyway: the app's commonest small size, 8, scales to 10 and is raised the
+  /// last two points to land on the grid, and its next size, 10, scales to
+  /// 12.5 and is already there.
+  static const double cjkSmallFontSize = 12.0;
 
-  /// Sizes below this use the 10px faces; at or above it, the 16px faces.
-  static const double _arkSmallFaceCutoff = 12.0;
-
-  static const String _arkPixelJa10Family = 'ArkPixelJa10';
-  static const String _arkPixelKo10Family = 'ArkPixelKo10';
-  static const String _arkPixelZhCn10Family = 'ArkPixelZhCn10';
-  static const String _arkPixelZhHk10Family = 'ArkPixelZhHk10';
-  static const String _arkPixelZhTw10Family = 'ArkPixelZhTw10';
-  static const String _arkPixelZhTr10Family = 'ArkPixelZhTr10';
-
+  /// Scripts held to [cjkSmallFontSize] — the ones the 12px faces draw.
   static const Set<String> _cjkLanguageCodes = {'ja', 'ko', 'zh'};
 
   // SRA pixel families are used first for selected non-Latin locales.
@@ -55,45 +48,27 @@ class AppFonts {
     _appLocale = locale;
   }
 
-  static List<String> _chineseArkFamiliesForLocale(Locale locale,
-      {required bool small}) {
+  /// The Chinese cuts, the one matching the reader's region first.
+  ///
+  /// Upstream draws six regional cuts; two are bundled. They differ in the
+  /// shape of shared characters, not in which characters exist, so Simplified
+  /// readers get zh_cn and every Traditional region — Taiwan, Hong Kong,
+  /// Macau — gets zh_tw rather than three near-identical megabytes.
+  static List<String> _chineseArkFamiliesForLocale(Locale locale) {
     final country = locale.countryCode?.toUpperCase();
     final script = locale.scriptCode?.toLowerCase();
 
-    final region = switch (country) {
-      'TW' => 'tw',
-      'HK' || 'MO' => 'hk',
-      'CN' || 'SG' => 'cn',
-      _ => switch (script) {
-          'hant' => 'tr',
-          'hans' => 'cn',
-          _ => 'cn',
-        },
+    final traditional = switch (country) {
+      'TW' || 'HK' || 'MO' => true,
+      'CN' || 'SG' => false,
+      _ => script == 'hant',
     };
 
-    final tw = small ? _arkPixelZhTw10Family : _arkPixelZhTwFamily;
-    final hk = small ? _arkPixelZhHk10Family : _arkPixelZhHkFamily;
-    final cn = small ? _arkPixelZhCn10Family : _arkPixelZhCnFamily;
-    final tr = small ? _arkPixelZhTr10Family : _arkPixelZhTrFamily;
-
-    final primaryFamily = switch (region) {
-      'tw' => tw,
-      'hk' => hk,
-      'tr' => tr,
-      _ => cn,
-    };
-
-    // The other regional cuts follow as fallbacks, then the CJK neighbours:
-    // between them they cover any character the primary cut is missing.
-    return <String>{
-      primaryFamily,
-      tr,
-      tw,
-      hk,
-      cn,
-      small ? _arkPixelJa10Family : _arkPixelJaFamily,
-      small ? _arkPixelKo10Family : _arkPixelKoFamily,
-    }.toList();
+    // The other cut follows as a fallback, then Japanese: between them they
+    // cover characters the primary cut is missing.
+    return traditional
+        ? const [_arkPixelZhTwFamily, _arkPixelZhCnFamily, _arkPixelJaFamily]
+        : const [_arkPixelZhCnFamily, _arkPixelZhTwFamily, _arkPixelJaFamily];
   }
 
   static Locale _resolveLocale([Locale? locale]) =>
@@ -114,8 +89,6 @@ class AppFonts {
       double? fontSize]) {
     final resolvedLocale = _resolveLocale(locale);
     final code = resolvedLocale.languageCode.toLowerCase();
-    // Which Ark Pixel face to reach for, by the size it will be drawn at.
-    final small = (fontSize ?? cjkSmallFontSize) < _arkSmallFaceCutoff;
 
     switch (code) {
       case 'ar':
@@ -148,7 +121,9 @@ class AppFonts {
         ];
       case 'ja':
         return [
-          small ? _arkPixelJa10Family : _arkPixelJaFamily,
+          _arkPixelJaFamily,
+          _arkPixelZhCnFamily,
+          _arkPixelZhTwFamily,
           ..._sraPixelFamilies,
           'Noto Sans JP',
           'Noto Sans SC',
@@ -157,7 +132,11 @@ class AppFonts {
         ];
       case 'ko':
         return [
-          small ? _arkPixelKo10Family : _arkPixelKoFamily,
+          // Galmuri carries the Hangul; the Ark cuts behind it carry the
+          // hanja that Korean text occasionally reaches for.
+          _galmuriKoFamily,
+          _arkPixelZhTwFamily,
+          _arkPixelJaFamily,
           ..._sraPixelFamilies,
           'Noto Sans KR',
           'Noto Sans',
@@ -165,7 +144,7 @@ class AppFonts {
         ];
       case 'zh':
         return [
-          ..._chineseArkFamiliesForLocale(resolvedLocale, small: small),
+          ..._chineseArkFamiliesForLocale(resolvedLocale),
           ..._sraPixelFamilies,
           'Noto Sans SC',
           'Noto Sans JP',
@@ -191,38 +170,113 @@ class AppFonts {
     List<Shadow>? shadows,
     Locale? locale,
   }) {
-    final size = cjkAwareFontSize(fontSize, locale);
+    // Every script is drawn at the size that gives it the same weight as the
+    // Latin pixel face, not at the size the caller nominally asked for. The
+    // floor is applied after the scale, so a size that was already being
+    // raised to the 10px face is not raised twice.
+    final size = fontSize == null
+        ? null
+        : cjkAwareFontSize(fontSize * scriptScale(locale), locale);
     final pixelFallbackFamilies = _pixelFallbackFamiliesForLocale(locale, size);
+    final weight = fontWeight ?? scriptWeight(locale);
+    // The offset copy goes last so it sits above any drop shadow the caller
+    // asked for, directly under the glyph it is thickening.
+    final allShadows = color != null && usesOffsetBold(locale)
+        ? [...?shadows, Shadow(offset: const Offset(1, 0), color: color)]
+        : shadows;
     try {
       // Try using the local bundled font first
       return TextStyle(
         fontFamily: 'PressStart2P',
         fontSize: size,
-        fontWeight: fontWeight,
+        fontWeight: weight,
         color: color,
         height: height,
         decoration: decoration,
         letterSpacing: letterSpacing,
         fontStyle: fontStyle,
-        shadows: shadows,
+        shadows: allShadows,
         fontFamilyFallback: pixelFallbackFamilies,
       );
     } catch (e) {
       // Fallback to google_fonts (requires internet on first use)
       return GoogleFonts.pressStart2p(
         fontSize: size,
-        fontWeight: fontWeight,
+        fontWeight: weight,
         color: color,
         height: height,
         decoration: decoration,
         letterSpacing: letterSpacing,
         fontStyle: fontStyle,
       ).copyWith(
-        shadows: shadows,
+        shadows: allShadows,
         fontFamilyFallback: pixelFallbackFamilies,
       );
     }
   }
+
+  /// Scripts a bundled pixel face does draw, but only as hairlines.
+  ///
+  /// Ark Pixel draws CJK on a 10px grid and PixelAE draws Arabic on the same,
+  /// so their strokes are one pixel wide. Press Start 2P is drawn for 8px, so
+  /// at the same font size its strokes are 1.25px. The ink heights match
+  /// almost exactly — 0.9em against 0.875em — which is why the difference
+  /// reads as size when it is really weight.
+  static const Set<String> _hairlinePixelScripts = {'ja', 'zh', 'ar'};
+
+  /// Korean, whose bundled face is already a designed bold.
+  ///
+  /// Galmuri ships a drawn bold cut, and that is the one bundled: a real pixel
+  /// bold beats both a synthetic one and an offset copy. So Hangul takes the
+  /// size scale and nothing else.
+  static const Set<String> _boldPixelScripts = {'ko'};
+
+  /// Scripts no bundled face covers at all.
+  ///
+  /// There is not one Devanagari letter or Thai character in any of them, so
+  /// these fall through to the platform's Noto and arrive smooth and light
+  /// beside blocky Latin. A real [FontWeight.w700] is available there.
+  static const Set<String> _unservedScripts = {'hi', 'th'};
+
+  /// How much larger a non-Latin script is drawn to carry the same weight as
+  /// Latin at the same nominal size.
+  ///
+  /// A quarter, which is also the ratio between the pixel grids: it puts an
+  /// Ark design pixel at 1.25 device pixels, exactly where Press Start 2P's
+  /// already sits. Dense scripts need the extra rows anyway — a kanji has
+  /// five strokes where a Latin capital has two.
+  ///
+  /// Latin, Greek and Cyrillic are all drawn by Press Start 2P itself, so
+  /// they are already the weight everything else is matched to and scale by 1.
+  static const double nonLatinOpticalScale = 1.25;
+
+  /// The optical scale for [locale]'s script.
+  static double scriptScale([Locale? locale]) {
+    final code = _resolveLocale(locale).languageCode.toLowerCase();
+    return _hairlinePixelScripts.contains(code) ||
+            _boldPixelScripts.contains(code) ||
+            _unservedScripts.contains(code)
+        ? nonLatinOpticalScale
+        : 1.0;
+  }
+
+  /// Whether [locale]'s script is thickened with an offset copy of itself.
+  ///
+  /// A pixel face has no bold cut, and emboldening one synthetically smears it
+  /// off the grid. A hard copy of the glyph one pixel over is how bitmap fonts
+  /// have always been thickened: at these sizes the offset is one design
+  /// pixel, so the result is still square. Scripts that arrive from the
+  /// platform's Noto get a real [FontWeight.w700] instead — see
+  /// [scriptWeight].
+  static bool usesOffsetBold([Locale? locale]) => _hairlinePixelScripts
+      .contains(_resolveLocale(locale).languageCode.toLowerCase());
+
+  /// The weight [locale]'s script is drawn at when the caller asks for none.
+  static FontWeight? scriptWeight([Locale? locale]) =>
+      _unservedScripts.contains(
+              _resolveLocale(locale).languageCode.toLowerCase())
+          ? FontWeight.w700
+          : null;
 
   /// Returns Space Mono font style (alternative to pixel font)
   static TextStyle spaceMono({

@@ -6,6 +6,7 @@ import 'package:mojilearner_flutter/models/models.dart';
 import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/screens/wardrobe_screen.dart';
+import 'package:mojilearner_flutter/utils/pet_recolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/mock_providers.dart';
@@ -31,7 +32,7 @@ void main() {
     when(() => mockSettings.usePixelFont).thenReturn(true);
     when(() => mockUser.coins).thenReturn(0);
     when(() => mockLanguage.targetLanguage).thenReturn(
-      const Language(code: 'es', name: 'Spanish', flag: '\u{1F1EA}\u{1F1F8}'),
+      const Language(code: 'es', name: 'Spanish'),
     );
     when(() => mockCalibration.getLanguageProficiency(any())).thenReturn(null);
   });
@@ -182,6 +183,62 @@ void main() {
       expect(character.equippedInSlot(AccessorySlots.neck), isNull);
     });
 
+  });
+
+  // Coats and eye colours are the other thing coins buy here. Void heads the
+  // exotic tier and is the only swatch on screen at its price, so its price
+  // tag identifies exactly one thing to tap.
+  group('buying a colour', () {
+    const voidCoat = '#262A38';
+    const voidPrice = '\u{1FA99} $kCoatPriceExotic';
+
+    testWidgets('a locked coat is priced and does not go on', (tester) async {
+      final character = await pumpWardrobe(tester);
+
+      expect(find.text(voidPrice), findsWidgets);
+
+      await tester.tap(find.text(voidPrice).first);
+      await settle(tester);
+
+      expect(find.text('Not enough coins!'), findsOneWidget);
+      expect(character.design.bodyColor, kDefaultBodyColor);
+    });
+
+    testWidgets('confirming a purchase paints the pet with it',
+        (tester) async {
+      when(() => mockUser.coins).thenReturn(999);
+      when(() => mockUser.spendCoins(any())).thenAnswer((_) async {});
+
+      final character = await pumpWardrobe(tester);
+
+      await tester.tap(find.text(voidPrice).first);
+      await settle(tester);
+
+      expect(find.text('BUY'), findsOneWidget);
+      await tester.tap(find.text('BUY'));
+      await settle(tester);
+
+      verify(() => mockUser.spendCoins(kCoatPriceExotic)).called(1);
+      expect(character.design.bodyColor, voidCoat);
+    });
+
+    testWidgets('cancelling buys nothing', (tester) async {
+      when(() => mockUser.coins).thenReturn(999);
+      when(() => mockUser.spendCoins(any())).thenAnswer((_) async {});
+
+      final character = await pumpWardrobe(tester);
+
+      await tester.tap(find.text(voidPrice).first);
+      await settle(tester);
+      await tester.tap(find.text('CANCEL'));
+      await settle(tester);
+
+      verifyNever(() => mockUser.spendCoins(any()));
+      expect(character.design.bodyColor, kDefaultBodyColor);
+    });
+  });
+
+  group('buying from the shelf, continued', () {
     // A crown at any price would turn "earned by learning" back into
     // "bought", so the tap must never reach a purchase dialog.
     testWidgets('a rich player still cannot buy a bond-gated piece',
@@ -198,6 +255,27 @@ void main() {
       expect(find.text('Earned, not sold'), findsOneWidget);
       verifyNever(() => mockUser.spendCoins(any()));
       expect(character.equippedInSlot(AccessorySlots.hat), isNull);
+    });
+  });
+
+  // The bird is drawn in profile and shows one eye, so odd-eyed would colour a
+  // cell nobody can see. It still gets both colour panels -- being rigged is
+  // what the pickers are gated on, and the chick is.
+  group('a pet with one eye', () {
+    testWidgets('is offered colours but not the odd-eyed mode',
+        (tester) async {
+      final character = await pumpWardrobe(tester);
+
+      expect(find.text('SOLID'), findsOneWidget);
+      expect(find.text('ODD-EYED'), findsOneWidget);
+
+      await character.updateCharacterType('bird');
+      await settle(tester);
+
+      expect(find.text('BODY & TAIL COLOR'), findsOneWidget);
+      expect(find.text('EYE COLOR'), findsOneWidget);
+      expect(find.text('SOLID'), findsNothing);
+      expect(find.text('ODD-EYED'), findsNothing);
     });
   });
 }

@@ -8,6 +8,7 @@ import '../constants/accessories.dart';
 import '../constants/bond.dart';
 import '../constants/app_runtime_config.dart';
 import '../utils/accessory_ownership.dart';
+import '../utils/color_ownership.dart';
 import '../utils/bond_progress.dart';
 import '../utils/pet_recolor.dart';
 import 'user_provider.dart';
@@ -151,14 +152,24 @@ class CharacterProvider extends ChangeNotifier {
 
   /// [equippedAccessoryAssets] for any pet, for the same reason as
   /// [colorSpecFor].
-  List<String> equippedAccessoryAssetsFor(String type) {
+  List<String> equippedAccessoryAssetsFor(String type) =>
+      [for (final def in equippedAccessoriesFor(type)) def.asset];
+
+  /// Every accessory [type] is wearing, in slot order so the hat layers above
+  /// the neck/face.
+  ///
+  /// The sprite needs the whole definition rather than just the asset: which
+  /// slot a piece is in decides where it sits on a pet whose head is not the
+  /// cat's, and which piece it is decides whether that pet wears its own cut
+  /// of the art instead.
+  List<AccessoryDef> equippedAccessoriesFor(String type) {
     final accessories = designFor(type).accessories;
-    final assets = <String>[];
+    final defs = <AccessoryDef>[];
     for (final slot in AccessorySlots.all) {
       final def = accessoryById(accessories[slot]);
-      if (def != null) assets.add(def.asset);
+      if (def != null) defs.add(def);
     }
-    return assets;
+    return defs;
   }
 
   /// Whether [id] is wearable: a free starter, one that has been bought, or
@@ -1072,24 +1083,74 @@ class CharacterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Whether [swatch] is wearable — free, or already bought.
+  bool ownsSwatch(PetSwatch swatch) =>
+      ColorOwnership.isOwned(swatch, unlockedItemIds: _unlockedItems);
+
+  /// Buys a coat or eye colour. Returns false without side effects when the
+  /// swatch is free, already owned, or unaffordable.
+  ///
+  /// The colour is unlocked but not applied: buying and wearing are separate
+  /// so the caller decides whether a purchase also repaints the pet (the
+  /// wardrobe does, matching what buying a hat does there).
+  Future<bool> purchaseSwatch(
+    PetSwatch swatch,
+    UserProvider userProvider,
+  ) async {
+    final price = swatch.price;
+    if (price == null) return false;
+    if (_unlockedItems.contains(swatch.id)) return false;
+    if (userProvider.coins < price) return false;
+
+    await userProvider.spendCoins(price);
+    _unlockedItems.add(swatch.id);
+    await _savePetState();
+    notifyListeners();
+    return true;
+  }
+
   /// Sets the body + tail coat colour (always shared between the two) of the
   /// pet currently out. Other pets keep their own coat.
+  ///
+  /// A coat that has not been bought is ignored rather than applied, so the
+  /// gate holds even if a caller skips the wardrobe's own check.
   void updateBodyColor(String hex) {
     if (design.bodyColor == hex) return;
+    if (!ColorOwnership.isHexAllowed(
+      hex,
+      kAllBodySwatches,
+      unlockedItemIds: _unlockedItems,
+    )) {
+      return;
+    }
     _setDesign(design.copyWith(bodyColor: hex));
   }
 
   /// Updates the eye colouring of the pet currently out. [color2] is only
   /// meaningful for the heterochromia (right eye) mode.
+  ///
+  /// Rejected outright if either colour is unowned — including the mode
+  /// switch, since a switch carries both colours and half-applying it would
+  /// leave the eyes in a state the player did not ask for.
   void updateEyeColors({
     required EyeMode mode,
     required String color1,
     String? color2,
   }) {
+    final second = color2 ?? design.eyeColor2;
+    for (final hex in [color1, second]) {
+      if (!ColorOwnership.isHexAllowed(
+        hex,
+        kAllEyeSwatches,
+        unlockedItemIds: _unlockedItems,
+      )) {
+        return;
+      }
+    }
     _setDesign(design.copyWith(
       eyeMode: eyeModeToString(mode),
       eyeColor1: color1,
-      eyeColor2: color2 ?? design.eyeColor2,
+      eyeColor2: second,
     ));
   }
 

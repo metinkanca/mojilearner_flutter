@@ -143,7 +143,7 @@ void main() {
       when(() => mockCharacter.heldFoodId).thenReturn(null);
 
       when(() => mockLanguage.targetLanguage).thenReturn(
-        const Language(code: 'es', name: 'Spanish', flag: '🇪🇸'),
+        const Language(code: 'es', name: 'Spanish'),
       );
       when(() => mockSettings.usePixelFont).thenReturn(true);
       when(() => mockVocab.dueCount(languageCode: any(named: 'languageCode')))

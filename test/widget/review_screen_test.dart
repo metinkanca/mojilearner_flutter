@@ -29,7 +29,7 @@ void main() {
     when(() => mockCharacter.scaleReward(any())).thenReturn(3);
     when(() => mockCharacter.rewardChat()).thenReturn(null);
     when(() => mockLanguage.targetLanguage).thenReturn(
-      const Language(code: 'es', name: 'Spanish', flag: '🇪🇸'),
+      const Language(code: 'es', name: 'Spanish'),
     );
     when(() => mockSettings.usePixelFont).thenReturn(true);
   });

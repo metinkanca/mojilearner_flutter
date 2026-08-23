@@ -63,7 +63,7 @@ void main() {
     when(() => mockCharacter.petThePet()).thenReturn(true);
 
     when(() => mockLanguage.targetLanguage).thenReturn(
-      const Language(code: 'es', name: 'Spanish', flag: '🇪🇸'),
+      const Language(code: 'es', name: 'Spanish'),
     );
     when(() => mockSettings.usePixelFont).thenReturn(true);
     when(() => mockVocab.dueCount(languageCode: any(named: 'languageCode')))

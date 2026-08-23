@@ -6,26 +6,36 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/accessories.dart';
 import '../providers/character_provider.dart';
 import '../utils/pet_recolor.dart';
 
 enum CharacterMotionProfile { auto, full, reduced }
 
 /// Describes a pet that has been split into independently animatable SVG
-/// layers (base body + eyes + muzzle), all sharing the same viewBox so they
-/// overlay pixel-perfectly. Pets without an entry fall back to a single
-/// whole-sprite render that still breathes.
+/// layers (base body + eyes, and a muzzle and tail where the pet has them),
+/// all sharing the same viewBox so they overlay pixel-perfectly. Pets without
+/// an entry fall back to a single whole-sprite render that still breathes.
 class _PetParts {
   final String base;
   final String eyes;
-  final String mouth;
 
-  /// Pre-baked tail poses for a stepped wag: [left, centre, right]. Swapping
-  /// baked poses avoids runtime rotation, which would soften the pixels.
+  /// Closed muzzle, drawn over the coat. Null for a pet whose face has no
+  /// separate mouth to open — the bird's beak is part of its head.
+  final String? mouth;
+
+  /// Tail poses for a stepped wag: [left, centre, right]. Pets with a
+  /// [tailPivot] wag by swinging the centre pose about that hinge instead, and
+  /// only use the centre entry. Empty for a pet with no tail.
   final List<String> tailFrames;
 
-  /// Open-mouth pose, swapped with [mouth] frame-by-frame for the chew.
-  final String mouthOpen;
+  /// Hinge the tail swings about, in canvas art units. Null for a pet whose
+  /// wag is baked into [tailFrames] rather than rotated.
+  final Offset? tailPivot;
+
+  /// Open-mouth pose, swapped with [mouth] frame-by-frame for the chew. Null
+  /// wherever [mouth] is.
+  final String? mouthOpen;
 
   /// Pivot (in [Alignment] space) at the vertical centre of the eyes, so a
   /// blink squashes them in place instead of sliding them.
@@ -41,16 +51,37 @@ class _PetParts {
   /// elsewhere on the shared canvas moves the accessories to meet it.
   final Offset accessoryOffset;
 
+  /// Per-slot overrides of [accessoryOffset], for a pet whose head, face and
+  /// chest are not simply the cat's shifted by one vector. A cat and a dog are
+  /// the same animal drawn twice — head above chest, eyes above muzzle — so one
+  /// offset lands all three slots. A chick in profile is not: its crown sits
+  /// far below the cat's while its chest barely moves, so hat and neck have to
+  /// travel different distances.
+  final Map<String, Offset> accessoryOffsets;
+
+  /// Accessory id -> the art this pet wears instead of the shared piece.
+  ///
+  /// An override is already drawn where this pet needs it, so it is placed
+  /// verbatim — no [accessoryOffset] is applied on top.
+  final Map<String, String> accessoryOverrides;
+
   const _PetParts({
     required this.base,
     required this.eyes,
-    required this.mouth,
-    required this.mouthOpen,
-    required this.tailFrames,
+    this.mouth,
+    this.mouthOpen,
+    this.tailFrames = const [],
+    this.tailPivot,
     required this.eyesPivot,
     required this.eyeGeometry,
     this.accessoryOffset = Offset.zero,
+    this.accessoryOffsets = const {},
+    this.accessoryOverrides = const {},
   });
+
+  /// Where [slot]'s accessories sit on this pet.
+  Offset offsetForSlot(String slot) =>
+      accessoryOffsets[slot] ?? accessoryOffset;
 }
 
 // Alignments derived from the assembled art viewBox "-20 -90 222 328"
@@ -59,14 +90,15 @@ class _PetParts {
 //   eyes bottom edge ~ (118.5, 89) -> Alignment(0.248, 0.091)
 //       (pivot at the bottom so the lid closes downward, top -> bottom)
 //   chew swaps cat_mouth <-> cat_mouth_open (no scaling).
-//   tail flicks left (cat_tail_l) hinged at the bottom (~38, 224), no
-//       runtime rotation. cat_tail_r is unused (left-only flick).
-//       The flick poses are baked as a whole-unit shear about that hinge:
-//       each row steps sideways by a rounded amount, so every edge stays on
-//       the pixel grid. They used to be the rest pose under an SVG
-//       `rotate(+-10)`, which softened the pixels and left hairline holes
-//       where the outline pieces no longer met -- the coat colour showed
-//       through them, outside the outline.
+//   tail flicks left by swinging the rest pose 10 degrees about its hinge at
+//       (38, 224), the bottom of the curl. The flick was baked as a
+//       whole-unit shear for a while, to keep every edge on the pixel grid --
+//       but a sheared curl steps sideways row by row, which is a staircase,
+//       and this art has no diagonals anywhere else. Rotating tilts the whole
+//       curl instead, which is what it did originally. The hairline holes
+//       that cost it that job the first time (outline pieces no longer
+//       meeting, coat showing through) are closed by [sealOutlines].
+//       cat_tail_l / cat_tail_r are unused while the cat rotates.
 const Map<String, _PetParts> _layeredPets = {
   'cat': _PetParts(
     base: 'assets/svgs/cat_base.svg',
@@ -78,15 +110,17 @@ const Map<String, _PetParts> _layeredPets = {
       'assets/svgs/cat_tail.svg', // centre (rest)
       'assets/svgs/cat_tail_r.svg', // wag right (unused)
     ],
+    tailPivot: Offset(38, 224),
     eyesPivot: Alignment(0.248, 0.091),
     eyeGeometry: kCatEyes,
   ),
   // The dog art is 208x248 against the cat's 202x238, placed feet-on-the-same
   // ground line, which leaves its head ~30 units higher than the cat's -- hence
   // the accessory offset. Its tail is a tall straight flap rather than a curl,
-  // so the wag poses are baked as a one-cell bend at the hinge rather than the
-  // cat's sheared curl -- either way the edges stay on the pixel grid, which a
-  // real rotation would not.
+  // so its wag stays a pair of baked poses -- a one-cell bend at the hinge,
+  // which reads as a flap moving and keeps every edge on the pixel grid. It is
+  // the cat's curl that needed rotating: a curl bent one cell at a time is a
+  // staircase.
   'dog': _PetParts(
     base: 'assets/svgs/dog_base.svg',
     eyes: 'assets/svgs/dog_eyes.svg',
@@ -101,10 +135,54 @@ const Map<String, _PetParts> _layeredPets = {
     eyeGeometry: kDogEyes,
     accessoryOffset: Offset(10, -25),
   ),
+  // The chick is the odd one out: drawn in profile, no tail, and its beak is
+  // part of the head silhouette rather than a muzzle laid over it. So its rig
+  // is the coat plus one eye — it breathes and blinks, and has nothing to wag
+  // or chew with. Its head is a long way below the cat's while its chest has
+  // barely moved, which is why its accessories are placed per slot rather than
+  // by one offset, and the face slot is its own art (see
+  // art_src/gen_bird_acc.py — a second lens has nowhere to go on a head shown
+  // side-on).
+  'bird': _PetParts(
+    base: 'assets/svgs/bird_base.svg',
+    eyes: 'assets/svgs/bird_eyes.svg',
+    eyesPivot: Alignment(0.306, 0.201),
+    eyeGeometry: kBirdEyes,
+    accessoryOffsets: {
+      // Every hat has its own bird cut below, so this only catches a hat added
+      // before one is generated for it: seated right, but cat-sized.
+      AccessorySlots.hat: Offset(14, 45),
+      AccessorySlots.neck: Offset(22, 30),
+    },
+    accessoryOverrides: {
+      // Hats, re-pixelised smaller (art_src/gen_bird_hats.py). The cat's head
+      // is wider than the whole chick, so a hat merely moved onto it swallows
+      // it — a top hat came out taller than the bird.
+      'beanie': 'assets/svgs/acc_beanie_bird.svg',
+      'cap': 'assets/svgs/acc_cap_bird.svg',
+      'cowboyhat': 'assets/svgs/acc_cowboyhat_bird.svg',
+      'crown': 'assets/svgs/acc_crown_bird.svg',
+      'devilhorns': 'assets/svgs/acc_devilhorns_bird.svg',
+      'flowercrown': 'assets/svgs/acc_flowercrown_bird.svg',
+      'headphones': 'assets/svgs/acc_headphones_bird.svg',
+      'mortarboard': 'assets/svgs/acc_mortarboard_bird.svg',
+      'partyhat': 'assets/svgs/acc_partyhat_bird.svg',
+      'tophat': 'assets/svgs/acc_tophat_bird.svg',
+      'wizardhat': 'assets/svgs/acc_wizardhat_bird.svg',
+      // Face, re-cut side-on (art_src/gen_bird_acc.py).
+      'glasses': 'assets/svgs/acc_glasses_bird.svg',
+      'sunglasses': 'assets/svgs/acc_sunglasses_bird.svg',
+      'mask': 'assets/svgs/acc_mask_bird.svg',
+      'mustache': 'assets/svgs/acc_mustache_bird.svg',
+    },
+  ),
 };
 
-/// The art canvas every pet layer and accessory shares, in art units.
+/// The art canvas every pet layer and accessory shares, in art units, and the
+/// corner it starts at -- the shared viewBox is "-20 -90 222 328", so art
+/// coordinates are not canvas offsets until that corner is taken off them.
 const Size _kCanvas = Size(222, 328);
+const Offset _kCanvasOrigin = Offset(-20, -90);
 
 /// Whether [type] is a pet that has been split into layers, and so can be
 /// recoloured, blink, chew and wag. Pets without an entry fall back to a single
@@ -113,6 +191,23 @@ const Size _kCanvas = Size(222, 328);
 /// Exposed so the wardrobe can decide whether to offer the colour pickers
 /// without keeping its own list of which pets are rigged.
 bool isLayeredPet(String type) => _layeredPets.containsKey(type);
+
+/// The eye cells [type] is drawn with, for UI that has to know how many there
+/// are: a pet in profile shows one eye, so odd-eyed has nothing to act on.
+///
+/// Exposed for the same reason as [isLayeredPet] — the wardrobe should not
+/// keep its own copy of which pet is drawn which way.
+PetEyeGeometry eyeGeometryFor(String type) =>
+    _layeredPets[type]?.eyeGeometry ?? kCatEyes;
+
+/// The art [type] wears for [def]: its own cut of the piece where it has one,
+/// otherwise the shared front-on art.
+///
+/// Exposed so a test can check that every pet/accessory pair resolves to an
+/// asset that actually ships — a mistyped override would otherwise show up as
+/// a pet wearing nothing, and only on that one pet with that one item.
+String accessoryAssetFor(String type, AccessoryDef def) =>
+    _layeredPets[type]?.accessoryOverrides[def.id] ?? def.asset;
 
 class CharacterSprite extends StatefulWidget {
   final double width;
@@ -154,6 +249,8 @@ class _CharacterSpriteState extends State<CharacterSprite>
   final Map<String, String> _rawSvg = {};
   bool _rawLoaded = false;
   final Map<String, String> _tintCache = {};
+  final Map<String, String> _sealCache = {};
+  final Set<String> _rawPending = {};
   PetColorSpec? _tintCacheSpec;
 
   // Pixel-style stepping: idle motion is sampled on a low-fps grid and snapped
@@ -171,6 +268,10 @@ class _CharacterSpriteState extends State<CharacterSprite>
   static const double _kPetSquash = 0.92;
   static const double _kPetSwayUnits = 6.0;
   static const double _kPetSquintScale = 0.30;
+
+  /// How far a rotating tail swings out on the flick: 10 degrees, the angle
+  /// the art was originally drawn flicked at.
+  static const double _kTailFlickRadians = 10 * math.pi / 180;
 
   /// Snaps a 0..1 value to (levels + 1) discrete steps.
   double _quantize(double v, int levels) =>
@@ -200,8 +301,8 @@ class _CharacterSpriteState extends State<CharacterSprite>
     final assets = <String>{
       for (final parts in _layeredPets.values) ...[
         parts.base,
-        parts.mouth,
-        parts.mouthOpen,
+        if (parts.mouth != null) parts.mouth!,
+        if (parts.mouthOpen != null) parts.mouthOpen!,
         ...parts.tailFrames,
       ],
     };
@@ -215,6 +316,19 @@ class _CharacterSpriteState extends State<CharacterSprite>
     if (mounted) setState(() => _rawLoaded = true);
   }
 
+  /// Loads one asset's raw text on demand, for the layers that are not known
+  /// up front: the equipped accessories, and whole-sprite pets. Both are drawn
+  /// from the raw string so their outlines can be sealed like the coat's.
+  void _loadRawAsset(String asset) {
+    if (_rawSvg.containsKey(asset) || !_rawPending.add(asset)) return;
+    rootBundle.loadString(asset).then((raw) {
+      if (!mounted) return;
+      setState(() => _rawSvg[asset] = raw);
+    }).catchError((_) {
+      // Missing/unreadable asset: it keeps its plain asset render.
+    });
+  }
+
   /// Recolours [asset]'s coat fills for [spec], memoised per spec. Layers
   /// without coat fills (the mouth) pass through unchanged.
   String? _tintedBody(String asset, PetColorSpec spec) {
@@ -225,7 +339,8 @@ class _CharacterSpriteState extends State<CharacterSprite>
       _tintCache.clear();
       _tintCacheSpec = spec;
     }
-    return _tintCache[asset] ??= recolorBodyLayer(raw, spec.bodyColor);
+    return _tintCache[asset] ??=
+        sealOutlines(recolorBodyLayer(raw, spec.bodyColor));
   }
 
   @override
@@ -371,8 +486,21 @@ class _CharacterSpriteState extends State<CharacterSprite>
     }
   }
 
+  /// Renders an asset that is not recoloured (an accessory, or a whole-sprite
+  /// pet), with its outline sealed. Falls back to the plain asset render until
+  /// the raw text has loaded — one frame of a faint edge rather than no pet.
   Widget _svgLayer(String asset, double? w, double? h) {
-    return SvgPicture.asset(asset, width: w, height: h, fit: widget.fit);
+    final raw = _rawSvg[asset];
+    if (raw == null) {
+      _loadRawAsset(asset);
+      return SvgPicture.asset(asset, width: w, height: h, fit: widget.fit);
+    }
+    return SvgPicture.string(
+      _sealCache[asset] ??= sealOutlines(raw),
+      width: w,
+      height: h,
+      fit: widget.fit,
+    );
   }
 
   /// Renders a recoloured coat layer (base / tail / mouth). Falls back to the
@@ -381,6 +509,16 @@ class _CharacterSpriteState extends State<CharacterSprite>
     final tinted = _tintedBody(asset, spec);
     if (tinted == null) return _svgLayer(asset, w, h);
     return SvgPicture.string(tinted, width: w, height: h, fit: widget.fit);
+  }
+
+  /// Swings the tail layer about its hinge. [pivot] is in canvas art units.
+  /// BoxFit.contain centres the art in the layer's box, so the canvas centre
+  /// is the box centre — which is where [Transform.rotate] measures `origin`
+  /// from, leaving the hinge as an art-space offset from it.
+  Widget _tail(Widget layer, double angle, Offset? pivot, double unit) {
+    if (angle == 0.0 || pivot == null) return layer;
+    final origin = (pivot - _kCanvas.center(_kCanvasOrigin)) * unit;
+    return Transform.rotate(angle: angle, origin: origin, child: layer);
   }
 
   PetColorSpec _safeColorSpec(CharacterProvider provider, String type) {
@@ -396,12 +534,12 @@ class _CharacterSpriteState extends State<CharacterSprite>
     }
   }
 
-  List<String> _safeEquippedAccessoryAssets(
+  List<AccessoryDef> _safeEquippedAccessories(
       CharacterProvider provider, String type) {
     try {
-      return provider.equippedAccessoryAssetsFor(type);
+      return provider.equippedAccessoriesFor(type);
     } catch (_) {
-      return const <String>[];
+      return const <AccessoryDef>[];
     }
   }
 
@@ -517,7 +655,7 @@ class _CharacterSpriteState extends State<CharacterSprite>
                     ),
                   );
 
-              // Whole-sprite render (dog/bird, or any unsplit pet).
+              // Whole-sprite render, for any pet not split into layers.
               if (parts == null) {
                 return posed(
                   _svgLayer(
@@ -530,7 +668,7 @@ class _CharacterSpriteState extends State<CharacterSprite>
                 );
               }
 
-              // Layered render (cat): stepped blink + stepped chew.
+              // Layered render: stepped blink + stepped chew.
               // Blink is a 3-frame sequence (open -> half -> shut); the eye
               // pivot is at the bottom, so the lid closes downward.
               //
@@ -554,9 +692,11 @@ class _CharacterSpriteState extends State<CharacterSprite>
               }
 
               // Chew: swap closed <-> open mouth on the fps grid. Mouth is held
-              // open while food is hovering (waiting phase).
-              String mouthAsset = parts.mouth;
-              if (!_reduceMotion && eating) {
+              // open while food is hovering (waiting phase). A pet with no
+              // separate mouth layer (the bird's beak is part of its head)
+              // simply has nothing to swap.
+              String? mouthAsset = parts.mouth;
+              if (mouthAsset != null && !_reduceMotion && eating) {
                 if (_safeEatingPhase(provider) == PetEatingPhase.consuming) {
                   mouthAsset = frame.isEven ? parts.mouthOpen : parts.mouth;
                 } else {
@@ -564,34 +704,48 @@ class _CharacterSpriteState extends State<CharacterSprite>
                 }
               }
 
-              // Tail wag: swap between pre-baked poses (left/centre/right) on
-              // the fps grid -- no runtime rotation, so the pixels stay crisp.
-              // Wags in every state except a hard stop (reduce-motion), so it
-              // still flicks while the pet is "dozing" (AI offline). Quicker
-              // when happy, slower/idle otherwise.
-              // Tail flicks to the LEFT (outward, away from the body) and back
-              // to rest, rather than swinging both ways. 0 = left pose, 1 = rest.
-              int tailIdx = 1; // centre / rest
+              // Tail wag: stepped on the fps grid, so the tail holds a pose
+              // rather than sweeping through one. Wags in every state except a
+              // hard stop (reduce-motion), so it still flicks while the pet is
+              // "dozing" (AI offline). Quicker when happy, slower/idle
+              // otherwise. Flicks to the LEFT (outward, away from the body) and
+              // back to rest, rather than swinging both ways.
+              //
+              // A pet with a [tailPivot] holds the rest pose and swings it
+              // about the hinge; the others swap baked poses (0 = left, 1 =
+              // rest).
+              var flicked = false;
               if (!_reduceMotion) {
                 final freq =
                     petted ? 5.0 : (state == PetVisualState.happy ? 3.5 : 2.5);
                 final wag = math.sin(tStep * 2 * math.pi * freq);
-                tailIdx = wag < -0.4 ? 0 : 1; // dip left, else rest
+                flicked = wag < -0.4;
               }
+              final rotates = parts.tailPivot != null;
+              final tailIdx = (flicked && !rotates) ? 0 : 1;
+              // Negative is anticlockwise on screen, which swings the top of
+              // the tail out to the left.
+              final tailAngle =
+                  (flicked && rotates) ? -_kTailFlickRadians : 0.0;
 
               // Equipped accessories overlay on top of the pet (hat/neck/face),
               // pre-positioned on the pet canvas so they ride the breath too.
-              final accessoryAssets =
-                  _safeEquippedAccessoryAssets(provider, type);
-
-              final accessoryShift = parts.accessoryOffset * unit;
+              // A pet that wears its own cut of a piece takes it verbatim; the
+              // shared art is shifted to wherever that slot sits on this pet.
+              final accessories = _safeEquippedAccessories(provider, type);
 
               final stack = Stack(
                 fit: StackFit.passthrough,
                 children: [
                   _coatLayer(parts.base, w, h, spec),
-                  _coatLayer(parts.tailFrames[tailIdx], w, h, spec),
-                  _coatLayer(mouthAsset, w, h, spec),
+                  if (parts.tailFrames.isNotEmpty)
+                    _tail(
+                      _coatLayer(parts.tailFrames[tailIdx], w, h, spec),
+                      tailAngle,
+                      parts.tailPivot,
+                      unit,
+                    ),
+                  if (mouthAsset != null) _coatLayer(mouthAsset, w, h, spec),
                   Transform(
                     alignment: parts.eyesPivot,
                     transform: Matrix4.diagonal3Values(1.0, eyeScaleY, 1.0),
@@ -602,10 +756,12 @@ class _CharacterSpriteState extends State<CharacterSprite>
                       fit: widget.fit,
                     ),
                   ),
-                  for (final asset in accessoryAssets)
+                  for (final def in accessories)
                     Transform.translate(
-                      offset: accessoryShift,
-                      child: _svgLayer(asset, w, h),
+                      offset: parts.accessoryOverrides.containsKey(def.id)
+                          ? Offset.zero
+                          : parts.offsetForSlot(def.slot) * unit,
+                      child: _svgLayer(accessoryAssetFor(type, def), w, h),
                     ),
                 ],
               );

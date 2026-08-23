@@ -11,41 +11,40 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.20.2
+  intl: ^0.20.3
   
   # State Management
   provider: ^6.1.1
   
   # Navigation
-  go_router: ^13.0.0
+  go_router: ^17.5.0
   
   # Storage
   shared_preferences: ^2.2.2
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^11.0.0
   
   # HTTP & API
   http: ^1.1.0
-  flutter_dotenv: ^5.1.0
+  flutter_dotenv: ^6.0.1
   
   # Audio
   flutter_sound: ^9.2.13
-  permission_handler: ^11.1.0
+  permission_handler: ^13.0.1
   
   # UI & Animations
-  google_fonts: ^6.1.0
-  lottie: ^3.0.0
+  google_fonts: ^8.2.1
+  lottie: ^3.5.1
   flutter_animate: ^4.5.0
   
   # Icons
   cupertino_icons: ^1.0.2
-  lucide_icons: ^0.257.0
   google_generative_ai: ^0.4.7
-  flutter_svg: ^2.2.3
+  flutter_svg: ^2.3.0
 
   # Local reminders (pet care, reviews, daily reward).
   # timezone + flutter_timezone let a reminder keep meaning "8am local"
   # after the player changes time zone.
-  flutter_local_notifications: ^22.2.0
+  flutter_local_notifications: ^22.3.0
   timezone: ^0.11.1
   flutter_timezone: ^5.1.0
   firebase_core: ^4.13.0
@@ -53,12 +52,13 @@ dependencies:
   cloud_firestore: ^6.8.0
   crypto: ^3.0.7
   google_sign_in: ^7.2.0
+  lucide_icons_flutter: ^3.1.17
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
-  mocktail: ^1.0.4
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.5
   integration_test:
     sdk: flutter
 
@@ -85,42 +85,26 @@ flutter:
     - family: SraPixelHigh
       fonts:
         - asset: assets/fonts/sra/PixelHigh.ttf
-    # Ark Pixel ships one face per design size. The 10px faces are for small
-    # UI text: the 16px face rendered at nav-bar sizes drops whole pixel rows,
-    # which is what made kana and kanji smear together.
-    - family: ArkPixelJa10
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-10px-proportional-ja.ttf
-    - family: ArkPixelKo10
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-10px-proportional-ko.ttf
-    - family: ArkPixelZhCn10
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_cn.ttf
-    - family: ArkPixelZhHk10
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_hk.ttf
-    - family: ArkPixelZhTw10
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_tw.ttf
-    - family: ArkPixelZhTr10
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-10px-proportional-zh_tr.ttf
+    # Ark Pixel draws CJK on a 12px grid. The 10px and 16px sizes it also
+    # ships were bundled here first, but upstream has only drawn 1,076 and 97
+    # ideographs at those sizes against 18,299 at 12px — so most kanji and
+    # hanzi were falling through to the platform's smooth Noto. These are the
+    # 12px cuts, subset to JIS X 0208 (ja), GB 2312 (zh_cn) and Big5 Level 1
+    # (zh_tw) plus every character the app's own translations use. See
+    # tool/subset_fonts.py.
     - family: ArkPixelJa
       fonts:
-        - asset: assets/fonts/ark/ark-pixel-16px-proportional-ja.ttf
-    - family: ArkPixelKo
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-16px-proportional-ko.ttf
+        - asset: assets/fonts/ark/ark-pixel-12px-proportional-ja.ttf
     - family: ArkPixelZhCn
       fonts:
-        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_cn.ttf
-    - family: ArkPixelZhHk
-      fonts:
-        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_hk.ttf
+        - asset: assets/fonts/ark/ark-pixel-12px-proportional-zh_cn.ttf
     - family: ArkPixelZhTw
       fonts:
-        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_tw.ttf
-    - family: ArkPixelZhTr
+        - asset: assets/fonts/ark/ark-pixel-12px-proportional-zh_tw.ttf
+    # Ark Pixel has no Hangul at any size. Galmuri11 is drawn on the same 12px
+    # grid and carries all 11,172 syllables; the bold cut is the one bundled,
+    # because a designed pixel bold is what matches the weight of Press Start
+    # 2P's Latin — see AppFonts.nonLatinOpticalScale.
+    - family: GalmuriKo
       fonts:
-        - asset: assets/fonts/ark/ark-pixel-16px-proportional-zh_tr.ttf
+        - asset: assets/fonts/galmuri/Galmuri11-Bold.ttf

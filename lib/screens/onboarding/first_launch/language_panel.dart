@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../components/pixel_flag.dart';
 import '../../../constants/theme.dart';
 import '../../../providers/language_provider.dart';
 import 'onboarding_text.dart';
@@ -87,7 +88,11 @@ class LanguagePanel extends StatelessWidget {
   }
 }
 
-/// One language in the list: its flag and its own name, in its own script.
+/// Tall enough for the largest balanced script, so every row matches.
+const double _rowHeight = 48;
+
+/// One language in the list: its flag and the name the language calls itself
+/// by, in its own script.
 class _LanguageRow extends StatelessWidget {
   final Language language;
   final bool isSelected;
@@ -106,7 +111,13 @@ class _LanguageRow extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        // Fixed height rather than padding around the text: the scripts are
+        // drawn at different sizes to weigh the same (see
+        // [AppFonts.nonLatinOpticalScale]), and rows that sized themselves to
+        // their text would leave the list stepping up and down as it scrolls.
+        height: _rowHeight,
+        alignment: AlignmentDirectional.centerStart,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected ? AppTheme.retroPrimary : Colors.white,
           // Constant border width, changing colour: a border that thickened on
@@ -125,11 +136,13 @@ class _LanguageRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(language.flag, style: const TextStyle(fontSize: 20)),
+            PixelFlag(code: language.code, height: 14),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                language.name,
+                // Endonym, not the English name: this list is read by someone
+                // who has not told the app what they read yet.
+                language.nativeName,
                 // Each row is drawn in its own language, so it resolves its
                 // own script's fonts rather than the app's current ones.
                 style: onboardingTextStyle(

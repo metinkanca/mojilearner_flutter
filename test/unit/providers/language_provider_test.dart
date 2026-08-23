@@ -62,7 +62,7 @@ void main() {
       // Arrange
       final provider = LanguageProvider();
       await Future.delayed(const Duration(milliseconds: 150));
-      const french = Language(code: 'fr', name: 'French', flag: '🇫🇷');
+      const french = Language(code: 'fr', name: 'French');
       
       // Act
       await provider.setNativeLanguage(french);
@@ -77,7 +77,7 @@ void main() {
       // Arrange
       final provider = LanguageProvider();
       await Future.delayed(const Duration(milliseconds: 150));
-      const german = Language(code: 'de', name: 'German', flag: '🇩🇪');
+      const german = Language(code: 'de', name: 'German');
       
       // Act
       await provider.setTargetLanguage(german);

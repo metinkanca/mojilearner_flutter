@@ -76,8 +76,9 @@ class AppRuntimeConfig {
         defaultValue: checkedInGoogleIosClientId,
       );
 
-  /// Treat every accessory as owned, so the whole wardrobe can be tried on
-  /// without buying anything or grinding bond stages.
+  /// Treat every accessory and every bought coat/eye colour as owned, so the
+  /// whole wardrobe can be tried on without buying anything or grinding bond
+  /// stages.
   ///
   /// A testing affordance, not a gameplay one, so it is doubly fenced:
   ///

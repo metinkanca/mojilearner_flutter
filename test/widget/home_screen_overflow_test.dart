@@ -79,7 +79,7 @@ void main() {
     when(() => mockCharacter.awakeUntil).thenReturn(null);
 
     when(() => mockLanguage.targetLanguage).thenReturn(
-      const Language(code: 'es', name: 'Spanish', flag: '🇪🇸'),
+      const Language(code: 'es', name: 'Spanish'),
     );
     when(() => mockSettings.usePixelFont).thenReturn(true);
   });

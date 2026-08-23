@@ -33,7 +33,7 @@ void main() {
 
     when(() => mockSettings.usePixelFont).thenReturn(true);
     when(() => mockLanguage.targetLanguage).thenReturn(
-      const Language(code: 'es', name: 'Spanish', flag: '🇪🇸'),
+      const Language(code: 'es', name: 'Spanish'),
     );
     when(() => mockCalibration.getLanguageProficiency(any())).thenReturn(null);
   });

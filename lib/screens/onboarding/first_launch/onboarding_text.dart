@@ -14,6 +14,10 @@ import '../../../utils/fonts.dart';
 ///
 /// Space Mono already carries the universal Noto fallbacks and takes no
 /// locale, so it needs no such help.
+///
+/// [AppFonts.pressStart2p] also balances each script against the weight of its
+/// Latin — see [AppFonts.nonLatinOpticalScale] — which is another reason to
+/// pass the locale being drawn rather than let it read the app's.
 TextStyle onboardingTextStyle({
   required bool usePixelFont,
   required Locale locale,

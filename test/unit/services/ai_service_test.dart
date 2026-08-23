@@ -10,7 +10,7 @@ void main() {
   group('AiService - unconfigured (AI unavailable)', () {
     setUp(() {
       // No proxy URL, no client fallback: the service must degrade politely.
-      dotenv.testLoad(fileInput: '');
+      dotenv.loadFromString(envString: '', isOptional: true);
     });
 
     test('reports AI as unavailable', () {
@@ -46,14 +46,14 @@ void main() {
 
   group('AiService - backend proxy', () {
     setUp(() {
-      dotenv.testLoad(fileInput: '''
+      dotenv.loadFromString(envString: '''
 AI_PROXY_BASE_URL=https://backend.test
 AI_PROXY_TOKEN=secret-token
 ''');
     });
 
     tearDown(() {
-      dotenv.testLoad(fileInput: '');
+      dotenv.loadFromString(envString: '', isOptional: true);
     });
 
     test('is available once a proxy URL is configured', () {

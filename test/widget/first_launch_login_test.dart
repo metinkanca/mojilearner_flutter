@@ -42,7 +42,7 @@ void main() {
 
   /// Walks language and pet, so the login step is what is on screen.
   Future<void> reachLoginPhase(WidgetTester tester) async {
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
     await tester.tap(find.text(spanish().onboardingLanguageConfirm));
     await settle(tester);
@@ -241,7 +241,7 @@ void main() {
       (tester) async {
     await pumpOpening(tester);
 
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
     await tester.tap(find.text(spanish().onboardingLanguageConfirm));
     await settle(tester);

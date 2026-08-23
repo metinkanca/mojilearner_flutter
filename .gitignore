@@ -113,3 +113,5 @@ TESTER_GUIDE.md
 # Proxy dependencies and its real configuration (see server/.env.example).
 server/node_modules/
 server/.env
+# Widget Preview related
+.widget_preview/

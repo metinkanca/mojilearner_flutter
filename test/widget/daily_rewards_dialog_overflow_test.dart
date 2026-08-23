@@ -89,6 +89,16 @@ void main() {
 
   // Greek carries the longest translations, so it decides whether the copy
   // above and below the calendar leaves the row any room.
+  // Greek is the longest translation, but Press Start 2P draws it itself, so
+  // it never takes the quarter-size bump every non-Latin script gets — see
+  // [AppFonts.nonLatinOpticalScale]. These are the ones that do.
+  for (final code in ['ja', 'zh', 'ko', 'ar', 'hi', 'th']) {
+    testWidgets('streak calendar fits a handset in $code', (tester) async {
+      await pumpDialog(tester, dayNumber: 1, locale: Locale(code));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('streak calendar fits a handset in the longest locale',
       (tester) async {
     await pumpDialog(tester, dayNumber: 1, locale: const Locale('el'));

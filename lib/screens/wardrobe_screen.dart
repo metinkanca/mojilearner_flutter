@@ -14,6 +14,7 @@ import '../providers/settings_provider.dart';
 import '../providers/user_provider.dart';
 import '../utils/accessory_ownership.dart';
 import '../utils/bond_context.dart';
+import '../utils/color_ownership.dart';
 import '../utils/fonts.dart';
 import '../utils/shop_item_localizer.dart';
 import '../utils/pet_recolor.dart';
@@ -52,6 +53,7 @@ class WardrobeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final characterProvider = Provider.of<CharacterProvider>(context);
     final settingsProvider = Provider.of<SettingsProvider>(context);
+    final coins = context.select<UserProvider, int>((p) => p.coins);
     final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
@@ -81,6 +83,11 @@ class WardrobeScreen extends StatelessWidget {
           icon: Icons.arrow_back,
           onPressed: () => context.pop(),
         ),
+        // The closet sells things now — coats, eyes and accessories — so it
+        // shows the purse, like the shop does.
+        actions: [
+          _CoinBalance(coins: coins, fontFunction: fontFunction),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -109,14 +116,29 @@ class WardrobeScreen extends StatelessWidget {
                       fontFunction: fontFunction,
                       textDirection: textDirection,
                       child: _SwatchRow(
-                        swatches: kBodySwatches,
+                        statuses: ColorOwnership.statusesFor(
+                          kAllBodySwatches,
+                          unlockedItemIds: characterProvider.unlockedItems,
+                          coins: coins,
+                        ),
                         selectedHex: characterProvider.design.bodyColor,
+                        fontFunction: fontFunction,
+                        textDirection: textDirection,
                         onPick: characterProvider.updateBodyColor,
+                        onBuy: (status) => _confirmColorPurchase(
+                          context: context,
+                          status: status,
+                          title: l10n.bodyTailColor,
+                          fontFunction: fontFunction,
+                          textDirection: textDirection,
+                          onBought: characterProvider.updateBodyColor,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     _EyePanel(
                       provider: characterProvider,
+                      coins: coins,
                       fontFunction: fontFunction,
                       textDirection: textDirection,
                       l10n: l10n,
@@ -398,7 +420,11 @@ class _SlotSection extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (dialogContext) => _BuyDialog(
-        status: status,
+        preview: Text(
+          status.accessory.icon,
+          style: const TextStyle(fontSize: 48),
+        ),
+        name: accessoryName(l10n, status.accessory),
         price: item.price,
         fontFunction: fontFunction,
         textDirection: textDirection,
@@ -505,15 +531,142 @@ void _showWardrobeDialog({
   );
 }
 
+/// Buys one coat or eye colour, then wears it.
+///
+/// [title] doubles as the dialog's heading because the swatch names are not
+/// localized — the colour itself is the label, and "COAT COLOUR" over a patch
+/// of Ultraviolet says everything the name would.
+void _confirmColorPurchase({
+  required BuildContext context,
+  required SwatchStatus status,
+  required String title,
+  required _FontFn fontFunction,
+  required TextDirection textDirection,
+  required void Function(String hex) onBought,
+}) {
+  final l10n = AppLocalizations.of(context)!;
+  final price = status.swatch.price;
+  if (price == null) return;
+
+  if (!status.affordable) {
+    _showWardrobeDialog(
+      context: context,
+      fontFunction: fontFunction,
+      textDirection: textDirection,
+      title: title,
+      message: l10n.notEnoughCoinsMessage,
+      detail: '${AccessoryTileIcons.coin} $price',
+    );
+    return;
+  }
+
+  final character = context.read<CharacterProvider>();
+  final user = context.read<UserProvider>();
+
+  showDialog<void>(
+    context: context,
+    builder: (dialogContext) => _BuyDialog(
+      preview: _SwatchPreview(hex: status.swatch.hex),
+      name: title,
+      price: price,
+      fontFunction: fontFunction,
+      textDirection: textDirection,
+      onConfirm: () async {
+        Navigator.of(dialogContext).pop();
+        final bought = await character.purchaseSwatch(status.swatch, user);
+        // Straight onto the pet, for the same reason a bought hat is worn at
+        // once: seeing it on is what the purchase was for.
+        if (bought) onBought(status.swatch.hex);
+      },
+    ),
+  );
+}
+
+/// The colour being bought, at the size the buy dialog shows an emoji.
+class _SwatchPreview extends StatelessWidget {
+  final String hex;
+
+  const _SwatchPreview({required this.hex});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 56,
+      height: 56,
+      decoration: BoxDecoration(
+        color: hexToColor(hex),
+        border: Border.all(color: AppTheme.retroDark, width: 3),
+        boxShadow: const [
+          BoxShadow(
+            color: AppTheme.retroDark,
+            offset: Offset(3, 3),
+            blurRadius: 0,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The purse, in the app bar. Mirrors the shop's so the two read as one
+/// wallet.
+class _CoinBalance extends StatelessWidget {
+  final int coins;
+  final _FontFn fontFunction;
+
+  const _CoinBalance({required this.coins, required this.fontFunction});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppTheme.retroAccent,
+        border: Border.all(color: AppTheme.retroDark, width: 3),
+        boxShadow: const [
+          BoxShadow(
+            color: AppTheme.retroDark,
+            offset: Offset(2, 2),
+            blurRadius: 0,
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.monetization_on,
+              color: AppTheme.retroDark, size: 16),
+          const SizedBox(width: 4),
+          Text(
+            '$coins',
+            textDirection: TextDirection.ltr,
+            style: fontFunction(
+              fontSize: 10,
+              color: AppTheme.retroDark,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Confirms one purchase. Deliberately agnostic about what is being bought —
+/// a hat shows its emoji, a colour shows the colour itself — so the wardrobe
+/// has one buy flow rather than one per shelf.
 class _BuyDialog extends StatelessWidget {
-  final AccessoryStatus status;
+  final Widget preview;
+  final String name;
   final int price;
   final _FontFn fontFunction;
   final TextDirection textDirection;
   final Future<void> Function() onConfirm;
 
   const _BuyDialog({
-    required this.status,
+    required this.preview,
+    required this.name,
     required this.price,
     required this.fontFunction,
     required this.textDirection,
@@ -535,13 +688,10 @@ class _BuyDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              status.accessory.icon,
-              style: const TextStyle(fontSize: 48),
-            ),
+            preview,
             const SizedBox(height: 12),
             Text(
-              accessoryName(l10n, status.accessory).toUpperCase(),
+              name.toUpperCase(),
               textDirection: textDirection,
               textAlign: TextAlign.center,
               style: fontFunction(
@@ -748,55 +898,104 @@ class _AccessoryTile extends StatelessWidget {
   }
 }
 
-/// A single colour swatch with the retro chunky border.
+/// A single colour swatch with the retro chunky border. A locked one is
+/// dimmed, padlocked and priced — visible for the same reason a locked
+/// accessory tile is: a colour you can see is a reason to keep earning, and a
+/// missing square is not.
 class _Swatch extends StatelessWidget {
-  final String hex;
+  final SwatchStatus status;
   final bool selected;
   final VoidCallback onTap;
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
 
   const _Swatch({
-    required this.hex,
+    required this.status,
     required this.selected,
     required this.onTap,
+    required this.fontFunction,
+    required this.textDirection,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = hexToColor(hex);
+    final color = hexToColor(status.swatch.hex);
+    final locked = !status.isOwned;
     final checkColor =
         color.computeLuminance() > 0.5 ? AppTheme.retroDark : Colors.white;
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 42,
-        height: 42,
-        decoration: BoxDecoration(
-          color: color,
-          border:
-              Border.all(color: AppTheme.retroDark, width: selected ? 4 : 2),
-          boxShadow: const [
-            BoxShadow(
-              color: AppTheme.retroDark,
-              offset: Offset(2, 2),
-              blurRadius: 0,
+      child: SizedBox(
+        // Fixed width so the price line below cannot widen one swatch and
+        // stagger the row.
+        width: 46,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: locked ? color.withValues(alpha: 0.4) : color,
+                border: Border.all(
+                  color: AppTheme.retroDark,
+                  width: selected ? 4 : 2,
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppTheme.retroDark,
+                    offset: Offset(2, 2),
+                    blurRadius: 0,
+                  ),
+                ],
+              ),
+              child: locked
+                  ? const Icon(Icons.lock, size: 18, color: AppTheme.retroDark)
+                  : selected
+                      ? Icon(Icons.check, size: 20, color: checkColor)
+                      : null,
+            ),
+            // Rendered at a fixed height whether or not it has a price to
+            // show, so buying a colour does not reflow the panels below it.
+            SizedBox(
+              height: 14,
+              child: Text(
+                locked
+                    ? '${AccessoryTileIcons.coin} ${status.swatch.price}'
+                    : '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
+                style: fontFunction(
+                  fontSize: 6,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
             ),
           ],
         ),
-        child: selected ? Icon(Icons.check, size: 20, color: checkColor) : null,
       ),
     );
   }
 }
 
 class _SwatchRow extends StatelessWidget {
-  final List<PetSwatch> swatches;
+  final List<SwatchStatus> statuses;
   final String selectedHex;
   final ValueChanged<String> onPick;
+  final ValueChanged<SwatchStatus> onBuy;
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
 
   const _SwatchRow({
-    required this.swatches,
+    required this.statuses,
     required this.selectedHex,
     required this.onPick,
+    required this.onBuy,
+    required this.fontFunction,
+    required this.textDirection,
   });
 
   @override
@@ -805,11 +1004,16 @@ class _SwatchRow extends StatelessWidget {
       spacing: 12,
       runSpacing: 12,
       children: [
-        for (final s in swatches)
+        for (final status in statuses)
           _Swatch(
-            hex: s.hex,
-            selected: s.hex.toLowerCase() == selectedHex.toLowerCase(),
-            onTap: () => onPick(s.hex),
+            status: status,
+            selected:
+                status.swatch.hex.toLowerCase() == selectedHex.toLowerCase(),
+            fontFunction: fontFunction,
+            textDirection: textDirection,
+            // One tap, two meanings: wear it, or buy it (see _SlotSection).
+            onTap: () =>
+                status.isOwned ? onPick(status.swatch.hex) : onBuy(status),
           ),
       ],
     );
@@ -818,15 +1022,19 @@ class _SwatchRow extends StatelessWidget {
 
 class _LabeledSwatches extends StatelessWidget {
   final String label;
+  final List<SwatchStatus> statuses;
   final String selectedHex;
   final ValueChanged<String> onPick;
+  final ValueChanged<SwatchStatus> onBuy;
   final _FontFn fontFunction;
   final TextDirection textDirection;
 
   const _LabeledSwatches({
     required this.label,
+    required this.statuses,
     required this.selectedHex,
     required this.onPick,
+    required this.onBuy,
     required this.fontFunction,
     required this.textDirection,
   });
@@ -847,9 +1055,12 @@ class _LabeledSwatches extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         _SwatchRow(
-          swatches: kEyeSwatches,
+          statuses: statuses,
           selectedHex: selectedHex,
           onPick: onPick,
+          onBuy: onBuy,
+          fontFunction: fontFunction,
+          textDirection: textDirection,
         ),
       ],
     );
@@ -905,12 +1116,14 @@ class _ModeButton extends StatelessWidget {
 
 class _EyePanel extends StatelessWidget {
   final CharacterProvider provider;
+  final int coins;
   final _FontFn fontFunction;
   final TextDirection textDirection;
   final AppLocalizations l10n;
 
   const _EyePanel({
     required this.provider,
+    required this.coins,
     required this.fontFunction,
     required this.textDirection,
     required this.l10n,
@@ -919,43 +1132,73 @@ class _EyePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spec = provider.colorSpec;
+    // A pet drawn in profile shows one eye. Odd-eyed would then colour a cell
+    // nobody can see, so the mode buttons go away and the one eye is picked
+    // like a solid pair — whatever mode happens to be saved.
+    final singleEye = eyeGeometryFor(provider.currentCharacterType).isSingle;
+    final statuses = ColorOwnership.statusesFor(
+      kAllEyeSwatches,
+      unlockedItemIds: provider.unlockedItems,
+      coins: coins,
+    );
+
+    /// Buying an eye colour applies it to the side it was picked for, keeping
+    /// the mode and the other eye as they are.
+    void buy(SwatchStatus status, void Function(String hex) wear) =>
+        _confirmColorPurchase(
+          context: context,
+          status: status,
+          title: l10n.eyeColor,
+          fontFunction: fontFunction,
+          textDirection: textDirection,
+          onBought: wear,
+        );
 
     Widget pickers;
-    switch (spec.eyeMode) {
+    switch (singleEye ? EyeMode.solid : spec.eyeMode) {
       case EyeMode.solid:
+        void wear(String hex) =>
+            provider.updateEyeColors(mode: EyeMode.solid, color1: hex);
         pickers = _LabeledSwatches(
           label: l10n.colorLabel,
+          statuses: statuses,
           selectedHex: spec.eyeColor1,
-          onPick: (hex) =>
-              provider.updateEyeColors(mode: EyeMode.solid, color1: hex),
+          onPick: wear,
+          onBuy: (status) => buy(status, wear),
           fontFunction: fontFunction,
           textDirection: textDirection,
         );
         break;
       case EyeMode.heterochromia:
+        void wearLeft(String hex) => provider.updateEyeColors(
+              mode: EyeMode.heterochromia,
+              color1: hex,
+              color2: spec.eyeColor2,
+            );
+        void wearRight(String hex) => provider.updateEyeColors(
+              mode: EyeMode.heterochromia,
+              color1: spec.eyeColor1,
+              color2: hex,
+            );
         pickers = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _LabeledSwatches(
               label: l10n.leftEye,
+              statuses: statuses,
               selectedHex: spec.eyeColor1,
-              onPick: (hex) => provider.updateEyeColors(
-                mode: EyeMode.heterochromia,
-                color1: hex,
-                color2: spec.eyeColor2,
-              ),
+              onPick: wearLeft,
+              onBuy: (status) => buy(status, wearLeft),
               fontFunction: fontFunction,
               textDirection: textDirection,
             ),
             const SizedBox(height: 14),
             _LabeledSwatches(
               label: l10n.rightEye,
+              statuses: statuses,
               selectedHex: spec.eyeColor2,
-              onPick: (hex) => provider.updateEyeColors(
-                mode: EyeMode.heterochromia,
-                color1: spec.eyeColor1,
-                color2: hex,
-              ),
+              onPick: wearRight,
+              onBuy: (status) => buy(status, wearRight),
               fontFunction: fontFunction,
               textDirection: textDirection,
             ),
@@ -971,31 +1214,33 @@ class _EyePanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              _ModeButton(
-                label: l10n.eyeStyleSolid.toUpperCase(),
-                selected: spec.eyeMode == EyeMode.solid,
-                onTap: () => provider.updateEyeColors(
-                  mode: EyeMode.solid,
-                  color1: spec.eyeColor1,
-                  color2: spec.eyeColor2,
+          if (!singleEye) ...[
+            Row(
+              children: [
+                _ModeButton(
+                  label: l10n.eyeStyleSolid.toUpperCase(),
+                  selected: spec.eyeMode == EyeMode.solid,
+                  onTap: () => provider.updateEyeColors(
+                    mode: EyeMode.solid,
+                    color1: spec.eyeColor1,
+                    color2: spec.eyeColor2,
+                  ),
+                  fontFunction: fontFunction,
                 ),
-                fontFunction: fontFunction,
-              ),
-              _ModeButton(
-                label: l10n.eyeStyleOddEyed.toUpperCase(),
-                selected: spec.eyeMode == EyeMode.heterochromia,
-                onTap: () => provider.updateEyeColors(
-                  mode: EyeMode.heterochromia,
-                  color1: spec.eyeColor1,
-                  color2: spec.eyeColor2,
+                _ModeButton(
+                  label: l10n.eyeStyleOddEyed.toUpperCase(),
+                  selected: spec.eyeMode == EyeMode.heterochromia,
+                  onTap: () => provider.updateEyeColors(
+                    mode: EyeMode.heterochromia,
+                    color1: spec.eyeColor1,
+                    color2: spec.eyeColor2,
+                  ),
+                  fontFunction: fontFunction,
                 ),
-                fontFunction: fontFunction,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
           pickers,
         ],
       ),

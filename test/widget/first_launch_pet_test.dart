@@ -42,7 +42,7 @@ void main() {
 
   /// Walks the language step so the pets become the thing being chosen.
   Future<void> reachPetPhase(WidgetTester tester) async {
-    await tester.tap(find.text('Spanish'));
+    await tester.tap(find.text('Español'));
     await settle(tester);
     await tester.tap(find.text(spanish().onboardingLanguageConfirm));
     await settle(tester);
