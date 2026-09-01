@@ -670,6 +670,29 @@ class AppLocalizationsEl extends AppLocalizations {
   String get scenarioContinue => 'Συνέχεια';
 
   @override
+  String get scenarioFinish => 'Τέλος';
+
+  @override
+  String get scenarioFinishTitle => 'Τέλος της σκηνής;';
+
+  @override
+  String get scenarioFinishBody =>
+      'Κάποιοι στόχοι είναι ακόμα ανοιχτοί. Αν τελειώσεις τώρα, παίρνεις μερική ανταμοιβή και το σενάριο μένει ημιτελές, ώστε να το ολοκληρώσεις σωστά αργότερα.';
+
+  @override
+  String get scenarioFinishConfirm => 'Τέλος ούτως ή άλλως';
+
+  @override
+  String get scenarioFinishCancel => 'Συνέχισε τη συζήτηση';
+
+  @override
+  String get scenarioPartialTitle => 'Η σκηνή τελείωσε';
+
+  @override
+  String get scenarioPartialNote =>
+      'Μερική ανταμοιβή — ολοκλήρωσε όλους τους στόχους για την πλήρη ανταμοιβή.';
+
+  @override
   String get objCoffeeOrder => 'Παράγγειλε ένα ρόφημα';
 
   @override
@@ -978,9 +1001,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Στεφάνι λουλουδιών';
 
   @override
-  String get accessoryDevilHornsName => 'Κέρατα διαβόλου';
-
-  @override
   String get onboardingLanguageQuestion => 'Τι γλώσσα μιλάς;';
 
   @override
@@ -1041,4 +1061,45 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Η σύνδεση απέτυχε. Έλεγξε τα στοιχεία και δοκίμασε ξανά.';
+
+  @override
+  String get adsFreeCoins => 'Δωρεάν νομίσματα';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Δες ένα βίντεο για +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Απομένουν $remaining από $total σήμερα';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Αυτά για σήμερα';
+
+  @override
+  String get adsNotReady => 'Δεν υπάρχει διαθέσιμο βίντεο αυτή τη στιγμή';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins νομίσματα!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Ποια χρονιά γεννήθηκες;';
+
+  @override
+  String get onboardingBirthYearHint => 'Έτος';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Χρησιμοποιείται μόνο για να επιλέγουμε κατάλληλες διαφημίσεις.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Δώσε ένα έγκυρο έτος';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Τα προσωπικά στοιχεία αποκρύφτηκαν πριν την αποστολή.';
 }

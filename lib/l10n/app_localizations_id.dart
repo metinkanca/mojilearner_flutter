@@ -670,6 +670,29 @@ class AppLocalizationsId extends AppLocalizations {
   String get scenarioContinue => 'Lanjutkan';
 
   @override
+  String get scenarioFinish => 'Selesai';
+
+  @override
+  String get scenarioFinishTitle => 'Akhiri adegan?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Beberapa tujuan masih terbuka. Mengakhiri sekarang hanya memberi hadiah sebagian, dan skenario tetap belum tuntas sehingga kamu bisa menyelesaikannya dengan benar nanti.';
+
+  @override
+  String get scenarioFinishConfirm => 'Tetap akhiri';
+
+  @override
+  String get scenarioFinishCancel => 'Lanjut mengobrol';
+
+  @override
+  String get scenarioPartialTitle => 'Adegan berakhir';
+
+  @override
+  String get scenarioPartialNote =>
+      'Hadiah sebagian — selesaikan semua tujuan untuk hadiah penuh.';
+
+  @override
   String get objCoffeeOrder => 'Pesan minuman';
 
   @override
@@ -974,9 +997,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Mahkota Bunga';
 
   @override
-  String get accessoryDevilHornsName => 'Tanduk Setan';
-
-  @override
   String get onboardingLanguageQuestion => 'Bahasa apa yang kamu gunakan?';
 
   @override
@@ -1036,4 +1056,45 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Tidak bisa masuk. Periksa datamu dan coba lagi.';
+
+  @override
+  String get adsFreeCoins => 'Koin Gratis';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Tonton video untuk +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Sisa $remaining dari $total hari ini';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Cukup untuk hari ini';
+
+  @override
+  String get adsNotReady => 'Tidak ada video saat ini';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins koin!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Tahun berapa kamu lahir?';
+
+  @override
+  String get onboardingBirthYearHint => 'Tahun';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Ini hanya menentukan iklan yang cocok untukmu.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Masukkan tahun yang valid';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Data pribadi disembunyikan sebelum dikirim.';
 }

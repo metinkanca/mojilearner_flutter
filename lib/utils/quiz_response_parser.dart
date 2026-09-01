@@ -29,7 +29,7 @@ class QuizResponseParser {
 
   /// Parses [response] into questions.
   ///
-  /// [allowedReviewItemIds] is the whitelist from [QuizBriefing.offeredIds].
+  /// [allowedReviewItemIds] is the whitelist from [BriefedReview.offeredIds].
   /// A question tagged with anything else keeps its content but loses the
   /// tag, so it still gets asked and simply doesn't touch the schedule.
   ///
@@ -102,6 +102,28 @@ class QuizResponseParser {
       explanation: explanation,
       reviewItemId: reviewItemId,
     );
+  }
+
+  /// Same parse, shaped for the onboarding quiz screens.
+  ///
+  /// Those two screens render questions straight from maps rather than from
+  /// [QuizQuestion], and each used to do its own `json.decode` with its own
+  /// markdown-fence stripping and no validation at all — a reply with three
+  /// options, or a "correct" answer that was not among them, produced a
+  /// question nobody could answer. Routing them through [parse] gets them the
+  /// option count, the answer-is-on-screen check and the field caps.
+  ///
+  /// No review ids are offered during onboarding, so none are accepted.
+  static List<Map<String, dynamic>> parseAsMaps(String response) {
+    return parse(response, allowedReviewItemIds: const {})
+        .map((q) => <String, dynamic>{
+              'question': q.question.isEmpty ? q.topic : q.question,
+              'topic': q.topic,
+              'options': q.options,
+              'correct': q.correct,
+              'explanation': q.explanation,
+            })
+        .toList();
   }
 
   /// Normalises one field: response markers escaped so a generated question

@@ -9,7 +9,8 @@ import '../utils/fonts.dart';
 import '../utils/progression_utils.dart';
 import '../utils/rtl_locale.dart';
 
-/// Shown when the learner clears every required objective in a scenario.
+/// Shown when a scenario run ends — cleared, or finished early by the learner
+/// with goals still open, which the title and closing note distinguish.
 ///
 /// Deliberately simpler than `QuizRewardsPopup` — no confetti layer. A
 /// scenario clear is a frequent, repeatable beat, and the quiz popup's full
@@ -80,7 +81,10 @@ class ScenarioCompletePopup extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  l10n.scenarioCompleteTitle.toUpperCase(),
+                  (reward.isPartial
+                          ? l10n.scenarioPartialTitle
+                          : l10n.scenarioCompleteTitle)
+                      .toUpperCase(),
                   textDirection: textDirection,
                   textAlign: TextAlign.center,
                   style: fontFunction(
@@ -225,10 +229,12 @@ class ScenarioCompletePopup extends StatelessWidget {
                 ],
 
                 // Explains the smaller number before the learner wonders.
-                if (!reward.isFirstClear) ...[
+                if (reward.isPartial || !reward.isFirstClear) ...[
                   const SizedBox(height: 10),
                   Text(
-                    l10n.scenarioReplayNote,
+                    reward.isPartial
+                        ? l10n.scenarioPartialNote
+                        : l10n.scenarioReplayNote,
                     textDirection: textDirection,
                     textAlign: TextAlign.center,
                     style: fontFunction(

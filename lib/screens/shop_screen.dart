@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../components/free_coins_tile.dart';
 import '../constants/theme.dart';
 import '../constants/shop.dart';
 import '../providers/user_provider.dart';
@@ -220,6 +221,11 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             ),
           ),
           const SizedBox(height: 16),
+
+          // The offer sits above the shelves on purpose: this is the screen
+          // where a player is already looking at something they cannot
+          // afford. It hides itself when the day's ads are used up.
+          FreeCoinsTile(usePixelFont: settingsProvider.usePixelFont),
 
           // Items Grid
           Expanded(

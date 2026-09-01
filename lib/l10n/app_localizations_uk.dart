@@ -667,6 +667,29 @@ class AppLocalizationsUk extends AppLocalizations {
   String get scenarioContinue => 'Продовжити';
 
   @override
+  String get scenarioFinish => 'Завершити';
+
+  @override
+  String get scenarioFinishTitle => 'Завершити сцену?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Деякі цілі ще не виконані. Якщо завершити зараз, нагорода буде частковою, а сценарій залишиться незавершеним — зможеш пройти його як слід пізніше.';
+
+  @override
+  String get scenarioFinishConfirm => 'Усе одно завершити';
+
+  @override
+  String get scenarioFinishCancel => 'Продовжити розмову';
+
+  @override
+  String get scenarioPartialTitle => 'Сцену завершено';
+
+  @override
+  String get scenarioPartialNote =>
+      'Часткова нагорода — виконай усі цілі, щоб отримати повну.';
+
+  @override
   String get objCoffeeOrder => 'Замов напій';
 
   @override
@@ -974,9 +997,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Вінок із квітів';
 
   @override
-  String get accessoryDevilHornsName => 'Ріжки диявола';
-
-  @override
   String get onboardingLanguageQuestion => 'Якою мовою ти розмовляєш?';
 
   @override
@@ -1036,4 +1056,45 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Не вдалося увійти. Перевір дані та спробуй ще раз.';
+
+  @override
+  String get adsFreeCoins => 'Безкоштовні монети';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Переглянь відео за +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Сьогодні лишилось $remaining з $total';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'На сьогодні все';
+
+  @override
+  String get adsNotReady => 'Зараз немає доступних відео';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins монет!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'У якому році ти народився?';
+
+  @override
+  String get onboardingBirthYearHint => 'Рік';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Це потрібно лише для добору відповідної реклами.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Введіть коректний рік';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Особисті дані приховано перед надсиланням.';
 }

@@ -668,6 +668,29 @@ class AppLocalizationsRo extends AppLocalizations {
   String get scenarioContinue => 'Continuă';
 
   @override
+  String get scenarioFinish => 'Încheie';
+
+  @override
+  String get scenarioFinishTitle => 'Închei scena?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Unele obiective sunt încă deschise. Dacă închei acum, primești doar o recompensă parțială, iar scenariul rămâne neterminat, ca să îl poți duce la capăt cum trebuie mai târziu.';
+
+  @override
+  String get scenarioFinishConfirm => 'Încheie oricum';
+
+  @override
+  String get scenarioFinishCancel => 'Continuă conversația';
+
+  @override
+  String get scenarioPartialTitle => 'Scenă încheiată';
+
+  @override
+  String get scenarioPartialNote =>
+      'Recompensă parțială — îndeplinește toate obiectivele pentru recompensa completă.';
+
+  @override
   String get objCoffeeOrder => 'Comandă o băutură';
 
   @override
@@ -973,9 +996,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Coroniță de flori';
 
   @override
-  String get accessoryDevilHornsName => 'Coarne de diavol';
-
-  @override
   String get onboardingLanguageQuestion => 'Ce limbă vorbești?';
 
   @override
@@ -1037,4 +1057,45 @@ class AppLocalizationsRo extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Conectarea a eșuat. Verifică datele și încearcă din nou.';
+
+  @override
+  String get adsFreeCoins => 'Monede gratuite';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Vezi un videoclip pentru +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Au mai rămas $remaining din $total azi';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Asta e tot pentru azi';
+
+  @override
+  String get adsNotReady => 'Niciun videoclip disponibil acum';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins monede!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'În ce an te-ai născut?';
+
+  @override
+  String get onboardingBirthYearHint => 'An';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Este folosit doar pentru a alege reclame potrivite.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Introdu un an valid';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Datele personale au fost ascunse înainte de trimitere.';
 }

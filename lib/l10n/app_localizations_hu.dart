@@ -668,6 +668,29 @@ class AppLocalizationsHu extends AppLocalizations {
   String get scenarioContinue => 'Tovább';
 
   @override
+  String get scenarioFinish => 'Befejezés';
+
+  @override
+  String get scenarioFinishTitle => 'Befejezed a jelenetet?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Néhány cél még nyitva van. Ha most fejezed be, csak részleges jutalmat kapsz, és a forgatókönyv befejezetlen marad, így később rendesen teljesítheted.';
+
+  @override
+  String get scenarioFinishConfirm => 'Mégis befejezem';
+
+  @override
+  String get scenarioFinishCancel => 'Folytatom a beszélgetést';
+
+  @override
+  String get scenarioPartialTitle => 'Jelenet vége';
+
+  @override
+  String get scenarioPartialNote =>
+      'Részleges jutalom — teljesítsd az összes célt a teljes jutalomért.';
+
+  @override
   String get objCoffeeOrder => 'Rendelj egy italt';
 
   @override
@@ -973,9 +996,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Virágkoszorú';
 
   @override
-  String get accessoryDevilHornsName => 'Ördögszarvak';
-
-  @override
   String get onboardingLanguageQuestion => 'Milyen nyelven beszélsz?';
 
   @override
@@ -1036,4 +1056,45 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'A bejelentkezés nem sikerült. Ellenőrizd az adatokat, és próbáld újra.';
+
+  @override
+  String get adsFreeCoins => 'Ingyen érmék';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Nézz meg egy videót +$coins érméért';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Ma még $remaining a(z) $total-ból';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Mára ennyi';
+
+  @override
+  String get adsNotReady => 'Most nincs elérhető videó';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins érme!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Melyik évben születtél?';
+
+  @override
+  String get onboardingBirthYearHint => 'Év';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Csak azt dönti el, milyen hirdetések valók neked.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Adj meg egy érvényes évet';
+
+  @override
+  String get privacyRedactedNotice =>
+      'A személyes adatokat elrejtettük küldés előtt.';
 }

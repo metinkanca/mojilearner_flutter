@@ -8,6 +8,8 @@ import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:mojilearner_flutter/providers/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../helpers/test_fixtures.dart';
+
 /// The equip guard lives in the provider, not only in the wardrobe, so these
 /// go through the provider directly — that is the thing a future caller would
 /// reach for.
@@ -92,7 +94,10 @@ void main() {
 
   group('buying', () {
     test('an accessory bought in the shop becomes wearable', () async {
-      SharedPreferences.setMockInitialValues({'coins': 500});
+      SharedPreferences.setMockInitialValues({
+        ...TestFixtures.welcomeGiftAlreadyGiven,
+        'coins': 500,
+      });
       final provider = await buildProvider();
       final user = await buildUser();
 
@@ -107,14 +112,20 @@ void main() {
     });
 
     test('a purchase that cannot be afforded leaves it locked', () async {
-      SharedPreferences.setMockInitialValues({'coins': 0});
+      SharedPreferences.setMockInitialValues({
+        ...TestFixtures.welcomeGiftAlreadyGiven,
+        'coins': 0,
+      });
       final provider = await buildProvider();
       final user = await buildUser();
 
-      final item = accessoryShopItemById('necklace')!;
+      // Whatever the shop is selling, rather than one named piece: a
+      // withheld accessory leaves the listing, and this test is about having
+      // no coins, not about which accessory it was.
+      final item = accessoryShopItems.first;
       expect(await provider.purchaseItem(item, user), isFalse);
       expect(
-        provider.ownsAccessory('necklace', stage: PetStage.curious),
+        provider.ownsAccessory(item.id, stage: PetStage.curious),
         isFalse,
       );
     });

@@ -2,14 +2,20 @@ import '../utils/input_sanitizer.dart';
 import '../utils/output_validator.dart';
 import '../utils/pii_detector.dart';
 import '../utils/rate_limiter.dart';
-import '../utils/semantic_validator.dart';
 
 /// The kind of AI request being guarded. Determines which rate-limit
 /// cooldown applies.
 enum AiRequestKind { chat, assessment, quiz }
 
 /// Why an outbound user message was blocked, or null if allowed.
-enum AiGuardBlock { rateLimited, suspiciousInput, emptyInput, offTopicShift }
+///
+/// Deliberately short. There used to be `suspiciousInput` and `offTopicShift`
+/// too, both driven by English keyword lists — they refused ordinary learner
+/// messages ("let's roleplay a cafe scene", anything written in Japanese) and
+/// caught nothing an attacker could not rephrase. Refusing a message is now
+/// reserved for the two reasons that are language-neutral and certain: the
+/// learner is over the rate limit, or there is nothing to send.
+enum AiGuardBlock { rateLimited, emptyInput }
 
 /// Result of guarding an outbound user message.
 class AiInputGuardResult {
@@ -31,7 +37,11 @@ class AiInputGuardResult {
   /// Sanitized (and PII-redacted) text to send to the model.
   final String outboundText;
 
-  /// Original text with PII redacted — what should be shown/stored locally.
+  /// What to show and store locally: the learner's own words, with PII
+  /// redacted and response markers escaped. Escaping matters because stored
+  /// messages are replayed to the model as history when a chat is reopened,
+  /// and an unescaped `|||VOCAB|||` in a user turn would be parsed as if the
+  /// tutor had written it.
   final String displayText;
 
   /// True when personal data was detected and redacted.
@@ -55,8 +65,12 @@ class AiResponseGuardResult {
 }
 
 /// Single entry point for the client-side AI security pipeline:
-/// rate limiting, input sanitization, semantic-shift detection,
-/// PII redaction, and AI response validation.
+/// rate limiting, marker escaping, PII redaction, and AI response validation.
+///
+/// The pipeline deliberately does not try to classify intent from the user's
+/// wording. That job belongs to the system prompt, which handles it in every
+/// language; this layer handles the parts a prompt cannot — cost, structure,
+/// personal data, and checking what comes back.
 ///
 /// Every screen that talks to [AiService] must route user text through
 /// [checkUserMessage] and model output through [checkAiResponse] instead
@@ -103,16 +117,12 @@ class AiGuard {
 
   /// Runs the full inbound pipeline over a free-form user message.
   ///
-  /// [recentUserMessages] is the user's prior messages in this
-  /// conversation, used for semantic-shift detection.
-  ///
   /// Does NOT record the request against the rate limiter — call
   /// [recordRequest] once the message is actually sent.
   static AiInputGuardResult checkUserMessage({
     required String rawText,
     required AiRequestKind kind,
     required String source,
-    List<String> recentUserMessages = const [],
   }) {
     if (!_canSend(kind, source)) {
       return AiInputGuardResult._(
@@ -122,32 +132,25 @@ class AiGuard {
       );
     }
 
-    final sanitizedText = InputSanitizer.sanitizeUserInput(rawText);
-
-    if (InputSanitizer.isSuspicious(rawText)) {
-      InputSanitizer.logSuspiciousInput(rawText, source);
-      return const AiInputGuardResult._(block: AiGuardBlock.suspiciousInput);
-    }
+    // Escapes response markers, strips control characters, caps length, and
+    // logs anything injection-shaped for monitoring. It never rewrites what
+    // the learner actually said.
+    final sanitizedText =
+        InputSanitizer.sanitizeUserInput(rawText, source: source);
 
     if (sanitizedText.isEmpty) {
       return const AiInputGuardResult._(block: AiGuardBlock.emptyInput);
     }
 
-    if (SemanticValidator.hasAnomalousShift(
-      recentUserMessages: recentUserMessages,
-      newInput: sanitizedText,
-    )) {
-      InputSanitizer.logSuspiciousInput(rawText, '${source}_semantic');
-      return const AiInputGuardResult._(block: AiGuardBlock.offTopicShift);
-    }
-
     final piiRedacted = PIIDetector.hasSensitiveData(sanitizedText);
+    final displayText = InputSanitizer.escapeSpecialMarkers(rawText);
     return AiInputGuardResult._(
       outboundText: piiRedacted
           ? PIIDetector.redactSensitiveData(sanitizedText)
           : sanitizedText,
-      displayText:
-          piiRedacted ? PIIDetector.redactSensitiveData(rawText) : rawText,
+      displayText: piiRedacted
+          ? PIIDetector.redactSensitiveData(displayText)
+          : displayText,
       piiRedacted: piiRedacted,
     );
   }

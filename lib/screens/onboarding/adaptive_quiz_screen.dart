@@ -1,20 +1,19 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
 import '../../components/quiz_rewards_popup.dart';
-import '../../providers/calibration_provider.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/offline_detector.dart';
-import '../../utils/input_sanitizer.dart';
 import '../../utils/level_validator.dart';
 import '../../utils/progression_utils.dart';
+import '../../utils/quiz_response_parser.dart';
 import '../../utils/rtl_locale.dart';
 import '../../services/ai_guard.dart';
+import '../../services/ai_prompt_spec.dart';
 import '../../services/ai_service.dart';
 import '../../../utils/fonts.dart';
 
@@ -42,32 +41,12 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
     _generateQuiz();
   }
 
-  String _getDifficultyDescription(String level) {
-    switch (level.toLowerCase()) {
-      case 'beginner':
-        return 'basic vocabulary and simple grammar';
-      case 'intermediate':
-        return 'common phrases, grammar rules, and sentence construction';
-      case 'advanced':
-        return 'complex grammar, idioms, and nuanced expressions';
-      default:
-        return 'basic vocabulary and simple grammar';
-    }
-  }
-
   Future<void> _generateQuiz() async {
     final languageProvider =
         Provider.of<LanguageProvider>(context, listen: false);
     final targetLang = languageProvider.targetLanguage?.name ?? 'Spanish';
     final targetCode = languageProvider.targetLanguage?.code ?? 'es';
     final aiLevel = LevelValidator.normalizeLevel(widget.aiLevel);
-
-    // Get self-assessed level from proficiency
-    final calibrationProvider =
-        Provider.of<CalibrationProvider>(context, listen: false);
-    final proficiency = calibrationProvider.getLanguageProficiency(targetCode);
-    final selfLevel =
-        LevelValidator.normalizeLevel(proficiency?.selfAssessedLevel);
 
     // Use mock questions if offline
     if (OfflineDetector.isOfflineMode) {
@@ -87,8 +66,6 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
       });
       return;
     }
-
-    final difficulty = _getDifficultyDescription(aiLevel);
 
     try {
       // 🔒 SECURITY: Rate limiting for quiz generation
@@ -113,58 +90,39 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
 
       AiGuard.recordRequest('adaptive_quiz');
 
-      // 🔒 SECURITY: Sanitize language inputs
-      final sanitizedTargetLang =
-          InputSanitizer.sanitizeLanguageName(targetLang) ?? 'Spanish';
-      final sanitizedAiLevel =
-          InputSanitizer.sanitizeLanguageName(aiLevel) ?? 'beginner';
-      final sanitizedSelfLevel =
-          InputSanitizer.sanitizeLanguageName(selfLevel) ?? 'beginner';
-      final prompt =
-          '''Generate exactly 5 multiple-choice questions to test $sanitizedTargetLang proficiency at $sanitizedAiLevel level.
-
-User's self-assessment: $sanitizedSelfLevel
-AI's assessment from chat: $sanitizedAiLevel
-
-Focus on: $difficulty
-
-Rules:
-1. Generate questions matching $aiLevel difficulty
-2. Each question should have 4 options
-3. Include a brief explanation for the correct answer
-4. Return ONLY valid JSON, no markdown code blocks
-5. Make questions practical and useful
-
-Format:
-[
-  {
-    "question": "How do you say 'Hello' in $targetLang?",
-    "topic": "Greeting",
-    "options": ["Option1", "Option2", "Option3", "Option4"],
-    "correct": "Option1",
-    "explanation": "Brief explanation why this is correct"
-  }
-]
-
-Generate 5 questions now:''';
-
+      // The same quiz prompt the main quiz asks for, instead of a hand-rolled
+      // one that sanitized its inputs into `sanitizedAiLevel` and then
+      // interpolated the raw `$aiLevel` three lines later — the one value on
+      // this screen derived from what the learner typed during the chat
+      // assessment, and so the one that needed it. The level now travels as
+      // data and the server normalises it to one of three words.
+      //
+      // The AI-determined level is what the app goes on to use everywhere
+      // else, so it is the level the quiz is built for; onboarding has no
+      // review history to send with it.
       final aiText = await AiService.instance.generateText(
-        prompt: prompt,
+        spec: AiPromptSpec.quiz(
+          targetCode: targetCode,
+          nativeCode: languageProvider.nativeLanguage.code,
+          level: aiLevel,
+        ),
         source: 'adaptive_quiz_screen',
         // Same reasoning as the main quiz: structured JSON, no thinking.
         config: AiGenerationConfig.structuredJson,
       );
 
-      if (aiText.isNotEmpty) {
-        String jsonText = aiText.trim();
-        // Remove markdown code blocks if present
-        jsonText =
-            jsonText.replaceAll('```json', '').replaceAll('```', '').trim();
+      // Validated parse: exactly four distinct options, the correct answer
+      // present among them, fields capped and markers escaped. A reply that
+      // survives none of that falls through to the local set rather than
+      // rendering an unanswerable question.
+      final parsed = aiText.isEmpty
+          ? const <Map<String, dynamic>>[]
+          : QuizResponseParser.parseAsMaps(aiText);
 
-        final List<dynamic> data = json.decode(jsonText);
+      if (parsed.isNotEmpty) {
         setState(() {
           _usingLocalFallback = false;
-          _questions = data.cast<Map<String, dynamic>>();
+          _questions = parsed;
           _isLoading = false;
         });
       } else {

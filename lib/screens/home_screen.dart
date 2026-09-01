@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:convert'; // Added
 import 'dart:async';
 import '../constants/theme.dart';
+import '../providers/ads_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/daily_reward_provider.dart';
 import '../providers/language_provider.dart';
@@ -23,8 +23,11 @@ import '../models/models.dart';
 import '../components/character_sprite.dart';
 import '../components/daily_rewards_dialog.dart';
 import '../l10n/app_localizations.dart';
+import '../services/ai_guard.dart';
+import '../services/ai_prompt_spec.dart';
 import '../services/ai_service.dart';
 import '../utils/fonts.dart';
+import '../utils/mistake_extractor.dart';
 import '../utils/rtl_locale.dart';
 
 /// The level and XP pill on the home screen's top row.
@@ -48,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _dailyRewardDialogVisible = false;
   DailyRewardInfo? _resolvedDailyReward;
   bool _didResolveDailyReward = false;
+  bool _didBootstrapAds = false;
   Timer? _sleepRefreshTimer;
 
   /// Scratch-to-pet gesture state. Only meaningful between a horizontal drag
@@ -149,8 +153,23 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _resolveDailyReward();
+        _bootstrapAds();
       }
     });
+  }
+
+  /// Starts the ad SDK once, on the first home screen of the session.
+  ///
+  /// Here rather than in `main` for two reasons: the UMP consent form is a
+  /// native dialog that needs an activity on screen to appear over, and the
+  /// home screen is only reachable once onboarding is done — so the form can
+  /// never land on top of the opening, which is the one flow in the app that
+  /// has to stay uninterrupted.
+  void _bootstrapAds() {
+    if (_didBootstrapAds) return;
+    _didBootstrapAds = true;
+
+    unawaited(Provider.of<AdsProvider>(context, listen: false).bootstrap());
   }
 
   Future<void> _resolveDailyReward() async {
@@ -575,44 +594,16 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<LanguageProvider>(context, listen: false);
     final characterProvider =
         Provider.of<CharacterProvider>(context, listen: false);
-    final targetLang = languageProvider.targetLanguage?.name ?? 'Spanish';
 
     try {
-      final systemInstruction = '''
-Context: The user is learning $targetLang.
-You are a friendly virtual pet helping the user practice a foreign language in a gentle, game-like way.
-
-This conversation happens on the app’s home screen.
-
-Your role is NOT to teach deeply or explain grammar.
-Your role is to encourage light daily practice and guide the user toward structured activities.
-
-Rules:
-- Keep responses to 1–3 short sentences
-- Never give long explanations
-- Never ask multiple questions at once
-- Never overwhelm the user with choices
-- Be encouraging, warm, and simple
-
-Behavior:
-- If you are hungry, gently suggest a quiz
-- If your happiness is low, encourage short interaction
-- If the user struggled recently, suggest a relevant scenario
-- Otherwise, respond casually and positively
-
-If the user makes mistakes, respond naturally and kindly in your text.
-Do NOT correct formally in the text unless asked.
-
-MISTAKE TRACKING:
-If the user makes a mistake, append this HIDDEN block at the very end of your response:
-|||MISTAKE|||
-{ "original": "user's wrong text", "correction": "correct text", "explanation": "brief reason", "type": "grammar" }
-
-You should feel like a friendly companion, not a teacher or chatbot.
-''';
-
+      // The pet's wording lives in `server/src/prompts.js` alongside the
+      // tutor's, and carries the same safety floor: who it talks to, what it
+      // will not become, and what to do when a conversation stops being a
+      // game. This screen only says which language and which persona.
       _aiSessionId = await AiService.instance.createSession(
-        systemInstruction: systemInstruction,
+        spec: AiPromptSpec.pet(
+          targetCode: languageProvider.targetLanguage?.code,
+        ),
         source: 'home_screen',
       );
 
@@ -643,23 +634,48 @@ You should feel like a friendly companion, not a teacher or chatbot.
       return;
     }
 
+    // 🔒 SECURITY: the same inbound pipeline the chat screen uses. This
+    // screen talked to the model directly for a long time, which meant the
+    // most-used AI surface in the app was the one with no rate limit, no
+    // marker escaping, no PII redaction and no check on what came back.
+    final guard = AiGuard.checkUserMessage(
+      rawText: text,
+      kind: AiRequestKind.chat,
+      source: 'home_screen',
+    );
+
+    if (!guard.allowed) {
+      switch (guard.block!) {
+        case AiGuardBlock.rateLimited:
+          // The pet simply has not finished listening yet. A cooldown notice
+          // would be the wrong register here, so the bubble stays put.
+          break;
+        case AiGuardBlock.emptyInput:
+          break;
+      }
+      setState(() => _isAwaitingReply = false);
+      return;
+    }
+
+    AiGuard.recordRequest('home_screen');
+
     _textController.clear();
     _bubbleTimer?.cancel();
     setState(() {
-      _lastUserMessage = text;
+      _lastUserMessage = guard.displayText;
       _isAwaitingReply = true;
       _bubbleVisible = true;
     });
 
     if (_aiSessionId != null) {
       try {
-        final response = await AiService.instance.sendSessionMessage(
+        final rawResponse = await AiService.instance.sendSessionMessage(
           sessionId: _aiSessionId!,
-          message: text,
+          message: guard.outboundText,
           source: 'home_screen',
         );
 
-        if (AiService.instance.isUnavailableResponse(response)) {
+        if (AiService.instance.isUnavailableResponse(rawResponse)) {
           characterProvider.setAiIssueSleepMode(true);
           setState(() {
             _isAwaitingReply = false;
@@ -668,35 +684,35 @@ You should feel like a friendly companion, not a teacher or chatbot.
           return;
         }
 
+        // 🔒 SECURITY: validate what came back before showing it.
+        final checked =
+            AiGuard.checkAiResponse(rawResponse, source: 'home_screen');
+        if (!checked.valid) {
+          // A rejected reply is not a connection problem, so the pet is not
+          // put to sleep over it — it just has nothing sensible to say.
+          setState(() => _isAwaitingReply = false);
+          return;
+        }
+
         characterProvider.setAiIssueSleepMode(false);
         characterProvider.registerInteraction();
 
+        final response = checked.text!;
         if (response.isNotEmpty) {
-          String botText = response;
-
-          // Mistake Parsing
-          if (botText.contains('|||MISTAKE|||')) {
-            final parts = botText.split('|||MISTAKE|||');
-            botText = parts[0].trim();
-            if (parts.length > 1) {
-              try {
-                final jsonStr = parts[1].trim();
-                final jsonMap = json.decode(jsonStr);
-                if (mounted) {
-                  Provider.of<MistakesProvider>(context, listen: false)
-                      .addMistake(
-                          jsonMap['original'] ?? '',
-                          jsonMap['correction'] ?? '',
-                          jsonMap['explanation'] ?? '',
-                          jsonMap['type'] ?? 'grammar');
-                }
-              } catch (e) {
-                debugPrint("Home Parsing Error: $e");
-              }
-            }
+          // Validated parse: fields capped, markers escaped, a correction
+          // identical to the original dropped.
+          final extraction = MistakeExtractor.extract(response);
+          final mistake = extraction.mistake;
+          if (mistake != null && mounted) {
+            Provider.of<MistakesProvider>(context, listen: false).addMistake(
+              mistake.original,
+              mistake.correction,
+              mistake.explanation,
+              mistake.type,
+            );
           }
 
-          _showBubble(botText);
+          _showBubble(extraction.content);
         }
       } catch (e) {
         characterProvider.setAiIssueSleepMode(true);

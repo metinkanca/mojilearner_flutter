@@ -668,6 +668,29 @@ class AppLocalizationsSv extends AppLocalizations {
   String get scenarioContinue => 'Fortsätt';
 
   @override
+  String get scenarioFinish => 'Avsluta';
+
+  @override
+  String get scenarioFinishTitle => 'Avsluta scenen?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Några mål är fortfarande öppna. Avslutar du nu får du bara delvis belöning, och scenariot förblir oavklarat så att du kan klara det ordentligt senare.';
+
+  @override
+  String get scenarioFinishConfirm => 'Avsluta ändå';
+
+  @override
+  String get scenarioFinishCancel => 'Fortsätt prata';
+
+  @override
+  String get scenarioPartialTitle => 'Scenen avslutad';
+
+  @override
+  String get scenarioPartialNote =>
+      'Delvis belöning — klara alla mål för full belöning.';
+
+  @override
   String get objCoffeeOrder => 'Beställ en dryck';
 
   @override
@@ -973,9 +996,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Blomsterkrans';
 
   @override
-  String get accessoryDevilHornsName => 'Djävulshorn';
-
-  @override
   String get onboardingLanguageQuestion => 'Vilket språk talar du?';
 
   @override
@@ -1036,4 +1056,44 @@ class AppLocalizationsSv extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Kunde inte logga in. Kontrollera uppgifterna och försök igen.';
+
+  @override
+  String get adsFreeCoins => 'Gratis mynt';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Titta på en video för +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return '$remaining av $total kvar i dag';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Det var allt för i dag';
+
+  @override
+  String get adsNotReady => 'Ingen video tillgänglig just nu';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins mynt!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Vilket år är du född?';
+
+  @override
+  String get onboardingBirthYearHint => 'År';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Detta avgör bara vilka annonser som passar dig.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Ange ett giltigt år';
+
+  @override
+  String get privacyRedactedNotice => 'Personuppgifter doldes före sändning.';
 }

@@ -657,6 +657,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scenarioContinue => '계속';
 
   @override
+  String get scenarioFinish => '끝내기';
+
+  @override
+  String get scenarioFinishTitle => '장면을 끝낼까요?';
+
+  @override
+  String get scenarioFinishBody =>
+      '아직 남은 목표가 있어요. 지금 끝내면 보상의 일부만 받고 시나리오는 미완료로 남아, 나중에 제대로 클리어할 수 있어요.';
+
+  @override
+  String get scenarioFinishConfirm => '그래도 끝내기';
+
+  @override
+  String get scenarioFinishCancel => '계속 대화하기';
+
+  @override
+  String get scenarioPartialTitle => '장면 종료';
+
+  @override
+  String get scenarioPartialNote => '부분 보상 — 모든 목표를 달성하면 전체 보상을 받아요.';
+
+  @override
   String get objCoffeeOrder => '음료 주문하기';
 
   @override
@@ -955,9 +977,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get accessoryFlowerCrownName => '꽃 왕관';
 
   @override
-  String get accessoryDevilHornsName => '악마 뿔';
-
-  @override
   String get onboardingLanguageQuestion => '어떤 언어를 사용하나요?';
 
   @override
@@ -1015,4 +1034,43 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get accountErrorSignIn => '로그인하지 못했어요. 정보를 확인하고 다시 시도해 주세요.';
+
+  @override
+  String get adsFreeCoins => '무료 코인';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return '동영상 보고 +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return '오늘 $total개 중 $remaining개 남음';
+  }
+
+  @override
+  String get adsNoneLeftToday => '오늘은 여기까지';
+
+  @override
+  String get adsNotReady => '지금은 동영상이 없습니다';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins 코인!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => '몇 년도에 태어났나요?';
+
+  @override
+  String get onboardingBirthYearHint => '연도';
+
+  @override
+  String get onboardingBirthYearWhy => '알맞은 광고를 고르는 데에만 사용됩니다.';
+
+  @override
+  String get onboardingBirthYearInvalid => '올바른 연도를 입력해 주세요';
+
+  @override
+  String get privacyRedactedNotice => '개인 정보는 보내기 전에 숨겨졌습니다.';
 }

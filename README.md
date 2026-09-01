@@ -106,6 +106,7 @@ To get started with the Mojilearner Flutter project, follow these steps:
 - **Adaptive Quizzes**: Difficulty adjusts to your level
 - **Retro Pixel UI**: Fun, nostalgic design aesthetic
 - **Pet Companion**: Friendly mascot guides your journey
+- **Rewarded Ads**: Optional coins for watching a video, unlocked by the day's learning ([ADS.md](ADS.md))
 
 ## Building for Distribution
 
@@ -143,6 +144,7 @@ open ios/Runner.xcworkspace
 - [IOS_BUILD_GUIDE.md](IOS_BUILD_GUIDE.md) - Detailed iOS/Mac instructions with TestFlight setup
 - [QUICK_BUILD.md](QUICK_BUILD.md) - Quick reference commands
 - [OFFLINE_MODE.md](OFFLINE_MODE.md) - How offline mode works and how to extend it
+- [ADS.md](ADS.md) - Rewarded/interstitial ads, the membership seam, and the pre-release AdMob checklist
 
 **For Testers:**
 - [TESTER_GUIDE.md](TESTER_GUIDE.md) - Comprehensive testing checklist

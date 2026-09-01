@@ -24,10 +24,34 @@ const DEFAULT_TTL_MS = 30 * 60 * 1000;
  */
 const DEFAULT_MAX_SESSIONS = 500;
 
+/**
+ * Messages kept in a conversation, oldest dropped first.
+ *
+ * The cost control that matters most, because the provider is stateless: every
+ * turn re-sends the whole history at the input rate, so an untrimmed chat costs
+ * O(n^2) in tokens over n turns. A 20-turn session bills roughly 76k input
+ * tokens to carry 6k tokens of actual conversation.
+ *
+ * Safe to trim here precisely because it is not where the conversation's rules
+ * live. The persona, the output format, the scenario briefing and the SRS queue
+ * are all in `systemInstruction`, which is stored separately and re-sent whole
+ * on every turn. What ageing out costs the learner is the far end of a long
+ * chat, which the model would have been weighting lightly anyway.
+ *
+ * 16 is eight exchanges. Long enough that a scenario holds together, short
+ * enough that the quadratic never gets going.
+ */
+const DEFAULT_MAX_HISTORY = 16;
+
 export class MemorySessionStore {
-  constructor({ ttlMs = DEFAULT_TTL_MS, maxSessions = DEFAULT_MAX_SESSIONS } = {}) {
+  constructor({
+    ttlMs = DEFAULT_TTL_MS,
+    maxSessions = DEFAULT_MAX_SESSIONS,
+    maxHistory = DEFAULT_MAX_HISTORY,
+  } = {}) {
     this.ttlMs = ttlMs;
     this.maxSessions = maxSessions;
+    this.maxHistory = maxHistory;
     /** @type {Map<string, {systemInstruction: string, history: Array<{role: string, text: string}>, model: string, touchedAt: number}>} */
     this.sessions = new Map();
   }
@@ -37,6 +61,19 @@ export class MemorySessionStore {
     for (const [id, s] of this.sessions) {
       if (now - s.touchedAt > this.ttlMs) this.sessions.delete(id);
     }
+  }
+
+  /**
+   * The most recent [maxHistory] messages, with a leading model turn dropped.
+   *
+   * That last part is not cosmetic: Gemini rejects a `contents` array whose
+   * first entry is a model turn, and slicing a window out of an alternating
+   * conversation lands on one half the time.
+   */
+  trim(history) {
+    if (!(this.maxHistory > 0) || history.length <= this.maxHistory) return history;
+    const window = history.slice(-this.maxHistory);
+    return window[0]?.role === 'model' ? window.slice(1) : window;
   }
 
   create(id, { systemInstruction, history, model }) {
@@ -49,7 +86,7 @@ export class MemorySessionStore {
     }
     this.sessions.set(id, {
       systemInstruction,
-      history: [...history],
+      history: this.trim([...history]),
       model,
       touchedAt: Date.now(),
     });
@@ -70,10 +107,22 @@ export class MemorySessionStore {
     return s;
   }
 
+  /**
+   * Adds one message and re-applies the window.
+   *
+   * Mutates the stored array in place rather than replacing it, so a caller
+   * holding the session object from `get` still sees the trim — and so the
+   * rollback in `/v1/ai/chat/send`, which pops the user turn it just added,
+   * keeps popping the right element.
+   */
   append(id, message) {
     const s = this.get(id);
     if (!s) return false;
     s.history.push(message);
+    const trimmed = this.trim(s.history);
+    if (trimmed.length !== s.history.length) {
+      s.history.splice(0, s.history.length - trimmed.length);
+    }
     return true;
   }
 

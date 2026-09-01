@@ -669,6 +669,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scenarioContinue => 'Continue';
 
   @override
+  String get scenarioFinish => 'Finish';
+
+  @override
+  String get scenarioFinishTitle => 'End the scene?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Some objectives are still open. Finishing now pays partial credit, and the scenario stays unfinished so you can clear it properly later.';
+
+  @override
+  String get scenarioFinishConfirm => 'Finish anyway';
+
+  @override
+  String get scenarioFinishCancel => 'Keep talking';
+
+  @override
+  String get scenarioPartialTitle => 'Scene ended';
+
+  @override
+  String get scenarioPartialNote =>
+      'Partial credit — clear every objective for the full reward.';
+
+  @override
   String get objCoffeeOrder => 'Order a drink';
 
   @override
@@ -976,9 +999,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Flower Crown';
 
   @override
-  String get accessoryDevilHornsName => 'Devil Horns';
-
-  @override
   String get onboardingLanguageQuestion => 'What language do you speak?';
 
   @override
@@ -1037,4 +1057,45 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Could not sign in. Check your details and try again.';
+
+  @override
+  String get adsFreeCoins => 'Free Coins';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Watch a video for +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return '$remaining of $total left today';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'That\'s all for today';
+
+  @override
+  String get adsNotReady => 'No video available right now';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins coins!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'What year were you born?';
+
+  @override
+  String get onboardingBirthYearHint => 'Year';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'This only decides which ads are suitable for you.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Please enter a valid year';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Personal details were hidden before sending.';
 }

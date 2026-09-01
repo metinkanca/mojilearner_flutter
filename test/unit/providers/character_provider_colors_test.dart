@@ -5,6 +5,8 @@ import 'package:mojilearner_flutter/providers/user_provider.dart';
 import 'package:mojilearner_flutter/utils/pet_recolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../helpers/test_fixtures.dart';
+
 /// Fantasy coats and eyes are bought, so the guard has to hold in the
 /// provider: the wardrobe's own check only covers taps, and a colour reached
 /// any other way must still be paid for.
@@ -28,7 +30,10 @@ void main() {
   }
 
   Future<UserProvider> buildUser({int coins = 0}) async {
-    SharedPreferences.setMockInitialValues({'coins': coins});
+    SharedPreferences.setMockInitialValues({
+      ...TestFixtures.welcomeGiftAlreadyGiven,
+      'coins': coins,
+    });
     final user = UserProvider();
     await Future.delayed(const Duration(milliseconds: 50));
     return user;

@@ -672,6 +672,29 @@ class AppLocalizationsTr extends AppLocalizations {
   String get scenarioContinue => 'Devam';
 
   @override
+  String get scenarioFinish => 'Bitir';
+
+  @override
+  String get scenarioFinishTitle => 'Sahne bitsin mi?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Hâlâ tamamlanmamış hedefler var. Şimdi bitirirsen ödülün yalnızca bir kısmını alırsın ve senaryo tamamlanmamış kalır, böylece sonra düzgünce bitirebilirsin.';
+
+  @override
+  String get scenarioFinishConfirm => 'Yine de bitir';
+
+  @override
+  String get scenarioFinishCancel => 'Konuşmaya devam et';
+
+  @override
+  String get scenarioPartialTitle => 'Sahne bitti';
+
+  @override
+  String get scenarioPartialNote =>
+      'Kısmi ödül — tam ödül için tüm hedefleri tamamla.';
+
+  @override
   String get objCoffeeOrder => 'Bir içecek sipariş et';
 
   @override
@@ -978,9 +1001,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Çiçek Tacı';
 
   @override
-  String get accessoryDevilHornsName => 'Şeytan Boynuzları';
-
-  @override
   String get onboardingLanguageQuestion => 'Hangi dili konuşuyorsun?';
 
   @override
@@ -1039,4 +1059,45 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Giriş yapılamadı. Bilgilerini kontrol edip tekrar dene.';
+
+  @override
+  String get adsFreeCoins => 'Bedava Altın';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Video izle, +$coins kazan';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Bugün $total hakkın $remaining tanesi kaldı';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Bugünlük bu kadar';
+
+  @override
+  String get adsNotReady => 'Şu anda video yok';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins altın!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Hangi yıl doğdun?';
+
+  @override
+  String get onboardingBirthYearHint => 'Yıl';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Bu yalnızca sana uygun reklamları seçmek için kullanılır.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Lütfen geçerli bir yıl gir';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Kişisel bilgiler gönderilmeden önce gizlendi.';
 }

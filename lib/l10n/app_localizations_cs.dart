@@ -665,6 +665,29 @@ class AppLocalizationsCs extends AppLocalizations {
   String get scenarioContinue => 'Pokračovat';
 
   @override
+  String get scenarioFinish => 'Ukončit';
+
+  @override
+  String get scenarioFinishTitle => 'Ukončit scénu?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Některé cíle jsou stále nesplněné. Když teď skončíš, získáš jen částečnou odměnu a scénář zůstane nedokončený, takže ho můžeš později splnit pořádně.';
+
+  @override
+  String get scenarioFinishConfirm => 'Přesto ukončit';
+
+  @override
+  String get scenarioFinishCancel => 'Pokračovat v hovoru';
+
+  @override
+  String get scenarioPartialTitle => 'Scéna ukončena';
+
+  @override
+  String get scenarioPartialNote =>
+      'Částečná odměna — splň všechny cíle pro plnou odměnu.';
+
+  @override
   String get objCoffeeOrder => 'Objednej si nápoj';
 
   @override
@@ -971,9 +994,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Věnec z květin';
 
   @override
-  String get accessoryDevilHornsName => 'Čertovské rohy';
-
-  @override
   String get onboardingLanguageQuestion => 'Jakým jazykem mluvíš?';
 
   @override
@@ -1033,4 +1053,44 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Přihlášení se nezdařilo. Zkontroluj údaje a zkus to znovu.';
+
+  @override
+  String get adsFreeCoins => 'Mince zdarma';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Sledovat video za +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Dnes zbývá $remaining z $total';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'To je pro dnešek vše';
+
+  @override
+  String get adsNotReady => 'Právě teď není video k dispozici';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins mincí!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'V kterém roce ses narodil(a)?';
+
+  @override
+  String get onboardingBirthYearHint => 'Rok';
+
+  @override
+  String get onboardingBirthYearWhy => 'Slouží jen k výběru vhodných reklam.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Zadej prosím platný rok';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Osobní údaje byly před odesláním skryty.';
 }

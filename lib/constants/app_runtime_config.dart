@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kDebugMode, TargetPlatform;
 
 /// Deployment-specific, non-secret runtime values.
 ///
@@ -43,6 +44,42 @@ class AppRuntimeConfig {
         'AI_PROXY_TOKEN',
         defaultValue: checkedInAiProxyToken,
       );
+
+  /// The model every AI call asks for.
+  ///
+  /// Not a 2.5 model: that family is closed to new API keys, and
+  /// `generateContent` answers a new key with a 404 pointing at a 3.x
+  /// replacement — while still listing the 2.5 models in `/v1beta/models`, so
+  /// the listing is no proof of access.
+  ///
+  /// Among what is left, 3.1 Flash Lite is the cheapest ($0.25/$1.50 per M
+  /// against $0.30/$2.50 for 3.5 Flash Lite) and, decisively, the only cheap
+  /// one that still accepts `thinkingBudget: 0` — 3.5 and 3.6 reject it with
+  /// a 400, which would break `AiGenerationConfig.structuredJson` and put
+  /// reasoning tokens back on the bill at the output rate.
+  ///
+  /// It scored 16/16 usable on `server/tools/eval` across the language
+  /// matrix, p50 1.57s. Cheaper models exist outside the Gemini family, but
+  /// they are text-only — foreclosing speaking practice — and slower to first
+  /// token, which every turn of a chat with the pet would feel.
+  ///
+  /// Switching is deliberately a build flag, not an edit:
+  ///
+  ///     flutter build apk --dart-define=AI_MODEL=deepseek/deepseek-v4-flash
+  ///
+  /// Whatever is set here must also appear in the proxy's `ALLOWED_MODELS`,
+  /// or the request comes back rejected — that list is what stops a leaked
+  /// proxy URL from being pointed at the most expensive model on offer.
+  ///
+  /// Unlike its neighbours this is a `const` field rather than a getter,
+  /// because `AiService` uses it as a default parameter value and Dart
+  /// requires those to be compile-time constants.
+  static const String checkedInAiModel = 'gemini-3.1-flash-lite';
+
+  static const String aiModel = String.fromEnvironment(
+    'AI_MODEL',
+    defaultValue: checkedInAiModel,
+  );
 
   // Keep strict backend-only behavior by default.
   static const bool allowClientAiFallback = false;
@@ -150,4 +187,85 @@ class AppRuntimeConfig {
         'SKIP_ONBOARDING',
         defaultValue: false,
       );
+
+  // ==================== ADS ====================
+  //
+  // See `lib/constants/ads.dart` for what ads are allowed to do and what they
+  // pay; this half is only about which AdMob inventory the build talks to.
+
+  /// AdMob unit ids for the current platform.
+  ///
+  /// The checked-in defaults are **Google's official test units**, and that is
+  /// deliberate rather than a placeholder left in by accident. A debug build
+  /// serving live inventory means developers generating impressions and
+  /// clicks on their own ads, which is what gets an AdMob account terminated.
+  /// Test units are the only safe thing to fail back to, so the live ids
+  /// arrive at build time and nowhere else:
+  ///
+  ///     flutter build appbundle \
+  ///       --dart-define=ADMOB_REWARDED_ANDROID=ca-app-pub-XXX/YYY \
+  ///       --dart-define=ADMOB_INTERSTITIAL_ANDROID=ca-app-pub-XXX/ZZZ
+  ///
+  /// Same reasoning as [aiProxyBaseUrl] above: a deployment's own identifiers
+  /// stay out of the repo, and one source tree can produce a test build and a
+  /// store build.
+  static const String testRewardedAndroid =
+      'ca-app-pub-3940256099942544/5224354917';
+  static const String testRewardedIos =
+      'ca-app-pub-3940256099942544/1712485313';
+  static const String testInterstitialAndroid =
+      'ca-app-pub-3940256099942544/1033173712';
+  static const String testInterstitialIos =
+      'ca-app-pub-3940256099942544/4411468910';
+
+  static const String _rewardedAndroid = String.fromEnvironment(
+    'ADMOB_REWARDED_ANDROID',
+    defaultValue: testRewardedAndroid,
+  );
+
+  static const String _rewardedIos = String.fromEnvironment(
+    'ADMOB_REWARDED_IOS',
+    defaultValue: testRewardedIos,
+  );
+
+  static const String _interstitialAndroid = String.fromEnvironment(
+    'ADMOB_INTERSTITIAL_ANDROID',
+    defaultValue: testInterstitialAndroid,
+  );
+
+  static const String _interstitialIos = String.fromEnvironment(
+    'ADMOB_INTERSTITIAL_IOS',
+    defaultValue: testInterstitialIos,
+  );
+
+  static String get rewardedAdUnitId =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? _rewardedIos
+          : _rewardedAndroid;
+
+  static String get interstitialAdUnitId =>
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? _interstitialIos
+          : _interstitialAndroid;
+
+  /// True while the build is still pointed at Google's test inventory.
+  ///
+  /// Read by `AdsService`, which complains about it on a release build — the
+  /// one case where the mistake is expensive and nobody is watching a debug
+  /// console.
+  static bool get usingTestAdUnits =>
+      rewardedAdUnitId == testRewardedAndroid ||
+      rewardedAdUnitId == testRewardedIos;
+
+  /// Whether ads are switched on at all.
+  ///
+  /// On everywhere by default, and turned off for the test suite by
+  /// `AdsService.debugOverride`. The define exists so a manual run can be
+  /// made ad-free while looking at something else:
+  ///
+  ///     flutter run --dart-define=ADS_ENABLED=false
+  static const bool adsEnabled = bool.fromEnvironment(
+    'ADS_ENABLED',
+    defaultValue: true,
+  );
 }

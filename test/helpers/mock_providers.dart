@@ -1,5 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/constants/bond.dart';
+import 'package:mojilearner_flutter/constants/gold.dart';
 import 'package:mojilearner_flutter/utils/bond_progress.dart';
 import 'package:mojilearner_flutter/providers/user_provider.dart';
 import 'package:mojilearner_flutter/providers/daily_reward_provider.dart';
@@ -19,7 +20,57 @@ import 'package:mojilearner_flutter/providers/calibration_provider.dart';
 /// when(() => mockUserProvider.coins).thenReturn(100);
 /// ```
 
-class MockUserProvider extends Mock implements UserProvider {}
+/// Coin awards are implemented rather than stubbed.
+///
+/// The review, quiz and scenario flows all pay out through
+/// [awardLearningGold], so leaving it to `when()` would make every test that
+/// merely grades a card fail on a missing stub for the economy — the same
+/// reason bond is implemented on [MockCharacterProvider]. It pays in full
+/// here: the taper and the source caps have their own tests
+/// (`test/unit/constants/gold_test.dart`), and screen tests should not have
+/// to know today's ledger to assert on a payout.
+///
+/// [awardedGold] records every call for tests that do care.
+class MockUserProvider extends Mock implements UserProvider {
+  /// Every coin award, in call order.
+  final List<({int raw, GoldSource source})> awardedGold = [];
+
+  @override
+  Future<GoldAward> awardLearningGold(int raw, GoldSource source) async {
+    awardedGold.add((raw: raw, source: source));
+    return GoldAward(paid: raw, raw: raw);
+  }
+
+  /// Coins awarded from [source] across the test so far.
+  int goldFrom(GoldSource source) => awardedGold
+      .where((a) => a.source == source)
+      .fold(0, (sum, a) => sum + a.raw);
+
+  /// Untapered coin grants, in call order.
+  ///
+  /// Implemented for the same reason [awardLearningGold] is, and kept
+  /// separate from it on purpose: this is the path a rewarded ad pays
+  /// through, and the two lists staying distinct is what lets a test assert
+  /// that ad coins never went near the learning ledger. See
+  /// `constants/ads.dart`.
+  final List<int> addedCoins = [];
+
+  @override
+  Future<void> addCoins(int amount) async => addedCoins.add(amount);
+
+  /// Today's pre-taper learning coins, derived from [awardedGold].
+  ///
+  /// Implemented rather than stubbed because the rewarded-ad offer is gated
+  /// on it: a screen test that merely renders the shop should not have to
+  /// stub the economy to say whether the player has studied today.
+  @override
+  int get learningGoldEarnedToday =>
+      awardedGold.fold(0, (sum, a) => sum + a.raw);
+
+  /// Membership. A plain field so a test can flip it without a stub.
+  @override
+  bool isPremium = false;
+}
 
 class MockDailyRewardProvider extends Mock implements DailyRewardProvider {}
 

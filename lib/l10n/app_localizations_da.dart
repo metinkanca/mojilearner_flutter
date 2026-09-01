@@ -668,6 +668,29 @@ class AppLocalizationsDa extends AppLocalizations {
   String get scenarioContinue => 'Fortsæt';
 
   @override
+  String get scenarioFinish => 'Afslut';
+
+  @override
+  String get scenarioFinishTitle => 'Afslut scenen?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Nogle mål er stadig åbne. Afslutter du nu, får du kun delvis belønning, og scenariet forbliver ufuldført, så du kan klare det ordentligt senere.';
+
+  @override
+  String get scenarioFinishConfirm => 'Afslut alligevel';
+
+  @override
+  String get scenarioFinishCancel => 'Bliv ved med at tale';
+
+  @override
+  String get scenarioPartialTitle => 'Scenen er slut';
+
+  @override
+  String get scenarioPartialNote =>
+      'Delvis belønning — klar alle mål for at få den fulde belønning.';
+
+  @override
   String get objCoffeeOrder => 'Bestil en drik';
 
   @override
@@ -973,9 +996,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Blomsterkrans';
 
   @override
-  String get accessoryDevilHornsName => 'Djævlehorn';
-
-  @override
   String get onboardingLanguageQuestion => 'Hvilket sprog taler du?';
 
   @override
@@ -1035,4 +1055,45 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Kunne ikke logge ind. Tjek dine oplysninger, og prøv igen.';
+
+  @override
+  String get adsFreeCoins => 'Gratis mønter';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Se en video for +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return '$remaining af $total tilbage i dag';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Det var alt for i dag';
+
+  @override
+  String get adsNotReady => 'Ingen video tilgængelig lige nu';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins mønter!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Hvilket år er du født?';
+
+  @override
+  String get onboardingBirthYearHint => 'År';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Det bruges kun til at vælge passende reklamer.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Indtast venligst et gyldigt år';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Personlige oplysninger blev skjult før afsendelse.';
 }

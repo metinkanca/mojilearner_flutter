@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../constants/gold.dart';
 import '../constants/theme.dart';
 import '../components/character_sprite.dart';
 import '../components/quiz_rewards_popup.dart';
+import '../providers/ads_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/quiz_provider.dart';
 import '../providers/character_provider.dart';
@@ -13,9 +15,10 @@ import '../providers/vocab_provider.dart';
 import '../providers/calibration_provider.dart';
 import '../utils/progression_utils.dart';
 import '../services/ai_guard.dart';
+import '../services/ai_prompt_spec.dart';
 import '../services/ai_service.dart';
 import '../utils/srs_quiz_builder.dart';
-import '../utils/quiz_briefing.dart';
+import '../utils/review_selection.dart';
 import '../utils/quiz_response_parser.dart';
 import '../utils/quiz_cache.dart';
 import '../utils/srs_scheduler.dart';
@@ -89,6 +92,16 @@ class _QuizScreenState extends State<QuizScreen> {
   /// the screen.
   bool _isGenerating = false;
 
+  /// Whether the review schedule actually had something due when this quiz
+  /// was sourced. Drives the coin payout, not the questions.
+  ///
+  /// Deliberately not "are these SRS questions": an AI set is briefed on the
+  /// due queue, and a cached set is fingerprinted on it, so both come back
+  /// unchanged for a learner whose queue is empty — and re-taking the same
+  /// cached quiz would otherwise pay full price every time. What the payout
+  /// should follow is whether the schedule had work for the player today.
+  bool _drawnFromDueQueue = false;
+
   @override
   void initState() {
     super.initState();
@@ -107,11 +120,15 @@ class _QuizScreenState extends State<QuizScreen> {
   /// 3. The stock set, for a learner who has met nothing yet.
   Future<void> _loadQuestions() async {
     final quizProvider = Provider.of<QuizProvider>(context, listen: false);
+    final vocab = Provider.of<VocabProvider>(context, listen: false);
+    final code =
+        Provider.of<LanguageProvider>(context, listen: false).targetLanguage?.code;
 
     // Show the locally-built quiz immediately so the screen is never empty
     // while the request is in flight.
     final local = _buildSrsQuestions();
     setState(() {
+      _drawnFromDueQueue = vocab.nextSession(languageCode: code).isNotEmpty;
       _srsQuestions = local;
       _isGenerating = true;
       _restoreProgress(quizProvider);
@@ -189,18 +206,23 @@ class _QuizScreenState extends State<QuizScreen> {
     if (!guard.allowed) return const [];
     AiGuard.recordRequest('quiz_screen');
 
-    final prompt = QuizBriefing.build(
-      targetLanguage: language.targetLanguage?.name ?? 'Spanish',
-      nativeLanguage: language.nativeLanguage.name,
-      level: level,
+    // Trimmed here, then rendered into a prompt by the server. This side
+    // picks which items are worth testing; `server/src/prompts.js` writes the
+    // brief and caps the lists again.
+    final briefed = ReviewSelection.select(
       troubleSpots: troubleSpots,
       dueItems: dueItems,
-      languageCode: code,
     );
 
     try {
       final response = await AiService.instance.generateText(
-        prompt: prompt,
+        spec: AiPromptSpec.quiz(
+          targetCode: code,
+          nativeCode: language.nativeLanguage.code,
+          level: level,
+          troubleSpots: briefed.trouble,
+          dueItems: briefed.due,
+        ),
         source: 'quiz_screen',
         // A fixed JSON schema gains nothing from the model reasoning first,
         // and that reasoning bills at the output rate.
@@ -214,10 +236,7 @@ class _QuizScreenState extends State<QuizScreen> {
       final questions = QuizResponseParser.parse(
         response,
         // Only ids the model was actually shown may reschedule an item.
-        allowedReviewItemIds: QuizBriefing.offeredIds(
-          troubleSpots: troubleSpots,
-          dueItems: dueItems,
-        ),
+        allowedReviewItemIds: briefed.offeredIds,
       );
 
       if (questions.isNotEmpty) {
@@ -286,6 +305,7 @@ class _QuizScreenState extends State<QuizScreen> {
       final quizProvider = Provider.of<QuizProvider>(context, listen: false);
       final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final adsProvider = Provider.of<AdsProvider>(context, listen: false);
 
       final reward = ProgressionUtils.getQuizRewardOutcome(
         correctAnswers: _score,
@@ -296,7 +316,14 @@ class _QuizScreenState extends State<QuizScreen> {
       // pre-quiz condition — a sick pet earns half.
       final wasSick = characterProvider.isSick;
       final grantedXp = characterProvider.scaleReward(reward.xpReward);
-      final grantedCoins = characterProvider.scaleReward(reward.coinReward);
+
+      // A quiz the spaced-repetition schedule did not ask for pays a
+      // fraction. The schedule already knows how much there is worth studying
+      // today; this lets it pace the coin economy too, instead of the
+      // player's patience for the same five questions. See `gold.dart`.
+      final rawCoins = _drawnFromDueQueue
+          ? reward.coinReward
+          : (reward.coinReward * GoldConstants.repeatQuizRate).round();
 
       characterProvider.applyQuizRewards(
         happinessDelta: reward.happinessDelta,
@@ -310,7 +337,11 @@ class _QuizScreenState extends State<QuizScreen> {
         totalQuestions: _questions.length,
       );
       await userProvider.addXp(grantedXp);
-      await userProvider.addCoins(grantedCoins);
+      final coinAward = await userProvider.awardLearningGold(
+        characterProvider.scaleReward(rawCoins),
+        GoldSource.quiz,
+      );
+      final grantedCoins = coinAward.paid;
 
       quizProvider.clearProgress();
 
@@ -333,6 +364,14 @@ class _QuizScreenState extends State<QuizScreen> {
           onContinue: () => Navigator.of(context, rootNavigator: true).pop(),
         ),
       );
+
+      // After the reward popup, never before it: the payoff for the work
+      // must not be the thing that gets interrupted. Does nothing when the
+      // hour cooldown has not elapsed, or the player holds a membership --
+      // the guard lives in AdsProvider so both completion screens ask the
+      // same question.
+      if (!mounted) return;
+      await adsProvider.maybeShowInterstitial();
 
       if (!mounted) return;
       context.go('/');

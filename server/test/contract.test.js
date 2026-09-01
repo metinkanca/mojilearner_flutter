@@ -53,6 +53,10 @@ async function serve(opts) {
   };
 }
 
+// Whatever the service defaults to. Named rather than repeated so changing
+// the default model is a one-line edit here, not a broken suite.
+const MODEL = 'gemini-3.1-flash-lite';
+
 const quietLogger = { info() {}, error() {} };
 
 test('generate returns the text field the client requires', async () => {
@@ -60,33 +64,43 @@ test('generate returns the text field the client requires', async () => {
   const s = await serve({ provider, logger: quietLogger });
   try {
     const res = await s.post('/v1/ai/generate', {
-      model: 'gemini-2.5-flash',
-      prompt: 'say hello in french',
+      model: MODEL,
+      mode: 'quiz',
+      params: { targetCode: 'fr', nativeCode: 'en', level: 'beginner' },
       source: 'quiz_screen',
     });
     assert.equal(res.status, 200);
     assert.equal(res.body.text, 'bonjour');
-    assert.equal(provider.calls[0].contents[0].parts[0].text, 'say hello in french');
+    // The prompt is this service's, not the caller's: the caller sent a mode
+    // and three values, and the text below was written by src/prompts.js.
+    const sent = provider.calls[0].history[0].text;
+    assert.match(sent, /Generate exactly 5 multiple-choice questions/);
+    assert.match(sent, /beginner learner of French/);
+    assert.match(sent, /The learner speaks English\./);
   } finally {
     await s.close();
   }
 });
 
-test('generate forwards generationConfig, mapping thinkingBudget', async () => {
+test('generate forwards the generation config in the neutral shape', async () => {
   const provider = stubProvider();
   const s = await serve({ provider, logger: quietLogger });
   try {
     await s.post('/v1/ai/generate', {
-      model: 'gemini-2.5-flash',
-      prompt: 'p',
+      model: MODEL,
+      mode: 'quiz', params: {},
       source: 'quiz_screen',
       // AiGenerationConfig.structuredJson, as the app sends it.
       generationConfig: { maxOutputTokens: 2048, temperature: 0.4, thinkingBudget: 0 },
     });
+    // Neutral, not Gemini-shaped: translating to a provider's wire format is
+    // the provider's job now, so that a second one can sit beside it. The
+    // Gemini mapping itself is covered by `toGeminiGenerationConfig` below and
+    // by the wire-body test in provider.test.js.
     assert.deepEqual(provider.calls[0].generationConfig, {
       maxOutputTokens: 2048,
       temperature: 0.4,
-      thinkingConfig: { thinkingBudget: 0 },
+      thinkingBudget: 0,
     });
   } finally {
     await s.close();
@@ -99,7 +113,7 @@ test('an empty model reply is 200, not an error', async () => {
   const s = await serve({ provider: stubProvider(''), logger: quietLogger });
   try {
     const res = await s.post('/v1/ai/generate', {
-      model: 'gemini-2.5-flash', prompt: 'p', source: 'quiz_screen',
+      model: MODEL, mode: 'quiz', params: {}, source: 'quiz_screen',
     });
     assert.equal(res.status, 200);
     assert.equal(res.body.text, '');
@@ -109,13 +123,14 @@ test('an empty model reply is 200, not an error', async () => {
 });
 
 test('chat start returns a sessionId and send continues the conversation', async () => {
-  const provider = stubProvider((req) => `turns:${req.contents.length}`);
+  const provider = stubProvider((req) => `turns:${req.history.length}`);
   const s = await serve({ provider, logger: quietLogger });
   try {
     const start = await s.post('/v1/ai/chat/start', {
-      model: 'gemini-2.5-flash',
+      model: MODEL,
       source: 'chat_screen',
-      systemInstruction: 'You are Moji.',
+      mode: 'pet',
+      params: { targetCode: 'ja' },
       history: [{ role: 'user', text: 'hi' }, { role: 'model', text: 'hello' }],
     });
     assert.equal(start.status, 200);
@@ -123,18 +138,20 @@ test('chat start returns a sessionId and send continues the conversation', async
     assert.ok(start.body.sessionId.length > 0);
 
     const first = await s.post('/v1/ai/chat/send', {
-      model: 'gemini-2.5-flash',
+      model: MODEL,
       source: 'chat_screen',
       sessionId: start.body.sessionId,
       message: 'how are you',
     });
     // Two seeded turns plus the new user message.
     assert.equal(first.body.text, 'turns:3');
-    assert.equal(provider.calls[0].systemInstruction, 'You are Moji.');
+    // Likewise the persona: the caller named the mode, this service wrote it.
+    assert.match(provider.calls[0].systemInstruction, /You are a friendly virtual pet/);
+    assert.match(provider.calls[0].systemInstruction, /The user is learning Japanese\./);
 
     // The reply is remembered, so the next turn carries five.
     const second = await s.post('/v1/ai/chat/send', {
-      model: 'gemini-2.5-flash',
+      model: MODEL,
       source: 'chat_screen',
       sessionId: start.body.sessionId,
       message: 'and again',
@@ -151,7 +168,7 @@ test('an unknown session is 410, distinct from an upstream failure', async () =>
   const s = await serve({ provider: stubProvider(), logger: quietLogger });
   try {
     const res = await s.post('/v1/ai/chat/send', {
-      model: 'gemini-2.5-flash', source: 'chat_screen',
+      model: MODEL, source: 'chat_screen',
       sessionId: 's_nope', message: 'hi',
     });
     assert.equal(res.status, 410);
@@ -172,24 +189,24 @@ test('a failed turn is rolled back so a retry does not double-send', async () =>
         e.upstreamStatus = 429;
         throw e;
       }
-      return `turns:${req.contents.length}`;
+      return `turns:${req.history.length}`;
     },
   };
   const s = await serve({ provider, logger: quietLogger });
   try {
     const start = await s.post('/v1/ai/chat/start', {
-      model: 'gemini-2.5-flash', source: 'chat_screen',
-      systemInstruction: '', history: [],
+      model: MODEL, source: 'chat_screen',
+      mode: 'pet', params: {}, history: [],
     });
     const bad = await s.post('/v1/ai/chat/send', {
-      model: 'gemini-2.5-flash', source: 'chat_screen',
+      model: MODEL, source: 'chat_screen',
       sessionId: start.body.sessionId, message: 'hi',
     });
     assert.equal(bad.status, 502, 'an upstream refusal is 502, not 500');
 
     fail = false;
     const good = await s.post('/v1/ai/chat/send', {
-      model: 'gemini-2.5-flash', source: 'chat_screen',
+      model: MODEL, source: 'chat_screen',
       sessionId: start.body.sessionId, message: 'hi',
     });
     // One user turn, not two: the failed attempt left nothing behind.
@@ -205,17 +222,17 @@ test('auth is enforced when a token is configured', async () => {
   });
   try {
     const anon = await s.post('/v1/ai/generate', {
-      model: 'gemini-2.5-flash', prompt: 'p', source: 'quiz_screen',
+      model: MODEL, mode: 'quiz', params: {}, source: 'quiz_screen',
     });
     assert.equal(anon.status, 401);
 
     const wrong = await s.post('/v1/ai/generate',
-      { model: 'gemini-2.5-flash', prompt: 'p', source: 'quiz_screen' },
+      { model: MODEL, mode: 'quiz', params: {}, source: 'quiz_screen' },
       { Authorization: 'Bearer nope' });
     assert.equal(wrong.status, 401);
 
     const ok = await s.post('/v1/ai/generate',
-      { model: 'gemini-2.5-flash', prompt: 'p', source: 'quiz_screen' },
+      { model: MODEL, mode: 'quiz', params: {}, source: 'quiz_screen' },
       { Authorization: 'Bearer secret' });
     assert.equal(ok.status, 200);
   } finally {
@@ -228,12 +245,12 @@ test('auth is enforced when a token is configured', async () => {
 test('a model outside the allow-list is refused', async () => {
   const s = await serve({
     provider: stubProvider(),
-    allowedModels: ['gemini-2.5-flash'],
+    allowedModels: [MODEL],
     logger: quietLogger,
   });
   try {
     const res = await s.post('/v1/ai/generate', {
-      model: 'gemini-3-ultra-expensive', prompt: 'p', source: 'quiz_screen',
+      model: 'gemini-3-ultra-expensive', mode: 'quiz', params: {}, source: 'quiz_screen',
     });
     assert.equal(res.status, 400);
     assert.equal(res.body.error, 'model_not_allowed');
@@ -242,7 +259,7 @@ test('a model outside the allow-list is refused', async () => {
   }
 });
 
-test('missing prompt, session or message are rejected before the provider', async () => {
+test('missing mode, session or message are rejected before the provider', async () => {
   const provider = stubProvider();
   const s = await serve({ provider, logger: quietLogger });
   try {
@@ -299,4 +316,56 @@ test('gemini helpers map the shapes the app sends', () => {
   );
   assert.equal(extractText({ candidates: [{ content: { parts: [{ text: ' hi ' }] } }] }), 'hi');
   assert.equal(extractText({}), '');
+});
+
+// Only a browser needs CORS, and a web build carries the proxy token in its
+// JS bundle — so the headers stay off unless an operator names the origins.
+test('no CORS headers are sent unless origins are configured', async () => {
+  const s = await serve({ provider: stubProvider(), logger: quietLogger });
+  try {
+    const res = await fetch(`${s.base}/healthz`, { headers: { origin: 'http://localhost:5000' } });
+    assert.equal(res.headers.get('access-control-allow-origin'), null);
+  } finally {
+    await s.close();
+  }
+});
+
+test('a configured origin gets a preflight and an allow header', async () => {
+  const s = await serve({
+    provider: stubProvider(),
+    corsOrigins: ['http://localhost:5000'],
+    logger: quietLogger,
+  });
+  try {
+    const pre = await fetch(`${s.base}/v1/ai/generate`, {
+      method: 'OPTIONS',
+      headers: {
+        origin: 'http://localhost:5000',
+        'access-control-request-method': 'POST',
+      },
+    });
+    assert.equal(pre.status, 204);
+    assert.equal(pre.headers.get('access-control-allow-origin'), 'http://localhost:5000');
+    assert.match(pre.headers.get('access-control-allow-headers'), /authorization/);
+  } finally {
+    await s.close();
+  }
+});
+
+test('an origin outside the list is refused at the preflight', async () => {
+  const s = await serve({
+    provider: stubProvider(),
+    corsOrigins: ['http://localhost:5000'],
+    logger: quietLogger,
+  });
+  try {
+    const pre = await fetch(`${s.base}/v1/ai/generate`, {
+      method: 'OPTIONS',
+      headers: { origin: 'http://evil.example', 'access-control-request-method': 'POST' },
+    });
+    assert.equal(pre.status, 403);
+    assert.equal(pre.headers.get('access-control-allow-origin'), null);
+  } finally {
+    await s.close();
+  }
 });

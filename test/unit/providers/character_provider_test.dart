@@ -122,8 +122,8 @@ void main() {
       final provider = CharacterProvider();
       await Future.delayed(const Duration(milliseconds: 100));
 
-      // Assert - Hunger should increase by 3 per hour (2 hours = 6)
-      expect(provider.hunger, equals(56));
+      // Assert - Hunger should increase by 2 per hour (2 hours = 4)
+      expect(provider.hunger, equals(54));
     });
 
     test('should decrease happiness over time (simulated)', () async {
@@ -213,8 +213,8 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 100));
 
       // Assert
-      // Hunger: 50 + (6 * 3) = 68
-      expect(provider.hunger, equals(68));
+      // Hunger: 50 + (6 * 2) = 62
+      expect(provider.hunger, equals(62));
       // Happiness: 70 - (6 * 2) = 58
       expect(provider.happiness, equals(58));
       // Health: 100 (no critical stats)

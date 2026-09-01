@@ -2,6 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- AdMob app id. REPLACE BEFORE RELEASE, alongside the Android one in
+         android/app/src/main/AndroidManifest.xml. This is Google's public
+         *test* app id; see that file for why a test id is the checked-in
+         default. -->
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-3940256099942544~1458002511</string>
+    <!-- Shown in the App Tracking Transparency prompt. The prompt itself is
+         not requested yet - see README. Without it iOS ads stay
+         non-personalised, which works but earns less. -->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>This lets us show ads that are more relevant to you. Mimikin works exactly the same either way.</string>
+    <!-- SKAdNetwork attribution. Only Google's own identifier is listed;
+         paste the full current list from
+         https://developers.google.com/admob/ios/quick-start
+         before release, or mediated networks cannot attribute installs. -->
+    <key>SKAdNetworkItems</key>
+    <array>
+        <dict>
+            <key>SKAdNetworkIdentifier</key>
+            <string>cstr6suwn9.skadnetwork</string>
+        </dict>
+    </array>
     <key>CFBundleName</key>
     <string>Mimikin</string>
     <key>CFBundleDisplayName</key>

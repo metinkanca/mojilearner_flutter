@@ -654,6 +654,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scenarioContinue => '继续';
 
   @override
+  String get scenarioFinish => '结束';
+
+  @override
+  String get scenarioFinishTitle => '结束这场对话？';
+
+  @override
+  String get scenarioFinishBody =>
+      '还有目标没有完成。现在结束只能获得部分奖励，情景也不算通关，你之后可以好好地再挑战一次。';
+
+  @override
+  String get scenarioFinishConfirm => '仍然结束';
+
+  @override
+  String get scenarioFinishCancel => '继续聊';
+
+  @override
+  String get scenarioPartialTitle => '情景结束';
+
+  @override
+  String get scenarioPartialNote => '部分奖励 —— 完成所有目标可获得全额奖励。';
+
+  @override
   String get objCoffeeOrder => '点一杯饮料';
 
   @override
@@ -951,9 +973,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accessoryFlowerCrownName => '花冠';
 
   @override
-  String get accessoryDevilHornsName => '恶魔角';
-
-  @override
   String get onboardingLanguageQuestion => '你说什么语言？';
 
   @override
@@ -1011,4 +1030,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountErrorSignIn => '登录失败。请检查信息后重试。';
+
+  @override
+  String get adsFreeCoins => '免费金币';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return '观看视频获得 +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return '今日剩余 $remaining/$total';
+  }
+
+  @override
+  String get adsNoneLeftToday => '今天就到这里';
+
+  @override
+  String get adsNotReady => '暂时没有可看的视频';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins 金币！';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => '你出生于哪一年？';
+
+  @override
+  String get onboardingBirthYearHint => '年份';
+
+  @override
+  String get onboardingBirthYearWhy => '这只用于选择适合你的广告。';
+
+  @override
+  String get onboardingBirthYearInvalid => '请输入有效的年份';
+
+  @override
+  String get privacyRedactedNotice => '个人信息已在发送前隐藏。';
 }

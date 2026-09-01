@@ -13,7 +13,10 @@ import 'package:mojilearner_flutter/providers/settings_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
 import 'package:mojilearner_flutter/providers/scenario_provider.dart';
 import 'package:mojilearner_flutter/providers/calibration_provider.dart';
+import 'package:mojilearner_flutter/providers/ads_provider.dart';
+import 'package:mojilearner_flutter/services/ads_service.dart';
 import 'package:mojilearner_flutter/l10n/app_localizations.dart';
+import 'fake_ads.dart';
 import 'mock_providers.dart';
 
 /// The surface every layout test gets unless it asks for something else.
@@ -48,6 +51,11 @@ Future<void> pumpApp(
   VocabProvider? vocabProvider,
   ScenarioProvider? scenarioProvider,
   CalibrationProvider? calibrationProvider,
+  AdsProvider? adsProvider,
+  /// Stands in for AdMob. Defaults to one that reports nothing loaded, so a
+  /// screen carrying the free-coins offer simply does not show it and the
+  /// post-quiz interstitial hook is a no-op. Tests about ads pass their own.
+  FakeAdsService? adsService,
   /// Pins the app locale, for layouts that need checking against the
   /// longest translation rather than English. Null keeps the default.
   Locale? locale,
@@ -57,6 +65,13 @@ Future<void> pumpApp(
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
+
+  // Restored rather than cleared, so a test that installed its own fake
+  // before pumping keeps it, and nothing leaks into the next test.
+  final previousAdsService = AdsService.debugOverride;
+  AdsService.debugOverride =
+      adsService ?? previousAdsService ?? FakeAdsService();
+  addTearDown(() => AdsService.debugOverride = previousAdsService);
 
   await tester.pumpWidget(
     MultiProvider(
@@ -97,6 +112,15 @@ Future<void> pumpApp(
         ),
         ChangeNotifierProvider<CalibrationProvider>.value(
           value: calibrationProvider ?? MockCalibrationProvider(),
+        ),
+        // Proxied off UserProvider exactly as `main.dart` does. The rewarded
+        // offer is gated on whether anything has been learned today, and
+        // that fact lives on the user — a plain .value provider here would
+        // leave every screen test looking at a player who never studies.
+        ChangeNotifierProxyProvider<UserProvider, AdsProvider>(
+          create: (_) => adsProvider ?? AdsProvider(),
+          update: (_, user, ads) =>
+              (ads ?? adsProvider ?? AdsProvider())..updateFromUser(user),
         ),
       ],
       child: MaterialApp(
@@ -136,12 +160,24 @@ Future<void> pumpAppWithRouter(
   VocabProvider? vocabProvider,
   ScenarioProvider? scenarioProvider,
   CalibrationProvider? calibrationProvider,
+  AdsProvider? adsProvider,
+  /// Stands in for AdMob. Defaults to one that reports nothing loaded, so a
+  /// screen carrying the free-coins offer simply does not show it and the
+  /// post-quiz interstitial hook is a no-op. Tests about ads pass their own.
+  FakeAdsService? adsService,
   /// The test surface to lay out on. Defaults to a handset — see
   /// [kHandsetSurface].
   Size surfaceSize = kHandsetSurface,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
+
+  // Restored rather than cleared, so a test that installed its own fake
+  // before pumping keeps it, and nothing leaks into the next test.
+  final previousAdsService = AdsService.debugOverride;
+  AdsService.debugOverride =
+      adsService ?? previousAdsService ?? FakeAdsService();
+  addTearDown(() => AdsService.debugOverride = previousAdsService);
 
   await tester.pumpWidget(
     MultiProvider(
@@ -182,6 +218,15 @@ Future<void> pumpAppWithRouter(
         ),
         ChangeNotifierProvider<CalibrationProvider>.value(
           value: calibrationProvider ?? MockCalibrationProvider(),
+        ),
+        // Proxied off UserProvider exactly as `main.dart` does. The rewarded
+        // offer is gated on whether anything has been learned today, and
+        // that fact lives on the user — a plain .value provider here would
+        // leave every screen test looking at a player who never studies.
+        ChangeNotifierProxyProvider<UserProvider, AdsProvider>(
+          create: (_) => adsProvider ?? AdsProvider(),
+          update: (_, user, ads) =>
+              (ads ?? adsProvider ?? AdsProvider())..updateFromUser(user),
         ),
       ],
       child: MaterialApp.router(

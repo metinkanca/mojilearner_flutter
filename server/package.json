@@ -4,12 +4,20 @@
   "private": true,
   "description": "Keeps the Gemini API key off the phone. Implements the three endpoints lib/services/ai_service.dart calls.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "node --test"
+    "test": "node --test",
+    "eval": "node tools/eval/run.mjs",
+    "eval:mock": "node tools/eval/run.mjs --mock",
+    "eval:idioms": "node tools/eval/run.mjs --cases cases-idioms.json",
+    "eval:idiomkb": "node tools/eval/idiomkb.mjs",
+    "eval:rescore": "node tools/eval/rescore.mjs",
+    "eval:prices": "node tools/eval/prices.mjs"
   },
   "dependencies": {
     "express": "^4.21.2"

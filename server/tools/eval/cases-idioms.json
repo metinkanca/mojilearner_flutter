@@ -1,0 +1,322 @@
+[
+  {
+    "id": "idiom-ja-en-ashimoto",
+    "idiom": "足元を見る",
+    "source": "IdiomKB ja#14",
+    "idiomkb": "To be cautious, mindful of one's surroundings.",
+    "verified": "To take advantage of someone's weak position — classically, a seller overcharging a buyer who has no choice.",
+    "agreesWithIdiomKB": false,
+    "note": "IdiomKB reads this one off the words: 'look at the feet' becomes 'watch your step'. The real sense is exploitation. A model that agrees with IdiomKB here has made the same mistake, not a different one.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "I saw 足元を見る in a drama and the subtitles didn't really explain it. What does it mean?",
+    "expect": {
+      "anyOf": [["take advantage", "takes advantage", "taking advantage", "took advantage", "exploit", "weak position", "weakness", "weak point", "vulnerab", "desperat", "upper hand", "overcharg", "rip off", "ripping off", "leverage"]],
+      "notLiteralOnly": ["cautious", "careful", "mindful", "watch your step", "surroundings", "look at the feet", "looking at feet", "someone's feet"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-saba",
+    "idiom": "鯖を読む",
+    "source": "IdiomKB ja#36",
+    "idiomkb": "To read the room. To understand the situation and act accordingly.",
+    "verified": "To fudge a count in your favour — most often to shave years off your age.",
+    "agreesWithIdiomKB": false,
+    "note": "IdiomKB has confused this with 空気を読む. The verb 読む is the only thing the two share.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "A friend said someone was 鯖を読んでる. What does 鯖を読む mean?",
+    "expect": {
+      "anyOf": [["fudge", "miscount", "understate", "lie about", "lying about", "lies about", "exaggerat", "cheat", "falsif", "manipulat", "younger than", "fewer than", "misrepresent", "fib", "age", "inflate", "inaccurate count"]],
+      "notLiteralOnly": ["read the room", "atmosphere", "situation and act", "mackerel", "counting fish"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-ippai",
+    "idiom": "一杯食う",
+    "source": "IdiomKB ja#30",
+    "idiomkb": "To eat a lot",
+    "verified": "To be taken in — to fall for a trick.",
+    "agreesWithIdiomKB": false,
+    "note": "The purest literal trap in the set: 一杯 (one cupful) plus 食う (eat) reads as 'eat a lot' and means nothing of the kind. IdiomKB fell for it exactly.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "I read 一杯食わされた in a story. What does 一杯食う mean?",
+    "expect": {
+      "anyOf": [["trick", "deceiv", "duped", "dupe", "fooled", "fool", "taken in", "conned", "swindl", "scam", "cheated", "pulled a fast one"]],
+      "notLiteralOnly": ["eat a lot", "eating a lot", "large meal", "big meal", "full meal", "drink a lot", "one bowl", "a bowlful", "cupful"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-nasake",
+    "idiom": "情けは人の為ならず",
+    "source": "IdiomKB ja#235",
+    "idiomkb": "Compassion is not always beneficial to others. Sometimes, being too kind or lenient can have negative consequences.",
+    "verified": "Kindness you show others comes back to you — it is not only for their sake.",
+    "agreesWithIdiomKB": false,
+    "note": "The most famous misreading in Japanese: ならず is classical 'is not', not 'does not become'. Native speakers get this wrong too, so the wrong answer is well represented in training data. IdiomKB's own ja_meaning field states the correct sense while its en_meaning states the misreading — the dataset contradicts itself inside one row.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "Can you explain the proverb 情けは人の為ならず?",
+    "expect": {
+      "anyOf": [["comes back", "come back", "comes around", "returns to you", "return to you", "your own good", "own benefit", "benefit you", "benefits you", "help yourself", "yourself in the end", "eventually", "rewarded", "reward", "karma", "full circle"]],
+      "notLiteralOnly": ["spoil", "not always beneficial", "too kind", "does not help them", "makes them weak", "dependent", "harms them", "not for their sake"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-kubi",
+    "idiom": "首が回らない",
+    "source": "IdiomKB ja#247",
+    "idiomkb": "Lack of flexibility. Unable to adapt or react quickly.",
+    "verified": "To be so deep in debt that you cannot move — up to your neck in it.",
+    "agreesWithIdiomKB": false,
+    "note": "'The neck will not turn' reads as stiffness, and IdiomKB glossed the stiffness. The idiom is exclusively about debt.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 首が回らない mean?",
+    "expect": {
+      "anyOf": [["debt", "owe", "owing", "creditor", "bills", "repay", "loan", "financ", "money troubles", "borrowed"]],
+      "notLiteralOnly": ["flexib", "adapt", "react quickly", "rigid", "stiff", "turn your neck", "neck will not turn", "neck won't turn"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-abura",
+    "idiom": "油を売る",
+    "source": "IdiomKB ja#62",
+    "idiomkb": "to talk someone into buying something unnecessary or to deceive someone",
+    "verified": "To idle away time chatting when you are supposed to be working.",
+    "agreesWithIdiomKB": false,
+    "note": "'Selling oil' sounds like a sales idiom, and IdiomKB made it one. It comes from Edo-period oil sellers chatting while the thick oil poured, and means slacking off.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "My teacher said 油を売るな to someone. What does 油を売る mean?",
+    "expect": {
+      "anyOf": [["idle", "idling", "loaf", "waste time", "wasting time", "wasted time", "slack", "goof", "dawdl", "chatting instead", "killing time", "kill time", "avoid work", "avoiding work", "away from work", "not doing your work", "lingering", "dilly"]],
+      "notLiteralOnly": ["talk someone into", "persuade", "deceiv", "unnecessary purchase", "sell oil", "selling oil", "sells oil"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-neko",
+    "idiom": "猫を被る",
+    "source": "IdiomKB ja#48",
+    "idiomkb": "To act innocent or pretend to be someone else in order to deceive others",
+    "verified": "To put on a demure, innocent act that hides your real character.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case: IdiomKB has this one right. A model that misses here has broken idiom handling generally, rather than being trapped by a particular literal reading.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 猫を被る mean?",
+    "expect": {
+      "anyOf": [["pretend", "feign", "innocen", "facade", "true nature", "true self", "true personality", "demure", "put on an act", "putting on an act", "hide", "hiding", "mask", "well-behaved"]],
+      "notLiteralOnly": ["wear a cat", "wearing a cat", "cat on your head", "covered by a cat", "put a cat on"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-asameshi",
+    "idiom": "朝飯前",
+    "source": "IdiomKB ja#153",
+    "idiomkb": "Something is very easy. It's a piece of cake.",
+    "verified": "Trivially easy — easy enough to finish before breakfast.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case whose literal reading is genuinely part of a good answer. Checks that notLiteralOnly does not punish a model for explaining where the idiom comes from.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "Someone answered 朝飯前だよ when I asked for help with something. What does 朝飯前 mean?",
+    "expect": {
+      "anyOf": [["easy", "easi", "piece of cake", "simple", "effortless", "no trouble", "breeze", "trivial", "child's play", "cinch", "nothing to it", "no problem at all"]],
+      "notLiteralOnly": ["before breakfast", "morning meal", "before eating"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-nekonote",
+    "idiom": "猫の手も借りたい",
+    "source": "IdiomKB ja#180",
+    "idiomkb": "willing to accept any help one can get; overwhelmed with work",
+    "verified": "So busy you would take help from anyone — even a cat, which is famously no help at all.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case. The joke only lands if the model conveys that a cat's help would be useless, but the gate only asks for the busyness.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 猫の手も借りたい mean?",
+    "expect": {
+      "anyOf": [["busy", "swamped", "overwhelm", "short-handed", "shorthanded", "any help", "every bit of help", "desperate for help", "need help", "all the help", "run off your feet", "hectic"]],
+      "notLiteralOnly": ["cat's paw", "borrow a cat", "cat paw", "paws", "cats help"]
+    }
+  },
+  {
+    "id": "idiom-ja-en-hara",
+    "idiom": "腹を割る",
+    "source": "IdiomKB ja#55",
+    "idiomkb": "To speak honestly and openly, to share one's true thoughts and feelings.",
+    "verified": "To open up and speak frankly, holding nothing back.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case with a violent literal image ('split the belly'), which a weak model may translate straight.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 腹を割って話す mean?",
+    "expect": {
+      "anyOf": [["frank", "honest", "openly", "open up", "opening up", "heart-to-heart", "candid", "true feelings", "real feelings", "without holding back", "hold back", "sincer", "straight with", "no secrets"]],
+      "notLiteralOnly": ["split the belly", "cut open", "stomach", "belly", "abdomen"]
+    }
+  },
+  {
+    "id": "idiom-zh-en-huashe",
+    "idiom": "画蛇添足",
+    "source": "IdiomKB zh (画蛇添足)",
+    "idiomkb": "to overdo it or ruin something by unnecessary addition",
+    "verified": "To ruin something by adding what was not needed; to gild the lily.",
+    "agreesWithIdiomKB": true,
+    "note": "Chengyu carry a story, and a model that retells the story without landing the moral has taught nothing usable.",
+    "targetLang": "Mandarin Chinese", "targetCode": "zh",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 画蛇添足 mean and when would I use it?",
+    "expect": {
+      "anyOf": [["unnecessary", "superfluous", "overdo", "overdid", "overdoing", "gild", "went too far", "go too far", "ruin", "spoil", "redundant", "uncalled for", "too much", "not needed", "worse by adding"]],
+      "notLiteralOnly": ["snake", "feet to a", "drawing contest", "add feet"]
+    }
+  },
+  {
+    "id": "idiom-zh-en-duiniu",
+    "idiom": "对牛弹琴",
+    "source": "IdiomKB zh (对牛弹琴)",
+    "idiomkb": "to speak words of wisdom to those who are unable to understand or appreciate them",
+    "verified": "To address an audience incapable of appreciating what you are saying; casting pearls before swine.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case. Also worth a blind read for whether the model warns that this is rude about the listener.",
+    "targetLang": "Mandarin Chinese", "targetCode": "zh",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "A colleague used 对牛弹琴 in a meeting. What does it mean?",
+    "expect": {
+      "anyOf": [["wasted on", "doesn't understand", "does not understand", "cannot understand", "can't understand", "won't understand", "pearls before swine", "deaf ears", "uninterested", "unappreciat", "cannot appreciate", "no point explaining", "pointless to explain", "over their head", "wrong audience", "incapable of understanding"]],
+      "notLiteralOnly": ["cow", "ox", "cattle", "zither", "lute", "guqin", "playing music to"]
+    }
+  },
+  {
+    "id": "idiom-zh-en-shouzhu",
+    "idiom": "守株待兔",
+    "source": "IdiomKB zh (守株待兔)",
+    "idiomkb": "waiting idly for opportunities to come without taking any proactive action",
+    "verified": "To sit waiting for a fluke to repeat itself instead of working for a result.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case. 'Waiting' is deliberately absent from the accepted terms because the literal fable is also about waiting — accepting it would let a bare retelling pass as an explanation.",
+    "targetLang": "Mandarin Chinese", "targetCode": "zh",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 守株待兔 mean?",
+    "expect": {
+      "anyOf": [["passiv", "without effort", "no effort", "windfall", "idly", "idle", "do nothing", "doing nothing", "fluke", "stroke of luck", "rely on luck", "relying on luck", "lazy", "same luck", "without trying", "hoping it happens again"]],
+      "notLiteralOnly": ["tree stump", "rabbit", "hare", "farmer"]
+    }
+  },
+  {
+    "id": "idiom-zh-en-saiweng",
+    "idiom": "塞翁失马",
+    "source": "IdiomKB zh (塞翁失马)",
+    "idiomkb": "misfortune may be a blessing in disguise",
+    "verified": "A setback may turn out to be good fortune; you cannot tell yet.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case. The full form 塞翁失马，焉知非福 is what makes it usable, so a good answer should reach for it.",
+    "targetLang": "Mandarin Chinese", "targetCode": "zh",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "My friend said 塞翁失马 when I told her I lost my job. What does that mean?",
+    "expect": {
+      "anyOf": [["blessing in disguise", "silver lining", "turn out", "turns out", "turned out", "something good", "a gain", "misfortune", "bad luck", "good may come", "good can come", "never know", "for the better", "too early to tell"]],
+      "notLiteralOnly": ["old man", "horse", "frontier", "border"]
+    }
+  },
+  {
+    "id": "idiom-zh-en-mamahuhu",
+    "idiom": "马马虎虎",
+    "source": "IdiomKB zh (马马虎虎)",
+    "idiomkb": "doing something in a careless and sloppy manner, without paying enough attention to details",
+    "verified": "So-so, or done carelessly — depending on whether it describes a state or an effort.",
+    "agreesWithIdiomKB": true,
+    "note": "Control case, and the one beginners actually meet first. Two senses; either is accepted.",
+    "targetLang": "Mandarin Chinese", "targetCode": "zh",
+    "nativeLang": "English", "nativeCode": "en",
+    "user": "What does 马马虎虎 mean? I hear it all the time.",
+    "expect": {
+      "anyOf": [["so-so", "so so", "careless", "sloppy", "mediocre", "not great", "just okay", "just ok", "average", "half-hearted", "without much care", "passable", "not very well", "haphazard", "all right", "alright"]],
+      "notLiteralOnly": ["horse", "tiger"]
+    }
+  },
+  {
+    "id": "idiom-en-es-beans",
+    "idiom": "spill the beans",
+    "source": "IdiomKB en (spill the beans)",
+    "idiomkb": "to reveal or disclose secret or confidential information",
+    "verified": "To give away a secret.",
+    "agreesWithIdiomKB": true,
+    "note": "English as the target rather than as the language of the answer. The meaning has to land in Spanish, which is where a model pattern-matching its way through idioms tends to switch back to English.",
+    "targetLang": "English", "targetCode": "en",
+    "nativeLang": "Spanish", "nativeCode": "es",
+    "user": "¿Qué significa 'spill the beans'? Lo escuché en una serie.",
+    "expect": {
+      "anyOf": [["revelar", "revela", "secreto", "contar", "divulgar", "confesar", "desvelar", "soltar", "filtrar", "chismear", "irse de la lengua"]],
+      "notLiteralOnly": ["frijol", "judías", "habas", "alubias", "derramar los", "verter"]
+    }
+  },
+  {
+    "id": "idiom-en-es-weather",
+    "idiom": "under the weather",
+    "source": "IdiomKB en (under the weather)",
+    "idiomkb": "feeling sick or unwell",
+    "verified": "Feeling slightly ill.",
+    "agreesWithIdiomKB": true,
+    "note": "An idiom whose words point at an entirely different topic. A model working from the words explains the weather.",
+    "targetLang": "English", "targetCode": "en",
+    "nativeLang": "Spanish", "nativeCode": "es",
+    "user": "Mi jefe me escribió 'I'm feeling under the weather today'. ¿Qué quiere decir?",
+    "expect": {
+      "anyOf": [["enferm", "indispuesto", "resfriad", "se siente mal", "sentirse mal", "sentirte mal", "siento mal", "malestar", "pachucho", "mala salud", "achacoso", "no estar bien", "no se encuentra bien", "no se siente bien", "no te sientes bien", "no me siento bien", "no se siente muy bien"]],
+      "notLiteralOnly": ["clima", "tiempo atmosférico", "lluvia", "meteorolog", "bajo el tiempo"]
+    }
+  },
+  {
+    "id": "idiom-en-es-bucket",
+    "idiom": "kick the bucket",
+    "source": "IdiomKB en (kick the bucket)",
+    "idiomkb": "to die",
+    "verified": "To die — jocular, and disrespectful about the person who died.",
+    "agreesWithIdiomKB": true,
+    "note": "The app serves under-13s, so this case is also worth a blind read for how each model handles a death idiom for a young learner. That part is not gated.",
+    "targetLang": "English", "targetCode": "en",
+    "nativeLang": "Spanish", "nativeCode": "es",
+    "user": "¿Qué significa 'kick the bucket' en inglés?",
+    "expect": {
+      "anyOf": [["morir", "muere", "murió", "fallec", "muerte", "estirar la pata", "palmarla", "difunto"]],
+      "notLiteralOnly": ["cubo", "balde", "cubeta", "patear", "dar una patada"]
+    }
+  },
+  {
+    "id": "idiom-ja-zh-yakeishi",
+    "idiom": "焼け石に水",
+    "source": "IdiomKB ja#1",
+    "idiomkb": "A drop in the bucket. (zh_meaning: 杯水车薪)",
+    "verified": "A gesture far too small to help — a drop in the bucket.",
+    "agreesWithIdiomKB": true,
+    "note": "Chinese speaker learning Japanese: a real cell in a 27-locale app, and the pairing IdiomKB was built for. Chinese has an exact equivalent (杯水车薪), so a good answer reaches for it instead of paraphrasing.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "Chinese", "nativeCode": "zh",
+    "user": "「焼け石に水」是什么意思？",
+    "expect": {
+      "anyOf": [["杯水车薪", "于事无补", "无济于事", "作用不大", "没有效果", "徒劳", "不起作用", "远远不够", "收效甚微", "杯水車薪", "無濟於事"]],
+      "notLiteralOnly": ["烧热的石头", "热石头", "烧石子", "石子", "浇水", "石头上", "燒熱", "石頭"]
+    }
+  },
+  {
+    "id": "idiom-ja-zh-mikka",
+    "idiom": "三日坊主",
+    "source": "IdiomKB ja#215",
+    "idiomkb": "Someone who starts something but quickly loses interest or gives up. (zh_meaning: 三天打鱼两天晒网)",
+    "verified": "Someone who gives up on things almost immediately.",
+    "agreesWithIdiomKB": true,
+    "note": "Chinese native again. 三分钟热度 is the natural answer, and the explanation must be in Chinese rather than English.",
+    "targetLang": "Japanese", "targetCode": "ja",
+    "nativeLang": "Chinese", "nativeCode": "zh",
+    "user": "朋友说我是「三日坊主」，这是什么意思？",
+    "expect": {
+      "anyOf": [["三分钟热度", "三天打鱼", "半途而废", "坚持不了", "不能长久", "长久坚持", "不能坚持", "无法坚持", "持续不了", "很快放弃", "很快就放弃", "不能持久", "没有恒心", "持之以恒", "很快就厌倦", "轻易放弃", "三分鐘熱度", "半途而廢", "堅持不了", "不能長久"]],
+      "notLiteralOnly": ["和尚", "僧侣", "三天的和尚", "当三天", "僧侶"]
+    }
+  }
+]

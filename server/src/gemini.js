@@ -50,6 +50,31 @@ export function extractText(payload) {
   return parts.map((p) => (typeof p?.text === 'string' ? p.text : '')).join('').trim();
 }
 
+/**
+ * Pulls token counts out of a response, or null when the field is absent.
+ *
+ * Two details decide whether the number that reaches the budget ledger is the
+ * number that reaches the bill:
+ *
+ * - `thoughtsTokenCount` is reasoning, and it is billed at the *output* rate.
+ *   Counting only `candidatesTokenCount` would under-report every call made
+ *   without `thinkingBudget: 0` — which, before the clamp in app.js, was every
+ *   chat turn the app makes.
+ * - `cachedContentTokenCount` is a subset of `promptTokenCount`, not an
+ *   addition to it, and bills at roughly a tenth of the rate. It is reported
+ *   separately so `costOf` can discount it rather than double-count it.
+ */
+export function extractUsage(payload) {
+  const meta = payload?.usageMetadata;
+  if (!meta) return null;
+  const n = (v) => (Number.isFinite(v) ? v : 0);
+  return {
+    inputTokens: n(meta.promptTokenCount),
+    outputTokens: n(meta.candidatesTokenCount) + n(meta.thoughtsTokenCount),
+    cachedInputTokens: n(meta.cachedContentTokenCount),
+  };
+}
+
 export class GeminiProvider {
   constructor({ apiKey, fetchImpl = fetch, timeoutMs = 25_000 }) {
     if (!apiKey) throw new Error('GEMINI_API_KEY is required');
@@ -61,15 +86,23 @@ export class GeminiProvider {
   }
 
   /**
-   * @param {{model: string, contents: Array, systemInstruction?: string, generationConfig?: object}} req
-   * @returns {Promise<string>} reply text, possibly empty
+   * @param {{model: string, history: Array<{role: string, text: string}>,
+   *   systemInstruction?: string, generationConfig?: object}} req
+   *   `history` and `generationConfig` are in the app's own neutral shape;
+   *   translating them to this provider's wire format is this class's job, not
+   *   the caller's. That is what lets a second provider sit beside this one
+   *   without either format becoming the protocol.
+   * @returns {Promise<{text: string, usage: object|null}>} reply text (possibly
+   *   empty) and the token counts to bill it against. Callers normalise a bare
+   *   string too, so a stub provider in a test need not return usage.
    */
-  async generate({ model, contents, systemInstruction, generationConfig }) {
-    const body = { contents };
+  async generate({ model, history, systemInstruction, generationConfig }) {
+    const body = { contents: toGeminiContents(history ?? []) };
     if (systemInstruction) {
       body.systemInstruction = { parts: [{ text: systemInstruction }] };
     }
-    if (generationConfig) body.generationConfig = generationConfig;
+    const cfg = toGeminiGenerationConfig(generationConfig);
+    if (cfg) body.generationConfig = cfg;
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.timeoutMs);
@@ -95,7 +128,11 @@ export class GeminiProvider {
         throw err;
       }
 
-      return extractText(await res.json());
+      const payload = await res.json();
+      // The id that actually answered, so the spend ledger prices what was
+      // served rather than what was asked for. They differ whenever a
+      // FallbackProvider rewrites the model on its way through.
+      return { text: extractText(payload), usage: extractUsage(payload), model };
     } finally {
       clearTimeout(timer);
     }

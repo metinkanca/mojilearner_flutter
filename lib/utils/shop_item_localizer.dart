@@ -58,8 +58,6 @@ class ShopItemLocalizer {
         return l10n.accessoryWizardHatName;
       case 'flowercrown':
         return l10n.accessoryFlowerCrownName;
-      case 'devilhorns':
-        return l10n.accessoryDevilHornsName;
       default:
         return item.name;
     }

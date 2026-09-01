@@ -671,6 +671,29 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scenarioContinue => 'Tiếp tục';
 
   @override
+  String get scenarioFinish => 'Kết thúc';
+
+  @override
+  String get scenarioFinishTitle => 'Kết thúc cảnh này?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Vẫn còn mục tiêu chưa hoàn thành. Kết thúc bây giờ chỉ nhận được một phần phần thưởng, và tình huống vẫn chưa hoàn tất để bạn chinh phục trọn vẹn sau này.';
+
+  @override
+  String get scenarioFinishConfirm => 'Vẫn kết thúc';
+
+  @override
+  String get scenarioFinishCancel => 'Tiếp tục trò chuyện';
+
+  @override
+  String get scenarioPartialTitle => 'Cảnh đã kết thúc';
+
+  @override
+  String get scenarioPartialNote =>
+      'Phần thưởng một phần — hoàn thành mọi mục tiêu để nhận đầy đủ.';
+
+  @override
   String get objCoffeeOrder => 'Gọi một đồ uống';
 
   @override
@@ -974,9 +997,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Vòng hoa';
 
   @override
-  String get accessoryDevilHornsName => 'Sừng quỷ';
-
-  @override
   String get onboardingLanguageQuestion => 'Bạn nói ngôn ngữ nào?';
 
   @override
@@ -1035,4 +1055,45 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Không đăng nhập được. Kiểm tra thông tin và thử lại.';
+
+  @override
+  String get adsFreeCoins => 'Xu miễn phí';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Xem video để nhận +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Còn $remaining/$total hôm nay';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Hôm nay hết rồi';
+
+  @override
+  String get adsNotReady => 'Hiện chưa có video';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins xu!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Bạn sinh năm nào?';
+
+  @override
+  String get onboardingBirthYearHint => 'Năm';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Điều này chỉ dùng để chọn quảng cáo phù hợp với bạn.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Vui lòng nhập năm hợp lệ';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Thông tin cá nhân đã được ẩn trước khi gửi.';
 }

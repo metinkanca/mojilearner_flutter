@@ -68,7 +68,7 @@ class QuizCache {
   /// Summarises the learner state a quiz was generated for.
   ///
   /// Deliberately built from the *ids* offered to the model plus the level,
-  /// because those are exactly the inputs [QuizBriefing] uses. Grading an
+  /// because those are exactly the inputs the quiz prompt uses. Grading an
   /// item changes which items are due, which changes this, which correctly
   /// invalidates the cache.
   static String fingerprint({

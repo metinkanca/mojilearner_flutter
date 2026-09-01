@@ -14,6 +14,7 @@ import 'providers/user_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/quiz_provider.dart';
 import 'providers/mistakes_provider.dart';
+import 'providers/ads_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/vocab_provider.dart';
 import 'providers/scenario_provider.dart';
@@ -102,6 +103,17 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(create: (_) => ScenarioProvider()..load()),
       ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
+      // Ads. Proxied off UserProvider for the membership flag, which is the
+      // only thing that suppresses an interstitial — see `constants/ads.dart`.
+      ChangeNotifierProxyProvider<UserProvider, AdsProvider>(
+        create: (context) => AdsProvider()
+          ..load()
+          ..updateFromUser(
+              Provider.of<UserProvider>(context, listen: false)),
+        update: (context, userProvider, adsProvider) =>
+            (adsProvider ?? (AdsProvider()..load()))
+              ..updateFromUser(userProvider),
+      ),
       // Nullable on purpose: when cloud sync could not start there is no
       // account to attach anything to, and the screens that offer signing in
       // hide themselves rather than failing at the tap.

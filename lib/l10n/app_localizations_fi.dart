@@ -669,6 +669,29 @@ class AppLocalizationsFi extends AppLocalizations {
   String get scenarioContinue => 'Jatka';
 
   @override
+  String get scenarioFinish => 'Lopeta';
+
+  @override
+  String get scenarioFinishTitle => 'Lopetetaanko kohtaus?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Osa tavoitteista on yhä kesken. Jos lopetat nyt, saat vain osittaisen palkkion ja skenaario jää suorittamatta, joten voit läpäistä sen kunnolla myöhemmin.';
+
+  @override
+  String get scenarioFinishConfirm => 'Lopeta silti';
+
+  @override
+  String get scenarioFinishCancel => 'Jatka juttelua';
+
+  @override
+  String get scenarioPartialTitle => 'Kohtaus päättyi';
+
+  @override
+  String get scenarioPartialNote =>
+      'Osittainen palkkio — suorita kaikki tavoitteet saadaksesi täyden palkkion.';
+
+  @override
   String get objCoffeeOrder => 'Tilaa juoma';
 
   @override
@@ -975,9 +998,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Kukkaseppele';
 
   @override
-  String get accessoryDevilHornsName => 'Pirunsarvet';
-
-  @override
   String get onboardingLanguageQuestion => 'Mitä kieltä puhut?';
 
   @override
@@ -1037,4 +1057,45 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Kirjautuminen epäonnistui. Tarkista tiedot ja yritä uudelleen.';
+
+  @override
+  String get adsFreeCoins => 'Ilmaisia kolikoita';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Katso video ja saat +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Jäljellä tänään $remaining/$total';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Siinä kaikki tälle päivälle';
+
+  @override
+  String get adsNotReady => 'Videota ei ole juuri nyt saatavilla';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins kolikkoa!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Minä vuonna synnyit?';
+
+  @override
+  String get onboardingBirthYearHint => 'Vuosi';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Tätä käytetään vain sopivien mainosten valintaan.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Anna kelvollinen vuosi';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Henkilötiedot piilotettiin ennen lähettämistä.';
 }

@@ -6,6 +6,8 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants/app_runtime_config.dart';
+import 'ai_prompt_spec.dart';
+import 'fallback_prompts.dart';
 
 /// Central AI gateway service.
 ///
@@ -80,7 +82,9 @@ class AiService {
 
   static final AiService instance = AiService._();
 
-  static const String _defaultModel = 'gemini-2.5-flash';
+  /// Set at build time with `--dart-define=AI_MODEL=...`; see
+  /// [AppRuntimeConfig.aiModel] for why the default is what it is.
+  static const String _defaultModel = AppRuntimeConfig.aiModel;
 
   /// Upper bound for any remote AI call so a hung backend can never
   /// freeze the UI indefinitely.
@@ -175,15 +179,19 @@ class AiService {
     return apiKey;
   }
 
+  /// Runs a one-shot prompt.
+  ///
+  /// [spec] names the prompt and carries its data; the wording lives on the
+  /// server. See [AiPromptSpec] for why the app no longer sends prompt text.
   Future<String> generateText({
-    required String prompt,
+    required AiPromptSpec spec,
     String model = _defaultModel,
     String source = 'unknown',
     AiGenerationConfig config = AiGenerationConfig.conversational,
   }) async {
     if (_backendConfigured) {
       return _generateViaBackend(
-        prompt: prompt,
+        spec: spec,
         model: model,
         source: source,
         config: config,
@@ -195,18 +203,23 @@ class AiService {
       return _unavailableUserMessage;
     }
 
+    final prompt = FallbackPrompts.prompt(spec);
+    if (prompt == null) {
+      throw ArgumentError('${spec.mode.wireName} is not a generate mode.');
+    }
     return _generateViaClient(prompt: prompt, model: model, config: config);
   }
 
+  /// Opens a chat session under the persona [spec] names.
   Future<String> createSession({
-    required String systemInstruction,
+    required AiPromptSpec spec,
     List<AiChatMessage> history = const <AiChatMessage>[],
     String model = _defaultModel,
     String source = 'unknown',
   }) async {
     if (_backendConfigured) {
       return _createSessionViaBackend(
-        systemInstruction: systemInstruction,
+        spec: spec,
         history: history,
         model: model,
         source: source,
@@ -218,6 +231,10 @@ class AiService {
       return _newUnavailableSessionId();
     }
 
+    final systemInstruction = FallbackPrompts.systemInstruction(spec);
+    if (systemInstruction == null) {
+      throw ArgumentError('${spec.mode.wireName} is not a chat mode.');
+    }
     return _createSessionViaClient(
       systemInstruction: systemInstruction,
       history: history,
@@ -258,7 +275,7 @@ class AiService {
   }
 
   Future<String> _generateViaBackend({
-    required String prompt,
+    required AiPromptSpec spec,
     required String model,
     required String source,
     AiGenerationConfig config = AiGenerationConfig.conversational,
@@ -282,7 +299,8 @@ class AiService {
       headers: headers,
       body: json.encode({
         'model': model,
-        'prompt': prompt,
+        'mode': spec.mode.wireName,
+        'params': spec.params,
         'source': source,
         // Forwarded for the proxy to map onto the provider's own fields.
         // A proxy that ignores this simply gets the previous behaviour.
@@ -339,7 +357,7 @@ class AiService {
   }
 
   Future<String> _createSessionViaBackend({
-    required String systemInstruction,
+    required AiPromptSpec spec,
     required List<AiChatMessage> history,
     required String model,
     required String source,
@@ -364,7 +382,8 @@ class AiService {
       body: json.encode({
         'model': model,
         'source': source,
-        'systemInstruction': systemInstruction,
+        'mode': spec.mode.wireName,
+        'params': spec.params,
         'history': history.map((m) => m.toJson()).toList(),
       }),
     ).timeout(_requestTimeout);

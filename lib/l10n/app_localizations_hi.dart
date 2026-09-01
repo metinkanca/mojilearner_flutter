@@ -665,6 +665,29 @@ class AppLocalizationsHi extends AppLocalizations {
   String get scenarioContinue => 'जारी रखें';
 
   @override
+  String get scenarioFinish => 'समाप्त करें';
+
+  @override
+  String get scenarioFinishTitle => 'दृश्य समाप्त करें?';
+
+  @override
+  String get scenarioFinishBody =>
+      'कुछ लक्ष्य अभी बाकी हैं। अभी समाप्त करने पर आंशिक इनाम मिलेगा और यह परिदृश्य अधूरा रहेगा, ताकि आप इसे बाद में ठीक से पूरा कर सकें।';
+
+  @override
+  String get scenarioFinishConfirm => 'फिर भी समाप्त करें';
+
+  @override
+  String get scenarioFinishCancel => 'बात जारी रखें';
+
+  @override
+  String get scenarioPartialTitle => 'दृश्य समाप्त';
+
+  @override
+  String get scenarioPartialNote =>
+      'आंशिक इनाम — पूरा इनाम पाने के लिए सभी लक्ष्य पूरे करें।';
+
+  @override
   String get objCoffeeOrder => 'एक ड्रिंक ऑर्डर करें';
 
   @override
@@ -968,9 +991,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get accessoryFlowerCrownName => 'फूलों का मुकुट';
 
   @override
-  String get accessoryDevilHornsName => 'शैतानी सींग';
-
-  @override
   String get onboardingLanguageQuestion => 'आप कौन सी भाषा बोलते हैं?';
 
   @override
@@ -1029,4 +1049,44 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'साइन इन नहीं हो सका। जानकारी जाँचें और फिर कोशिश करें।';
+
+  @override
+  String get adsFreeCoins => 'मुफ़्त सिक्के';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return '+$coins के लिए वीडियो देखें';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'आज $total में से $remaining बाकी';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'आज के लिए बस इतना ही';
+
+  @override
+  String get adsNotReady => 'अभी कोई वीडियो उपलब्ध नहीं है';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins सिक्के!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'आपका जन्म किस वर्ष हुआ?';
+
+  @override
+  String get onboardingBirthYearHint => 'वर्ष';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'इसका उपयोग केवल आपके लिए उपयुक्त विज्ञापन चुनने में होता है।';
+
+  @override
+  String get onboardingBirthYearInvalid => 'कृपया एक मान्य वर्ष दर्ज करें';
+
+  @override
+  String get privacyRedactedNotice => 'भेजने से पहले निजी जानकारी छिपा दी गई।';
 }

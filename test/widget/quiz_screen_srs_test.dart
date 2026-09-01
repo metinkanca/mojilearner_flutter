@@ -164,7 +164,6 @@ void main() {
     const stockQuestionCount = 5;
 
     when(() => mockUser.addXp(any())).thenAnswer((_) async {});
-    when(() => mockUser.addCoins(any())).thenAnswer((_) async {});
     when(() => mockCharacter.isSick).thenReturn(false);
     when(() => mockCharacter.applyQuizRewards(
           happinessDelta: any(named: 'happinessDelta'),

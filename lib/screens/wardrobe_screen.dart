@@ -4,11 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../components/character_sprite.dart';
+import '../components/free_coins_tile.dart';
 import '../constants/accessories.dart';
 import '../constants/bond.dart';
 import '../constants/shop.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
+import '../providers/ads_provider.dart';
 import '../providers/character_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/user_provider.dart';
@@ -410,6 +412,7 @@ class _SlotSection extends StatelessWidget {
         title: accessoryName(l10n, status.accessory),
         message: l10n.notEnoughCoinsMessage,
         detail: '${AccessoryTileIcons.coin} ${item.price}',
+        action: _rewardedAdAction(context),
       );
       return;
     }
@@ -481,6 +484,7 @@ void _showWardrobeDialog({
   required String title,
   required String message,
   String? detail,
+  _DialogAction? action,
 }) {
   showDialog<void>(
     context: context,
@@ -524,10 +528,51 @@ void _showWardrobeDialog({
                 ),
               ),
             ],
+            if (action != null) ...[
+              const SizedBox(height: 16),
+              _DialogButton(
+                label: action.label.toUpperCase(),
+                color: AppTheme.retroAccent,
+                fontFunction: fontFunction,
+                textDirection: textDirection,
+                // Closed first: the ad takes over the screen, and coming back
+                // to a stale "not enough coins" over a balance that has since
+                // gone up would read as the purchase having failed.
+                onTap: () {
+                  Navigator.of(context).pop();
+                  action.onTap();
+                },
+              ),
+            ],
           ],
         ),
       ),
     ),
+  );
+}
+
+/// An extra button on a wardrobe dialog.
+typedef _DialogAction = ({String label, VoidCallback onTap});
+
+/// The "watch a video for coins" action for a can't-afford dialog, or null
+/// when there is no ad to offer.
+///
+/// Deliberately reachable only from the two *purchase* paths. A bond-gated
+/// accessory has no price at any amount of coins — see
+/// `AccessoryAvailability.bondLocked` — so the branch that explains one never
+/// comes near this. Putting an ad button there would turn a piece that is
+/// earned by learning into one that is bought, which is the exact thing that
+/// rule exists to prevent.
+_DialogAction? _rewardedAdAction(BuildContext context) {
+  final ads = context.read<AdsProvider>();
+  if (!ads.canOfferRewarded) return null;
+
+  final reward = ads.nextRewardValue;
+  if (reward == null) return null;
+
+  return (
+    label: AppLocalizations.of(context)!.adsWatchForCoins(reward),
+    onTap: () => watchRewardedAd(context),
   );
 }
 
@@ -556,6 +601,7 @@ void _confirmColorPurchase({
       title: title,
       message: l10n.notEnoughCoinsMessage,
       detail: '${AccessoryTileIcons.coin} $price',
+      action: _rewardedAdAction(context),
     );
     return;
   }

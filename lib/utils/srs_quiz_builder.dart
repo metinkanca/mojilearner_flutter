@@ -1,6 +1,6 @@
 /// Builds quiz questions out of the learner's review queue.
 ///
-/// This is what closes the SRS loop in the other direction: [SrsBriefing]
+/// This is what closes the SRS loop in the other direction: the review
 /// pushes the queue into conversation, this pulls it into active recall, and
 /// the answers grade the items back through [VocabProvider.grade].
 ///

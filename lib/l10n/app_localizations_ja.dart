@@ -657,6 +657,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String get scenarioContinue => '続ける';
 
   @override
+  String get scenarioFinish => 'おわる';
+
+  @override
+  String get scenarioFinishTitle => 'シーンを終える？';
+
+  @override
+  String get scenarioFinishBody =>
+      'まだ達成していない目標があります。ここで終えると報酬は一部だけになり、シナリオは未クリアのまま残るので、あとでしっかり達成できます。';
+
+  @override
+  String get scenarioFinishConfirm => 'それでも終える';
+
+  @override
+  String get scenarioFinishCancel => '会話を続ける';
+
+  @override
+  String get scenarioPartialTitle => 'シーン終了';
+
+  @override
+  String get scenarioPartialNote => '一部だけの報酬 — すべての目標を達成すると全額もらえます。';
+
+  @override
   String get objCoffeeOrder => '飲み物を注文する';
 
   @override
@@ -955,9 +977,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get accessoryFlowerCrownName => '花かんむり';
 
   @override
-  String get accessoryDevilHornsName => 'あくまのツノ';
-
-  @override
   String get onboardingLanguageQuestion => '何語を話しますか？';
 
   @override
@@ -1015,4 +1034,43 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get accountErrorSignIn => 'ログインできませんでした。もういちどためしてください。';
+
+  @override
+  String get adsFreeCoins => '無料コイン';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return '動画を見て +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return '本日 残り $remaining/$total';
+  }
+
+  @override
+  String get adsNoneLeftToday => '今日はここまで';
+
+  @override
+  String get adsNotReady => '今は動画がありません';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins コイン！';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => '生まれた年は？';
+
+  @override
+  String get onboardingBirthYearHint => '年';
+
+  @override
+  String get onboardingBirthYearWhy => 'あなたに合った広告を選ぶためだけに使います。';
+
+  @override
+  String get onboardingBirthYearInvalid => '正しい年を入力してください';
+
+  @override
+  String get privacyRedactedNotice => '個人情報は送信前に隠されました。';
 }

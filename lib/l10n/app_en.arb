@@ -268,6 +268,13 @@
   "scenarioFirstClear": "First clear!",
   "scenarioReplayNote": "Replay reward — first clears pay more.",
   "scenarioContinue": "Continue",
+  "scenarioFinish": "Finish",
+  "scenarioFinishTitle": "End the scene?",
+  "scenarioFinishBody": "Some objectives are still open. Finishing now pays partial credit, and the scenario stays unfinished so you can clear it properly later.",
+  "scenarioFinishConfirm": "Finish anyway",
+  "scenarioFinishCancel": "Keep talking",
+  "scenarioPartialTitle": "Scene ended",
+  "scenarioPartialNote": "Partial credit — clear every objective for the full reward.",
   "objCoffeeOrder": "Order a drink",
   "objCoffeeCustomize": "Customize your order",
   "objCoffeePrice": "Ask what it costs",
@@ -405,7 +412,6 @@
   "accessoryHeadphonesName": "Headphones",
   "accessoryWizardHatName": "Wizard Hat",
   "accessoryFlowerCrownName": "Flower Crown",
-  "accessoryDevilHornsName": "Devil Horns",
   "onboardingLanguageQuestion": "What language do you speak?",
   "onboardingLanguageConfirm": "Continue",
   "onboardingPetQuestion": "Who will you take home?",
@@ -432,5 +438,43 @@
         "type": "String"
       }
     }
+  },
+  "adsFreeCoins": "Free Coins",
+  "adsWatchForCoins": "Watch a video for +{coins}",
+  "@adsWatchForCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "adsLeftToday": "{remaining} of {total} left today",
+  "@adsLeftToday": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "adsNoneLeftToday": "That's all for today",
+  "adsNotReady": "No video available right now",
+  "adsEarnedCoins": "+{coins} coins!",
+  "@adsEarnedCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingBirthYearTitle": "What year were you born?",
+  "onboardingBirthYearHint": "Year",
+  "onboardingBirthYearWhy": "This only decides which ads are suitable for you.",
+  "onboardingBirthYearInvalid": "Please enter a valid year",
+  "privacyRedactedNotice": "Personal details were hidden before sending.",
+  "@privacyRedactedNotice": {
+    "description": "Shown when the app removed personal data from a message before sending it to the AI."
   }
 }

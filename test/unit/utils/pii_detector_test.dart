@@ -25,9 +25,15 @@ void main() {
       expect(PIIDetector.hasSensitiveData('ssn 123-45-6789'), isTrue);
     });
 
-    test('detects postal codes', () {
-      expect(PIIDetector.hasSensitiveData('I live at 90210'), isTrue);
+    test('detects ZIP+4 but not a bare five-digit number', () {
       expect(PIIDetector.hasSensitiveData('zip is 12345-6789'), isTrue);
+
+      // A lone five-digit number is a number. Treating it as a postal code
+      // redacted every price a learner practised with — "12000 yen", "50000
+      // won" — out of both the outbound message and the stored copy.
+      expect(PIIDetector.hasSensitiveData('I live at 90210'), isFalse);
+      expect(PIIDetector.hasSensitiveData('it costs 12000 yen'), isFalse);
+      expect(PIIDetector.hasSensitiveData('50000 won please'), isFalse);
     });
 
     test('detects credential-style input', () {

@@ -1390,6 +1390,48 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get scenarioContinue;
 
+  /// No description provided for @scenarioFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get scenarioFinish;
+
+  /// No description provided for @scenarioFinishTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'End the scene?'**
+  String get scenarioFinishTitle;
+
+  /// No description provided for @scenarioFinishBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Some objectives are still open. Finishing now pays partial credit, and the scenario stays unfinished so you can clear it properly later.'**
+  String get scenarioFinishBody;
+
+  /// No description provided for @scenarioFinishConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish anyway'**
+  String get scenarioFinishConfirm;
+
+  /// No description provided for @scenarioFinishCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep talking'**
+  String get scenarioFinishCancel;
+
+  /// No description provided for @scenarioPartialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scene ended'**
+  String get scenarioPartialTitle;
+
+  /// No description provided for @scenarioPartialNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial credit — clear every objective for the full reward.'**
+  String get scenarioPartialNote;
+
   /// No description provided for @objCoffeeOrder.
   ///
   /// In en, this message translates to:
@@ -1954,12 +1996,6 @@ abstract class AppLocalizations {
   /// **'Flower Crown'**
   String get accessoryFlowerCrownName;
 
-  /// No description provided for @accessoryDevilHornsName.
-  ///
-  /// In en, this message translates to:
-  /// **'Devil Horns'**
-  String get accessoryDevilHornsName;
-
   /// No description provided for @onboardingLanguageQuestion.
   ///
   /// In en, this message translates to:
@@ -2073,6 +2109,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not sign in. Check your details and try again.'**
   String get accountErrorSignIn;
+
+  /// No description provided for @adsFreeCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Coins'**
+  String get adsFreeCoins;
+
+  /// No description provided for @adsWatchForCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a video for +{coins}'**
+  String adsWatchForCoins(int coins);
+
+  /// No description provided for @adsLeftToday.
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining} of {total} left today'**
+  String adsLeftToday(int remaining, int total);
+
+  /// No description provided for @adsNoneLeftToday.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s all for today'**
+  String get adsNoneLeftToday;
+
+  /// No description provided for @adsNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'No video available right now'**
+  String get adsNotReady;
+
+  /// No description provided for @adsEarnedCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'+{coins} coins!'**
+  String adsEarnedCoins(int coins);
+
+  /// No description provided for @onboardingBirthYearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What year were you born?'**
+  String get onboardingBirthYearTitle;
+
+  /// No description provided for @onboardingBirthYearHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get onboardingBirthYearHint;
+
+  /// No description provided for @onboardingBirthYearWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'This only decides which ads are suitable for you.'**
+  String get onboardingBirthYearWhy;
+
+  /// No description provided for @onboardingBirthYearInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid year'**
+  String get onboardingBirthYearInvalid;
+
+  /// Shown when the app removed personal data from a message before sending it to the AI.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal details were hidden before sending.'**
+  String get privacyRedactedNotice;
 }
 
 class _AppLocalizationsDelegate

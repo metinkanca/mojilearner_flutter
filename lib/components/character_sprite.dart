@@ -65,11 +65,32 @@ class _PetParts {
   /// verbatim — no [accessoryOffset] is applied on top.
   final Map<String, String> accessoryOverrides;
 
+  /// The coat with the mouth open, for a pet whose mouth is part of its
+  /// silhouette rather than a layer over it.
+  ///
+  /// The chick's beak is cut out of its head, so there is no mouth layer to
+  /// swap and no overlay that could do the job either — opening a beak takes
+  /// pixels away from where they were, and a layer painted on top can only
+  /// add. So the whole coat gets a second pose
+  /// (art_src/gen_bird_chew.py). Null for a pet that chews with [mouthOpen].
+  final String? baseOpen;
+
+  /// Accessory id -> where this pet wears that one piece, overriding both
+  /// [accessoryOffset] and [accessoryOffsets].
+  ///
+  /// One offset per pet only works while the pieces are all the same shape of
+  /// thing. They are not: a top hat is seated by its brim, a wizard hat by a
+  /// brim two cells lower, a flower crown by a band that has to clear the
+  /// ears. Moving them as a group lands whichever one the offset was measured
+  /// from and leaves the rest floating or sunk.
+  final Map<String, _AccessoryPlacement> accessoryPlacements;
+
   const _PetParts({
     required this.base,
     required this.eyes,
     this.mouth,
     this.mouthOpen,
+    this.baseOpen,
     this.tailFrames = const [],
     this.tailPivot,
     required this.eyesPivot,
@@ -77,11 +98,61 @@ class _PetParts {
     this.accessoryOffset = Offset.zero,
     this.accessoryOffsets = const {},
     this.accessoryOverrides = const {},
+    this.accessoryPlacements = const {},
   });
 
   /// Where [slot]'s accessories sit on this pet.
   Offset offsetForSlot(String slot) =>
       accessoryOffsets[slot] ?? accessoryOffset;
+
+  /// Where [def] sits on this pet: its own placement where one was measured,
+  /// otherwise wherever the slot puts it.
+  _AccessoryPlacement placementFor(AccessoryDef def) =>
+      accessoryPlacements[def.id] ?? _AccessoryPlacement.at(offsetForSlot(def.slot));
+}
+
+/// Where one accessory sits on one pet, in canvas art units.
+///
+/// These numbers are not eyeballed. Each comes from a reference drawing — the
+/// pet art and the accessory art dropped into one Inkscape document with the
+/// accessory dragged onto the pet by hand — read back by
+/// `art_src/acc_offset.py`, which matches every path in the drawing to the
+/// asset it came from and solves for the translation between them. Re-run it
+/// against a new `<pet>_with_<accessory>.svg` to get the pair of numbers here.
+class _AccessoryPlacement {
+  const _AccessoryPlacement(this._dx, this._dy,
+      {this.mirrored = false, this.underMuzzle = false});
+
+  /// A placement that is only ever a move — the pet-wide and per-slot offsets,
+  /// which have no reason to mirror anything or to go under a layer.
+  _AccessoryPlacement.at(Offset offset)
+      : _dx = offset.dx,
+        _dy = offset.dy,
+        mirrored = false,
+        underMuzzle = false;
+
+  final double _dx;
+  final double _dy;
+
+  /// Movement from where the art is drawn to where this pet wears it.
+  Offset get offset => Offset(_dx, _dy);
+
+  /// Flipped left-to-right before being moved, about the canvas centre — which
+  /// is what [Transform.scale] with a negative `scaleX` does to a layer that
+  /// fills the canvas.
+  ///
+  /// The dog wears the cap the other way round from the cat. There is no
+  /// second asset for that: a mirrored copy of pixel art is the same pixel art.
+  final bool mirrored;
+
+  /// Drawn under the muzzle layer instead of over everything.
+  ///
+  /// An accessory is normally the last thing painted, which is right for a hat
+  /// and wrong for anything the pet's own face should overlap. The dog's jaw
+  /// hangs over the top of its bow tie — the reference drawing has the bow's
+  /// wings sitting under the muzzle paths, which is not something a placement
+  /// on top of the stack can express at any offset.
+  final bool underMuzzle;
 }
 
 // Alignments derived from the assembled art viewBox "-20 -90 222 328"
@@ -113,6 +184,18 @@ const Map<String, _PetParts> _layeredPets = {
     tailPivot: Offset(38, 224),
     eyesPivot: Alignment(0.248, 0.091),
     eyeGeometry: kCatEyes,
+    // The accessories are drawn on the cat's canvas, so a piece with no
+    // placement of its own hangs where it was authored -- hence no
+    // [accessoryOffset] here. These are the ones a reference drawing has since
+    // adjusted; see [_AccessoryPlacement].
+    accessoryPlacements: {
+      'tophat': _AccessoryPlacement(-13, -23),
+      'cowboyhat': _AccessoryPlacement(-6, -20),
+      'cap': _AccessoryPlacement(42, -6, mirrored: true),
+      'bowtie': _AccessoryPlacement(12, 2),
+      'collar': _AccessoryPlacement(-1, 10),
+      'medal': _AccessoryPlacement(-3, 6),
+    },
   ),
   // The dog art is 208x248 against the cat's 202x238, placed feet-on-the-same
   // ground line, which leaves its head ~30 units higher than the cat's -- hence
@@ -133,42 +216,79 @@ const Map<String, _PetParts> _layeredPets = {
     ],
     eyesPivot: Alignment(0.342, -0.067),
     eyeGeometry: kDogEyes,
+    // The fallback, for pieces no reference drawing has been made for yet.
     accessoryOffset: Offset(10, -25),
+    // Measured, one drawing per piece — see [_AccessoryPlacement].
+    accessoryPlacements: {
+      'tophat': _AccessoryPlacement(-4, -37),
+      'cowboyhat': _AccessoryPlacement(8, -38),
+      'partyhat': _AccessoryPlacement(9, -37),
+      'wizardhat': _AccessoryPlacement(5, -44),
+      'flowercrown': _AccessoryPlacement(2, -57),
+      'cap': _AccessoryPlacement(38, -38, mirrored: true),
+      'medal': _AccessoryPlacement(1, -13),
+      'mustache': _AccessoryPlacement(40, -12),
+      // The dog wears its own cut of the bow (below), which is already drawn
+      // where it goes — so this carries no offset, only the layer.
+      'bowtie': _AccessoryPlacement(0, 0, underMuzzle: true),
+    },
+    accessoryOverrides: {
+      // The shared bow is drawn for the cat, whose muzzle stops well above its
+      // chest. The dog's jaw comes down across the bow, so its copy has the
+      // right wing clipped to that line (art_src/bowtie_new_for_dog.svg). The
+      // notch is in the art rather than left to the layer order, so the outline
+      // follows the shape the dog actually shows rather than being hidden
+      // behind the muzzle halfway along.
+      'bowtie': 'assets/svgs/acc_bowtie_dog.svg',
+    },
   ),
   // The chick is the odd one out: drawn in profile, no tail, and its beak is
   // part of the head silhouette rather than a muzzle laid over it. So its rig
-  // is the coat plus one eye — it breathes and blinks, and has nothing to wag
-  // or chew with. Its head is a long way below the cat's while its chest has
+  // is the coat plus one eye — it breathes and blinks, and has nothing to wag,
+  // while chewing swaps the whole coat for [baseOpen] rather than a mouth
+  // layer. Its head is a long way below the cat's while its chest has
   // barely moved, which is why its accessories are placed per slot rather than
   // by one offset, and the face slot is its own art (see
   // art_src/gen_bird_acc.py — a second lens has nowhere to go on a head shown
   // side-on).
   'bird': _PetParts(
     base: 'assets/svgs/bird_base.svg',
+    baseOpen: 'assets/svgs/bird_base_open.svg',
     eyes: 'assets/svgs/bird_eyes.svg',
     eyesPivot: Alignment(0.306, 0.201),
     eyeGeometry: kBirdEyes,
     accessoryOffsets: {
-      // Every hat has its own bird cut below, so this only catches a hat added
-      // before one is generated for it: seated right, but cat-sized.
+      // Every piece the chick has a drawing for has its own cut below, so this
+      // only catches one added before a drawing is made for it: seated right,
+      // but cat-sized.
       AccessorySlots.hat: Offset(14, 45),
       AccessorySlots.neck: Offset(22, 30),
     },
     accessoryOverrides: {
-      // Hats, re-pixelised smaller (art_src/gen_bird_hats.py). The cat's head
-      // is wider than the whole chick, so a hat merely moved onto it swallows
+      // Lifted from the reference drawings (art_src/gen_bird_worn.py): each is
+      // the piece drawn on the chick at the size and in the place it belongs,
+      // so it goes down exactly as drawn and carries no offset. The cat's head
+      // is wider than the whole chick, so a piece merely moved onto it swallows
       // it — a top hat came out taller than the bird.
       'beanie': 'assets/svgs/acc_beanie_bird.svg',
       'cap': 'assets/svgs/acc_cap_bird.svg',
       'cowboyhat': 'assets/svgs/acc_cowboyhat_bird.svg',
       'crown': 'assets/svgs/acc_crown_bird.svg',
-      'devilhorns': 'assets/svgs/acc_devilhorns_bird.svg',
       'flowercrown': 'assets/svgs/acc_flowercrown_bird.svg',
+      // Worn side-on, the far cup is behind the head — which is drawn into the
+      // art, the same way the dog's bow tie is notched for its jaw.
       'headphones': 'assets/svgs/acc_headphones_bird.svg',
       'mortarboard': 'assets/svgs/acc_mortarboard_bird.svg',
       'partyhat': 'assets/svgs/acc_partyhat_bird.svg',
       'tophat': 'assets/svgs/acc_tophat_bird.svg',
       'wizardhat': 'assets/svgs/acc_wizardhat_bird.svg',
+      // Neck, from the same drawings.
+      'collar': 'assets/svgs/acc_collar_bird.svg',
+      'medal': 'assets/svgs/acc_medal_bird.svg',
+      // The bow tie is the exception: it is drawn finer than the 7-unit cell
+      // and wears a 4-unit outline on every pet, so its copy is scaled by
+      // art_src/gen_acc.py rather than lifted with the cell grid's border.
+      'bowtie': 'assets/svgs/acc_bowtie_bird.svg',
       // Face, re-cut side-on (art_src/gen_bird_acc.py).
       'glasses': 'assets/svgs/acc_glasses_bird.svg',
       'sunglasses': 'assets/svgs/acc_sunglasses_bird.svg',
@@ -303,6 +423,7 @@ class _CharacterSpriteState extends State<CharacterSprite>
         parts.base,
         if (parts.mouth != null) parts.mouth!,
         if (parts.mouthOpen != null) parts.mouthOpen!,
+        if (parts.baseOpen != null) parts.baseOpen!,
         ...parts.tailFrames,
       ],
     };
@@ -503,6 +624,21 @@ class _CharacterSpriteState extends State<CharacterSprite>
     );
   }
 
+  /// One equipped accessory, moved to where [type] wears it.
+  ///
+  /// A pet with its own cut of the piece is the exception: that art was drawn
+  /// against this pet already, so it goes down untouched.
+  Widget _accessoryLayer(_PetParts parts, String type, AccessoryDef def,
+      double unit, double? w, double? h) {
+    Widget art = _svgLayer(accessoryAssetFor(type, def), w, h);
+    if (parts.accessoryOverrides.containsKey(def.id)) return art;
+    final placement = parts.placementFor(def);
+    if (placement.mirrored) {
+      art = Transform.scale(scaleX: -1, child: art);
+    }
+    return Transform.translate(offset: placement.offset * unit, child: art);
+  }
+
   /// Renders a recoloured coat layer (base / tail / mouth). Falls back to the
   /// plain asset until the raw text has loaded.
   Widget _coatLayer(String asset, double? w, double? h, PetColorSpec spec) {
@@ -691,18 +827,18 @@ class _CharacterSpriteState extends State<CharacterSprite>
                 eyeScaleY = math.min(eyeScaleY, _kPetSquintScale);
               }
 
-              // Chew: swap closed <-> open mouth on the fps grid. Mouth is held
-              // open while food is hovering (waiting phase). A pet with no
-              // separate mouth layer (the bird's beak is part of its head)
-              // simply has nothing to swap.
-              String? mouthAsset = parts.mouth;
-              if (mouthAsset != null && !_reduceMotion && eating) {
-                if (_safeEatingPhase(provider) == PetEatingPhase.consuming) {
-                  mouthAsset = frame.isEven ? parts.mouthOpen : parts.mouth;
-                } else {
-                  mouthAsset = parts.mouthOpen;
-                }
-              }
+              // Chew: open and close on the fps grid, held open while food is
+              // hovering (waiting phase) rather than alternating.
+              final chewing = eating &&
+                  !_reduceMotion &&
+                  (_safeEatingPhase(provider) != PetEatingPhase.consuming ||
+                      frame.isEven);
+              // Whichever the pet chews with: a mouth laid over the muzzle, or
+              // a second coat for a beak that is part of the head.
+              final mouthAsset =
+                  chewing && parts.mouth != null ? parts.mouthOpen : parts.mouth;
+              final baseAsset =
+                  chewing ? (parts.baseOpen ?? parts.base) : parts.base;
 
               // Tail wag: stepped on the fps grid, so the tail holds a pose
               // rather than sweeping through one. Wags in every state except a
@@ -737,7 +873,7 @@ class _CharacterSpriteState extends State<CharacterSprite>
               final stack = Stack(
                 fit: StackFit.passthrough,
                 children: [
-                  _coatLayer(parts.base, w, h, spec),
+                  _coatLayer(baseAsset, w, h, spec),
                   if (parts.tailFrames.isNotEmpty)
                     _tail(
                       _coatLayer(parts.tailFrames[tailIdx], w, h, spec),
@@ -745,6 +881,9 @@ class _CharacterSpriteState extends State<CharacterSprite>
                       parts.tailPivot,
                       unit,
                     ),
+                  for (final def in accessories)
+                    if (parts.placementFor(def).underMuzzle)
+                      _accessoryLayer(parts, type, def, unit, w, h),
                   if (mouthAsset != null) _coatLayer(mouthAsset, w, h, spec),
                   Transform(
                     alignment: parts.eyesPivot,
@@ -757,12 +896,8 @@ class _CharacterSpriteState extends State<CharacterSprite>
                     ),
                   ),
                   for (final def in accessories)
-                    Transform.translate(
-                      offset: parts.accessoryOverrides.containsKey(def.id)
-                          ? Offset.zero
-                          : parts.offsetForSlot(def.slot) * unit,
-                      child: _svgLayer(accessoryAssetFor(type, def), w, h),
-                    ),
+                    if (!parts.placementFor(def).underMuzzle)
+                      _accessoryLayer(parts, type, def, unit, w, h),
                 ],
               );
 

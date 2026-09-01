@@ -669,6 +669,29 @@ class AppLocalizationsPt extends AppLocalizations {
   String get scenarioContinue => 'Continuar';
 
   @override
+  String get scenarioFinish => 'Terminar';
+
+  @override
+  String get scenarioFinishTitle => 'Terminar a cena?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Ainda há objetivos em aberto. Terminar agora dá uma recompensa parcial, e o cenário continua por concluir, para poderes passá-lo como deve ser mais tarde.';
+
+  @override
+  String get scenarioFinishConfirm => 'Terminar mesmo assim';
+
+  @override
+  String get scenarioFinishCancel => 'Continuar a conversa';
+
+  @override
+  String get scenarioPartialTitle => 'Cena terminada';
+
+  @override
+  String get scenarioPartialNote =>
+      'Recompensa parcial — conclui todos os objetivos para a recompensa completa.';
+
+  @override
   String get objCoffeeOrder => 'Peça uma bebida';
 
   @override
@@ -977,9 +1000,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Coroa de flores';
 
   @override
-  String get accessoryDevilHornsName => 'Chifres de diabo';
-
-  @override
   String get onboardingLanguageQuestion => 'Que idioma você fala?';
 
   @override
@@ -1038,4 +1058,45 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Não foi possível entrar. Confira seus dados e tente de novo.';
+
+  @override
+  String get adsFreeCoins => 'Moedas grátis';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Assista a um vídeo por +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Restam $remaining de $total hoje';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'É tudo por hoje';
+
+  @override
+  String get adsNotReady => 'Nenhum vídeo disponível agora';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins moedas!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'Em que ano você nasceu?';
+
+  @override
+  String get onboardingBirthYearHint => 'Ano';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Isto serve apenas para escolher anúncios adequados a você.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Insira um ano válido';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Os dados pessoais foram ocultados antes do envio.';
 }

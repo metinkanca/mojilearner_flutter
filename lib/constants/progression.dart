@@ -1,13 +1,28 @@
 class ProgressionConstants {
   /// The starting XP for level 1 to 2
   static const int baseXP = 100;
-  
-  /// The exponential growth rate of the XP curve
-  /// 2.0 is standard. 1.8 is slightly easier.
-  static const double growthRate = 1.8;
+
+  /// The exponential growth rate of the XP curve.
+  ///
+  /// Was 1.8, which put level 20 at 146,115 XP — around 1.4 years for a
+  /// committed daily learner and effectively never for anyone else. Three
+  /// quarters of [levelRewards] was therefore decoration: unreachable coins
+  /// and two backgrounds nobody would ever be shown. At 1.5 the cap is 67,135
+  /// XP, which a daily learner reaches inside a year, so the back half of the
+  /// ladder is a real reward again.
+  static const double growthRate = 1.5;
 
   /// Max level cap
   static const int maxLevel = 20;
+
+  /// The first entry in [levelRewards], granted once at the start of a new
+  /// game.
+  ///
+  /// Level-up rewards are handed out when the level *changes*, and a player
+  /// starts at level 1 — so this one could never fire that way. It is a
+  /// welcome gift rather than a level-up, and `UserProvider` grants it on
+  /// first load instead.
+  static const int welcomeRewardLevel = 1;
 }
 
 enum RewardType {
@@ -68,19 +83,30 @@ const List<RewardDef> levelRewards = [
 ];
 
 /// Daily rewards schedule (cycles every 7 days with bonuses)
+///
+/// This cycle feeds the pet; it does not fund the wardrobe. It used to pay
+/// 375 coins a week, which was 52% of an average player's income and 84% of a
+/// light one's — opening the app was by far the best-paid thing in the game,
+/// and the pet's upkeep was really being bought with login money rather than
+/// earned. Two consequences followed: learning barely mattered to the
+/// economy, and for a light player *neglecting* the pet paid better than
+/// feeding it, because skipping food saved more than sickness cost.
+///
+/// So the cycle now hands out food directly — about 300 hunger a week against
+/// the 336 a fed pet burns — plus 45 coins. Survival is nearly free for
+/// anyone who shows up, the small shortfall keeps feeding a real act rather
+/// than an automatic one, and every coin that buys a hat is earned by
+/// learning. See `gold.dart`.
 const List<RewardDef> dailyRewards = [
-  // Day 1: Small welcome back
-  RewardDef(level: 1, type: RewardType.coins, value: 50, description: 'Day 1: 50 coins'),
-  // Day 2: Slightly better
-  RewardDef(level: 2, type: RewardType.coins, value: 75, description: 'Day 2: 75 coins'),
-  // Day 3: Food item
-  RewardDef(level: 3, type: RewardType.item, value: 1, description: 'Day 3: Apple', itemId: 'apple'),
-  // Day 4: More coins
-  RewardDef(level: 4, type: RewardType.coins, value: 100, description: 'Day 4: 100 coins'),
-  // Day 5: Coffee boost
-  RewardDef(level: 5, type: RewardType.item, value: 2, description: 'Day 5: Coffee x2', itemId: 'coffee'),
-  // Day 6: Big coin reward
-  RewardDef(level: 6, type: RewardType.coins, value: 150, description: 'Day 6: 150 coins'),
-  // Day 7: Special weekly reward
-  RewardDef(level: 7, type: RewardType.item, value: 1, description: 'Day 7: Pizza!', itemId: 'pizza'),
+  // Day 1: a greeting, not an income.
+  RewardDef(level: 1, type: RewardType.coins, value: 12, description: 'Day 1: 12 coins'),
+  // Day 2: two days of light rations.
+  RewardDef(level: 2, type: RewardType.item, value: 2, description: 'Day 2: Croissant x2', itemId: 'croissant'),
+  RewardDef(level: 3, type: RewardType.coins, value: 15, description: 'Day 3: 15 coins'),
+  // Day 4: the week's bulk of the pet's food.
+  RewardDef(level: 4, type: RewardType.item, value: 2, description: 'Day 4: Pizza x2', itemId: 'pizza'),
+  RewardDef(level: 5, type: RewardType.coins, value: 18, description: 'Day 5: 18 coins'),
+  RewardDef(level: 6, type: RewardType.item, value: 1, description: 'Day 6: Sushi Set', itemId: 'sushi'),
+  // Day 7: the streak payoff — a fortnight of dinners in one go.
+  RewardDef(level: 7, type: RewardType.item, value: 2, description: 'Day 7: Sushi x2!', itemId: 'sushi'),
 ];

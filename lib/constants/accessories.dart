@@ -49,6 +49,14 @@ class AccessoryDef {
   /// Bond stage that unlocks it, or null when bond is not what gates it.
   final PetStage? requiredStage;
 
+  /// Kept out of the wardrobe and the shop while its art is being reworked.
+  ///
+  /// Withheld rather than deleted: [accessoryById] still resolves it, so a pet
+  /// already wearing one goes on wearing it instead of being quietly stripped
+  /// by the catalogue sweep in `CharacterProvider._sanitizeDesign`. Deleting
+  /// the entry is what removing a piece for good looks like.
+  final bool hidden;
+
   const AccessoryDef({
     required this.id,
     required this.name,
@@ -57,6 +65,7 @@ class AccessoryDef {
     required this.icon,
     this.price,
     this.requiredStage,
+    this.hidden = false,
   }) : assert(price == null || requiredStage == null,
             'an accessory is either bought or earned, never both');
 
@@ -123,6 +132,7 @@ const List<AccessoryDef> kAccessories = [
     asset: 'assets/svgs/acc_necklace.svg',
     icon: '📿',
     price: 150,
+    hidden: true,
   ),
   AccessoryDef(
     id: 'mustache',
@@ -131,6 +141,7 @@ const List<AccessoryDef> kAccessories = [
     asset: 'assets/svgs/acc_mustache.svg',
     icon: '🥸',
     price: 90,
+    hidden: true,
   ),
   AccessoryDef(
     id: 'beanie',
@@ -196,6 +207,7 @@ const List<AccessoryDef> kAccessories = [
     asset: 'assets/svgs/acc_scarf.svg',
     icon: '🧣',
     price: 80,
+    hidden: true,
   ),
   AccessoryDef(
     id: 'headphones',
@@ -221,14 +233,6 @@ const List<AccessoryDef> kAccessories = [
     icon: '🌸',
     price: 120,
   ),
-  AccessoryDef(
-    id: 'devilhorns',
-    name: 'Devil Horns',
-    slot: AccessorySlots.hat,
-    asset: 'assets/svgs/acc_devilhorns.svg',
-    icon: '😈',
-    price: 110,
-  ),
 ];
 
 AccessoryDef? accessoryById(String? id) {
@@ -239,5 +243,13 @@ AccessoryDef? accessoryById(String? id) {
   return null;
 }
 
+/// The accessories a player can be shown — everything but the withheld ones.
+///
+/// [kAccessories] stays the full set so that ids already in a saved design or
+/// a purchase history still resolve; this is what the wardrobe and the shop
+/// are built from.
+final List<AccessoryDef> visibleAccessories =
+    kAccessories.where((a) => !a.hidden).toList(growable: false);
+
 List<AccessoryDef> accessoriesForSlot(String slot) =>
-    kAccessories.where((a) => a.slot == slot).toList();
+    visibleAccessories.where((a) => a.slot == slot).toList();

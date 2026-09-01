@@ -662,6 +662,29 @@ class AppLocalizationsTh extends AppLocalizations {
   String get scenarioContinue => 'ต่อไป';
 
   @override
+  String get scenarioFinish => 'จบ';
+
+  @override
+  String get scenarioFinishTitle => 'จบฉากนี้ไหม?';
+
+  @override
+  String get scenarioFinishBody =>
+      'ยังมีเป้าหมายที่ยังไม่สำเร็จ ถ้าจบตอนนี้จะได้รางวัลเพียงบางส่วน และสถานการณ์นี้จะยังไม่ถือว่าผ่าน คุณจึงกลับมาทำให้ครบได้ทีหลัง';
+
+  @override
+  String get scenarioFinishConfirm => 'จบเลย';
+
+  @override
+  String get scenarioFinishCancel => 'คุยต่อ';
+
+  @override
+  String get scenarioPartialTitle => 'จบฉากแล้ว';
+
+  @override
+  String get scenarioPartialNote =>
+      'รางวัลบางส่วน — ทำเป้าหมายให้ครบเพื่อรับรางวัลเต็ม';
+
+  @override
   String get objCoffeeOrder => 'สั่งเครื่องดื่ม';
 
   @override
@@ -962,9 +985,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get accessoryFlowerCrownName => 'มงกุฎดอกไม้';
 
   @override
-  String get accessoryDevilHornsName => 'เขาปีศาจ';
-
-  @override
   String get onboardingLanguageQuestion => 'คุณพูดภาษาอะไร?';
 
   @override
@@ -1023,4 +1043,44 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'เข้าสู่ระบบไม่สำเร็จ ตรวจสอบข้อมูลแล้วลองใหม่';
+
+  @override
+  String get adsFreeCoins => 'เหรียญฟรี';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'ดูวิดีโอรับ +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'เหลือ $remaining จาก $total วันนี้';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'วันนี้หมดแล้ว';
+
+  @override
+  String get adsNotReady => 'ตอนนี้ยังไม่มีวิดีโอ';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins เหรียญ!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'คุณเกิดปีอะไร?';
+
+  @override
+  String get onboardingBirthYearHint => 'ปี';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'ใช้เพื่อเลือกโฆษณาที่เหมาะกับคุณเท่านั้น';
+
+  @override
+  String get onboardingBirthYearInvalid => 'กรุณากรอกปีที่ถูกต้อง';
+
+  @override
+  String get privacyRedactedNotice => 'ข้อมูลส่วนตัวถูกซ่อนไว้ก่อนส่ง';
 }

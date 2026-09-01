@@ -667,6 +667,29 @@ class AppLocalizationsNl extends AppLocalizations {
   String get scenarioContinue => 'Doorgaan';
 
   @override
+  String get scenarioFinish => 'Afronden';
+
+  @override
+  String get scenarioFinishTitle => 'Scène beëindigen?';
+
+  @override
+  String get scenarioFinishBody =>
+      'Er staan nog doelen open. Als je nu afrondt, krijg je een gedeeltelijke beloning en blijft het scenario onvoltooid, zodat je het later goed kunt halen.';
+
+  @override
+  String get scenarioFinishConfirm => 'Toch afronden';
+
+  @override
+  String get scenarioFinishCancel => 'Blijf praten';
+
+  @override
+  String get scenarioPartialTitle => 'Scène beëindigd';
+
+  @override
+  String get scenarioPartialNote =>
+      'Gedeeltelijke beloning — haal alle doelen voor de volledige beloning.';
+
+  @override
   String get objCoffeeOrder => 'Bestel een drankje';
 
   @override
@@ -973,9 +996,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get accessoryFlowerCrownName => 'Bloemenkrans';
 
   @override
-  String get accessoryDevilHornsName => 'Duivelshoorns';
-
-  @override
   String get onboardingLanguageQuestion => 'Welke taal spreek je?';
 
   @override
@@ -1035,4 +1055,45 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'Inloggen mislukt. Controleer je gegevens en probeer opnieuw.';
+
+  @override
+  String get adsFreeCoins => 'Gratis munten';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'Bekijk een video voor +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'Nog $remaining van $total vandaag';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'Dat was het voor vandaag';
+
+  @override
+  String get adsNotReady => 'Nu geen video beschikbaar';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins munten!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'In welk jaar ben je geboren?';
+
+  @override
+  String get onboardingBirthYearHint => 'Jaar';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'Dit bepaalt alleen welke advertenties geschikt zijn.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'Voer een geldig jaar in';
+
+  @override
+  String get privacyRedactedNotice =>
+      'Persoonlijke gegevens zijn verborgen voor verzending.';
 }

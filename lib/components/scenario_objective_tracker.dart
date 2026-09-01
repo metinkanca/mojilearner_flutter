@@ -20,9 +20,19 @@ import 'scenario_complete_popup.dart';
 /// Collapsible, because four rows of pixel text is a lot of vertical space on
 /// a phone once the conversation gets going.
 class ScenarioObjectiveTracker extends StatefulWidget {
-  const ScenarioObjectiveTracker({super.key, required this.scenario});
+  const ScenarioObjectiveTracker({
+    super.key,
+    required this.scenario,
+    this.onFinish,
+  });
 
   final ScenarioDefinition scenario;
+
+  /// Ends the run early. Present because a scene can move past a goal — an
+  /// NPC that seats you before you ask makes "ask for a table" unreachable —
+  /// and without this the checklist could never fill and the chat would run
+  /// on forever. Null once the run has already been paid out.
+  final VoidCallback? onFinish;
 
   @override
   State<ScenarioObjectiveTracker> createState() =>
@@ -129,6 +139,15 @@ class _ScenarioObjectiveTrackerState extends State<ScenarioObjectiveTracker> {
                         ),
                         const SizedBox(height: 6),
                       ],
+                      if (widget.onFinish != null) ...[
+                        const SizedBox(height: 4),
+                        _FinishButton(
+                          label: l10n.scenarioFinish,
+                          onTap: widget.onFinish!,
+                          fontFunction: fontFunction,
+                          textDirection: textDirection,
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -136,6 +155,57 @@ class _ScenarioObjectiveTrackerState extends State<ScenarioObjectiveTracker> {
           ),
         );
       },
+    );
+  }
+}
+
+/// The escape hatch, styled to sit under the checklist without competing with
+/// it: this is the way out of a stuck scene, not the way to play one.
+class _FinishButton extends StatelessWidget {
+  const _FinishButton({
+    required this.label,
+    required this.onTap,
+    required this.fontFunction,
+    required this.textDirection,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+  final TextStyle Function({
+    double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    double? height,
+    TextDecoration? decoration,
+    double? letterSpacing,
+    FontStyle? fontStyle,
+  }) fontFunction;
+  final TextDirection textDirection;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppTheme.retroDark, width: 2),
+          ),
+          child: Text(
+            label.toUpperCase(),
+            textDirection: textDirection,
+            style: fontFunction(
+              fontSize: 7,
+              color: AppTheme.retroDark,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

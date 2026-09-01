@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="katman_1"
+   version="1.1"
+   viewBox="-20 -90 222 328"
+   shape-rendering="crispEdges"
+   sodipodi:docname="bowtie_new_for_dog.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="Adsız_degrade_6"
+       data-name="Adsız degrade 6"
+       x1="756"
+       y1="607.5"
+       x2="1071"
+       y2="607.5"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#925a36"
+         id="stop3" />
+      <stop
+         offset="1"
+         stop-color="#7a4933"
+         id="stop4" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="namedview2"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.4603659"
+     inkscape:cx="83.320942"
+     inkscape:cy="224.5601"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="katman_1" />
+  <rect
+     class="st7"
+     x="101.51724"
+     y="178.54401"
+     width="7.5439367"
+     height="13.201888"
+     id="rect13-4"
+     style="fill:#e16f71;stroke-width:0.20956" />
+  <polygon
+     class="st7"
+     points="513,396 504,396 504,378 495,378 495,387 486,387 486,396 477,396 477,387 486,387 486,378 495,378 495,369 504,369 504,360 495,360 495,351 486,351 486,342 477,342 477,333 486,333 486,342 495,342 495,351 504,351 504,333 504,324 495,324 495,315 486,315 486,306 477,306 477,297 405,297 405,351 414,351 414,360 423,360 423,369 414,369 414,378 405,378 405,441 468,441 468,432 477,432 477,423 486,423 486,414 495,414 495,405 513,405 "
+     id="polygon31-9"
+     style="fill:#e16f71"
+     transform="matrix(0.20955375,0,0,0.20955375,-7.8692701,108.76253)" />
+  <path
+     id="polygon32-6"
+     style="fill:#e16f71;stroke-width:0.209554"
+     class="st7"
+     d="m 116.60565,187.97384 h -1.88598 v -1.88599 h -1.88598 v -1.88598 h 1.88598 v -1.88599 h 1.88598 v -1.88594 h 1.88599 v -1.88599 h -1.88599 v 3.77193 h -3.77196 v -3.77193 l 5.65795,6.1e-4 1.16799,-6.1e-4 8.832,-2.6e-4 5.00095,8.7e-4 0.0869,3.77136 h -1.88598 v 1.88598 h -1.88599 v 1.88599 h 1.88599 v 1.88598 h 1.88598 v 13.20189 h -13.20189 v -1.88598 h -1.88598 v -1.88599 h -1.88599 v -1.88598 h -1.88598 v -1.88598 h -3.77197 v -1.88599 h 1.88599 v -3.77197 h 1.88598 v 1.88599 h 1.88598 v 1.88598 h 1.88599 v -1.88598 h -1.88599 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <polygon
+     class="st8"
+     points="594,369 594,360 594,351 603,351 603,342 603,333 594,333 594,342 585,342 585,351 576,351 576,333 558,333 558,396 576,396 576,369 "
+     id="polygon33-3"
+     style="fill:#793d52"
+     transform="matrix(0.20955375,0,0,0.20955375,-7.8692701,108.76253)" />
+  <rect
+     class="st8"
+     x="97.74527"
+     y="178.54401"
+     width="3.7719684"
+     height="13.201888"
+     id="rect33-7"
+     style="fill:#793d52;stroke-width:0.20956" />
+  <polyline
+     class="st8"
+     points="576 369 585 369 594 369 594 378 603 378 603 387 603 396 594 396 594 387 585 387 585 378 576 378"
+     id="polyline33-8"
+     style="fill:#793d52"
+     transform="matrix(0.20955375,0,0,0.20955375,-7.8692701,108.76253)" />
+  <polyline
+     class="st8"
+     points="504 378 495 378 495 387 486 387 486 396 477 396 477 387 477 387 477 378 486 378 486 369 504 369"
+     id="polyline34-8"
+     style="fill:#793d52"
+     transform="matrix(0.20955375,0,0,0.20955375,-7.8692701,108.76253)" />
+  <polyline
+     class="st8"
+     points="504 369 486 369 486 360 486 360 486 351 477 351 477 333 486 333 486 342 495 342 495 351 504 351"
+     id="polyline35-2"
+     style="fill:#793d52"
+     transform="matrix(0.20955375,0,0,0.20955375,-7.8692701,108.76253)" />
+</svg>

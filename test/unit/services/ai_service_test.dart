@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:mojilearner_flutter/services/ai_prompt_spec.dart';
 import 'package:mojilearner_flutter/services/ai_service.dart';
 
 void main() {
@@ -19,7 +20,8 @@ void main() {
 
     test('generateText returns the unavailable sentinel message', () async {
       final text = await AiService.instance.generateText(
-        prompt: 'hello',
+        spec: AiPromptSpec.quiz(
+          targetCode: 'es', nativeCode: 'en', level: 'beginner'),
         source: 'test',
       );
       expect(AiService.instance.isUnavailableResponse(text), isTrue);
@@ -28,7 +30,7 @@ void main() {
     test('createSession hands out an unavailable session whose messages '
         'return the sentinel', () async {
       final sessionId = await AiService.instance.createSession(
-        systemInstruction: 'be nice',
+        spec: AiPromptSpec.pet(targetCode: 'es'),
         source: 'test',
       );
       final reply = await AiService.instance.sendSessionMessage(
@@ -60,8 +62,7 @@ AI_PROXY_TOKEN=secret-token
       expect(AiService.instance.isAiAvailable, isTrue);
     });
 
-    test('generateText posts prompt to /v1/ai/generate with auth header',
-        () async {
+    test('generateText posts a mode and params, never prompt text', () async {
       late http.Request captured;
       final client = MockClient((request) async {
         captured = request;
@@ -70,7 +71,8 @@ AI_PROXY_TOKEN=secret-token
 
       final text = await http.runWithClient(
         () => AiService.instance.generateText(
-          prompt: 'say hi in Spanish',
+          spec: AiPromptSpec.quiz(
+            targetCode: 'es', nativeCode: 'en', level: 'beginner'),
           source: 'test',
         ),
         () => client,
@@ -81,7 +83,15 @@ AI_PROXY_TOKEN=secret-token
           equals('https://backend.test/v1/ai/generate'));
       expect(captured.headers['Authorization'], equals('Bearer secret-token'));
       final body = json.decode(captured.body) as Map<String, dynamic>;
-      expect(body['prompt'], equals('say hi in Spanish'));
+      // The wording lives on the server; the app names a prompt and fills in
+      // its blanks. A `prompt` field here would mean the proxy was still a
+      // general-purpose relay for anyone holding the token.
+      expect(body.containsKey('prompt'), isFalse);
+      expect(body['mode'], equals('quiz'));
+      expect(
+        body['params'],
+        equals({'targetCode': 'es', 'nativeCode': 'en', 'level': 'beginner'}),
+      );
       expect(body['source'], equals('test'));
       expect(body['model'], isNotEmpty);
     });
@@ -90,7 +100,10 @@ AI_PROXY_TOKEN=secret-token
       final client = MockClient((_) async => http.Response('nope', 500));
       expect(
         () => http.runWithClient(
-          () => AiService.instance.generateText(prompt: 'x', source: 'test'),
+          () => AiService.instance.generateText(
+              spec: AiPromptSpec.quiz(
+                  targetCode: 'es', nativeCode: 'en', level: 'beginner'),
+              source: 'test'),
           () => client,
         ),
         throwsA(isA<StateError>()),
@@ -103,7 +116,10 @@ AI_PROXY_TOKEN=secret-token
           (_) async => http.Response(json.encode({'wrong': 'shape'}), 200));
       expect(
         () => http.runWithClient(
-          () => AiService.instance.generateText(prompt: 'x', source: 'test'),
+          () => AiService.instance.generateText(
+              spec: AiPromptSpec.quiz(
+                  targetCode: 'es', nativeCode: 'en', level: 'beginner'),
+              source: 'test'),
           () => client,
         ),
         throwsA(isA<FormatException>()),
@@ -115,7 +131,10 @@ AI_PROXY_TOKEN=secret-token
           (_) async => http.Response(json.encode({'text': '   '}), 200));
       expect(
         () => http.runWithClient(
-          () => AiService.instance.generateText(prompt: 'x', source: 'test'),
+          () => AiService.instance.generateText(
+              spec: AiPromptSpec.quiz(
+                  targetCode: 'es', nativeCode: 'en', level: 'beginner'),
+              source: 'test'),
           () => client,
         ),
         throwsA(isA<StateError>()),
@@ -138,7 +157,7 @@ AI_PROXY_TOKEN=secret-token
 
       final reply = await http.runWithClient(() async {
         final sessionId = await AiService.instance.createSession(
-          systemInstruction: 'you are a tutor',
+          spec: AiPromptSpec.chat(targetCode: 'es', nativeCode: 'en'),
           history: const [AiChatMessage(role: 'user', text: 'hi')],
           source: 'test',
         );
@@ -154,7 +173,10 @@ AI_PROXY_TOKEN=secret-token
       expect(requests, hasLength(2));
 
       final startBody = json.decode(requests[0].body) as Map<String, dynamic>;
-      expect(startBody['systemInstruction'], equals('you are a tutor'));
+      expect(startBody.containsKey('systemInstruction'), isFalse);
+      expect(startBody['mode'], equals('chat'));
+      expect(startBody['params'],
+          equals({'targetCode': 'es', 'nativeCode': 'en'}));
       expect(startBody['history'], hasLength(1));
 
       final sendBody = json.decode(requests[1].body) as Map<String, dynamic>;
@@ -168,7 +190,8 @@ AI_PROXY_TOKEN=secret-token
       expect(
         () => http.runWithClient(
           () => AiService.instance
-              .createSession(systemInstruction: 'x', source: 'test'),
+              .createSession(
+                  spec: AiPromptSpec.pet(targetCode: 'es'), source: 'test'),
           () => client,
         ),
         throwsA(isA<StateError>()),

@@ -6,6 +6,7 @@ import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../constants/bond.dart';
+import '../constants/gold.dart';
 import '../providers/character_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/settings_provider.dart';
@@ -78,6 +79,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
     // Per card, not per session: acting on a correction is the single event
     // most likely to be real learning rather than exposure.
     characterProvider.recordLearning(BondSource.correction);
+    // And the same per card in coins, up to a daily cap. Reviewing paid
+    // nothing at all before, which put the app's most valuable learning act
+    // level with idling. The cap is what keeps grading fast from being a
+    // faster way to earn than studying properly.
+    await userProvider.awardLearningGold(
+      characterProvider.scaleReward(GoldConstants.review),
+      GoldSource.review,
+    );
 
     if (!mounted) return;
     setState(() {

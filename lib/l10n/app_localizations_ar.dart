@@ -665,6 +665,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get scenarioContinue => 'متابعة';
 
   @override
+  String get scenarioFinish => 'إنهاء';
+
+  @override
+  String get scenarioFinishTitle => 'إنهاء المشهد؟';
+
+  @override
+  String get scenarioFinishBody =>
+      'لا تزال بعض الأهداف مفتوحة. الإنهاء الآن يمنحك مكافأة جزئية، ويبقى السيناريو غير مكتمل لتتمكن من إتمامه كما ينبغي لاحقًا.';
+
+  @override
+  String get scenarioFinishConfirm => 'إنهاء على أي حال';
+
+  @override
+  String get scenarioFinishCancel => 'متابعة المحادثة';
+
+  @override
+  String get scenarioPartialTitle => 'انتهى المشهد';
+
+  @override
+  String get scenarioPartialNote =>
+      'مكافأة جزئية — أكمل جميع الأهداف للحصول على المكافأة كاملة.';
+
+  @override
   String get objCoffeeOrder => 'اطلب مشروبًا';
 
   @override
@@ -971,9 +994,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accessoryFlowerCrownName => 'إكليل زهور';
 
   @override
-  String get accessoryDevilHornsName => 'قرون شيطان';
-
-  @override
   String get onboardingLanguageQuestion => 'ما اللغة التي تتحدثها؟';
 
   @override
@@ -1032,4 +1052,44 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get accountErrorSignIn =>
       'تعذّر تسجيل الدخول. تحقق من بياناتك وحاول مجددًا.';
+
+  @override
+  String get adsFreeCoins => 'عملات مجانية';
+
+  @override
+  String adsWatchForCoins(int coins) {
+    return 'شاهد فيديو مقابل +$coins';
+  }
+
+  @override
+  String adsLeftToday(int remaining, int total) {
+    return 'بقي $remaining من $total اليوم';
+  }
+
+  @override
+  String get adsNoneLeftToday => 'هذا كل شيء لليوم';
+
+  @override
+  String get adsNotReady => 'لا يوجد فيديو متاح الآن';
+
+  @override
+  String adsEarnedCoins(int coins) {
+    return '+$coins عملة!';
+  }
+
+  @override
+  String get onboardingBirthYearTitle => 'في أي عام وُلدت؟';
+
+  @override
+  String get onboardingBirthYearHint => 'السنة';
+
+  @override
+  String get onboardingBirthYearWhy =>
+      'يُستخدم هذا فقط لتحديد الإعلانات المناسبة لك.';
+
+  @override
+  String get onboardingBirthYearInvalid => 'يرجى إدخال سنة صحيحة';
+
+  @override
+  String get privacyRedactedNotice => 'تم إخفاء البيانات الشخصية قبل الإرسال.';
 }

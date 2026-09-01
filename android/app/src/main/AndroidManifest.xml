@@ -7,6 +7,12 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <!-- Advertising ID, for personalised ads. Requested from Android 13.
+         Under-13 players never get personalised ads regardless: the SDK is
+         told to apply child treatment for them, from the age answer given
+         during onboarding. See lib/services/ads_service.dart. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
     <application
         android:label="Mimikin"
         android:name="${applicationName}"
@@ -48,6 +54,22 @@
         <receiver
             android:exported="false"
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+
+        <!-- AdMob app id. REPLACE BEFORE RELEASE.
+             This is Google's public *test* app id, not ours. It is here
+             rather than a real one because the app has no AdMob account yet,
+             and because a debug build serving live inventory means developers
+             generating impressions on their own ads, which is what gets an
+             AdMob account terminated. Swap it for the real id from the AdMob
+             console at the same time as the ad unit ids in
+             lib/constants/app_runtime_config.dart, and do the same for
+             GADApplicationIdentifier in ios/Runner/Info.plist.
+
+             Note this cannot come from --dart-define: the manifest is read by
+             the SDK at process start, long before any Dart runs. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

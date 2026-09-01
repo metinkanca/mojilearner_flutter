@@ -19,7 +19,7 @@ void main() {
       final outcome = reward(bonusCleared: 0);
 
       expect(outcome.xpReward, equals(35));
-      expect(outcome.coinReward, equals(12));
+      expect(outcome.coinReward, equals(30));
       expect(outcome.isFirstClear, isTrue);
     });
 
@@ -27,7 +27,7 @@ void main() {
       final outcome = reward(bonusCleared: 1);
 
       expect(outcome.xpReward, equals(45));
-      expect(outcome.coinReward, equals(18));
+      expect(outcome.coinReward, equals(35));
     });
 
     test('scales partially with several bonus objectives', () {
@@ -65,6 +65,20 @@ void main() {
       );
     });
 
+    test('a first clear beats a quiz, because it is the harder work', () {
+      // A scenario is five minutes of unbroken target language against a
+      // quiz's ninety seconds. It used to pay 12-18 coins to a quiz's 20,
+      // which made the hardest content in the game the worst-paid per minute
+      // in it.
+      final bestQuiz = ProgressionUtils.getQuizRewardOutcome(
+        correctAnswers: 5,
+        totalQuestions: 5,
+      );
+      final firstClear = reward(bonusCleared: 1, isFirstClear: true);
+
+      expect(firstClear.coinReward, greaterThan(bestQuiz.coinReward));
+    });
+
     test('a replay never out-earns a quiz, so it cannot become the farm', () {
       // The best repeatable quiz payout is the yardstick: scenario replays
       // must stay clearly below it or they become the cheapest coin source.
@@ -79,12 +93,61 @@ void main() {
     });
   });
 
+  group('getScenarioPartialOutcome', () {
+    ScenarioRewardOutcome partial({required int cleared, int total = 4}) {
+      return ProgressionUtils.getScenarioPartialOutcome(
+        objectivesCleared: cleared,
+        objectivesTotal: total,
+      );
+    }
+
+    test('is never a clear, so it cannot consume the first-clear tier', () {
+      final outcome = partial(cleared: 3);
+
+      expect(outcome.isPartial, isTrue);
+      expect(outcome.isFirstClear, isFalse);
+    });
+
+    test('pays nothing for a run walked out of immediately', () {
+      final outcome = partial(cleared: 0);
+
+      expect(outcome.xpReward, isZero);
+      expect(outcome.coinReward, isZero);
+      expect(outcome.happinessDelta, isZero);
+    });
+
+    test('pays more the further the run got', () {
+      expect(partial(cleared: 3).xpReward,
+          greaterThan(partial(cleared: 1).xpReward));
+      expect(partial(cleared: 3).coinReward,
+          greaterThan(partial(cleared: 1).coinReward));
+    });
+
+    test('a near-complete bail still pays less than the cheapest clear', () {
+      // Otherwise finishing early becomes the efficient way to play: three of
+      // four objectives and out, over and over.
+      final cheapestClear = reward(bonusCleared: 0, isFirstClear: false);
+
+      expect(partial(cleared: 3).coinReward,
+          lessThan(cheapestClear.coinReward));
+      expect(partial(cleared: 3).xpReward, lessThan(cheapestClear.xpReward));
+    });
+
+    test('tolerates degenerate counts', () {
+      expect(partial(cleared: 9, total: 4).xpReward,
+          equals(partial(cleared: 4, total: 4).xpReward));
+      expect(partial(cleared: -2, total: 4).xpReward, isZero);
+      expect(partial(cleared: 1, total: 0).xpReward, isZero);
+      expect(partial(cleared: 1, total: -3).xpReward, isZero);
+    });
+  });
+
   group('getScenarioRewardOutcome - degenerate input', () {
     test('handles a scenario with no bonus objectives', () {
       final outcome = reward(bonusCleared: 0, bonusTotal: 0);
 
       expect(outcome.xpReward, equals(35));
-      expect(outcome.coinReward, equals(12));
+      expect(outcome.coinReward, equals(30));
     });
 
     test('clamps a cleared count above the total', () {

@@ -48,7 +48,14 @@ class CharacterProvider extends ChangeNotifier {
   static const double sickRewardMultiplier = 0.5;
 
   // Stat decay rates (points per hour).
-  static const int _hungerGainPerHour = 3;
+  //
+  // Hunger was 3/hour — 72 points a day, which cost around 36 coins of food
+  // and made upkeep a flat tax that fell hardest on the players earning
+  // least. At 2/hour the pet still empties half its bar a day, so feeding
+  // stays a real daily act, but the week's decay now roughly matches the food
+  // the daily login cycle hands out (see `dailyRewards`). Coins buy
+  // appearance; showing up buys dinner.
+  static const int _hungerGainPerHour = 2;
   static const int _happinessLossPerHour = 2;
   static const int _healthLossPerHour = 1;
 

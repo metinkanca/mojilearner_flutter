@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +7,12 @@ import '../../components/quiz_rewards_popup.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/user_provider.dart';
+import '../../utils/level_validator.dart';
 import '../../utils/progression_utils.dart';
+import '../../utils/quiz_response_parser.dart';
 import '../../utils/rtl_locale.dart';
+import '../../services/ai_guard.dart';
+import '../../services/ai_prompt_spec.dart';
 import '../../services/ai_service.dart';
 import '../../../utils/fonts.dart';
 
@@ -36,37 +39,44 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
 
   Future<void> _startCalibration() async {
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-    final targetLang = languageProvider.targetLanguage?.name ?? 'Spanish';
 
     try {
-      final prompt = '''
-        Context: Create a test for $targetLang.
-        Rules: Keep questions clear. One concept per question.
-        Format: JSON array of objects.
-        Example: [{"question": "Translate 'Hello'", "topic": "Hello", "options": ["Hola", "Adios"], "correct": "Hola", "explanation": "..."}]
-        Important: Include a short 'topic' field (max 1-2 words) which will be shown big (e.g. 'Cat?'). 'question' field should be the prompt (e.g. 'How do you say...').
-      ''';
+      final guard = AiGuard.checkRequest(
+        kind: AiRequestKind.quiz,
+        source: 'calibration_screen',
+      );
+      if (!guard.allowed) {
+        setState(() => _isLoading = false);
+        return;
+      }
+      AiGuard.recordRequest('calibration_screen');
 
+      // The same quiz prompt the main quiz asks for. What this screen sent
+      // before was four indented lines with no question count, no level, no
+      // option count and no "JSON only" rule — it relied on an example to
+      // imply the shape and on the model to guess the rest. Onboarding has no
+      // review history yet, so no review data goes with it.
       final aiText = await AiService.instance.generateText(
-        prompt: prompt,
+        spec: AiPromptSpec.quiz(
+          targetCode: languageProvider.targetLanguage?.code,
+          nativeCode: languageProvider.nativeLanguage.code,
+          level: LevelValidator.beginner,
+        ),
         source: 'calibration_screen',
         // Structured JSON: no thinking, low randomness.
         config: AiGenerationConfig.structuredJson,
       );
 
       if (aiText.isNotEmpty) {
-        String jsonText = aiText.trim();
-        if (jsonText.startsWith('```json')) {
-          jsonText = jsonText.replaceAll('```json', '').replaceAll('```', '');
-        } else if (jsonText.startsWith('```')) {
-          jsonText = jsonText.replaceAll('```', '');
+        // Validated parse: exactly four distinct options, the correct answer
+        // present among them, fields capped and markers escaped.
+        final parsed = QuizResponseParser.parseAsMaps(aiText);
+        if (parsed.isNotEmpty) {
+          setState(() {
+            _questions = parsed;
+            _isLoading = false;
+          });
         }
-        
-        final List<dynamic> data = json.decode(jsonText);
-        setState(() {
-          _questions = data.cast<Map<String, dynamic>>();
-          _isLoading = false;
-        });
       }
     } catch (e) {
       debugPrint('Error generating quiz: $e');

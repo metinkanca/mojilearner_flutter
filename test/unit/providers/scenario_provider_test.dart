@@ -123,6 +123,33 @@ void main() {
     });
   });
 
+  group('ScenarioProvider.endRunEarly', () {
+    test('clears the run without ever counting as a completion', () {
+      provider.markObjectives(coffee, ['order', 'price']);
+      provider.endRunEarly(coffee);
+
+      expect(provider.forScenario('coffee').clearedObjectiveIds, isEmpty);
+      expect(provider.forScenario('coffee').timesCompleted, equals(0));
+      expect(provider.hasEverCompleted('coffee'), isFalse);
+    });
+
+    test('leaves the first clear still available afterwards', () {
+      // The whole point of the early exit: bailing out of a stuck scene must
+      // not burn the one-off first-clear reward.
+      provider.markObjectives(coffee, ['order']);
+      provider.endRunEarly(coffee);
+
+      expect(provider.completeRun(coffee), isTrue);
+    });
+
+    test('stamps the run as played', () {
+      final moment = DateTime(2026, 3, 4, 12);
+      provider.endRunEarly(coffee, now: moment);
+
+      expect(provider.forScenario('coffee').lastPlayedAt, equals(moment));
+    });
+  });
+
   group('ScenarioProvider.resetRun', () {
     test('clears the current run without recording a completion', () {
       provider.markObjectives(coffee, ['order']);

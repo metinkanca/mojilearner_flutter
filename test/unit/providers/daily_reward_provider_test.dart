@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mojilearner_flutter/constants/progression.dart';
 import 'package:mojilearner_flutter/providers/daily_reward_provider.dart';
 import 'package:mojilearner_flutter/providers/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +96,7 @@ void main() {
           DateTime(yesterday.year, yesterday.month, yesterday.day)
               .toIso8601String();
 
-      // Use streak 0 so next reward is streak 1 (day 1 = 50 coins)
+      // Use streak 0 so next reward is streak 1, the cycle's coin day
       SharedPreferences.setMockInitialValues({
         'last_reward_claim_date': yesterdayStr,
         'streak': 0,
@@ -111,8 +112,13 @@ void main() {
       await provider.claimDailyReward();
       await Future.delayed(const Duration(milliseconds: 50));
 
-      // Day 1 reward gives 50 coins; streak advanced on UserProvider.
-      expect(userProvider.coins, equals(initialCoins + 50));
+      // Day 1 pays coins; streak advanced on UserProvider. Read the amount
+      // from the schedule rather than restating it, so retuning the cycle
+      // does not mean editing this assertion.
+      expect(
+        userProvider.coins,
+        equals(initialCoins + dailyRewards.first.value),
+      );
       expect(userProvider.streak, equals(1));
       expect(provider.dailyRewardClaimCount, equals(1));
 

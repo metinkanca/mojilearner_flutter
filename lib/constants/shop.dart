@@ -132,7 +132,7 @@ const List<ShopItem> _catalogue = [
 /// Only the coin-priced ones appear. Free starters need no shop entry, and the
 /// bond-gated pieces must not have one — putting a price on them, even a large
 /// one, would turn "earned by learning" back into "bought".
-final List<ShopItem> accessoryShopItems = kAccessories
+final List<ShopItem> accessoryShopItems = visibleAccessories
     .where((a) => a.price != null)
     .map((a) => ShopItem(
           id: a.id,

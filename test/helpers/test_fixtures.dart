@@ -10,6 +10,23 @@ class TestFixtures {
   static const int testLevel = 3;
   static const int testCoins = 500;
   static const int testStreak = 5;
+
+  /// Mock prefs for a player who has already had the one-time welcome gift.
+  ///
+  /// `UserProvider` grants the level-1 reward on first load, so a test that
+  /// seeds a balance and then asserts on it gets that gift added underneath
+  /// unless it says otherwise. Spread this into `setMockInitialValues` when
+  /// the balance under test should be exactly what the test set:
+  ///
+  /// ```dart
+  /// SharedPreferences.setMockInitialValues({
+  ///   ...TestFixtures.welcomeGiftAlreadyGiven,
+  ///   'coins': 500,
+  /// });
+  /// ```
+  static const Map<String, Object> welcomeGiftAlreadyGiven = {
+    'welcome_reward_granted': true,
+  };
   
   // Pet test data
   static const int testHunger = 50;

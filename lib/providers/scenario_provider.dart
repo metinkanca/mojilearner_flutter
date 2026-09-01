@@ -120,6 +120,22 @@ class ScenarioProvider extends ChangeNotifier {
     return isFirstClear;
   }
 
+  /// Ends a run the learner walked away from, with required objectives still
+  /// outstanding.
+  ///
+  /// Deliberately not [completeRun]: the checklist resets the same way, but
+  /// nothing about it counts as a clear, so `hasEverCompleted` stays false
+  /// and the first-clear tier is still there to be earned properly later.
+  void endRunEarly(ScenarioDefinition scenario, {DateTime? now}) {
+    final current = forScenario(scenario.id);
+    _progress[scenario.id] = current.copyWith(
+      clearedObjectiveIds: const {},
+      lastPlayedAt: now ?? DateTime.now(),
+    );
+    _save();
+    notifyListeners();
+  }
+
   /// Wipes the current run without recording a completion. Used when a
   /// learner restarts a scenario they abandoned part-way.
   void resetRun(String scenarioId) {

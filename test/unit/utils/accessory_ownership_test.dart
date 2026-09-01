@@ -56,13 +56,26 @@ void main() {
         isNotEmpty,
       );
     });
+
+    test('withholds a hidden piece from the wardrobe without unmaking it', () {
+      for (final a in kAccessories.where((a) => a.hidden)) {
+        expect(
+          accessoriesForSlot(a.slot).map((v) => v.id),
+          isNot(contains(a.id)),
+          reason: '${a.id} is withheld, so the wardrobe must not offer it',
+        );
+        // Still resolvable: a design already wearing it keeps it, rather than
+        // being stripped by CharacterProvider's catalogue sweep.
+        expect(accessoryById(a.id), isNotNull, reason: a.id);
+      }
+    });
   });
 
   group('the derived shop listing', () {
     test('lists every priced accessory and nothing else', () {
       expect(
         accessoryShopItems.map((i) => i.id).toSet(),
-        kAccessories.where((a) => a.price != null).map((a) => a.id).toSet(),
+        visibleAccessories.where((a) => a.price != null).map((a) => a.id).toSet(),
       );
     });
 

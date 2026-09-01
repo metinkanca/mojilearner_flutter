@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/constants/bond.dart';
+import 'package:mojilearner_flutter/constants/gold.dart';
 import 'package:mojilearner_flutter/models/models.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
@@ -136,8 +137,29 @@ void main() {
     await tester.tap(find.text('Again'));
     await tester.pumpAndSettle();
 
-    verify(() => mockCharacter.scaleReward(any())).called(1);
+    // Both payouts go through the sickness scaling: XP and coins.
+    verify(() => mockCharacter.scaleReward(any())).called(2);
     verify(() => mockUser.addXp(3)).called(1);
+  });
+
+  // Reviewing paid no coins at all before, which put the app's most valuable
+  // learning act level with idling. It pays per card now, capped for the day
+  // (see `gold.dart`).
+  testWidgets('grading pays coins as well as XP', (tester) async {
+    final vocab = buildVocab();
+
+    await pumpReview(tester, vocab);
+    await tester.tap(find.text('Show answer'));
+    await tester.pump();
+    await tester.tap(find.text('Again'));
+    await tester.pumpAndSettle();
+
+    // The amount is whatever the sickness scaling returned (stubbed to 3
+    // here); what this pins is that one review paid once, from the review
+    // source, so the day's cap counts it against the right ceiling.
+    expect(mockUser.awardedGold.map((a) => a.source),
+        equals([GoldSource.review]));
+    expect(mockUser.goldFrom(GoldSource.review), greaterThan(0));
   });
 
   // Bond, unlike XP, is not scaled by sickness and cannot be bought. Grading
