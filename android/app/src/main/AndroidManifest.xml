@@ -65,8 +65,10 @@
              lib/constants/app_runtime_config.dart, and do the same for
              GADApplicationIdentifier in ios/Runner/Info.plist.
 
-             Note this cannot come from --dart-define: the manifest is read by
-             the SDK at process start, long before any Dart runs. -->
+             Note this cannot come from a dart-define: the manifest is read by
+             the SDK at process start, long before any Dart runs. (Spelling it
+             with the two leading dashes would be an XML parse error — a
+             comment may not contain a double hyphen.) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
