@@ -9,13 +9,13 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get header => 'Ustawienia jÄ™zyka';
+  String get header => 'Ustawienia języka';
 
   @override
-  String get iSpeak => 'MÃ³wiÄ™ po';
+  String get iSpeak => 'Mówię po';
 
   @override
-  String get imLearning => 'UczÄ™ siÄ™';
+  String get imLearning => 'Uczę się';
 
   @override
   String get currentSelection => 'Obecny wybór:';
@@ -30,7 +30,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get streak => 'Seria';
 
   @override
-  String get audio => 'GÅ‚os bota';
+  String get audio => 'Głos bota';
 
   @override
   String get designMojiBtn => 'Zaprojektuj Moji';
@@ -39,13 +39,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get quizMode => 'Quiz';
 
   @override
-  String get quizDesc => 'SprawdÅº swojÄ… wiedzÄ™.';
+  String get quizDesc => 'Sprawdź swoją wiedzę.';
 
   @override
   String get scenarios => 'Scenariusze';
 
   @override
-  String get scenariosDesc => 'Ä†wicz prawdziwe rozmowy.';
+  String get scenariosDesc => 'Ćwicz prawdziwe rozmowy.';
 
   @override
   String get profile => 'Profil';
@@ -63,34 +63,34 @@ class AppLocalizationsPl extends AppLocalizations {
   String get profileDesc => 'Zobacz statystyki i ustawienia.';
 
   @override
-  String get voiceCall => 'Rozmowa gÅ‚osowa';
+  String get voiceCall => 'Rozmowa głosowa';
 
   @override
-  String get voiceCallDesc => 'Ä†wicz mÃ³wienie w czasie rzeczywistym.';
+  String get voiceCallDesc => 'Ćwicz mówienie w czasie rzeczywistym.';
 
   @override
-  String get practiceRealLife => 'Ä†wicz prawdziwe Å¼ycie';
+  String get practiceRealLife => 'Ćwicz prawdziwe życie';
 
   @override
-  String get chooseSituation => 'Wybierz sytuacjÄ™';
+  String get chooseSituation => 'Wybierz sytuację';
 
   @override
-  String get createYourOwn => 'StwÃ³rz wÅ‚asnÄ…';
+  String get createYourOwn => 'Stwórz własną';
 
   @override
-  String get startCustom => 'Rozpocznij wÅ‚asny scenariusz';
+  String get startCustom => 'Rozpocznij własny scenariusz';
 
   @override
-  String get customPlaceholder => 'Np. JesteÅ› taksÃ³wkarzem...';
+  String get customPlaceholder => 'Np. Jesteś taksówkarzem...';
 
   @override
   String get orderingCoffee => 'Zamawianie kawy';
 
   @override
-  String get jobInterview => 'Rozmowa o pracÄ™';
+  String get jobInterview => 'Rozmowa o pracę';
 
   @override
-  String get askingDirections => 'Pytanie o drogÄ™';
+  String get askingDirections => 'Pytanie o drogę';
 
   @override
   String get atTheDoctor => 'U lekarza';
@@ -105,7 +105,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get chats => 'Czaty';
 
   @override
-  String get searchPlaceholder => 'Szukaj wiadomoÅ›ci...';
+  String get searchPlaceholder => 'Szukaj wiadomości...';
 
   @override
   String get newChat => 'Nowy czat';
@@ -114,7 +114,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noChats => 'Brak czatów';
 
   @override
-  String get startNewConversation => 'Rozpocznij nowÄ… rozmowÄ™';
+  String get startNewConversation => 'Rozpocznij nową rozmowę';
 
   @override
   String get blankChat => 'Pusty czat';
@@ -126,7 +126,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get roleplayScenario => 'Scenariusz ról';
 
   @override
-  String get roleplayScenarioDesc => 'Ä†wicz konkretne sytuacje';
+  String get roleplayScenarioDesc => 'Ćwicz konkretne sytuacje';
 
   @override
   String get chooseChatType => 'Wybierz typ czatu';
@@ -135,28 +135,28 @@ class AppLocalizationsPl extends AppLocalizations {
   String get cancel => 'Anuluj';
 
   @override
-  String get typeMessage => 'Wpisz wiadomoÅ›Ä‡...';
+  String get typeMessage => 'Wpisz wiadomość...';
 
   @override
   String get designMoji => 'Projektuj Moji';
 
   @override
-  String get fullCustomization => 'PeÅ‚na personalizacja';
+  String get fullCustomization => 'Pełna personalizacja';
 
   @override
-  String get tapToChange => 'Dotknij, aby zmieniÄ‡';
+  String get tapToChange => 'Dotknij, aby zmienić';
 
   @override
   String get mascotColor => 'Kolor maskotki';
 
   @override
-  String get backgroundColor => 'Kolor tÅ‚a';
+  String get backgroundColor => 'Kolor tła';
 
   @override
   String get faceExpressions => 'Wyrazy twarzy';
 
   @override
-  String get personalityFaces => 'OsobowoÅ›Ä‡ i twarze';
+  String get personalityFaces => 'Osobowość i twarze';
 
   @override
   String get selectFaces => 'Wybierz twarze.';
@@ -166,14 +166,14 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String unlockMessage(Object level) {
-    return 'OsiÄ…gnij poziom $level, aby odblokowaÄ‡!';
+    return 'Osiągnij poziom $level, aby odblokować!';
   }
 
   @override
-  String get yourMistakes => 'Twoje bÅ‚Ä™dy';
+  String get yourMistakes => 'Twoje błędy';
 
   @override
-  String get learnFromWrong => 'Ucz siÄ™ na bÅ‚Ä™dach';
+  String get learnFromWrong => 'Ucz się na błędach';
 
   @override
   String get all => 'Wszystkie';
@@ -188,13 +188,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get close => 'Zamknij';
 
   @override
-  String get noGrammarAnalysis => 'Analiza gramatyczna niedostÄ™pna.';
+  String get noGrammarAnalysis => 'Analiza gramatyczna niedostępna.';
 
   @override
-  String get vocabulary => 'SÅ‚ownictwo';
+  String get vocabulary => 'Słownictwo';
 
   @override
-  String get noMistakes => 'Nie znaleziono bÅ‚Ä™dÃ³w!';
+  String get noMistakes => 'Nie znaleziono błędów!';
 
   @override
   String get yourAnswer => 'Twoja odpowiedź';
@@ -203,13 +203,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get correctAnswer => 'Poprawna odpowiedź';
 
   @override
-  String get explanation => 'WyjaÅ›nienie';
+  String get explanation => 'Wyjaśnienie';
 
   @override
   String get story => 'Scenariusze';
 
   @override
-  String get drills => 'BÅ‚Ä™dy';
+  String get drills => 'Błędy';
 
   @override
   String get typeHere => 'Wpisz tutaj...';
@@ -242,19 +242,19 @@ class AppLocalizationsPl extends AppLocalizations {
   String get alreadyOwnedMessage => 'Już posiadasz ten przedmiot!';
 
   @override
-  String get quantity => 'IloÅ›Ä‡';
+  String get quantity => 'Ilość';
 
   @override
-  String get totalPrice => 'CaÅ‚kowita Cena';
+  String get totalPrice => 'Całkowita Cena';
 
   @override
-  String get notEnoughCoins => 'NiewystarczajÄ…ce Monety!';
+  String get notEnoughCoins => 'Niewystarczające Monety!';
 
   @override
   String get purchaseFailed => 'Zakup Nieudany';
 
   @override
-  String get notEnoughCoinsMessage => 'NiewystarczajÄ…ce monety!';
+  String get notEnoughCoinsMessage => 'Niewystarczające monety!';
 
   @override
   String get buy => 'Kup';
@@ -294,10 +294,10 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get whatsYourName => 'JAK MASZ NA IMIÄ˜?';
+  String get whatsYourName => 'JAK MASZ NA IMIĘ?';
 
   @override
-  String get enterYourName => 'Wpisz swoje imiÄ™';
+  String get enterYourName => 'Wpisz swoje imię';
 
   @override
   String get continueBtn => 'KONTYNUUJ';
@@ -306,84 +306,84 @@ class AppLocalizationsPl extends AppLocalizations {
   String get howWouldYouRate => 'JAK OCENIASZ';
 
   @override
-  String get yourLevel => 'SWÃ“J POZIOM?';
+  String get yourLevel => 'SWÓJ POZIOM?';
 
   @override
-  String get beginner => 'POCZÄ„TKUJÄ„CY';
+  String get beginner => 'POCZĄTKUJĄCY';
 
   @override
-  String get intermediate => 'ÅšREDNIOZAAWANSOWANY';
+  String get intermediate => 'ŚREDNIOZAAWANSOWANY';
 
   @override
   String get advanced => 'ZAAWANSOWANY';
 
   @override
-  String get beginnerDesc => 'Dopiero zaczynam. Znam bardzo maÅ‚o sÅ‚Ã³w.';
+  String get beginnerDesc => 'Dopiero zaczynam. Znam bardzo mało słów.';
 
   @override
   String get intermediateDesc =>
-      'MogÄ™ prowadziÄ‡ podstawowe rozmowy i rozumieÄ‡ proste teksty.';
+      'Mogę prowadzić podstawowe rozmowy i rozumieć proste teksty.';
 
   @override
   String get advancedDesc =>
-      'Jestem biegÅ‚y lub prawie biegÅ‚y. MogÄ™ dyskutowaÄ‡ o zÅ‚oÅ¼onych tematach.';
+      'Jestem biegły lub prawie biegły. Mogę dyskutować o złożonych tematach.';
 
   @override
-  String get whichLanguage => 'KTÃ“REGO JÄ˜ZYKA';
+  String get whichLanguage => 'KTÓREGO JĘZYKA';
 
   @override
-  String get doYouWantToLearn => 'CHCESZ SIÄ˜ UCZYÄ†?';
+  String get doYouWantToLearn => 'CHCESZ SIĘ UCZYĆ?';
 
   @override
   String get changeAnytime =>
-      'MoÅ¼esz to zmieniÄ‡ w kaÅ¼dej chwili w ustawieniach';
+      'Możesz to zmienić w każdej chwili w ustawieniach';
 
   @override
   String get dontWorryVerify =>
-      'Nie martw siÄ™, zweryfikujemy to szybkim czatem!';
+      'Nie martw się, zweryfikujemy to szybkim czatem!';
 
   @override
-  String get startAssessment => 'ROZPOCZNIJ OCENÄ˜';
+  String get startAssessment => 'ROZPOCZNIJ OCENĘ';
 
   @override
   String get chatAssessment => 'OCENA CZATU';
 
   @override
-  String get typeYourAnswer => 'Wpisz swojÄ… odpowiedÅº...';
+  String get typeYourAnswer => 'Wpisz swoją odpowiedź...';
 
   @override
   String get mojiIsTyping => 'Moji pisze...';
 
   @override
-  String get send => 'WYÅšLIJ';
+  String get send => 'WYŚLIJ';
 
   @override
-  String get calibrationComplete => 'Kalibracja ZakoÅ„czona!';
+  String get calibrationComplete => 'Kalibracja Zakończona!';
 
   @override
   String get basedOnYourAnswers =>
       'Na podstawie Twoich odpowiedzi zalecany poziom startowy to:';
 
   @override
-  String get proficiencyLevel => 'Poziom BiegÅ‚oÅ›ci';
+  String get proficiencyLevel => 'Poziom Biegłości';
 
   @override
-  String get shopItemAppleName => 'JabÅ‚ko';
+  String get shopItemAppleName => 'Jabłko';
 
   @override
-  String get shopItemAppleDescription => 'Zdrowa przekÄ…ska.';
+  String get shopItemAppleDescription => 'Zdrowa przekąska.';
 
   @override
   String get shopItemCroissantName => 'Croissant';
 
   @override
-  String get shopItemCroissantDescription => 'MasÅ‚ana dobroÄ‡.';
+  String get shopItemCroissantDescription => 'Masłana dobroć.';
 
   @override
   String get shopItemPizzaName => 'Plasterek pizzy';
 
   @override
-  String get shopItemPizzaDescription => 'Serowy i sycÄ…cy.';
+  String get shopItemPizzaDescription => 'Serowy i sycący.';
 
   @override
   String get shopItemSushiName => 'Zestaw sushi';
@@ -459,7 +459,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get shopItemBgBlueName => 'Niebieski ocean';
 
   @override
-  String get shopItemBgBlueDescription => 'UspokajajÄ…ce niebieskie wibracje.';
+  String get shopItemBgBlueDescription => 'Uspokajające niebieskie wibracje.';
 
   @override
   String get shopItemBgForestName => 'Zielony las';
@@ -468,16 +468,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get shopItemBgForestDescription => 'Naturalne uczucie.';
 
   @override
-  String get shopItemBgSunsetName => 'PomaraÅ„czowy zachÃ³d sÅ‚oÅ„ca';
+  String get shopItemBgSunsetName => 'Pomarańczowy zachód słońca';
 
   @override
-  String get shopItemBgSunsetDescription => 'CiepÅ‚y i przytulny.';
+  String get shopItemBgSunsetDescription => 'Ciepły i przytulny.';
 
   @override
   String get shopItemBgGalaxyName => 'Fioletowa galaktyka';
 
   @override
-  String get shopItemBgGalaxyDescription => 'Poza tym Å›wiatem.';
+  String get shopItemBgGalaxyDescription => 'Poza tym światem.';
 
   @override
   String purchaseSuccessSingle(Object itemName) {

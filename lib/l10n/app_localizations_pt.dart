@@ -294,7 +294,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get whatsYourName => 'QUAL Ã‰ O SEU NOME?';
+  String get whatsYourName => 'QUAL É O SEU NOME?';
 
   @override
   String get enterYourName => 'Digite seu nome';
@@ -303,7 +303,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get continueBtn => 'CONTINUAR';
 
   @override
-  String get howWouldYouRate => 'COMO VOCÃŠ AVALIARIA';
+  String get howWouldYouRate => 'COMO VOCÊ AVALIARIA';
 
   @override
   String get yourLevel => 'SEU NÍVEL?';
@@ -315,7 +315,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get intermediate => 'INTERMEDIÁRIO';
 
   @override
-  String get advanced => 'AVANÃ‡ADO';
+  String get advanced => 'AVANÇADO';
 
   @override
   String get beginnerDesc => 'Estou começando. Conheço muito poucas palavras.';
@@ -332,7 +332,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get whichLanguage => 'QUAL IDIOMA';
 
   @override
-  String get doYouWantToLearn => 'VOCÃŠ QUER APRENDER?';
+  String get doYouWantToLearn => 'VOCÊ QUER APRENDER?';
 
   @override
   String get changeAnytime =>
@@ -343,10 +343,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Não se preocupe, vamos verificar isso com um bate-papo rápido!';
 
   @override
-  String get startAssessment => 'INICIAR AVALIAÃ‡ÃƒO';
+  String get startAssessment => 'INICIAR AVALIAÇÃO';
 
   @override
-  String get chatAssessment => 'AVALIAÃ‡ÃƒO POR CHAT';
+  String get chatAssessment => 'AVALIAÇÃO POR CHAT';
 
   @override
   String get typeYourAnswer => 'Digite sua resposta...';

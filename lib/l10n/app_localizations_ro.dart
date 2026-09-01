@@ -9,7 +9,7 @@ class AppLocalizationsRo extends AppLocalizations {
   AppLocalizationsRo([String locale = 'ro']) : super(locale);
 
   @override
-  String get header => 'SetÄƒri limbÄƒ';
+  String get header => 'Setări limbă';
 
   @override
   String get iSpeak => 'Vorbesc';
@@ -18,7 +18,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get imLearning => 'ÃnvÄƒÈ›';
 
   @override
-  String get currentSelection => 'SelecÈ›ia curentÄƒ:';
+  String get currentSelection => 'Selecția curentă:';
 
   @override
   String get level => 'Nivel';
@@ -33,19 +33,19 @@ class AppLocalizationsRo extends AppLocalizations {
   String get audio => 'Voce Bot';
 
   @override
-  String get designMojiBtn => 'CreeazÄƒ Moji';
+  String get designMojiBtn => 'Creează Moji';
 
   @override
   String get quizMode => 'Quiz';
 
   @override
-  String get quizDesc => 'TesteazÄƒ-È›i cunoÈ™tinÈ›ele.';
+  String get quizDesc => 'Testează-ți cunoștințele.';
 
   @override
   String get scenarios => 'Scenarii';
 
   @override
-  String get scenariosDesc => 'ExerseazÄƒ conversaÈ›ii reale.';
+  String get scenariosDesc => 'Exersează conversații reale.';
 
   @override
   String get profile => 'Profil';
@@ -60,31 +60,31 @@ class AppLocalizationsRo extends AppLocalizations {
   String get noMistakesYet => 'NICIO GREȘEALĂ ÎNCĂ!';
 
   @override
-  String get profileDesc => 'Vezi statistici È™i setÄƒri.';
+  String get profileDesc => 'Vezi statistici și setări.';
 
   @override
   String get voiceCall => 'Apel vocal';
 
   @override
-  String get voiceCallDesc => 'ExerseazÄƒ vorbirea Ã®n timp real.';
+  String get voiceCallDesc => 'Exersează vorbirea în timp real.';
 
   @override
-  String get practiceRealLife => 'PracticÄƒ viaÈ›a realÄƒ';
+  String get practiceRealLife => 'Practică viața reală';
 
   @override
-  String get chooseSituation => 'Alege o situaÈ›ie';
+  String get chooseSituation => 'Alege o situație';
 
   @override
-  String get createYourOwn => 'CreeazÄƒ propriul';
+  String get createYourOwn => 'Creează propriul';
 
   @override
   String get startCustom => 'Începe scenariu personalizat';
 
   @override
-  String get customPlaceholder => 'Ex. EÈ™ti È™ofer de taxi...';
+  String get customPlaceholder => 'Ex. Ești șofer de taxi...';
 
   @override
-  String get orderingCoffee => 'ComandÄƒ cafea';
+  String get orderingCoffee => 'Comandă cafea';
 
   @override
   String get jobInterview => 'Interviu de angajare';
@@ -96,22 +96,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get atTheDoctor => 'La doctor';
 
   @override
-  String get shopping => 'CumpÄƒrÄƒturi';
+  String get shopping => 'Cumpărături';
 
   @override
   String get restaurant => 'Restaurant';
 
   @override
-  String get chats => 'ConversaÈ›ii';
+  String get chats => 'Conversații';
 
   @override
-  String get searchPlaceholder => 'CautÄƒ mesaje...';
+  String get searchPlaceholder => 'Caută mesaje...';
 
   @override
   String get newChat => 'Chat nou';
 
   @override
-  String get noChats => 'Niciun chat Ã®ncÄƒ';
+  String get noChats => 'Niciun chat încă';
 
   @override
   String get startNewConversation => 'Ãncepe o conversaÈ›ie nouÄƒ';
@@ -126,28 +126,28 @@ class AppLocalizationsRo extends AppLocalizations {
   String get roleplayScenario => 'Scenariu de rol';
 
   @override
-  String get roleplayScenarioDesc => 'ExerseazÄƒ situaÈ›ii specifice';
+  String get roleplayScenarioDesc => 'Exersează situații specifice';
 
   @override
   String get chooseChatType => 'Alege tipul chatului';
 
   @override
-  String get cancel => 'AnuleazÄƒ';
+  String get cancel => 'Anulează';
 
   @override
-  String get typeMessage => 'Scrie mesajul tÄƒu...';
+  String get typeMessage => 'Scrie mesajul tău...';
 
   @override
   String get designMoji => 'Design Moji';
 
   @override
-  String get fullCustomization => 'Personalizare completÄƒ';
+  String get fullCustomization => 'Personalizare completă';
 
   @override
   String get tapToChange => 'Atinge pentru a schimba';
 
   @override
-  String get mascotColor => 'Culoare MascotÄƒ';
+  String get mascotColor => 'Culoare Mascotă';
 
   @override
   String get backgroundColor => 'Culoare Fundal';
@@ -156,10 +156,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get faceExpressions => 'Expresii faciale';
 
   @override
-  String get personalityFaces => 'Personalitate È™i FeÈ›e';
+  String get personalityFaces => 'Personalitate și Fețe';
 
   @override
-  String get selectFaces => 'Alege feÈ›ele.';
+  String get selectFaces => 'Alege fețele.';
 
   @override
   String get locked => 'Blocat';
@@ -170,7 +170,7 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get yourMistakes => 'GreÈ™elile tale';
+  String get yourMistakes => 'Greșelile tale';
 
   @override
   String get learnFromWrong => 'ÃnvaÈ›Äƒ din greÈ™eli';
@@ -179,41 +179,40 @@ class AppLocalizationsRo extends AppLocalizations {
   String get all => 'Toate';
 
   @override
-  String get grammar => 'GramaticÄƒ';
+  String get grammar => 'Gramatică';
 
   @override
-  String get grammarBreakdown => 'AnalizÄƒ GramaticalÄƒ';
+  String get grammarBreakdown => 'Analiză Gramaticală';
 
   @override
   String get close => 'Închide';
 
   @override
-  String get noGrammarAnalysis =>
-      'Nu existÄƒ analizÄƒ gramaticalÄƒ disponibilÄƒ.';
+  String get noGrammarAnalysis => 'Nu există analiză gramaticală disponibilă.';
 
   @override
   String get vocabulary => 'Vocabular';
 
   @override
-  String get noMistakes => 'Nicio greÈ™ealÄƒ gÄƒsitÄƒ!';
+  String get noMistakes => 'Nicio greșeală găsită!';
 
   @override
-  String get yourAnswer => 'RÄƒspunsul tÄƒu';
+  String get yourAnswer => 'Răspunsul tău';
 
   @override
-  String get correctAnswer => 'RÄƒspuns corect';
+  String get correctAnswer => 'Răspuns corect';
 
   @override
-  String get explanation => 'ExplicaÈ›ie';
+  String get explanation => 'Explicație';
 
   @override
   String get story => 'Scenarii';
 
   @override
-  String get drills => 'GreÈ™eli';
+  String get drills => 'Greșeli';
 
   @override
-  String get typeHere => 'TastaÈ›i aici...';
+  String get typeHere => 'Tastați aici...';
 
   @override
   String get shopTitle => 'Magazin';
@@ -368,34 +367,34 @@ class AppLocalizationsRo extends AppLocalizations {
   String get proficiencyLevel => 'Nivel de competență';
 
   @override
-  String get shopItemAppleName => 'MÄƒr';
+  String get shopItemAppleName => 'Măr';
 
   @override
-  String get shopItemAppleDescription => 'O gustare sÄƒnÄƒtoasÄƒ.';
+  String get shopItemAppleDescription => 'O gustare sănătoasă.';
 
   @override
   String get shopItemCroissantName => 'Croissant';
 
   @override
-  String get shopItemCroissantDescription => 'BunÄƒtate unturoasÄƒ.';
+  String get shopItemCroissantDescription => 'Bunătate unturoasă.';
 
   @override
   String get shopItemPizzaName => 'Felie de pizza';
 
   @override
-  String get shopItemPizzaDescription => 'CaseificatÄƒ È™i consistentÄƒ.';
+  String get shopItemPizzaDescription => 'Caseificată și consistentă.';
 
   @override
   String get shopItemSushiName => 'Set sushi';
 
   @override
-  String get shopItemSushiDescription => 'PeÈ™te premium.';
+  String get shopItemSushiDescription => 'Pește premium.';
 
   @override
   String get shopItemCoffeeName => 'Espresso';
 
   @override
-  String get shopItemCoffeeDescription => 'Accelerare rapidÄƒ a energiei.';
+  String get shopItemCoffeeDescription => 'Accelerare rapidă a energiei.';
 
   @override
   String get shopItemMedicineName => 'Medicament';
@@ -462,16 +461,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get shopItemBgBlueDescription => 'Vibracii albastra calmanta.';
 
   @override
-  String get shopItemBgForestName => 'Verde PÄƒdure';
+  String get shopItemBgForestName => 'Verde Pădure';
 
   @override
-  String get shopItemBgForestDescription => 'SimÈ›ÄƒmÃ¢nt natural.';
+  String get shopItemBgForestDescription => 'Simțământ natural.';
 
   @override
   String get shopItemBgSunsetName => 'Portocaliu Apus';
 
   @override
-  String get shopItemBgSunsetDescription => 'Cald È™i confortabil.';
+  String get shopItemBgSunsetDescription => 'Cald și confortabil.';
 
   @override
   String get shopItemBgGalaxyName => 'Violet Galaxie';
@@ -481,12 +480,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String purchaseSuccessSingle(Object itemName) {
-    return '$itemName cumpÄƒrat!';
+    return '$itemName cumpărat!';
   }
 
   @override
   String purchaseSuccessMultiple(Object itemName, Object quantity) {
-    return '$itemName x$quantity cumpÄƒrat!';
+    return '$itemName x$quantity cumpărat!';
   }
 
   @override

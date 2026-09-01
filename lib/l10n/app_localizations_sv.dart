@@ -45,7 +45,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get scenarios => 'Scenarier';
 
   @override
-  String get scenariosDesc => 'Ã–va verkliga samtal.';
+  String get scenariosDesc => 'Öva verkliga samtal.';
 
   @override
   String get profile => 'Profil';
@@ -57,7 +57,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mistakes => 'FEL';
 
   @override
-  String get noMistakesYet => 'INGA FEL Ã„NNU!';
+  String get noMistakesYet => 'INGA FEL ÄNNU!';
 
   @override
   String get profileDesc => 'Se statistik och inställningar.';
@@ -66,10 +66,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get voiceCall => 'Röstsamtal';
 
   @override
-  String get voiceCallDesc => 'Ã–va att tala i realtid.';
+  String get voiceCallDesc => 'Öva att tala i realtid.';
 
   @override
-  String get practiceRealLife => 'Ã–va verkliga livet';
+  String get practiceRealLife => 'Öva verkliga livet';
 
   @override
   String get chooseSituation => 'Välj en situation';
@@ -126,7 +126,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get roleplayScenario => 'Rollspelsscenario';
 
   @override
-  String get roleplayScenarioDesc => 'Ã–va specifika situationer';
+  String get roleplayScenarioDesc => 'Öva specifika situationer';
 
   @override
   String get chooseChatType => 'Välj chatt-typ';
@@ -227,16 +227,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get categoryDecor => 'Dekor';
 
   @override
-  String get hideOwnedCosmetics => 'DÃ¶lj Ã„gda Kosmetika';
+  String get hideOwnedCosmetics => 'Dölj Ägda Kosmetika';
 
   @override
   String get noItems => 'Inga Föremål';
 
   @override
-  String get owned => 'Ã„gd';
+  String get owned => 'Ägd';
 
   @override
-  String get alreadyOwned => 'Redan Ã„gd';
+  String get alreadyOwned => 'Redan Ägd';
 
   @override
   String get alreadyOwnedMessage => 'Du äger redan detta föremål!';
@@ -300,16 +300,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get enterYourName => 'Ange ditt namn';
 
   @override
-  String get continueBtn => 'FORTSÃ„TT';
+  String get continueBtn => 'FORTSÄTT';
 
   @override
-  String get howWouldYouRate => 'HUR SKULLE DU BEDÃ–MA';
+  String get howWouldYouRate => 'HUR SKULLE DU BEDÖMA';
 
   @override
-  String get yourLevel => 'DIN NIVÃ…?';
+  String get yourLevel => 'DIN NIVÅ?';
 
   @override
-  String get beginner => 'NYBÃ–RJARE';
+  String get beginner => 'NYBÖRJARE';
 
   @override
   String get intermediate => 'MELLAN';
@@ -329,10 +329,10 @@ class AppLocalizationsSv extends AppLocalizations {
       'Jag är flytande eller nästan flytande. Jag kan diskutera komplexa ämnen.';
 
   @override
-  String get whichLanguage => 'VILKET SPRÃ…K';
+  String get whichLanguage => 'VILKET SPRÅK';
 
   @override
-  String get doYouWantToLearn => 'VILL DU LÃ„RA DIG?';
+  String get doYouWantToLearn => 'VILL DU LÄRA DIG?';
 
   @override
   String get changeAnytime =>
@@ -343,10 +343,10 @@ class AppLocalizationsSv extends AppLocalizations {
       'Oroa dig inte, vi verifierar detta med en snabb chatt!';
 
   @override
-  String get startAssessment => 'STARTA BEDÃ–MNING';
+  String get startAssessment => 'STARTA BEDÖMNING';
 
   @override
-  String get chatAssessment => 'CHATT BEDÃ–MNING';
+  String get chatAssessment => 'CHATT BEDÖMNING';
 
   @override
   String get typeYourAnswer => 'Skriv ditt svar...';
@@ -368,7 +368,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get proficiencyLevel => 'Kompetensnivå';
 
   @override
-  String get shopItemAppleName => 'Ã„pple';
+  String get shopItemAppleName => 'Äpple';
 
   @override
   String get shopItemAppleDescription => 'En hälsosam mellanmål.';

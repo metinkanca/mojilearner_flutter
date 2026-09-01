@@ -57,7 +57,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mistakes => 'ERRORES';
 
   @override
-  String get noMistakesYet => 'Â¡AÃšN NO HAY ERRORES!';
+  String get noMistakesYet => '¡AÚN NO HAY ERRORES!';
 
   @override
   String get profileDesc => 'Ver tus estadísticas y configuraciones.';
@@ -294,7 +294,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get whatsYourName => 'Â¿CÃ“MO TE LLAMAS?';
+  String get whatsYourName => '¿CÓMO TE LLAMAS?';
 
   @override
   String get enterYourName => 'Introduce tu nombre';
@@ -329,7 +329,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Soy fluido o casi fluido. Puedo discutir temas complejos.';
 
   @override
-  String get whichLanguage => 'Â¿QUÃ‰ IDIOMA';
+  String get whichLanguage => '¿QUÉ IDIOMA';
 
   @override
   String get doYouWantToLearn => 'QUIERES APRENDER?';
@@ -343,10 +343,10 @@ class AppLocalizationsEs extends AppLocalizations {
       '¡No te preocupes, lo verificaremos con una breve charla!';
 
   @override
-  String get startAssessment => 'COMENZAR EVALUACIÃ“N';
+  String get startAssessment => 'COMENZAR EVALUACIÓN';
 
   @override
-  String get chatAssessment => 'EVALUACIÃ“N POR CHAT';
+  String get chatAssessment => 'EVALUACIÓN POR CHAT';
 
   @override
   String get typeYourAnswer => 'Escribe tu respuesta...';

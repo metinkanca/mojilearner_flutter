@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get header => 'CÃ i Ä‘áº·t ngÃ´n ngá»¯';
+  String get header => 'Cài đặt ngôn ngữ';
 
   @override
   String get iSpeak => 'Tôi nói';
@@ -21,13 +21,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get currentSelection => 'Lá»±a chá»n hiá»‡n táº¡i:';
 
   @override
-  String get level => 'Cáº¥p Ä‘á»™';
+  String get level => 'Cấp độ';
 
   @override
   String get xp => 'XP';
 
   @override
-  String get streak => 'Chuá»—i ngÃ y';
+  String get streak => 'Chuỗi ngày';
 
   @override
   String get audio => 'Giọng Bot';
@@ -36,31 +36,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get designMojiBtn => 'Thiết kế Moji';
 
   @override
-  String get quizMode => 'CÃ¢u Ä‘á»‘';
+  String get quizMode => 'Câu đố';
 
   @override
-  String get quizDesc => 'Kiá»ƒm tra kiáº¿n thá»©c cá»§a báº¡n.';
+  String get quizDesc => 'Kiểm tra kiến thức của bạn.';
 
   @override
-  String get scenarios => 'Ká»‹ch báº£n';
+  String get scenarios => 'Kịch bản';
 
   @override
-  String get scenariosDesc => 'Thá»±c hÃ nh há»™i thoáº¡i thá»±c táº¿.';
+  String get scenariosDesc => 'Thực hành hội thoại thực tế.';
 
   @override
-  String get profile => 'Há»“ sÆ¡';
+  String get profile => 'Hồ sơ';
 
   @override
   String get shop => 'Cửa hàng';
 
   @override
-  String get mistakes => 'Lá»–I';
+  String get mistakes => 'LỖI';
 
   @override
-  String get noMistakesYet => 'CHÆ¯A CÃ“ Lá»–I NÃ€O!';
+  String get noMistakesYet => 'CHƯA CÓ LỖI NÀO!';
 
   @override
-  String get profileDesc => 'Xem thá»‘ng kÃª vÃ  cÃ i Ä‘áº·t.';
+  String get profileDesc => 'Xem thống kê và cài đặt.';
 
   @override
   String get voiceCall => 'Cuá»™c gá»i thoáº¡i';
@@ -78,7 +78,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createYourOwn => 'Tự tạo';
 
   @override
-  String get startCustom => 'Báº¯t Ä‘áº§u ká»‹ch báº£n tÃ¹y chá»‰nh';
+  String get startCustom => 'Bắt đầu kịch bản tùy chỉnh';
 
   @override
   String get customPlaceholder => 'VD: Bạn là tài xế taxi...';
@@ -102,32 +102,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get restaurant => 'Nhà hàng';
 
   @override
-  String get chats => 'TrÃ² chuyá»‡n';
+  String get chats => 'Trò chuyện';
 
   @override
   String get searchPlaceholder => 'Tìm tin nhắn...';
 
   @override
-  String get newChat => 'TrÃ² chuyá»‡n má»›i';
+  String get newChat => 'Trò chuyện mới';
 
   @override
-  String get noChats => 'ChÆ°a cÃ³ trÃ² chuyá»‡n nÃ o';
+  String get noChats => 'Chưa có trò chuyện nào';
 
   @override
-  String get startNewConversation => 'Báº¯t Ä‘áº§u cuá»™c trÃ² chuyá»‡n má»›i';
+  String get startNewConversation => 'Bắt đầu cuộc trò chuyện mới';
 
   @override
-  String get blankChat => 'TrÃ² chuyá»‡n trá»‘ng';
+  String get blankChat => 'Trò chuyện trống';
 
   @override
-  String get blankChatDesc => 'Báº¯t Ä‘áº§u khÃ´ng ngá»¯ cáº£nh';
+  String get blankChatDesc => 'Bắt đầu không ngữ cảnh';
 
   @override
-  String get roleplayScenario => 'Ká»‹ch báº£n nháº­p vai';
+  String get roleplayScenario => 'Kịch bản nhập vai';
 
   @override
-  String get roleplayScenarioDesc =>
-      'Thá»±c hÃ nh cÃ¡c tÃ¬nh huá»‘ng cá»¥ thá»ƒ';
+  String get roleplayScenarioDesc => 'Thực hành các tình huống cụ thể';
 
   @override
   String get chooseChatType => 'Chá»n loáº¡i trÃ² chuyá»‡n';
@@ -142,10 +141,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get designMoji => 'Thiết kế Moji';
 
   @override
-  String get fullCustomization => 'TÃ¹y chá»‰nh Ä‘áº§y Ä‘á»§';
+  String get fullCustomization => 'Tùy chỉnh đầy đủ';
 
   @override
-  String get tapToChange => 'Cháº¡m Ä‘á»ƒ thay Ä‘á»•i';
+  String get tapToChange => 'Chạm để thay đổi';
 
   @override
   String get mascotColor => 'Màu linh vật';
@@ -154,7 +153,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get backgroundColor => 'Màu nền';
 
   @override
-  String get faceExpressions => 'Biá»ƒu cáº£m khuÃ´n máº·t';
+  String get faceExpressions => 'Biểu cảm khuôn mặt';
 
   @override
   String get personalityFaces => 'Tính cách & Khuôn mặt';
@@ -171,7 +170,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get yourMistakes => 'Lá»—i cá»§a báº¡n';
+  String get yourMistakes => 'Lỗi của bạn';
 
   @override
   String get learnFromWrong => 'Học từ sai lầm';
@@ -195,7 +194,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get vocabulary => 'Từ vựng';
 
   @override
-  String get noMistakes => 'KhÃ´ng tÃ¬m tháº¥y lá»—i!';
+  String get noMistakes => 'Không tìm thấy lỗi!';
 
   @override
   String get yourAnswer => 'Câu trả lời của bạn';
@@ -207,13 +206,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get explanation => 'Giải thích';
 
   @override
-  String get story => 'Ká»‹ch báº£n';
+  String get story => 'Kịch bản';
 
   @override
-  String get drills => 'Lá»—i sai';
+  String get drills => 'Lỗi sai';
 
   @override
-  String get typeHere => 'Nháº­p vÃ o Ä‘Ã¢y...';
+  String get typeHere => 'Nhập vào đây...';
 
   @override
   String get shopTitle => 'Cửa Hàng';
@@ -222,7 +221,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get categoryAll => 'Tất Cả';
 
   @override
-  String get categoryFood => 'Thá»©c Ä‚n';
+  String get categoryFood => 'Thức Ăn';
 
   @override
   String get categoryDecor => 'Trang Trí';
@@ -234,19 +233,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get noItems => 'Không Có Mục';
 
   @override
-  String get owned => 'Sá»Ÿ Há»¯u';
+  String get owned => 'Sở Hữu';
 
   @override
   String get alreadyOwned => 'ÄÃ£ Sá»Ÿ Há»¯u';
 
   @override
-  String get alreadyOwnedMessage => 'Báº¡n Ä‘Ã£ sá»Ÿ há»¯u má»¥c nÃ y!';
+  String get alreadyOwnedMessage => 'Bạn đã sở hữu mục này!';
 
   @override
-  String get quantity => 'Sá»‘ LÆ°á»£ng';
+  String get quantity => 'Số Lượng';
 
   @override
-  String get totalPrice => 'Tá»•ng GiÃ¡';
+  String get totalPrice => 'Tổng Giá';
 
   @override
   String get notEnoughCoins => 'Không Đủ Xu!';
@@ -255,7 +254,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get purchaseFailed => 'Mua Thất Bại';
 
   @override
-  String get notEnoughCoinsMessage => 'KhÃ´ng Ä‘á»§ xu!';
+  String get notEnoughCoinsMessage => 'Không đủ xu!';
 
   @override
   String get buy => 'Mua';
@@ -295,7 +294,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get whatsYourName => 'Báº N TÃŠN LÃ€ GÃŒ?';
+  String get whatsYourName => 'BẠN TÊN LÀ GÌ?';
 
   @override
   String get enterYourName => 'Nhập tên của bạn';
@@ -316,21 +315,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get intermediate => 'TRUNG CẤP';
 
   @override
-  String get advanced => 'NÃ‚NG CAO';
+  String get advanced => 'NÂNG CAO';
 
   @override
-  String get beginnerDesc => 'Má»›i báº¯t Ä‘áº§u. TÃ´i biáº¿t ráº¥t Ã­t tá»«.';
+  String get beginnerDesc => 'Mới bắt đầu. Tôi biết rất ít từ.';
 
   @override
   String get intermediateDesc =>
-      'TÃ´i cÃ³ thá»ƒ trÃ² chuyá»‡n cÆ¡ báº£n vÃ  hiá»ƒu vÄƒn báº£n Ä‘Æ¡n giáº£n.';
+      'Tôi có thể trò chuyện cơ bản và hiểu văn bản đơn giản.';
 
   @override
   String get advancedDesc =>
       'TÃ´i thÃ nh tháº¡o hoáº·c gáº§n thÃ nh tháº¡o. TÃ´i cÃ³ thá»ƒ tháº£o luáº­n cÃ¡c chá»§ Ä‘á» phá»©c táº¡p.';
 
   @override
-  String get whichLanguage => 'NGÃ”N NGá»® NÃ€O';
+  String get whichLanguage => 'NGÔN NGỮ NÀO';
 
   @override
   String get doYouWantToLearn => 'Báº N MUá»N Há»ŒC?';
@@ -353,13 +352,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get typeYourAnswer => 'Nhập câu trả lời của bạn...';
 
   @override
-  String get mojiIsTyping => 'Moji Ä‘ang gÃµ...';
+  String get mojiIsTyping => 'Moji đang gõ...';
 
   @override
   String get send => 'GỬI';
 
   @override
-  String get calibrationComplete => 'HoÃ n ThÃ nh Hiá»‡u Chuáº©n!';
+  String get calibrationComplete => 'Hoàn Thành Hiệu Chuẩn!';
 
   @override
   String get basedOnYourAnswers =>
@@ -372,13 +371,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get shopItemAppleName => 'Táo';
 
   @override
-  String get shopItemAppleDescription => 'Má»™t bá»¯a Äƒn nháº¹ lÃ nh máº¡nh.';
+  String get shopItemAppleDescription => 'Một bữa ăn nhẹ lành mạnh.';
 
   @override
   String get shopItemCroissantName => 'Bánh Croissant';
 
   @override
-  String get shopItemCroissantDescription => 'Sá»± tá»‘t lÃ nh cá»§a bÆ¡.';
+  String get shopItemCroissantDescription => 'Sự tốt lành của bơ.';
 
   @override
   String get shopItemPizzaName => 'Lát Pizza';
@@ -387,7 +386,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get shopItemPizzaDescription => 'Phô mát và no.';
 
   @override
-  String get shopItemSushiName => 'Bá»™ Sushi';
+  String get shopItemSushiName => 'Bộ Sushi';
 
   @override
   String get shopItemSushiDescription => 'Cá cao cấp.';
@@ -396,7 +395,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get shopItemCoffeeName => 'Espresso';
 
   @override
-  String get shopItemCoffeeDescription => 'TÄƒng nÄƒng lÆ°á»£ng nhanh.';
+  String get shopItemCoffeeDescription => 'Tăng năng lượng nhanh.';
 
   @override
   String get shopItemMedicineName => 'Thuốc';
@@ -460,8 +459,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get shopItemBgBlueName => 'Xanh Đại Dương';
 
   @override
-  String get shopItemBgBlueDescription =>
-      'Nhá»¯ng rung Ä‘á»™ng xanh yÃªn tÄ©nh.';
+  String get shopItemBgBlueDescription => 'Những rung động xanh yên tĩnh.';
 
   @override
   String get shopItemBgForestName => 'Xanh Rừng';
@@ -479,7 +477,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get shopItemBgGalaxyName => 'Tím Thiên Hà';
 
   @override
-  String get shopItemBgGalaxyDescription => 'NgoÃ i tháº¿ giá»›i nÃ y.';
+  String get shopItemBgGalaxyDescription => 'Ngoài thế giới này.';
 
   @override
   String purchaseSuccessSingle(Object itemName) {

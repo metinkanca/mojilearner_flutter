@@ -45,7 +45,7 @@ class AppLocalizationsNo extends AppLocalizations {
   String get scenarios => 'Scenarier';
 
   @override
-  String get scenariosDesc => 'Ã˜v pÃ¥ virkelige samtaler.';
+  String get scenariosDesc => 'Øv på virkelige samtaler.';
 
   @override
   String get profile => 'Profil';
@@ -57,7 +57,7 @@ class AppLocalizationsNo extends AppLocalizations {
   String get mistakes => 'FEIL';
 
   @override
-  String get noMistakesYet => 'INGEN FEIL ENNÃ…!';
+  String get noMistakesYet => 'INGEN FEIL ENNÅ!';
 
   @override
   String get profileDesc => 'Se statistikk og innstillinger.';
@@ -66,10 +66,10 @@ class AppLocalizationsNo extends AppLocalizations {
   String get voiceCall => 'Taleanrop';
 
   @override
-  String get voiceCallDesc => 'Ã˜v pÃ¥ Ã¥ snakke i sanntid.';
+  String get voiceCallDesc => 'Øv på å snakke i sanntid.';
 
   @override
-  String get practiceRealLife => 'Ã˜v pÃ¥ virkeligheten';
+  String get practiceRealLife => 'Øv på virkeligheten';
 
   @override
   String get chooseSituation => 'Velg en situasjon';
@@ -126,7 +126,7 @@ class AppLocalizationsNo extends AppLocalizations {
   String get roleplayScenario => 'Rollespillscenario';
 
   @override
-  String get roleplayScenarioDesc => 'Ã˜v pÃ¥ spesifikke situasjoner';
+  String get roleplayScenarioDesc => 'Øv på spesifikke situasjoner';
 
   @override
   String get chooseChatType => 'Velg chat-type';
@@ -312,7 +312,7 @@ class AppLocalizationsNo extends AppLocalizations {
   String get beginner => 'NYBEGYNNER';
 
   @override
-  String get intermediate => 'MELLOMNIVÃ…';
+  String get intermediate => 'MELLOMNIVÅ';
 
   @override
   String get advanced => 'AVANSERT';
@@ -329,10 +329,10 @@ class AppLocalizationsNo extends AppLocalizations {
       'Jeg er flytende eller nesten flytende. Jeg kan diskutere komplekse emner.';
 
   @override
-  String get whichLanguage => 'HVILKET SPRÃ…K';
+  String get whichLanguage => 'HVILKET SPRÅK';
 
   @override
-  String get doYouWantToLearn => 'VIL DU LÃ†RE?';
+  String get doYouWantToLearn => 'VIL DU LÆRE?';
 
   @override
   String get changeAnytime =>

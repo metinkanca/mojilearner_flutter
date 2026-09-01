@@ -66,10 +66,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get voiceCall => 'Hanghívás';
 
   @override
-  String get voiceCallDesc => 'Gyakorolj valÃ³s idÅ‘ben beszÃ©lni.';
+  String get voiceCallDesc => 'Gyakorolj valós időben beszélni.';
 
   @override
-  String get practiceRealLife => 'Gyakorlat a valÃ³ Ã©letbÅ‘l';
+  String get practiceRealLife => 'Gyakorlat a való életből';
 
   @override
   String get chooseSituation => 'Válassz helyzetet';
@@ -81,7 +81,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get startCustom => 'Egyéni forgatókönyv indítása';
 
   @override
-  String get customPlaceholder => 'Pl. TaxisofÅ‘r vagy...';
+  String get customPlaceholder => 'Pl. Taxisofőr vagy...';
 
   @override
   String get orderingCoffee => 'Kávé rendelés';
@@ -90,7 +90,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get jobInterview => 'Állásinterjú';
 
   @override
-  String get askingDirections => 'ÃštbaigazÃ­tÃ¡s kÃ©rÃ©se';
+  String get askingDirections => 'Útbaigazítás kérése';
 
   @override
   String get atTheDoctor => 'Az orvosnál';
@@ -99,16 +99,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shopping => 'Vásárlás';
 
   @override
-  String get restaurant => 'Ã‰tterem';
+  String get restaurant => 'Étterem';
 
   @override
   String get chats => 'Beszélgetések';
 
   @override
-  String get searchPlaceholder => 'Ãœzenetek keresÃ©se...';
+  String get searchPlaceholder => 'Üzenetek keresése...';
 
   @override
-  String get newChat => 'Ãšj beszÃ©lgetÃ©s';
+  String get newChat => 'Új beszélgetés';
 
   @override
   String get noChats => 'Még nincs beszélgetés';
@@ -117,7 +117,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get startNewConversation => 'Kezdj új beszélgetést';
 
   @override
-  String get blankChat => 'Ãœres beszÃ©lgetÃ©s';
+  String get blankChat => 'Üres beszélgetés';
 
   @override
   String get blankChatDesc => 'Kezdés kontextus nélkül';
@@ -144,7 +144,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get fullCustomization => 'Teljes testreszabás';
 
   @override
-  String get tapToChange => 'Ã‰rintsd meg a vÃ¡ltÃ¡shoz';
+  String get tapToChange => 'Érintsd meg a váltáshoz';
 
   @override
   String get mascotColor => 'Kabala színe';
@@ -166,7 +166,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String unlockMessage(Object level) {
-    return 'Ã‰rd el a(z) $level. szintet a feloldÃ¡shoz!';
+    return 'Érd el a(z) $level. szintet a feloldáshoz!';
   }
 
   @override
@@ -176,7 +176,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get learnFromWrong => 'Tanulj a hibákból';
 
   @override
-  String get all => 'Ã–sszes';
+  String get all => 'Összes';
 
   @override
   String get grammar => 'Nyelvtan';
@@ -188,7 +188,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get close => 'Bezárás';
 
   @override
-  String get noGrammarAnalysis => 'Nincs elÃ©rhetÅ‘ nyelvtani elemzÃ©s.';
+  String get noGrammarAnalysis => 'Nincs elérhető nyelvtani elemzés.';
 
   @override
   String get vocabulary => 'Szókincs';
@@ -382,7 +382,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shopItemPizzaName => 'Pizza szelet';
 
   @override
-  String get shopItemPizzaDescription => 'Sajtos Ã©s teltetÅ‘.';
+  String get shopItemPizzaDescription => 'Sajtos és teltető.';
 
   @override
   String get shopItemSushiName => 'Szusi szett';
@@ -455,13 +455,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Mit jelent ez?';
 
   @override
-  String get shopItemBgBlueName => 'Ã“ceÃ¡n kÃ©k';
+  String get shopItemBgBlueName => 'Óceán kék';
 
   @override
   String get shopItemBgBlueDescription => 'Megnyugtató kék vibrációk.';
 
   @override
-  String get shopItemBgForestName => 'ErdÅ‘ zÃ¶ld';
+  String get shopItemBgForestName => 'Erdő zöld';
 
   @override
   String get shopItemBgForestDescription => 'Természetes érzés.';

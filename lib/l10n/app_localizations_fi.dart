@@ -57,7 +57,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mistakes => 'VIRHEET';
 
   @override
-  String get noMistakesYet => 'EI VIELÃ„ VIRHEITÃ„!';
+  String get noMistakesYet => 'EI VIELÄ VIRHEITÄ!';
 
   @override
   String get profileDesc => 'Katso tilastot ja asetukset.';
@@ -294,7 +294,7 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get whatsYourName => 'MIKÃ„ SINUN NIMESI ON?';
+  String get whatsYourName => 'MIKÄ SINUN NIMESI ON?';
 
   @override
   String get enterYourName => 'Kirjoita nimesi';
@@ -330,7 +330,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Olen sujuva tai lähes sujuva. Voin keskustella monimutkaisista aiheista.';
 
   @override
-  String get whichLanguage => 'MIKÃ„ KIELI';
+  String get whichLanguage => 'MIKÄ KIELI';
 
   @override
   String get doYouWantToLearn => 'HALUAT OPPIA?';
@@ -340,7 +340,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get dontWorryVerify =>
-      'Ã„lÃ¤ huoli, vahvistamme tÃ¤mÃ¤n nopealla chatillÃ¤!';
+      'Älä huoli, vahvistamme tämän nopealla chatillä!';
 
   @override
   String get startAssessment => 'ALOITA ARVIOINTI';
@@ -355,7 +355,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mojiIsTyping => 'Moji kirjoittaa...';
 
   @override
-  String get send => 'LÃ„HETÃ„';
+  String get send => 'LÄHETÄ';
 
   @override
   String get calibrationComplete => 'Kalibrointi Valmis!';

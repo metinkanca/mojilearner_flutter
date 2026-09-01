@@ -135,7 +135,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
-  String get typeMessage => 'Ã‰cris ton message...';
+  String get typeMessage => 'Écris ton message...';
 
   @override
   String get designMoji => 'Design Moji';
@@ -251,7 +251,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notEnoughCoins => 'Pas Assez de Pièces!';
 
   @override
-  String get purchaseFailed => 'Achat Ã‰chouÃ©';
+  String get purchaseFailed => 'Achat Échoué';
 
   @override
   String get notEnoughCoinsMessage => 'Pas assez de pièces!';
@@ -303,19 +303,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get continueBtn => 'CONTINUER';
 
   @override
-  String get howWouldYouRate => 'COMMENT Ã‰VALUEZ-VOUS';
+  String get howWouldYouRate => 'COMMENT ÉVALUEZ-VOUS';
 
   @override
   String get yourLevel => 'VOTRE NIVEAU?';
 
   @override
-  String get beginner => 'DÃ‰BUTANT';
+  String get beginner => 'DÉBUTANT';
 
   @override
-  String get intermediate => 'INTERMÃ‰DIAIRE';
+  String get intermediate => 'INTERMÉDIAIRE';
 
   @override
-  String get advanced => 'AVANCÃ‰';
+  String get advanced => 'AVANCÉ';
 
   @override
   String get beginnerDesc => 'Je débute. Je connais très peu de mots.';
@@ -343,10 +343,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ne t\'inquiète pas, nous vérifierons cela avec une rapide discussion!';
 
   @override
-  String get startAssessment => 'COMMENCER L\'Ã‰VALUATION';
+  String get startAssessment => 'COMMENCER L\'ÉVALUATION';
 
   @override
-  String get chatAssessment => 'Ã‰VALUATION PAR CHAT';
+  String get chatAssessment => 'ÉVALUATION PAR CHAT';
 
   @override
   String get typeYourAnswer => 'Tape ta réponse...';
