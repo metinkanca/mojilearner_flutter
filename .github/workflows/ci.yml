@@ -12,6 +12,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Three independent jobs rather than three steps in one: they have nothing to
+# say to each other, they fail for unrelated reasons, and running them in
+# parallel keeps the slowest one (the Android build) off the critical path of
+# the fastest one (the server suite, which finishes in about a second).
 jobs:
   analyze-and-test:
     name: Analyze and test
@@ -53,3 +57,72 @@ jobs:
       # Not gating: `integration_test/` needs a device and is not run here.
       # If that changes, it belongs in its own job with an emulator, not
       # bolted onto this one.
+
+  android-build:
+    name: Android release build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # This job exists because of a bug the other one could not see. A comment
+    # in AndroidManifest.xml contained a double hyphen, which XML forbids, and
+    # `flutter build apk` failed at :app:processDebugMainManifest for every
+    # build. Analyze and test never parse the platform manifests, so the branch
+    # stayed green while no Android artifact could be produced at all.
+    steps:
+      - uses: actions/checkout@v4
+
+      # AGP 8.11 and Kotlin 2.2 target JVM 17; the app's own compileOptions
+      # ask for VERSION_17 too. Set explicitly rather than inherited from
+      # whatever the runner image happens to ship.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.1
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Release rather than debug, because release is the artifact that ships
+      # and it is the only one that runs R8 — a missing keep rule for Firebase
+      # or the ad SDK is invisible in a debug build. Signing is not a problem
+      # here: android/app/build.gradle.kts falls back to the debug keys when
+      # key.properties is absent, which it always is on a fresh clone. The APK
+      # is not uploaded anywhere; building it is the whole test.
+      - name: Build release APK
+        run: flutter build apk --release
+
+  server:
+    name: Proxy tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # The proxy stopped being a transport shim when the prompts moved into it.
+    # Every persona, every format rule and every safety clause the app relies
+    # on now lives in server/src/prompts.js, so leaving its suite to run only
+    # when someone remembers would mean the app's behaviour is untested here.
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # package.json asks for >=20. 22 is the current LTS and what the
+          # Dockerfile builds on.
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
