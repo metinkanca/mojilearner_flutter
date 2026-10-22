@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1386" height="1152" viewBox="0 0 154 128" shape-rendering="crispEdges">
+  <title>Hoothex — clean pixel grid</title>
+  <desc>154 by 128 square-cell grid; 9 by 9 display pixels per cell at the default size. Five exact flat character colours, a white background, integer orthogonal vector paths, and a consistent two-cell beak outline.</desc>
+  <rect id="background" width="154" height="128" fill="#ffffff"/>
+  <path id="outline" fill="#14120e" fill-rule="evenodd" d="
+    M72 2h6v1h1v1h3v2h1v1h3v2h1v1h3v1h2v3h3v1h1v1h1v1h1v1h1v1h1v1h1v1h3v1h4v1h1v1h1v1h1v1h1v2h1v1h7v1h11v1h5v1h1v1h3v1h2v1h2v2h1v3h-1v1h-1v1h-1v1h-1v1h-1v1h-2v1h-1v1h-3v1h-2v1h-3v3h1v3h1v1h1v1h1v6h-1v2h1v1h1v1h1v1h1v1h1v2h1v1h1v3h1v2h1v4h2v10h-1v1h-1v4h-1v2h-1v1h-1v1h-1v2h-1v1h-1v1h-1v1h-2v1h-1v1h-2v1h-1v1h20v1h1v5h-1v2h-23v1h-1v1h-18v-1h-1v-1h-17v1h-1v1h-17v-1h-2v-1h-25v1h-7v1h-1v1h-3v1h-1v1h-3v1h-4v1h-12v-1h-4v-1h-1v-6h-1v-2h-1v-1h-1v-5h1v-1h1v-1h-2v-8h1v-1h2v-4h4v-2h1v-1h5v1h7v1h1v1h3v1h3v2h2v1h1v1h1v2h1v1h1v1h5v1h1v1h1v4h5v-2h-2v-1h-1v-1h-1v-1h-1v-1h-1v-1h-2v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-3h-1v-4h-1v-2h-1v-6h1v-3h1v-3h1v-2h1v-1h1v-1h1v-1h1v-2h1v-1h2v-2h2v-1h3v-3h-5v-1h-2v-1h-1v-1h-1v-1h-1v-5h1v-1h1v-1h1v-1h1v-1h2v-1h2v-1h2v-1h1v-1h1v-1h3v-1h2v-1h2v-1h1v-6h1v-1h1v-5h-1v-1h-2v-1h-2v-1h-1v-1h-1v1h-1v1h-1v1h-2v1h-1v6h-1v1h-5v-2h-2v-3h-2v-6h1v-3h1v-1h1v-1h1v-1h1v-1h2v-1h2v-1h1v-1h1v-1h1v-1h1v-1h2v-1h5v-2h4v-1h2v-1h2v-1h1v-1h5z
+    M64 16h1v3h-1v3h-1v3h-1v5h3v-1h4v-1h1v-1h5v-1h5v-1h1v-1h8v-2h1v-1h6v-3h-1v-1h-2v-1h-2v-2h-1v-1h-1v-1h-3v-1h-1v-1h-1v-1h-2v-1h-1v-1h-1v-1h-3v-1h-9v2h-4v2h-5v1h-3v2h-4v1h-1v1h-1v1h-1v1h-1v1h-1v1h-3v2h-1v2h-2v2h-1v4h1v2h2v1h1v1h1v-1h1v-3h-1v-1h-1v-1h1v-1h2v-1h3v-2h1v-1h1v-1h3v1h1v2h2v1h2v-1h1v-3h1v-2h1v-1h1z
+    M91 25h1v4h1v4h12v-4h-1v-5h-1v-1h-12z
+    M95 25h5v1h1v4h-5v-2h-1z
+    M105 27h1v2h4v-1h-1v-2h-1v-2h-3z
+    M85 31h6v-2h-1v-3h-8v1h-6v1h-1v1h-4v1h-4v1h-3v1h-2v1h-1v1h-1v5h2v-1h3v-1h4v-1h1v-1h3v-1h6v-1h3v-1h3z
+    M106 37h26v1h-10v2h1v2h1v1h1v1h1v1h1v1h1v1h2v-1h2v-1h3v-1h3v-2h2v-1h1v-1h1v-1h1v-1h-1v-1h-1v-1h-1v-1h-2v-1h-3v-1h-6v-1h-11v-2h-2v1h-9v2h-1v1h-15v-2h-4v1h-4v1h-3v1h-5v1h-1v1h-4v1h-4v1h-3v1h-3v1h-1v1h-3v1h-2v1h-3v1h-1v1h-2v1h-2v2h-2v1h-1v1h-2v1h-1v2h1v1h1v2h3v1h4v1h6v-1h1v-1h1v-2h1v-2h2v-2h1v-2h-1v1h-3v1h-2v1h-4v1h-2v1h-2v-1h1v-1h2v-1h3v-1h2v-1h3v-1h2v-1h2v-1h3v-1h3v-1h4v-1h2v-1h4v-1h7v-1h7v-1h2v-1h12z
+    M116 46h3v2h-1v1h-1v2h2v6h-1v1h-3v-7h-1v-1h-1v-1h1v-1h1v-1h1z
+    M88 47h3v1h1v1h2v2h-1v1h-1v6h-4v-7h2v-2h-2z
+    M102 57h9v1h1v1h1v1h1v9h-1v1h-1v1h-3v-1h-1v-2h-1v-1h-3v-1h-2v-1h-1v-7h1z
+    M58 60h3v1h3v1h1v1h1v1h1v1h1v2h1v1h1v1h1v1h1v1h1v1h2v1h4v1h-4v4h1v8h-1v2h-1v1h-1v3h-1v2h-1v1h-1v2h-1v1h-1v1h-1v1h-1v1h-2v1h-1v1h-1v1h-1v1h-2v1h-1v2h10v-1h1v-1h2v-1h3v-1h9v1h3v1h2v1h1v2h15v-1h1v-1h2v-2h4v-1h8v1h4v-2h1v-2h1v-2h1v-2h1v-1h1v-3h1v-12h-1v-3h-1v-1h-1v-2h-1v-1h-1v-1h-3v-1h2v-1h1v-1h1v-1h1v-1h1v-1h1v-2h1v-2h1v-1h1v-4h-1v-1h-1v-1h-1v-4h-1v-1h-1v-1h-1v-3h-1v-2h-1v-1h-1v-2h-1v-1h-1v-1h-1v-1h-1v-1h-11v1h-10v1h-1v1h-9v1h-7v2h-6v1h-5v1h-2v1h-2v1h-1v3h-1v1h-1v2h-1v1h-1v1h-1v2h-1z
+    M103 64h2v1h3v1h1v1h1v2h1v-1h1v-7h-1v-1h-1v-1h-7z
+    M54 72h1v2h-1v1h-2v1h-1v1h-1v1h-1v1h-1v1h-2v1h-1v1h-2v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v3h1v3h1v2h1v1h1v1h1v1h3v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-2h2v-1h1v2h-1v1h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v2h-1v3h1v1h1v1h1v1h6v-1h1v-1h1v-1h2v-1h2v-1h1v-1h1v-1h1v-2h2v-1h1v-1h1v-1h1v-2h1v-2h1v-3h1v-3h1v-6h-1v-2h-1v-2h-1v-2h-1v-2h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-4v-1h-1v-1h-6v1h-1v1h-2v1h-2v2h-2v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v2h-1v1h-1v3h-1v3h-1v3h1v2h1v-1h1v-1h2v-1h1v-1h1v-1h1v-1h2v-1h1v-1h1v-1h1v-1h1v-1h2v-1h2v-1h1z
+    M127 74h1v2h1v3h2v14h-1v1h-1v4h-1v2h-1v1h-1v2h-1v2h-1v2h2v-1h1v-1h2v-1h2v-1h2v-2h1v-1h1v-1h1v-1h1v-1h1v-2h1v-6h-1v-1h-1v-1h-1v-1h-1v-1h-1v-2h-1v-2h1v1h1v1h1v1h1v1h1v1h1v1h2v-4h-1v-4h-1v-1h-1v-2h-1v-2h-1v-2h-1v-1h-1v-2h-1v-1h-1v-1h-2v1h-1v2h-1v1h-1z
+    M9 97h6v1h5v1h1v1h3v1h3v1h3v1h1v1h4v-3h-2v-2h-1v-1h-1v-1h-1v-1h-3v-2h-4v-1h-7v-1h-3v2h-4z
+    M6 104h1v1h1v3h4v1h10v2h11v-6h-3v-1h-4v-2h-3v-1h-4v-1h-6v-2h-6v2h-1z
+    M41 107h1v-2h-1v-1h-4v1h-1v1h-1v9h1v1h6v-2h-1v-1h-1v-5h1z
+    M76 110h1v7h3v-1h1v-6h1v1h1v6h3v-1h1v-7h-1v-1h-1v-1h-1v-1h-3v-1h-6v1h-2v1h-1v1h-1v1h-1v7h1v1h3v-1h2z
+    M112 110h1v1h1v5h-1v1h3v-1h1v-6h1v1h1v6h3v-1h1v-6h-1v-2h-1v-1h-3v-1h-6v1h-3v1h-2v1h-1v7h1v1h4v-1h1z
+    M6 112h1v1h1v2h2v1h1v1h9v1h-11v3h4v1h1v1h7v-1h1v-1h4v-1h4v-1h2v-1h2v-1h1v-1h-1v-1h-1v-3h-13v-1h-9v-1h-1v-1h-4z
+    M42 112h1v3h25v-4h-1v-1h-25z
+    M146 114h1v-3h-1v-1h-21v5h21z
+    M89 115h15v-5h-15z
+  "/>
+  <path id="witch-purple" fill="#5b3f8c" fill-rule="evenodd" d="
+    M68 5h9v1h3v1h1v1h1v1h2v1h1v1h1v1h3v1h1v1h1v2h2v1h2v1h1v3h-6v1h-1v2h-8v1h-1v1h-5v1h-5v1h-1v1h-4v1h-3v-5h1v-3h1v-3h1v-3h-1v1h-1v1h-1v2h-1v3h-1v1h-2v-1h-2v-2h-1v-1h-3v1h-1v1h-1v2h-3v1h-2v1h-1v1h1v1h1v3h-1v1h-1v-1h-1v-1h-2v-2h-1v-4h1v-2h2v-2h1v-2h3v-1h1v-1h1v-1h1v-1h1v-1h1v-1h4v-2h3v-1h5v-2h4z
+    M116 30h2v2h11v1h6v1h3v1h2v1h1v1h1v1h1v1h-1v1h-1v1h-1v1h-2v2h-3v1h-3v1h-2v1h-2v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-2h-1v-2h10v-1h-26v1h-12v1h-2v1h-7v1h-7v1h-4v1h-2v1h-4v1h-3v1h-3v1h-2v1h-2v1h-3v1h-2v1h-3v1h-2v1h-1v1h2v-1h2v-1h4v-1h2v-1h3v-1h1v2h-1v2h-2v2h-1v2h-1v1h-1v1h-6v-1h-4v-1h-3v-2h-1v-1h-1v-2h1v-1h2v-1h1v-1h2v-2h2v-1h2v-1h1v-1h3v-1h2v-1h3v-1h1v-1h3v-1h3v-1h4v-1h4v-1h1v-1h5v-1h3v-1h4v-1h4v2h15v-1h1v-2h9z
+    M107 38h11v1h1v1h1v1h1v1h1v2h1v1h1v2h1v3h1v1h1v1h1v4h1v1h1v1h1v4h-1v1h-1v2h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1h-2v1h3v1h1v1h1v2h1v1h1v3h1v12h-1v3h-1v1h-1v2h-1v2h-1v2h-1v2h-4v-1h-1v-1h1v-1h1v-1h1v-2h1v-1h1v-2h1v-1h1v-3h1v-7h-1v-4h-1v-1h-1v-2h-1v-2h-1v-1h-2v-1h-2v-3h2v-2h2v-4h-1v-1h-1v-1h-1v-1h-1v-1h-2v-2h-3v-1h-1v-1h-9v1h-7v1h-2v1h-1v1h-3v1h-1v1h-2v2h-1v1h-1v3h1v1h1v1h1v3h-2v1h-1v1h-1v1h-1v2h-1v1h-1v2h-1v3h-1v6h1v4h1v2h1v1h1v2h1v1h1v1h1v3h-2v-1h-9v1h-3v1h-2v1h-1v1h-10v-2h1v-1h2v-1h1v-1h1v-1h1v-1h2v-1h1v-1h1v-1h1v-1h1v-2h1v-1h1v-2h1v-3h1v-1h1v-2h1v-8h-1v-4h4v-1h-4v-1h-2v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-1h-1v-1h-1v-1h-3v-1h-3v-2h1v-2h1v-1h1v-1h1v-2h1v-1h1v-3h1v-1h2v-1h2v-1h5v-1h6v-2h7v-1h9v-1h1v-1h10z
+    M118 48h1v-2h-3v1h-1v1h-1v1h-1v1h1v1h1v7h3v-1h1v-6h-2v-2h1z
+    M88 49h2v2h-2v7h4v-6h1v-1h1v-2h-2v-1h-1v-1h-3z
+    M52 61h6v1h1v1h4v1h1v1h1v1h1v1h1v1h1v1h1v1h1v2h1v2h1v2h1v2h1v6h-1v3h-1v3h-1v2h-1v2h-1v1h-1v1h-1v1h-2v2h-1v1h-1v1h-1v1h-2v1h-2v1h-1v1h-1v1h-6v-1h-1v-1h-1v-1h-1v-3h1v-2h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h1v-2h1v-1h1v-2h-1v1h-2v2h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-1v1h-3v-1h-1v-1h-1v-1h-1v-2h-1v-3h-1v-3h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h2v-1h1v-1h2v-1h1v-1h1v-1h1v-1h1v-1h2v-1h1v-2h-1v1h-1v1h-2v1h-2v1h-1v1h-1v1h-1v1h-1v1h-2v1h-1v1h-1v1h-1v1h-2v1h-1v1h-1v-2h-1v-3h1v-3h1v-3h1v-1h1v-2h1v-1h1v-1h1v-1h1v-1h1v-1h1v-1h2v-2h2v-1h2v-1h1z
+    M130 67h2v1h1v1h1v2h1v1h1v2h1v2h1v2h1v1h1v4h1v4h-2v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v-1h-1v2h1v2h1v1h1v1h1v1h1v1h1v6h-1v2h-1v1h-1v1h-1v1h-1v1h-1v2h-2v1h-2v1h-2v1h-1v1h-2v-2h1v-2h1v-2h1v-1h1v-2h1v-4h1v-1h1v-14h-2v-3h-1v-2h-1v-3h1v-1h1v-2h1z
+    M92 76h2v1h1v1h1v1h2v1h2v1h2v1h2v-1h2v-1h2v-1h2v-1h1v-1h1v-1h2v5h-1v1h-2v1h-1v1h-1v1h-2v1h-1v1h-2v1h-2v-1h-1v-1h-2v-1h-2v-1h-1v-1h-1v-1h-2v-1h-1z
+    M91 87h2v1h1v1h2v1h2v1h2v2h2v1h2v-1h2v-2h2v-1h2v-1h2v-1h1v-1h2v1h1v4h-1v1h-1v1h-1v1h-2v1h-1v1h-2v1h-1v1h-1v1h-2v1h-2v-1h-2v-1h-1v-1h-1v-1h-2v-1h-1v-1h-2v-1h-1v-1h-1z
+  "/>
+  <path id="cream" fill="#ffefcd" fill-rule="evenodd" d="
+    M95 58h6v7h1v1h2v1h3v1h1v2h1v1h3v-1h1v-1h1v-9h-1v-1h2v2h2v1h1v1h1v1h1v1h1v4h-2v2h-2v3h2v1h2v1h1v2h1v2h1v1h1v4h1v7h-1v3h-1v1h-1v2h-1v1h-1v2h-1v1h-1v1h-1v1h-7v1h-4v2h-2v1h-1v1h-15v-2h-1v-1h-2v-1h-1v-3h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-4h-1v-6h1v-3h1v-2h1v-1h1v-2h1v-1h1v-1h1v-1h2v-3h-1v-1h-1v-1h-1v-3h1v-1h1v-2h2v-1h1v-1h3v-1h1v-1h2z
+    M92 81h1v1h2v1h1v1h1v1h2v1h2v1h1v1h2v-1h2v-1h1v-1h2v-1h1v-1h1v-1h2v-1h1v-5h-2v1h-1v1h-1v1h-2v1h-2v1h-2v1h-2v-1h-2v-1h-2v-1h-2v-1h-1v-1h-1v-1h-2z
+    M115 92h1v-4h-1v-1h-2v1h-1v1h-2v1h-2v1h-2v2h-2v1h-2v-1h-2v-2h-2v-1h-2v-1h-2v-1h-1v-1h-2v6h1v1h1v1h2v1h1v1h2v1h1v1h1v1h2v1h2v-1h2v-1h1v-1h1v-1h2v-1h1v-1h2v-1h1v-1h1z
+  "/>
+  <path id="gold" fill="#f0a93c" fill-rule="evenodd" d="
+    M91 23h12v1h1v5h1v4h-12v-4h-1v-4h-1z
+    M105 24h3v2h1v2h1v1h-4v-2h-1z
+    M82 26h8v3h1v2h-6v1h-3v1h-3v1h-6v1h-3v1h-1v1h-4v1h-3v1h-2v-5h1v-1h1v-1h2v-1h3v-1h4v-1h4v-1h1v-1h6z
+    M95 28h1v2h5v-4h-1v-1h-5z
+    M103 59h7v1h1v1h1v7h-1v1h-1v-2h-1v-1h-1v-1h-3v-1h-2z
+    M13 92h3v1h7v1h4v2h3v1h1v1h1v1h1v2h2v3h-4v-1h-1v-1h-3v-1h-3v-1h-3v-1h-1v-1h-5v-1h-6v-3h4z
+    M7 98h6v2h6v1h4v1h3v2h4v1h3v6h-11v-2h-10v-1h-4v-3h-1v-1h-1v-4h1z
+    M37 104h4v1h1v2h-1v1h-1v5h1v1h1v2h-6v-1h-1v-9h1v-1h1z
+    M75 105h6v1h3v1h1v1h1v1h1v7h-1v1h-3v-6h-1v-1h-1v6h-1v1h-3v-7h-1v6h-2v1h-3v-1h-1v-7h1v-1h1v-1h1v-1h2z
+    M112 106h6v1h3v1h1v2h1v6h-1v1h-3v-6h-1v-1h-1v6h-1v1h-3v-1h1v-5h-1v-1h-1v6h-1v1h-4v-1h-1v-7h1v-1h2v-1h3z
+    M6 109h4v1h1v1h9v1h13v3h1v1h1v1h-1v1h-2v1h-2v1h-4v1h-4v1h-1v1h-7v-1h-1v-1h-4v-3h11v-1h-9v-1h-1v-1h-2v-2h-1v-1h-1z
+  "/>
+  <path id="broom-brown" fill="#8a5a3c" fill-rule="evenodd" d="
+    M42 110h25v1h1v4h-25v-3h-1z
+    M89 110h15v5h-15z
+    M125 110h21v1h1v3h-1v1h-21z
+  "/>
+</svg>

@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="3656px"
+   height="1728px"
+   viewBox="0 0 3656 1728"
+   shape-rendering="crispEdges"
+   sodipodi:docname="pyrewing-symmetric-grid.svg"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="pixel-art-document-view"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     showgrid="true"
+     units="px"
+     inkscape:document-units="px"
+     inkscape:pageopacity="0"
+     inkscape:snap-global="true"
+     inkscape:snap-grids="true"
+     inkscape:object-nodes="true"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.93402778"
+     inkscape:cx="2848.9517"
+     inkscape:cy="214.66171"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="art-pixel-grid-8px"
+       type="xygrid"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="8"
+       spacingy="8"
+       empspacing="8"
+       color="#0099e5"
+       opacity="0.22"
+       empcolor="#0099e5"
+       empopacity="0.38"
+       dotted="false"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="false" />
+  </sodipodi:namedview>
+  <rect
+     id="magenta-background"
+     width="3656"
+     height="1728"
+     fill="#FF00FF" />
+  <g
+     id="text-panel">
+    <g
+       id="text-panel-frame">
+      <path
+         id="text-panel-frame-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 168,160 h 64 v 8 h 8 v 8 h 8 v 8 h 8 v 16 h 88 v -8 h 8 v -8 h 8 v -8 h 16 v -8 h 8 v -8 h 56 v 8 h 8 v 8 h 8 v 8 h 48 v 8 h 16 v 8 h 144 v -8 h 16 v -8 h 80 v -8 h 8 v -8 h 8 v -8 h 56 v 8 h 8 v 8 h 8 v 8 h 40 v 8 h 16 v 8 h 200 v -8 h 8 v -8 h 16 v 8 h 8 v 8 h 200 v -8 h 16 v -8 h 40 v -8 h 8 v -8 h 8 v -8 h 56 v 8 h 8 v 8 h 8 v 8 h 80 v 8 h 16 v 8 h 144 v -8 h 16 v -8 h 48 v -8 h 8 v -8 h 8 v -8 h 56 v 8 h 8 v 8 h 16 v 8 h 8 v 8 h 8 v 8 h 88 v -16 h 8 v -8 h 8 v -8 h 8 v -8 h 64 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 24 v 240 h -24 v 24 h -8 v 24 h 8 v 24 h 24 v 136 h -24 v 72 h 16 v -8 h 8 v 112 h -24 v -8 h -16 v 8 h -8 v 24 h -16 v 24 h -288 v -24 h -48 v 24 H 496 v -24 h -48 v 24 H 160 V 864 H 136 V 832 H 120 96 v -96 h 8 16 V 664 H 96 V 528 h 24 v -24 h 8 v -24 h -8 V 456 H 96 V 216 h 24 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 z m 0,16 v 8 h -8 v 8 h -8 v 8 h -8 v 16 h -8 v 8 h -16 v 224 h 16 v 8 h 8 v 88 h -8 v 8 h -8 v 8 h -8 v 72 h 8 v 8 h 8 v 8 h 8 v 80 h -8 v 8 h -8 v 8 h -8 v 64 h 8 32 v 8 8 32 h 8 v 8 h 248 v -8 h 8 v -8 h 8 v -8 h 72 v 8 h 8 v 8 h 8 v 8 h 1200 v -8 h 8 v -8 h 8 v -8 h 72 v 8 h 8 v 8 h 8 v 8 h 248 v -8 h 8 v -32 h 8 v -8 h 24 v -8 h 8 v -64 h -8 v -8 h -8 v -8 h -8 v -80 h 8 v -8 h 8 v -8 h 8 v -72 h -8 v -8 h -8 v -8 h -8 v -88 h 8 v -8 h 16 V 224 h -16 v -8 h -8 v -16 h -8 v -8 h -8 v -8 h -8 v -8 h -64 v 8 h -8 v 24 h -8 v 8 h -104 v -8 h -8 v -16 h -24 v -16 h -56 v 8 h -8 v 8 h -8 v 8 h -48 v 8 h -16 v 8 h -144 v -8 h -16 v -8 h -80 v -8 h -8 v -8 h -8 v -8 h -56 v 8 h -8 v 16 h -48 v 8 h -16 v 8 h -200 v -8 h -32 v 8 H 904 v -8 h -16 v -8 h -48 v -16 h -8 v -8 h -56 v 8 h -8 v 8 h -8 v 8 h -80 v 8 h -16 v 8 H 520 v -8 h -16 v -8 h -48 v -8 h -8 v -8 h -8 v -8 h -56 v 16 h -24 v 16 h -8 v 8 H 248 v -8 h -8 v -24 h -8 v -8 z m 80,88 h 1744 v 8 h 24 v 24 h 8 v 488 h -8 v 8 h -296 -40 -8 v 16 h -8 V 792 H 576 v 16 h -8 v -16 h -8 v -8 h -40 v 8 H 224 v -8 h -8 V 296 h 8 v -24 h 24 z m -8,24 V 768 H 2000 V 288 Z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-frame-basalt-shadow"
+         fill="#322627"
+         fill-rule="evenodd"
+         d="m 384,176 h 32 v 8 h -8 v 8 h -8 v 8 h -24 v 24 h 8 v 24 h 8 v 8 h 8 v -8 h 16 v -8 h 24 v -8 h 8 v -40 h 8 v 8 h 48 v 8 h 16 v 8 h 144 v -8 h 16 v -8 h 72 v 8 h -8 v 8 h 8 v 8 h 8 v 8 h 16 v 8 h 48 v -8 h 8 v -24 h -8 v -16 h -8 v -8 h -8 v -8 h 24 v 8 h 8 v 16 h 48 v 8 h 16 v 8 h 200 v -8 h 32 v 8 h 200 v -8 h 16 v -8 h 48 v -16 h 8 v -8 h 24 v 8 h -8 v 8 h -8 v 16 h -8 v 24 h 8 v 8 h 48 v -8 h 16 v -8 h 8 v -8 h 8 v -8 h -8 v -8 h 72 v 8 h 16 v 8 h 144 v -8 h 16 v -8 h 48 v -8 h 8 v 40 h 8 v 8 h 24 v 8 h 16 v 8 h 8 v -8 h 8 v -24 h 8 v -24 h -24 v -8 h -8 v -8 h -8 v -8 h 32 v 16 h 24 v 16 h 8 v 8 h 104 v 8 h -40 v 8 h -16 v 8 h -8 v 8 h -8 v 8 h 8 v 8 h -208 v -8 h 8 v -8 h 8 v -16 h 8 v -8 h -8 v -8 h -8 v 8 h -176 v 24 h 8 v 8 h 8 v 8 h -240 v -8 h 8 v -8 h 8 v -8 h 8 v -16 h -168 v 16 h 8 v 8 h 8 v 8 h 8 v 8 h -176 v -8 h 8 v -8 h 8 v -8 h 8 V 224 H 888 v 16 h 8 v 8 h 8 v 8 h 8 v 8 H 672 v -8 h 8 v -8 h 8 V 224 H 512 v -8 h -8 v 8 h -8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 H 312 v -8 h 8 v -8 h -8 v -8 h -8 v -8 h -16 v -8 h -40 v -8 h 104 v -8 h 8 v -16 h 24 z m -240,24 h 40 v 16 h 8 v 16 h 8 v 8 h 8 v 8 h 16 v 16 h 24 v 8 h -24 v 24 h -8 v 16 h -24 v 8 h -8 v 24 h 8 v -8 h 16 v -8 h 8 v 104 h -32 v -8 h -8 v 16 h -8 v 8 h -8 v 8 h -8 v 8 h -8 v -8 h -8 v -8 H 120 V 280 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v -8 h 8 v -24 h 8 v -8 h 8 v -32 h -8 v -8 h -8 v -16 h -16 v -8 0 8 h 16 v 16 h -40 v 8 h -8 v -24 h 16 v -8 h 8 z m 1912,0 h 40 v 16 h 8 v 8 h 16 v 24 h -8 v -8 h -32 -8 -8 v 8 h -8 v 32 h 8 v 8 h 8 v 24 h 8 v 8 h 8 v -16 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v 168 h -16 v 8 h -8 v 8 h -8 v -8 h -8 v -8 h -8 v -8 h -8 v -16 8 h -8 -32 V 328 h 8 v 8 h 16 v 8 h 8 v -24 h -8 v -8 h -24 v -16 h -8 v -24 h -24 v -8 h 24 v -16 h 16 v -8 h 8 v -8 h 8 v -16 h 8 z m -1816,8 h 8 v 8 h -8 z m 1752,0 h 8 v 8 h -8 z M 160,368 h -8 v 40 h 8 z m 1928,0 v 40 z M 144,472 h 8 v 8 h 8 v 8 h 8 v 32 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v -8 h 8 v -8 h 8 v 248 h 8 v 16 h -16 v 8 h -16 v 8 h -8 v 16 h 8 v 8 h 96 v -8 h 8 v -8 h -8 v -16 h -8 v -8 h -8 v -8 h 72 v 16 h 8 v 16 h 8 v 8 h 8 v 8 h 64 v 8 h -8 v 8 h -8 v 8 H 168 v -8 h -8 v -32 -8 -8 h -32 -8 v -64 h 8 v -8 h 8 v -8 h 8 v 16 h 8 v 8 h 8 v 8 h 16 v 8 h 8 v -24 h -8 v -8 h -8 v -16 h -8 v -8 h 8 v -16 h -8 v -8 h -8 v 16 h 8 v 8 h -8 v 16 h -8 v -80 h -8 v -8 h -8 v -8 h -8 v -24 h 8 v 8 h 32 v 8 h 8 v -8 h 8 v -8 h 8 v -16 h 8 v -8 h -16 v -8 h -56 v -16 h 8 v -8 h 8 v -8 h 8 z m 1944,0 h 8 v 72 h 8 v 8 h 8 v 8 h 8 v 16 h -56 v 8 h -16 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v -8 h 32 v -8 h 8 v 24 h -8 v 8 h -8 v 8 h -8 v 80 h -8 v -16 h -8 v -8 h 8 v -16 h -8 v 8 h -8 v 16 h 8 v 8 h -8 v 16 h -8 v 8 h -8 v 24 h 8 v -8 h 16 v -8 h 8 v -8 h 8 v -16 h 8 v 8 h 8 v 8 h 8 v 64 h -8 v 8 h -24 v 8 h -8 v 32 h -8 v 8 h -248 v -8 h -8 v -8 h -8 v -8 h 64 v -8 h 8 v -8 h 8 v -16 h 8 v -16 h 72 v 8 h -8 v 8 h -8 v 16 h -8 v 8 h 8 v 8 h 96 v -8 h 8 v -16 h -8 v -8 h -16 v -8 h -16 v -16 h 8 V 536 h 8 v 8 h 8 v 8 h 8 v -8 h 8 v -8 h 8 v -16 h 8 v -32 h 8 v -8 h 8 z M 520,784 h 40 v 8 h 8 v 16 h 8 v -16 h 88 v 16 h 8 v 8 h 16 v 8 h 8 v 8 h 8 v 8 h 96 v -8 h 8 v -8 h -8 v -16 h -8 v -8 h -8 v -8 h 104 v 8 h -8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 96 v -8 h 8 v -16 h -8 v -8 h -8 v -8 h -16 v -8 h 112 v 8 h -8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 16 v -8 h 8 v -8 h 8 v -16 h 8 v -8 h -8 v -8 h 112 v 8 h -16 v 8 h -8 v 8 h -8 v 16 h 8 v 8 h 96 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h -8 v -8 h 104 v 8 h -8 v 8 h -8 v 16 h -8 v 8 h 8 v 8 h 96 v -8 h 8 v -8 h 8 v -8 h 16 v -8 h 8 v -16 h 88 8 8 40 80 v 8 h -16 v 8 h -8 v 8 h -8 v 16 h 8 v 8 h -40 v 8 h -8 v 8 h -8 v 8 H 520 v -8 h -8 v -8 h -8 v -8 h -40 v -8 h 8 v -16 h -8 v -8 h -8 v -8 h -16 v -8 h 80 z m 88,40 h -8 v 8 h 8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-frame-basalt-face"
+         fill="#463635"
+         fill-rule="evenodd"
+         d="m 168,176 h 24 v 8 h -8 v 16 h -32 v -8 h 8 v -8 h 8 z m 632,0 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 624,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 616,-8 h 24 v 8 h 8 v 8 h 8 v 8 h -32 v -16 h -8 z M 816,192 h 8 v 8 h -8 z m 608,0 v 8 h -8 v -8 z m -1192,8 h 8 v 16 h 8 v 8 h 40 v 8 h 16 v 8 h 8 v 8 h 8 v 8 h -8 v 8 h -88 v -16 h -16 v -8 h -8 v -8 h -8 v -8 h 8 v -8 h 24 v -8 h 8 z m 1768,0 h 8 v 8 h 8 v 8 h 24 v 8 h 8 v 8 h -8 v 8 h -8 v 8 h -16 v 16 h -88 v -8 h -8 v -8 h 8 v -8 h 8 v -8 h 16 v -8 h 40 v -8 h 8 z m -1256,8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 736,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m -984,0 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 256,0 h 8 v 8 h -8 z m 720,0 v 8 h -8 v -8 z m 248,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m -848,0 h 16 v 24 h -8 v -8 h -8 z m 448,0 h 16 v 16 h -8 v 8 h -8 z m -1168,8 v 8 z m 216,0 h 8 v 8 h 24 v 8 h -16 v 8 h -8 v -8 h -8 z m 1464,0 h 8 v 16 h -8 v 8 h -8 v -8 h -16 v -8 h 24 z m -1344,8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 168,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 872,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 168,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m -1208,8 h 8 v 8 h -8 z m 152,0 v 8 h -8 v -8 z m 896,0 h 8 v 8 h -8 z m 152,0 v 8 h -8 v -8 z M 136,288 h 24 v 8 h 8 v 16 h -8 v 8 h -8 v -16 h -8 v -8 h -8 z m 1944,0 h 24 v 8 h -8 v 8 h -8 v 16 h -8 v -8 h -8 v -16 h 8 z M 200,312 h 16 v 16 h -8 v 8 h -16 v 8 h -8 v -16 h 16 z m 1824,0 h 16 v 16 h 16 v 16 h -8 v -8 h -16 v -8 h -8 z M 152,368 h 8 v 40 h -8 z m 24,56 h 8 v 8 h -8 z m 1880,0 v 8 z m -1848,8 h 8 v 24 h -8 z m 1816,0 h 8 v 24 h -8 z m -1856,8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 1896,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m -1912,8 v 8 h -8 v -8 z m 1920,0 h 8 v 8 h -8 z m -1928,8 v 8 h -8 v -8 z m 1936,0 h 8 v 8 h -8 z M 208,520 h 8 v 16 h -8 v 8 h -8 v 8 h -8 v -8 h -8 v -8 h -8 v -8 h 32 z m 1816,0 h 8 v 8 h 32 v 8 h -8 v 8 h -8 v 8 h -8 v -8 h -8 v -8 h -8 z M 120,576 h 56 v 8 h 16 v 8 h -8 v 8 h -8 v 16 h -8 v 8 h -8 v -8 h -32 v -8 h -8 z m 1944,0 h 56 v 32 h -8 v 8 h -32 v 8 h -8 v -8 h -8 v -16 h -8 v -8 h -8 v -8 h 16 z M 152,688 h 8 v 8 h 8 v 16 h -8 v -8 h -8 z m 1928,0 h 8 v 16 h -8 v 8 h -8 v -16 h 8 z M 160,712 v 8 h 8 v 16 h 8 v 8 h 8 v 24 h -8 v -8 h -16 v -8 h -8 v -8 h -8 v -16 h 8 v -16 z m 1920,0 h 8 v 16 h 8 v 16 h -8 v 8 h -8 v 8 h -16 v 8 h -8 v -24 h 8 v -8 h 8 v -16 h 8 z M 344,792 h 8 v 8 h -8 z m 320,0 h 24 v 24 h -16 v -8 h -8 z m 112,0 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 672,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 96,-8 h 24 v 16 h -8 v 8 h -16 z m 336,0 h 8 v 8 h -8 z m -1680,8 h 8 v 8 h -8 z m 0,8 v 8 h -16 v -8 z m 240,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 336,0 h 8 v 8 h -8 z m 88,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 104,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 88,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h 8 v 16 h -8 v -8 h -8 z m 48,-8 h 8 v 8 h -8 z m 0,8 v 16 h -8 v 8 h -8 v -16 h 8 v -8 z m 96,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 112,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 96,0 v 8 h -8 v -8 z m 336,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 240,-8 h 8 v 8 h -8 z m 8,8 h 16 v 8 h -16 z m -1840,8 v 16 h -8 v -16 z m 272,0 h 8 v 8 h -8 z m 224,0 h 8 v 8 h -8 z m 208,0 h 8 v 8 h -8 z m 112,0 h 8 v 8 h -8 z m 224,0 v 8 h -8 v -8 z m 112,0 v 8 h -8 v -8 z m 208,0 v 8 h -8 v -8 z m 224,0 v 8 h -8 v -8 z m 272,0 h 8 v 16 h -8 z m -1696,0 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 1520,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m -1688,8 h 16 v 8 h -16 z m 176,0 h 8 v 8 h -8 z m 432,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v -8 z m 312,0 h 16 v 8 h -16 z m 320,-8 h 8 v 8 h -8 z m 8,8 h 8 v 8 h -8 z m 432,0 v 8 h -8 v -8 z m 176,0 v 8 h -16 v -8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-frame-basalt-rim"
+         fill="#553f3e"
+         fill-rule="evenodd"
+         d="m 192,176 h 40 v 8 h 8 v 16 h -8 v 8 h -8 v 8 h -24 v 8 h -8 v -8 h -8 v -32 h 8 z m 224,0 h 24 v 8 h 8 v 48 h -8 v 8 h -48 v -8 h -8 v -8 h -8 v -24 h 24 v -8 h 8 v -8 h 8 z m 360,0 h 24 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 24 h -8 v 8 h -48 v -8 h -8 v -8 h -8 v -8 h -8 v -16 h 8 v -8 h 8 v -8 h 8 z m 664,0 h 24 v 8 h 8 v 8 h 8 v 8 h 8 v 16 h -8 v 8 h -8 v 8 h -8 v 8 h -48 v -8 h -8 v -24 h 8 v -8 h 8 v -8 h 8 v -8 h 8 z m 360,0 h 24 v 8 h 8 v 8 h 8 v 8 h 24 v 24 h -8 v 8 h -8 v 8 h -48 v -8 h -8 v -48 h 8 z m 208,0 h 40 v 8 h 8 v 32 h -8 v 8 h -8 v -8 h -24 v -8 h -8 v -8 h -8 v -16 h 8 z M 168,224 v 8 z m 336,0 h 184 v 16 h -8 v 8 h -8 v 8 h -8 v 8 H 528 v -8 h -8 v -8 h -8 v -8 h -8 z m 400,0 h 152 v 16 h -8 v 8 h -8 v 8 h -8 v 8 H 912 v -8 h -8 z m 280,0 h 152 v 32 h -8 v 8 h -120 v -8 h -8 v -8 h -8 v -8 h -8 z m 368,0 h 184 v 16 h -8 v 8 h -8 v 8 h -8 v 8 h -136 v -8 h -8 v -8 h -8 v -8 h -8 z M 128,240 h 48 v 8 h 8 v 32 h -8 v 8 h -8 v 8 h -8 v -8 h -32 v -8 h -8 v -32 h 8 z m 1936,0 h 48 v 8 h 8 v 32 h -8 v 8 h -8 v 8 h -8 v 8 h -8 v 16 h -8 v -8 h -8 v -24 h -8 v -8 h -8 v -32 h 8 z M 192,312 h 8 v 16 h -16 v -8 h 8 z m 1848,0 h 8 v 8 h 8 v 8 h -16 z M 176,432 h 32 v 24 h 8 v 64 h -8 v 8 h -32 v -8 h -8 v -32 h -8 v -8 h -8 v -16 h 8 v -8 h 8 v -8 h 8 z m 1856,0 h 32 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h -8 v 8 h -8 v 32 h -8 v 8 h -32 v -8 h -8 V 456 432 Z M 176,600 h 8 v 8 h -8 z m 1880,0 h 8 v 8 h -8 z M 224,792 h 48 v 8 h 8 v 8 h 8 v 16 h 8 v 8 h -8 v 8 h -80 v -8 h -16 v -16 h 16 v -8 h 8 v -8 h 8 z m 128,0 h 88 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h -8 v 8 h -88 v -8 h -8 v -8 h -8 v -8 h -8 v -8 h -8 v -8 h 8 z m 336,0 h 88 v 8 h 8 v 8 h 8 v 8 h 8 v 16 h -8 v 8 h -88 v -8 h -8 v -16 h -8 z m 200,0 h 96 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h -8 v 8 h -96 v -8 h -8 v -16 h -8 v -8 h -8 z m 208,0 h 48 v 16 h -8 v 8 h -8 v 16 h -16 v -16 h -8 v -8 h -8 z m 160,0 h 96 v 16 h -8 v 8 h -8 v 16 h -8 v 8 h -96 v -8 h -8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 z m 208,0 h 88 v 24 h -8 v 16 h -8 v 8 h -88 v -8 h -8 v -16 h 8 v -8 h 8 v -8 h 8 z m 336,0 h 88 v 8 h 8 v 8 h -8 v 8 h -8 v 8 h -8 v 8 h -8 v 8 h -88 v -8 h -8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 z m 168,0 h 48 v 8 h 8 v 8 h 8 v 8 h 16 v 16 h -16 v 8 h -80 v -8 h -8 v -8 h 8 v -16 h 8 v -8 h 8 z M 600,824 h 8 v 8 h -8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="text-panel-text-face">
+      <path
+         id="text-panel-text-face-basalt-face"
+         fill="#463635"
+         fill-rule="evenodd"
+         d="M240 288H2000V768H240Z" />
+    </g>
+    <g
+       id="text-panel-top-flame-1">
+      <path
+         id="text-panel-top-flame-1-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M312 56H328V64H336V72H344V80H352V104H360V112H368V120H376V128H384V136H392V144H400V176H392V192H384V200H376V208H360V216H280V208H264V200H256V192H248V176H240V144H248V136H256V128H264V120H272V112H280V104H288V80H296V72H304V64H312ZM312 72V80H304V104H296V112H288V120H280V128H272V136H264V144H256V176H264V192H280V200H360V192H376V176H384V144H376V136H368V128H360V120H352V112H344V104H336V80H328V72Z" />
+      <path
+         id="text-panel-top-flame-1-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 304,80 h 8 v 24 h -8 z m 24,0 h 8 v 24 h -8 z m -16,24 V 72 h 16 v 32 h 16 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 32 h -8 v 16 h -16 v 8 h -80 v -8 h -16 v -16 h -8 v -32 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 z m -8,48 v 24 h -8 v 16 h 48 v -16 h -8 v -24 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-top-flame-1-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 304,152 h 32 v 24 h 8 v 16 h -48 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="text-panel-top-flame-6">
+      <path
+         id="text-panel-top-flame-6-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1912 56H1928V64H1936V72H1944V80H1952V104H1960V112H1968V120H1976V128H1984V136H1992V144H2000V176H1992V192H1984V200H1976V208H1960V216H1880V208H1864V200H1856V192H1848V176H1840V144H1848V136H1856V128H1864V120H1872V112H1880V104H1888V80H1896V72H1904V64H1912ZM1912 72V80H1904V104H1896V112H1888V120H1880V128H1872V136H1864V144H1856V176H1864V192H1880V200H1960V192H1976V176H1984V144H1976V136H1968V128H1960V120H1952V112H1944V104H1936V80H1928V72Z" />
+      <path
+         id="text-panel-top-flame-6-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1928,104 v 0 l -16,-24 v -8 h 16 z m 0,-24 h 8 v 24 h -8 z m -24,24 V 80 h 8 l 16,24 h 8 v 0 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 32 h -8 v 16 h -16 v 8 h -80 v -8 h -16 v -16 h -8 v -32 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 z m 0,48 v 24 h -8 v 16 h 48 v -16 h -8 v -24 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-top-flame-6-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1904,152 h 32 v 24 h 8 v 16 h -48 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="text-panel-top-flame-2">
+      <path
+         id="text-panel-top-flame-2-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M584 96H600V104H608V112H616V120H624V136H632V144H640V152H648V160H656V168H664V176H672V200H664V208H656V216H528V208H520V200H512V176H520V168H528V160H536V152H544V144H552V136H560V120H568V112H576V104H584ZM584 112V120H576V136H568V144H560V152H552V168H544V176H528V200H656V176H640V168H632V152H624V144H616V136H608V120H600V112Z" />
+      <path
+         id="text-panel-top-flame-2-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 568,136 h 8 v -16 h 8 v -8 h 16 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 8 h 16 v 24 h -32 v -16 h -8 v -8 h -48 v 8 h -8 v 16 h -32 v -24 h 16 v -8 h 8 v -16 h 8 v -8 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-top-flame-2-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 568,176 h 48 v 8 h 8 v 16 h -64 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="text-panel-top-flame-5">
+      <path
+         id="text-panel-top-flame-5-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1640 96H1656V104H1664V112H1672V120H1680V136H1688V144H1696V152H1704V160H1712V168H1720V176H1728V200H1720V208H1712V216H1584V208H1576V200H1568V176H1576V168H1584V160H1592V152H1600V144H1608V136H1616V120H1624V112H1632V104H1640ZM1640 112V120H1632V136H1624V144H1616V152H1608V168H1600V176H1584V200H1712V176H1696V168H1688V152H1680V144H1672V136H1664V120H1656V112Z" />
+      <path
+         id="text-panel-top-flame-5-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1624,136 h 8 v -16 h 8 v -8 h 16 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 8 h 16 v 24 h -32 v -16 h -8 v -8 h -48 v 8 h -8 v 16 h -32 v -24 h 16 v -8 h 8 v -16 h 8 v -8 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-top-flame-5-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1624,176 h 48 v 8 h 8 v 16 h -64 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="text-panel-top-flame-3">
+      <path
+         id="text-panel-top-flame-3-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1000 32H1008V40H1016V48H1024V56H1032V80H1040V96H1048V104H1056V112H1064V128H1072V136H1080V144H1088V160H1096V176H1104V200H1096V208H1088V216H920V208H912V200H904V176H912V160H920V144H928V136H936V128H944V112H952V104H960V96H968V80H976V56H984V48H992V40H1000ZM1008 48H1000V56H992V80H984V96H976V112H960V128H952V136H944V144H936V160H928V176H920V200H1088V176H1080V160H1072V144H1064V136H1056V128H1048V112H1032V96H1024V80H1016V56H1008Z" />
+      <path
+         id="text-panel-top-flame-3-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 984,80 h 8 V 56 h 8 v -8 h 8 v 8 h 8 v 24 h 8 v 16 h 8 v 16 h 16 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 16 h 8 v 24 h -56 v -24 h -16 v -24 h -24 v 24 h -16 v 24 h -56 v -24 h 8 v -16 h 8 v -16 h 8 v -8 h 8 v -8 h 8 v -16 h 16 V 96 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-top-flame-3-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 992,152 h 24 v 24 h 16 v 24 h -56 v -24 h 16 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="text-panel-top-flame-4">
+      <path
+         id="text-panel-top-flame-4-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1232 32H1240V40H1248V48H1256V56H1264V80H1272V96H1280V104H1288V112H1296V128H1304V136H1312V144H1320V160H1328V176H1336V200H1328V208H1320V216H1152V208H1144V200H1136V176H1144V160H1152V144H1160V136H1168V128H1176V112H1184V104H1192V96H1200V80H1208V56H1216V48H1224V40H1232ZM1240 48H1232V56H1224V80H1216V96H1208V112H1192V128H1184V136H1176V144H1168V160H1160V176H1152V200H1320V176H1312V160H1304V144H1296V136H1288V128H1280V112H1264V96H1256V80H1248V56H1240Z" />
+      <path
+         id="text-panel-top-flame-4-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1216,80 h 8 V 56 h 8 v -8 h 8 v 8 h 8 v 24 h 8 v 16 h 8 v 16 h 16 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 16 h 8 v 24 h -56 v -24 h -16 v -24 h -24 v 24 h -16 v 24 h -56 v -24 h 8 v -16 h 8 v -16 h 8 v -8 h 8 v -8 h 8 v -16 h 16 V 96 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="text-panel-top-flame-4-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1224,152 h 24 v 24 h 16 v 24 h -56 v -24 h 16 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="text-panel-lava-crack-1">
+      <path
+         id="text-panel-lava-crack-1-burnt-edge"
+         fill="#ad4f2b"
+         fill-rule="evenodd"
+         d="m 144,200 v 16 z m 16,16 v 8 h 8 -8 z m 24,0 v 8 z m 8,16 v 8 z m 8,8 v 8 z m -24,168 h 16 v 16 h -8 v -8 h -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccc" />
+      <path
+         id="text-panel-lava-crack-1-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 144,200 h 40 v 24 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 8 h 24 v 8 h -16 v 16 h -8 v 8 h -8 v 16 h -16 v 8 h -8 v 48 h 8 v 8 h 8 v 8 h 16 v 48 h -32 v -8 h 8 v -16 h -32 v -40 h -8 v -8 h -32 v -40 h 48 v -32 h 8 v -8 h 8 v -32 h -8 v -8 h -8 v -24 h -24 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="text-panel-lava-crack-2">
+      <path
+         id="text-panel-lava-crack-2-burnt-edge"
+         fill="#AD4F2B"
+         fill-rule="evenodd"
+         d="M184 592H216V600H184ZM168 728H184V744H176V736H168Z" />
+      <path
+         id="text-panel-lava-crack-2-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M184 600H216V640H192V648H184V688H192V704H200V712H216V768H184V728H168V696H160V688H144V640H160V632H168V616H176V608H184Z" />
+    </g>
+    <g
+       id="text-panel-lava-crack-3">
+      <path
+         id="text-panel-lava-crack-3-burnt-edge"
+         fill="#AD4F2B"
+         fill-rule="evenodd"
+         d="M552 784H560V792H552Z" />
+      <path
+         id="text-panel-lava-crack-3-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M520 784H552V792H560V808H568V816H600V832H608V840H648V864H584V848H576V840H536V824H528V816H520Z" />
+    </g>
+    <g
+       id="text-panel-lava-crack-4">
+      <path
+         id="text-panel-lava-crack-4-burnt-edge"
+         fill="#ad4f2b"
+         fill-rule="evenodd"
+         d="m 1520,816 v 8 z m -8,16 v 8 z"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         id="text-panel-lava-crack-4-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M1552 792H1576V840H1536V848H1528V864H1472V840H1512V824H1520V816H1544V808H1552Z" />
+    </g>
+    <g
+       id="text-panel-lava-crack-5">
+      <path
+         id="text-panel-lava-crack-5-burnt-edge"
+         fill="#AD4F2B"
+         fill-rule="evenodd"
+         d="M1920 216H1944V224H1920ZM1912 240H1928V264H1920V248H1912Z" />
+      <path
+         id="text-panel-lava-crack-5-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M1904 216H1920V224H1944V240H1952V248H1992V256H2000V264H2016V288H2008V272H1928V240H1904Z" />
+    </g>
+    <g
+       id="text-panel-lava-crack-6">
+      <path
+         id="text-panel-lava-crack-6-burnt-edge"
+         fill="#ad4f2b"
+         fill-rule="evenodd"
+         d="m 2048,544 h 8 v 8 h -8 z m 8,8 h 8 v 8 h 8 v 16 h -16 z m 16,24 v 8 z"
+         sodipodi:nodetypes="ccccccccccccccc" />
+      <path
+         id="text-panel-lava-crack-6-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 2064,440 h 32 v 40 h -16 v 8 h -8 v 16 h -8 v 8 h -8 v 32 h -8 8 v 8 h 16 v 24 8 h 24 v 32 h -40 v -16 h -8 v -8 h -16 v -32 h -8 v -8 h -16 v -48 h 32 v -24 h 8 v -8 h 8 v -16 h 8 v -8 0 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+  </g>
+  <g
+     id="scroll-answer-tile">
+    <g
+       id="scroll-answer-tile-frame">
+      <path
+         id="scroll-answer-tile-frame-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 2448,152 h 920 v 8 h -920 z m -168,96 h 8 v 8 h -8 z m 1248,0 h 8 v 8 h -8 z m -1264,16 h 8 v 8 h -8 z m 1280,0 h 8 v 8 h -8 z m -1256,24 h 8 v 8 h -8 z m 8,8 h 16 v 8 h 8 v 24 8 h -8 -16 v -8 h 8 v -8 h 8 v -8 h -8 v -8 h -8 z m 1224,-8 h 8 v 8 h -8 z m 0,8 v 8 h -8 v 8 h -8 v 8 h 8 v 8 h 8 v 8 h -16 v -8 h -8 v -24 h 8 v -8 z m -1224,40 v 8 h -8 v -8 z m 1224,0 h 8 v 8 h -8 z M 2448,440 h 920 v 8 h -920 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="scroll-answer-tile-frame-burnt-edge"
+         fill="#ad4f2b"
+         fill-rule="evenodd"
+         d="m 2448,160 h 920 v 64 h -8 v -48 h -272 v 8 h -24 v -8 h -312 v 8 h -24 v -8 h -272 v 48 h -8 z m -160,88 h 120 v 16 h -64 v 24 h 16 v 40 h -16 v 32 h -72 v -8 h 8 v -8 h 16 v -8 h 16 8 v -8 -24 h -16 v -8 h -16 v -8 h -8 v -8 h -8 v -16 h 8 v -8 h 8 z m 1120,0 h 120 v 8 h 16 v 24 h -8 v 8 h -16 v 8 h -16 v 8 h -8 v 24 h 8 v 8 h 16 v 8 h 16 v 8 h 8 v 8 h -72 v -32 h -16 v -40 h 16 v -24 h -64 z m -960,168 h 920 v 24 h -920 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="scroll-answer-tile-left-burnt-corner">
+      <path
+         id="scroll-answer-tile-left-burnt-corner-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 2296,376 h 8 v 8 h -8 z m 8,0 h 32 v 16 h 16 v 16 h -8 v 8 h -8 v 8 h -8 v -8 h -8 v -8 h -8 v -16 h -8 z m 32,64 h 112 v 8 h -112 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccc" />
+      <path
+         id="scroll-answer-tile-left-burnt-corner-burnt-edge"
+         fill="#ad4f2b"
+         fill-rule="evenodd"
+         d="m 2280,360 h 64 v 8 h 64 v 24 h -24 v 8 h -8 v 8 h 8 v 8 h -24 v 8 h -8 v 8 h -8 v 8 h -8 v -24 -8 h 8 8 v -16 h -16 v -16 h -32 -8 v -8 h -8 -8 z m 128,32 h 24 v 24 h 16 v 24 h -64 v -24 h 24 v -8 h 8 v -8 h -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="scroll-answer-tile-left-burnt-corner-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M2376 400H2384V408H2376ZM2408 400H2416V408H2408ZM2352 424H2360V432H2384V440H2344V432H2352Z"
+         style="fill:#ad4f2b;fill-opacity:1" />
+      <path
+         id="scroll-answer-tile-left-burnt-corner-parchment-cream"
+         fill="#ebd6b3"
+         fill-rule="evenodd"
+         d="m 2384,392 h 24 v 24 h -24 z m 0,24 v 24 h -24 v -24 z"
+         sodipodi:nodetypes="cccccccccc" />
+    </g>
+    <g
+       id="scroll-answer-tile-left-ember">
+      <path
+         id="scroll-answer-tile-left-ember-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 2336,152 h 112 v 8 h -8 v 8 h -8 v 48 8 h -8 -16 v -24 -16 -24 h -64 v 8 h -8 z m 0,64 h 8 v 8 h 16 v 16 h -16 v -8 h -16 v -8 h 8 z m 40,8 h 24 v 16 h -24 z m -88,16 h 16 v 8 h -16 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="scroll-answer-tile-left-ember-burnt-edge"
+         fill="#ad4f2b"
+         fill-rule="evenodd"
+         d="m 2344,160 h 24 v 16 h -8 v 48 h -16 -8 v -8 -48 -8 z m 40,0 h 24 v 24 h -24 z m 56,0 h 8 v 40 h -8 v 8 h -8 v -40 h 8 z m -32,24 v 16 z m 0,16 v 24 h 4.7732 H 2432 v -8 h 16 v 8 h -16 v 16 h -24 v 8 h -104 v -8 h 16 24 16 v -16 h 16 v 16 h 24 v -16 h -16 v -8 h 8 v -8 h 8 v -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="scroll-answer-tile-left-ember-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M2368 160H2384V176H2368ZM2384 184H2408V200H2400V208H2392V216H2384V224H2360V200H2384ZM2440 200H2448V216H2432V208H2440Z"
+         style="fill:#ad4f2b;fill-opacity:1" />
+      <path
+         id="scroll-answer-tile-left-ember-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 2352,176 h 40 v 32 h -40 z"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <g
+       id="scroll-answer-tile-outer-outline">
+      <path
+         id="scroll-answer-tile-outer-outline-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 2320,136 h 1176 v 88 h 48 v 24 h 16 v 8 h 8 v 32 h -24 v 24 h -24 v 8 h 24 v 24 h 24 v 24 h -24 v 24 h -24 v 32 h -24 v 40 H 2320 v -40 h -24 v -32 h -24 v -24 h -24 v -24 h 24 v -24 h 24 v -8 h -24 v -24 h -24 v -32 h 24 v -32 h 48 z m 16,16 v 72 l 8,8 v 8 h -24 -32 v 8 h -8 v 8 8 h -8 -8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h -8 v 8 h -8 v 8 h -8 v 8 h -8 v 8 h -8 v 8 h 8 v 8 h 8 8 v 8 8 h 8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 24 h 1144 v -24 h 8 v -8 h 8 v -8 h 8 v -16 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h -8 v -8 h -8 v -8 h -8 v -8 h -8 v -8 h -8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h -8 v -8 h -8 v -8 h -8 v -8 h -32 v -8 h -8 v -8 h -8 v -72 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="scroll-answer-tile-right-burnt-corner">
+      <path
+         id="scroll-answer-tile-right-burnt-corner-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M3512 376H3520V384H3512ZM3512 384V392H3504V408H3496V416H3488V424H3480V416H3472V408H3464V392H3480V384ZM3368 440H3480V448H3368Z" />
+      <path
+         id="scroll-answer-tile-right-burnt-corner-burnt-edge"
+         fill="#AD4F2B"
+         fill-rule="evenodd"
+         d="M3472 360H3536V368H3528V376H3512V384H3480V392H3464V408H3472V416H3480V440H3472V432H3464V424H3456V416H3432V408H3440V400H3432V392H3408V368H3472ZM3408 392V400H3400V408H3408V416H3432V440H3368V416H3384V392Z" />
+      <path
+         id="scroll-answer-tile-right-burnt-corner-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M3400 400H3408V408H3400ZM3432 400H3440V408H3432ZM3456 424H3464V432H3472V440H3432V432H3456Z"
+         style="fill:#ad4f2b;fill-opacity:1" />
+      <path
+         id="scroll-answer-tile-right-burnt-corner-parchment-cream"
+         fill="#EBD6B3"
+         fill-rule="evenodd"
+         d="M3408 392H3432V416H3408ZM3432 416H3456V432H3432Z" />
+    </g>
+    <g
+       id="scroll-answer-tile-right-ember">
+      <path
+         id="scroll-answer-tile-right-ember-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M3368 152H3480V168H3472V160H3408V184H3400V200H3408V224H3392V216H3384V168H3376V160H3368ZM3472 216H3480V224H3488V232H3472V240H3456V224H3472ZM3416 224H3440V240H3416ZM3512 240H3528V248H3512Z" />
+      <path
+         id="scroll-answer-tile-right-ember-burnt-edge"
+         fill="#AD4F2B"
+         fill-rule="evenodd"
+         d="M3368 160H3376V168H3384V208H3376V200H3368ZM3408 160H3432V184H3408ZM3448 160H3472V168H3480V216H3472V224H3456V176H3448ZM3408 184V200H3400V184ZM3408 200H3416V208H3424V216H3432V224H3416V240H3440V224H3456V240H3472V232H3496V240H3512V248H3408V240H3384V224H3368V216H3392V224H3408Z" />
+      <path
+         id="scroll-answer-tile-right-ember-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M3432 160H3448V176H3432ZM3408 184H3432V200H3456V224H3432V216H3424V208H3416V200H3408ZM3368 200H3376V208H3384V216H3368Z"
+         style="fill:#ad4f2b;fill-opacity:1" />
+      <path
+         id="scroll-answer-tile-right-ember-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M3432 176H3456V200H3432Z" />
+    </g>
+    <g
+       id="scroll-answer-tile-text-face">
+      <path
+         id="scroll-answer-tile-text-face-parchment-cream"
+         fill="#EBD6B3"
+         fill-rule="evenodd"
+         d="M2456 176H2728V184H2752V176H3064V184H3088V176H3360V224H3384V240H3408V264H3472V288H3456V328H3472V368H3408V392H3384V416H2432V392H2408V368H2344V328H2360V288H2344V264H2408V240H2432V224H2456Z" />
+    </g>
+  </g>
+  <g
+     id="rune-stone">
+    <g
+       id="rune-stone-ember-line">
+      <path
+         id="rune-stone-ember-line-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 2504,544 h 152 v 8 h 8 v 8 h 16 v 16 h 8 v 8 h 64 v 16 h 8 v 8 h 16 v 24 h 16 v 8 h 48 v 8 h 8 v 8 h 16 v 200 h -8 v 8 h -16 v 16 h -520 v -16 h -16 -8 v -8 -200 h 16 8 v -8 -8 h 48 16 v -8 -24 h 16 8 v -8 -16 h 64 8 v -8 -16 h 16 8 v -8 z m 16,32 v 16 8 h -8 -16 v 16 h -8 v 8 h -80 v 16 8 h -8 -16 v 16 h -8 v 8 h -40 v 192 h 488 V 672 h -40 v -8 h -8 v -16 h -16 v -8 h -8 v -16 h -80 v -8 h -8 v -16 h -16 v -8 h -8 v -16 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="rune-stone-frame">
+      <path
+         id="rune-stone-frame-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M2512 512H2648V520H2512ZM2496 528H2504V536H2496ZM2496 536V544H2488V552H2472V544H2480V536ZM2656 528H2664V536H2656ZM2664 536H2680V544H2688V552H2672V544H2664ZM2472 552V560H2464V552ZM2688 552H2696V560H2688ZM2384 576H2400V584H2384ZM2760 576H2776V584H2760ZM2320 608H2360V616H2320ZM2800 608H2840V616H2800ZM2296 624H2304V632H2296ZM2856 624H2864V632H2856ZM2272 656H2280V880H2288V888H2872V880H2880V656H2888V896H2272Z" />
+      <path
+         id="rune-stone-frame-basalt-shadow"
+         fill="#322627"
+         fill-rule="evenodd"
+         d="m 2504,520 h 8 v 8 h -8 z m 144,0 h 8 v 8 h -8 z m -176,32 h 8 v 24 h -32 v 8 h -40 v 8 h -8 v 16 h -24 v 8 h 8 v 16 8 h -16 -48 v 8 h -32 v -8 h 8 v -8 h 8 v -16 h 8 8 40 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 16 v -8 h 8 v -8 h 8 v -8 h 56 z m 208,0 h 8 v 8 h 56 v 8 h 8 v 8 h 8 v 8 h 16 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 40 v -8 h 8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h -32 v -8 h -48 v -8 h -16 v -16 h 8 v -8 h -24 v -16 h -8 v -8 h -40 v -8 h -32 z m -392,96 v 8 h 8 v 200 h -8 v 16 h 8 v 8 h 16 v -8 h 8 v 8 h 520 v -8 h 8 v 8 h 16 v -8 h 8 v -16 h -8 V 656 h 8 v -8 h 8 v 232 h -8 v 8 h -584 v -8 h -8 V 648 Z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="rune-stone-frame-basalt-face"
+         fill="#463635"
+         fill-rule="evenodd"
+         d="m 2512,520 h 136 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h -16 v -8 h -8 v -8 h -152 v 8 0 8 h -24 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 z m -64,56 h 32 v 8 h -32 z m 240,0 h 24 v 8 h -24 z m -288,16 h 8 v 16 h -8 z m 352,0 h 8 v 8 h -8 z m -376,16 h 8 v 8 h -8 z m 400,0 h 8 v 8 h -8 z m -488,40 h 32 v 8 h -32 z m 560,0 h 24 v 8 h -24 z m -552,208 v 8 h 8 16 v 8 h -8 v 8 h -16 v -8 h -8 v -16 z m 560,0 h 16 v 16 h -8 v 8 h -16 v -8 h -8 v -8 h 16 z"
+         style="fill:#322627;fill-opacity:1"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="rune-stone-inner-outline">
+      <path
+         id="rune-stone-inner-outline-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 2520,576 h 120 v 16 h 8 v 8 h 16 v 16 h 8 v 8 h 80 v 16 h 8 v 8 h 16 v 16 h 8 v 0 h 40 V 864 H 2336 V 664 h 32 8 8 v -16 h 16 8 v -8 -16 h 80 v -8 -16 h 8 16 8 v -8 z m 16,24 v 24 h -24 -8 v 24 h -80 v 0 8 16 h -24 v 0 16 h -40 v 152 h 440 V 696 h -40 v -24 -16 h -8 v -8 h -8 v -16 h -80 v -8 h -8 v -16 h -16 v -8 h -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="rune-stone-outer-outline">
+      <path
+         id="rune-stone-outer-outline-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 2656,504 v 8 h 8 v 8 h 24 v 16 h 8 v 8 h 56 v 16 h 40 v 32 h 72 v 24 h 16 v 24 h 24 V 912 H 2256 V 640 h 24 v -24 h 16 v -24 h 72 v -32 h 40 v -16 h 56 8 v -8 -16 h 24 8 v -8 -8 z m -144,8 v 8 h -8 v 8 h -8 v 8 h -16 v 8 h -8 v 8 h -8 v 8 h -48 v 8 h -8 v 8 h -24 v 16 h -8 v 8 h -8 v 16 h -56 v 0 h -8 v 8 h -8 v 16 h -8 v 8 h -8 v 8 h -8 v 240 h 616 V 656 h -8 v -8 h -8 v -8 h -8 v -16 h -8 v -8 h -8 v -8 h -56 v -8 h -8 v -8 h -8 v -16 h -24 v -8 h -8 v -8 h -48 v -8 h -8 v -8 h -8 v -8 h -16 v -8 h -8 v -8 h -8 v -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="rune-stone-text-face">
+      <path
+         id="rune-stone-text-face-parchment-cream"
+         fill="#ebd6b3"
+         fill-rule="evenodd"
+         d="m 2632,600 h 8 v 8 h 16 v 16 h 8 v 8 h 80 v 16 h 8 v 8 h 8 v 16 16 h 40 V 840 H 2360 V 688 h 40 v -16 0 h 24 v -8 -16 0 h 72 v -24 h 8 32 v -24 h -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccc" />
+    </g>
+  </g>
+  <g
+     id="gold-coin">
+    <g
+       id="gold-coin-glint">
+      <path
+         id="gold-coin-glint-parchment-cream"
+         fill="#EBD6B3"
+         fill-rule="evenodd"
+         d="M3168 640H3216V656H3192V680H3168V704H3144V728H3104V680H3128V656H3168ZM3344 640H3392V656H3432V680H3456V728H3416V704H3392V680H3368V656H3344Z" />
+    </g>
+    <g
+       id="gold-coin-gold-rim">
+      <path
+         id="gold-coin-gold-rim-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M3184 560H3376V568H3384V576H3392V584H3424V592H3432V600H3440V608H3464V616H3472V624H3480V632H3488V640H3496V648H3512V656H3520V664H3528V680H3536V688H3544V696H3552V768H3544V776H3536V784H3528V800H3520V808H3512V816H3504V832H3496V840H3480V848H3472V856H3440V864H3432V872H3424V880H3392V888H3384V896H3376V904H3184V896H3176V888H3168V880H3136V872H3128V864H3120V856H3088V848H3080V840H3064V832H3056V816H3048V808H3040V800H3032V784H3024V776H3016V768H3008V696H3016V688H3024V680H3032V664H3040V656H3048V648H3064V640H3072V632H3080V624H3088V616H3096V608H3120V600H3128V592H3136V584H3168V576H3176V568H3184ZM3192 616V632H3136V656H3088V704H3064V760H3088V808H3136V832H3192V848H3368V832H3424V808H3472V760H3496V704H3472V656H3424V632H3368V616Z" />
+    </g>
+    <g
+       id="gold-coin-outer-outline">
+      <path
+         id="gold-coin-outer-outline-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M3168 544H3392V568H3440V592H3480V616H3496V632H3520V648H3544V680H3568V784H3544V816H3520V840H3504V848H3496V856H3480V872H3440V896H3392V920H3168V896H3120V872H3080V856H3064V848H3056V840H3040V816H3016V784H2992V680H3016V648H3040V632H3064V616H3080V592H3120V568H3168ZM3184 560V568H3176V576H3168V584H3136V592H3128V600H3120V608H3096V616H3088V624H3080V632H3072V640H3064V648H3048V656H3040V664H3032V680H3024V688H3016V696H3008V768H3016V776H3024V784H3032V800H3040V808H3048V816H3056V832H3064V840H3080V848H3088V856H3120V864H3128V872H3136V880H3168V888H3176V896H3184V904H3376V896H3384V888H3392V880H3424V872H3432V864H3440V856H3472V848H3480V840H3496V832H3504V816H3512V808H3520V800H3528V784H3536V776H3544V768H3552V696H3544V688H3536V680H3528V664H3520V656H3512V648H3496V640H3488V632H3480V624H3472V616H3464V608H3440V600H3432V592H3424V584H3392V576H3384V568H3376V560Z" />
+    </g>
+    <g
+       id="gold-coin-text-face">
+      <path
+         id="gold-coin-text-face-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M3192 616H3368V632H3424V656H3392V640H3344V656H3368V680H3392V704H3416V728H3456V680H3432V656H3472V704H3496V760H3472V808H3424V832H3368V848H3192V832H3136V808H3088V760H3064V704H3088V656H3128V680H3104V728H3144V704H3168V680H3192V656H3216V640H3168V656H3136V632H3192Z" />
+    </g>
+  </g>
+  <g
+     id="timer-basalt-groove">
+    <g
+       id="timer-basalt-groove-basalt-rim">
+      <path
+         id="timer-basalt-groove-basalt-rim-basalt-rim"
+         fill="#553F3E"
+         fill-rule="evenodd"
+         d="M144 976H2080V984H2088V992H2096V1000H2104V1008H2112V1064H2104V1120H2096V1128H2088V1136H2080V1144H144V1136H136V1128H128V1120H120V1064H112V1008H120V1000H128V992H136V984H144ZM192 1000V1008H184V1016H176V1024H168V1032H160V1088H168V1104H176V1112H2048V1104H2056V1088H2064V1032H2056V1024H2048V1016H2040V1008H2032V1000Z" />
+    </g>
+    <g
+       id="timer-basalt-groove-empty-channel">
+      <path
+         id="timer-basalt-groove-empty-channel-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M192 1000H2032V1008H2040V1016H2048V1024H2056V1032H2064V1088H2056V1104H2048V1112H176V1104H168V1088H160V1032H168V1024H176V1016H184V1008H192Z" />
+    </g>
+    <g
+       id="timer-basalt-groove-lower-rim-edge">
+      <path
+         id="timer-basalt-groove-lower-rim-edge-basalt-shadow"
+         fill="#322627"
+         fill-rule="evenodd"
+         d="M112 1064H120V1120H112ZM2104 1064H2112V1120H2104ZM120 1120H128V1128H120ZM2104 1120V1128H2096V1120ZM128 1128H136V1136H128ZM2096 1128V1136H2088V1128ZM136 1136H144V1144H136ZM2088 1136V1144H2080V1136ZM144 1144H2080V1152H144Z" />
+    </g>
+    <g
+       id="timer-basalt-groove-outer-outline">
+      <path
+         id="timer-basalt-groove-outer-outline-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M136 960H2088V976H2104V984H2112V1000H2128V1128H2112V1144H2096V1168H128V1144H112V1128H96V1000H112V984H120V976H136ZM144 976V984H136V992H128V1000H120V1008H112V1120H120V1128H128V1136H136V1144H144V1152H2080V1144H2088V1136H2096V1128H2104V1120H2112V1008H2104V1000H2096V992H2088V984H2080V976Z" />
+    </g>
+  </g>
+  <g
+     id="timer-fire-fill">
+    <g
+       id="timer-fire-fill-left-flame">
+      <path
+         id="timer-fire-fill-left-flame-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M2320 992H2328V1000H2336V1008H2344V1016H2352V1040H2360V1048H2368V1056H2376V1064H2384V1080H2400V1088H2408V1152H2400V1160H2248V1152H2240V1088H2248V1080H2264V1064H2272V1056H2280V1048H2288V1040H2296V1016H2304V1008H2312V1000H2320ZM2328 1008H2320V1016H2312V1040H2304V1048H2296V1056H2288V1064H2280V1080H2272V1088H2264V1096H2248V1144H2400V1096H2384V1088H2376V1080H2368V1064H2360V1056H2352V1048H2344V1040H2336V1016H2328Z" />
+      <path
+         id="timer-fire-fill-left-flame-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M2304 1040H2312V1056H2336V1040H2344V1048H2352V1056H2360V1064H2368V1080H2376V1088H2384V1096H2400V1144H2352V1120H2336V1096H2312V1120H2296V1144H2248V1096H2264V1088H2272V1080H2280V1064H2288V1056H2296V1048H2304Z" />
+      <path
+         id="timer-fire-fill-left-flame-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M2320 1008H2328V1016H2336V1056H2312V1016H2320ZM2312 1096H2336V1120H2352V1144H2296V1120H2312Z" />
+    </g>
+    <g
+       id="timer-fire-fill-right-flame">
+      <path
+         id="timer-fire-fill-right-flame-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M2488 992H2496V1000H2504V1008H2512V1016H2520V1040H2528V1048H2536V1056H2544V1064H2552V1080H2568V1088H2576V1152H2568V1160H2416V1152H2408V1088H2416V1080H2432V1064H2440V1056H2448V1048H2456V1040H2464V1016H2472V1008H2480V1000H2488ZM2496 1008H2488V1016H2480V1040H2472V1048H2464V1056H2456V1064H2448V1080H2440V1088H2432V1096H2416V1144H2568V1096H2552V1088H2544V1080H2536V1064H2528V1056H2520V1048H2512V1040H2504V1016H2496Z" />
+      <path
+         id="timer-fire-fill-right-flame-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M2472 1040H2480V1056H2504V1040H2512V1048H2520V1056H2528V1064H2536V1080H2544V1088H2552V1096H2568V1144H2520V1120H2504V1096H2480V1120H2464V1144H2416V1096H2432V1088H2440V1080H2448V1064H2456V1056H2464V1048H2472Z" />
+      <path
+         id="timer-fire-fill-right-flame-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M2488 1008H2496V1016H2504V1056H2480V1016H2488ZM2480 1096H2504V1120H2520V1144H2464V1120H2480Z" />
+    </g>
+  </g>
+  <g
+     id="flame-panel">
+    <g
+       id="flame-panel-frame">
+      <path
+         id="flame-panel-frame-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M560 1264H648V1272H656V1280H720V1288H736V1296H744V1304H864V1296H872V1288H888V1280H1040V1272H1048V1264H1176V1272H1184V1280H1336V1288H1352V1296H1360V1304H1480V1296H1488V1288H1504V1280H1568V1272H1576V1264H1664V1272H1672V1280H1696V1288H1712V1296H1720V1304H1752V1296H1760V1304H1800V1296H1808V1288H1824V1280H1848V1288H1864V1296H1880V1304H1992V1296H2008V1288H2016V1280H2024V1272H2080V1280H2088V1288H2096V1296H2104V1304H2112V1312H2120V1320H2128V1424H2112V1496H2128V1584H2120V1592H2112V1600H2104V1608H2096V1616H2088V1624H2080V1632H2024V1624H2016V1616H2008V1608H2000V1600H1992V1592H1984V1576H1976V1568H1896V1576H1888V1584H1880V1592H1872V1600H1864V1608H1856V1616H1816V1608H1808V1600H1800V1592H1792V1576H1784V1568H1736V1576H1728V1592H1720V1600H1712V1608H1704V1616H1672V1624H1664V1632H1576V1624H1568V1616H1504V1608H1488V1600H1480V1592H1472V1576H1480V1568H1352V1576H1360V1592H1352V1600H1344V1608H1336V1616H1184V1624H1176V1632H1048V1624H1040V1616H888V1608H880V1600H872V1592H864V1576H872V1568H744V1576H752V1592H744V1600H736V1608H720V1616H656V1624H648V1632H560V1624H552V1616H520V1608H512V1600H504V1592H496V1576H488V1568H440V1576H432V1592H424V1600H416V1608H408V1616H368V1608H360V1600H352V1592H344V1584H336V1576H328V1568H248V1576H240V1592H232V1600H224V1608H216V1616H208V1624H200V1632H144V1624H136V1616H128V1608H120V1600H112V1592H104V1584H96V1496H112V1424H96V1320H104V1312H112V1304H120V1296H128V1288H136V1280H144V1272H200V1280H208V1288H216V1296H232V1304H344V1296H360V1288H376V1280H400V1288H416V1296H424V1304H464V1296H472V1304H504V1296H512V1288H528V1280H552V1272H560ZM560 1280V1288H552V1296H528V1304H512V1312H504V1320H472V1312H464V1320H424V1312H416V1304H400V1296H376V1304H360V1312H344V1320H232V1312H216V1304H208V1296H200V1288H144V1296H136V1304H128V1312H120V1320H112V1416H120V1424H128V1432H136V1488H128V1496H120V1520H112V1584H120V1592H128V1600H136V1608H144V1616H200V1608H208V1600H216V1592H224V1576H232V1568H168V1560H160V1344H168V1336H200V1328H208V1320H224V1328H232V1336H344V1328H368V1336H728V1328H744V1336H856V1328H888V1336H1336V1328H1368V1336H1480V1328H1496V1336H1856V1328H1880V1336H1992V1328H2000V1320H2016V1328H2024V1336H2056V1344H2064V1560H2056V1568H1992V1576H2000V1592H2008V1600H2016V1608H2024V1616H2080V1608H2088V1600H2096V1592H2104V1584H2112V1520H2104V1496H2096V1488H2088V1432H2096V1424H2104V1416H2112V1320H2104V1312H2096V1304H2088V1296H2080V1288H2024V1296H2016V1304H2008V1312H1992V1320H1880V1312H1864V1304H1848V1296H1824V1304H1808V1312H1800V1320H1760V1312H1752V1320H1720V1312H1712V1304H1696V1296H1672V1288H1664V1280H1576V1288H1568V1296H1504V1304H1488V1312H1480V1320H1360V1312H1352V1304H1336V1296H1184V1288H1176V1280H1048V1288H1040V1296H888V1304H872V1312H864V1320H744V1312H736V1304H720V1296H656V1288H648V1280ZM184 1352V1552H2040V1352ZM344 1568V1576H352V1584H360V1592H368V1600H408V1592H416V1576H424V1568ZM504 1568V1576H512V1592H520V1600H552V1608H560V1616H648V1608H656V1600H720V1592H736V1576H728V1568ZM888 1568V1576H880V1592H888V1600H1040V1608H1048V1616H1176V1608H1184V1600H1336V1592H1344V1576H1336V1568ZM1496 1568V1576H1488V1592H1504V1600H1568V1608H1576V1616H1664V1608H1672V1600H1704V1592H1712V1576H1720V1568ZM1800 1568V1576H1808V1592H1816V1600H1856V1592H1864V1584H1872V1576H1880V1568Z" />
+      <path
+         id="flame-panel-frame-basalt-shadow"
+         fill="#322627"
+         fill-rule="evenodd"
+         d="M560 1280H568V1288H560ZM560 1288V1296H568V1304H576V1320H592V1328H624V1320H640V1312H648V1304H656V1296H688V1304H680V1320H688V1328H720V1320H728V1304H736V1312H744V1320H752V1328H856V1336H744V1328H728V1336H368V1328H344V1336H232V1328H224V1320H208V1328H200V1336H168V1328H176V1320H200V1312H208V1304H216V1312H232V1320H240V1328H336V1320H344V1312H360V1304H376V1296H392V1304H384V1320H392V1328H536V1320H544V1312H536V1304H528V1296H552V1288ZM1656 1280H1664V1288H1656ZM1664 1288H1672V1296H1696V1304H1688V1312H1680V1320H1688V1328H1832V1320H1840V1304H1832V1296H1848V1304H1864V1312H1880V1320H1888V1328H1984V1320H1992V1312H2008V1304H2016V1312H2024V1320H2048V1328H2056V1336H2024V1328H2016V1320H2000V1328H1992V1336H1880V1328H1856V1336H1496V1328H1480V1336H1368V1328H1472V1320H1480V1312H1488V1304H1496V1320H1504V1328H1536V1320H1544V1304H1536V1296H1568V1304H1576V1312H1584V1320H1600V1328H1632V1320H1648V1304H1656V1296H1664ZM888 1296H936V1304H920V1312H912V1328H1008V1304H992V1296H1040V1304H1048V1312H1056V1320H1072V1328H1104V1320H1120V1328H1152V1320H1168V1312H1176V1304H1184V1296H1232V1304H1216V1328H1312V1312H1304V1304H1288V1296H1336V1304H1352V1312H1360V1320H1368V1328H1336V1336H888V1328H856V1320H864V1312H872V1304H888ZM512 1304H520V1312H512ZM1704 1304H1712V1312H1704ZM120 1312H128V1320H120ZM120 1320V1392H136V1400H144V1392H160V1456H152V1448H144V1456H136V1432H128V1424H120V1416H112V1320ZM2096 1312H2104V1320H2096ZM2104 1320H2112V1416H2104V1424H2096V1432H2088V1456H2080V1448H2072V1456H2064V1392H2080V1400H2088V1392H2104ZM168 1336V1344H160V1336ZM2056 1336H2064V1344H2056ZM128 1488H144V1496H152V1488H160V1528H152V1520H128V1528H120V1584H112V1520H120V1496H128ZM2064 1488H2072V1496H2080V1488H2096V1496H2104V1520H2112V1584H2104V1528H2096V1520H2072V1528H2064ZM176 1568H232V1576H224V1592H216V1600H208V1592H200V1584H192V1576H176ZM344 1568H376V1576H368V1592H360V1584H352V1576H344ZM408 1568H424V1576H408ZM504 1568H528V1576H520V1592H512V1576H504ZM536 1568H592V1576H584V1592H576V1616H560V1608H552V1600H536V1592H544V1576H536ZM624 1568H688V1576H680V1592H688V1600H656V1608H648V1600H640V1592H632V1576H624ZM720 1568H728V1576H720ZM728 1576H736V1592H728ZM888 1568H912V1576H904V1592H912V1600H888V1592H880V1576H888ZM968 1568H1024V1576H1016V1592H1024V1600H968V1592H976V1576H968ZM1080 1568H1144V1576H1136V1584H1128V1592H1120V1600H1104V1592H1096V1584H1088V1576H1080ZM1200 1568H1256V1576H1248V1592H1256V1600H1200V1592H1208V1576H1200ZM1312 1568H1336V1576H1344V1592H1336V1600H1312V1592H1320V1576H1312ZM1496 1568H1504V1576H1496ZM1496 1576V1592H1488V1576ZM1536 1568H1600V1576H1592V1592H1584V1600H1576V1608H1568V1600H1536V1592H1544V1576H1536ZM1632 1568H1688V1576H1680V1592H1688V1600H1672V1608H1664V1616H1648V1592H1640V1576H1632ZM1696 1568H1720V1576H1712V1592H1704V1576H1696ZM1800 1568H1816V1576H1800ZM1848 1568H1880V1576H1872V1584H1864V1592H1856V1576H1848ZM1992 1568H2048V1576H2032V1584H2024V1592H2016V1600H2008V1592H2000V1576H1992ZM120 1584H128V1592H120ZM2104 1584V1592H2096V1584ZM368 1592H376V1600H368ZM408 1584H416V1592H408ZM408 1592V1600H400V1592ZM520 1592H528V1600H520ZM1704 1592V1600H1696V1592ZM1808 1584H1816V1592H1808ZM1816 1592H1824V1600H1816ZM1856 1592V1600H1848V1592ZM1104 1608H1120V1616H1104Z" />
+      <path
+         id="flame-panel-frame-basalt-face"
+         fill="#463635"
+         fill-rule="evenodd"
+         d="M568 1280H576V1296H584V1304H592V1320H576V1304H568V1296H560V1288H568ZM1648 1280H1656V1288H1664V1296H1656V1304H1648V1320H1632V1304H1640V1296H1648ZM648 1288H656V1304H648V1312H640V1320H632V1304H640V1296H648ZM1568 1288H1576V1296H1584V1304H1592V1320H1584V1312H1576V1304H1568ZM392 1296H400V1304H392ZM392 1304V1320H384V1304ZM704 1296H720V1304H728V1320H720V1328H688V1320H680V1304H688V1312H704ZM984 1296H992V1304H984ZM1232 1296H1240V1304H1232ZM1504 1296H1520V1312H1536V1304H1544V1320H1536V1328H1504V1320H1496V1304H1504ZM1824 1296H1832V1304H1824ZM1832 1304H1840V1320H1832ZM128 1304H136V1312H128ZM200 1304H208V1312H200ZM200 1312V1320H192V1312ZM520 1304H536V1312H544V1320H536V1328H512V1312H520ZM1000 1304H1008V1312H1000ZM1216 1304H1224V1312H1216ZM1688 1304H1704V1312H1712V1328H1688V1320H1680V1312H1688ZM2016 1304H2024V1312H2016ZM2024 1312H2032V1320H2024ZM2088 1304H2096V1312H2088ZM392 1320H400V1328H392ZM592 1320H600V1328H592ZM1056 1312H1064V1320H1056ZM1160 1312H1168V1320H1160ZM1632 1320V1328H1624V1320ZM1832 1320V1328H1824V1320ZM240 1320H336V1328H240ZM760 1320H856V1328H760ZM1368 1320H1464V1328H1368ZM1888 1320H1984V1328H1888ZM120 1368H128V1376H152V1368H160V1392H144V1400H136V1392H120ZM2064 1368H2072V1376H2096V1368H2104V1392H2088V1400H2080V1392H2064ZM144 1448H152V1456H160V1488H152V1496H144V1488H136V1456H144ZM2072 1448H2080V1456H2088V1488H2080V1496H2072V1488H2064V1456H2072ZM128 1520H152V1528H160V1560H152V1552H128V1560H120V1528H128ZM2072 1520H2096V1528H2104V1560H2096V1552H2072V1560H2064V1528H2072ZM376 1568H384V1576H376ZM376 1576V1592H368V1576ZM400 1568H408V1576H400ZM408 1576H416V1584H408ZM528 1568H536V1576H544V1592H536V1600H528V1592H520V1576H528ZM592 1568H600V1576H592ZM592 1576V1608H600V1616H576V1592H584V1576ZM1024 1568H1032V1584H1040V1600H1024V1592H1016V1576H1024ZM1192 1568H1200V1576H1208V1592H1200V1600H1184V1584H1192ZM1624 1568H1632V1576H1624ZM1632 1576H1640V1592H1648V1616H1624V1608H1632ZM1688 1568H1696V1576H1704V1592H1696V1600H1688V1592H1680V1576H1688ZM1816 1568H1824V1576H1816ZM1816 1576V1584H1808V1576ZM1840 1568H1848V1576H1840ZM1848 1576H1856V1592H1848ZM184 1576H192V1584H184ZM192 1584H200V1592H192ZM2032 1576H2040V1584H2032ZM2032 1584V1592H2024V1584ZM200 1592H208V1600H200ZM1088 1584H1096V1592H1088ZM1096 1592H1104V1600H1096ZM1128 1584H1136V1592H1128ZM1128 1592V1600H1120V1592ZM2024 1592V1600H2016V1592ZM632 1592H640V1600H648V1616H624V1608H632ZM1584 1592H1592V1608H1600V1616H1576V1600H1584Z" />
+      <path
+         id="flame-panel-frame-basalt-rim"
+         fill="#553F3E"
+         fill-rule="evenodd"
+         d="M576 1280H648V1296H640V1304H632V1320H624V1328H600V1320H592V1304H584V1296H576ZM1048 1280H1176V1288H1184V1304H1176V1312H1160V1320H1152V1328H1120V1320H1104V1328H1072V1320H1064V1312H1048V1304H1040V1288H1048ZM1576 1280H1648V1296H1640V1304H1632V1320H1624V1328H1600V1320H1592V1304H1584V1296H1576ZM144 1288H200V1296H208V1304H200V1312H192V1320H176V1328H168V1336H160V1368H152V1376H128V1368H120V1320H128V1312H136V1296H144ZM2024 1288H2080V1296H2088V1312H2096V1320H2104V1368H2096V1376H2072V1368H2064V1336H2056V1328H2048V1320H2032V1312H2024V1304H2016V1296H2024ZM688 1296H704V1312H688ZM936 1296H984V1304H1000V1312H1008V1328H912V1312H920V1304H936ZM1240 1296H1288V1304H1304V1312H1312V1328H1216V1312H1224V1304H1240ZM1520 1296H1536V1312H1520ZM392 1304H416V1312H424V1320H464V1312H472V1320H504V1312H512V1328H400V1320H392ZM1808 1304H1832V1320H1824V1328H1712V1312H1720V1320H1752V1312H1760V1320H1800V1312H1808ZM752 1320H760V1328H752ZM1464 1320H1472V1328H1464ZM128 1552H152V1560H168V1568H176V1576H184V1584H192V1592H200V1600H208V1608H200V1616H144V1608H136V1600H128V1584H120V1560H128ZM2072 1552H2096V1560H2104V1584H2096V1600H2088V1608H2080V1616H2024V1608H2016V1600H2024V1592H2032V1584H2040V1576H2048V1568H2056V1560H2072ZM384 1568H400V1576H408V1592H400V1600H376V1576H384ZM600 1568H624V1576H632V1608H624V1616H600V1608H592V1576H600ZM688 1568H720V1576H728V1592H720V1600H688V1592H680V1576H688ZM912 1568H968V1576H976V1592H968V1600H912V1592H904V1576H912ZM1032 1568H1080V1576H1088V1592H1096V1600H1128V1592H1136V1576H1144V1568H1192V1584H1184V1608H1176V1616H1120V1608H1104V1616H1048V1608H1040V1584H1032ZM1256 1568H1312V1576H1320V1592H1312V1600H1256V1592H1248V1576H1256ZM1504 1568H1536V1576H1544V1592H1536V1600H1504V1592H1496V1576H1504ZM1600 1568H1624V1576H1632V1608H1624V1616H1600V1608H1592V1576H1600ZM1824 1568H1840V1576H1848V1600H1824V1592H1816V1576H1824Z" />
+    </g>
+    <g
+       id="flame-panel-text-face">
+      <path
+         id="flame-panel-text-face-basalt-face"
+         fill="#463635"
+         fill-rule="evenodd"
+         d="M184 1352H2040V1552H184Z" />
+    </g>
+    <g
+       id="flame-panel-top-flame-1">
+      <path
+         id="flame-panel-top-flame-1-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M280 1200H296V1208H304V1216H312V1224H320V1248H328V1256H336V1264H344V1272H352V1280H360V1312H352V1320H344V1328H232V1320H224V1312H216V1280H224V1272H232V1264H240V1256H248V1248H256V1224H264V1216H272V1208H280ZM280 1216V1224H272V1248H264V1256H256V1272H248V1280H232V1312H344V1280H328V1272H320V1256H312V1248H304V1224H296V1216Z" />
+      <path
+         id="flame-panel-top-flame-1-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 264,1248 h 8 v -24 h 8 v -8 h 16 v 8 h 8 v 24 h 8 v 8 h 8 v 16 h 8 v 8 h 16 v 32 h -40 v -32 h -32 v 32 h -40 v -32 h 16 v -8 h 8 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-top-flame-1-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 272,1280 h 32 v 32 h -32 z"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <g
+       id="flame-panel-top-flame-6">
+      <path
+         id="flame-panel-top-flame-6-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1928 1200H1944V1208H1952V1216H1960V1224H1968V1248H1976V1256H1984V1264H1992V1272H2000V1280H2008V1312H2000V1320H1992V1328H1880V1320H1872V1312H1864V1280H1872V1272H1880V1264H1888V1256H1896V1248H1904V1224H1912V1216H1920V1208H1928ZM1928 1216V1224H1920V1248H1912V1256H1904V1272H1896V1280H1880V1312H1992V1280H1976V1272H1968V1256H1960V1248H1952V1224H1944V1216Z" />
+      <path
+         id="flame-panel-top-flame-6-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1912,1248 h 8 v -24 h 8 v -8 h 16 v 8 h 8 v 24 h 8 v 8 h 8 v 16 h 8 v 8 h 16 v 32 h -40 v -32 h -32 v 32 h -40 v -32 h 16 v -8 h 8 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-top-flame-6-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1920,1280 h 32 v 32 h -32 z"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <g
+       id="flame-panel-top-flame-2">
+      <path
+         id="flame-panel-top-flame-2-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M456 1240H472V1248H480V1256H488V1264H496V1272H504V1280H512V1288H520V1312H512V1320H504V1328H424V1320H416V1312H408V1288H416V1280H424V1272H432V1264H440V1256H448V1248H456ZM456 1256V1264H448V1280H432V1288H424V1312H504V1288H496V1280H480V1264H472V1256Z" />
+      <path
+         id="flame-panel-top-flame-2-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M432 1280H448V1296H432V1312H424V1288H432ZM480 1280H496V1288H504V1312H496V1296H480Z" />
+      <path
+         id="flame-panel-top-flame-2-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M456 1256H472V1264H480V1296H496V1312H432V1296H448V1264H456Z" />
+    </g>
+    <g
+       id="flame-panel-top-flame-5">
+      <path
+         id="flame-panel-top-flame-5-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1752 1240H1768V1248H1776V1256H1784V1264H1792V1272H1800V1280H1808V1288H1816V1312H1808V1320H1800V1328H1720V1320H1712V1312H1704V1288H1712V1280H1720V1272H1728V1264H1736V1256H1744V1248H1752ZM1752 1256V1264H1744V1280H1728V1288H1720V1312H1800V1288H1792V1280H1776V1264H1768V1256Z" />
+      <path
+         id="flame-panel-top-flame-5-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M1728 1280H1744V1296H1728V1312H1720V1288H1728ZM1776 1280H1792V1288H1800V1312H1792V1296H1776Z" />
+      <path
+         id="flame-panel-top-flame-5-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M1752 1256H1768V1264H1776V1296H1792V1312H1728V1296H1744V1264H1752Z" />
+    </g>
+    <g
+       id="flame-panel-top-flame-3">
+      <path
+         id="flame-panel-top-flame-3-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M800 1200H808V1208H816V1216H824V1224H832V1240H840V1248H848V1256H856V1272H864V1280H872V1288H880V1312H872V1320H864V1328H744V1320H736V1312H728V1288H736V1280H744V1272H752V1256H760V1248H768V1240H776V1224H784V1216H792V1208H800ZM808 1216H800V1224H792V1240H784V1248H776V1256H768V1272H760V1280H752V1288H744V1312H864V1288H856V1280H848V1272H840V1256H832V1248H824V1240H816V1224H808Z" />
+      <path
+         id="flame-panel-top-flame-3-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 784,1240 h 8 v -16 h 8 v -8 h 8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 24 h -40 v -16 h -8 v -16 h -24 v 16 h -8 v 16 h -40 v -24 h 8 v -8 h 8 v -8 h 8 v -16 h 8 v -8 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-top-flame-3-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 792,1280 h 24 v 16 h 8 v 16 h -40 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="flame-panel-top-flame-4">
+      <path
+         id="flame-panel-top-flame-4-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1416 1200H1424V1208H1432V1216H1440V1224H1448V1240H1456V1248H1464V1256H1472V1272H1480V1280H1488V1288H1496V1312H1488V1320H1480V1328H1360V1320H1352V1312H1344V1288H1352V1280H1360V1272H1368V1256H1376V1248H1384V1240H1392V1224H1400V1216H1408V1208H1416ZM1424 1216H1416V1224H1408V1240H1400V1248H1392V1256H1384V1272H1376V1280H1368V1288H1360V1312H1480V1288H1472V1280H1464V1272H1456V1256H1448V1248H1440V1240H1432V1224H1424Z" />
+      <path
+         id="flame-panel-top-flame-4-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1400,1240 h 8 v -16 h 8 v -8 h 8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 8 h 8 v 8 h 8 v 24 h -40 v -16 h -8 v -16 h -24 v 16 h -8 v 16 h -40 v -24 h 8 v -8 h 8 v -8 h 8 v -16 h 8 v -8 h 8 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-top-flame-4-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1408,1280 h 24 v 16 h 8 v 16 h -40 v -16 h 8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="flame-panel-bottom-flame-1">
+      <path
+         id="flame-panel-bottom-flame-1-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M232 1560H344V1568H352V1576H360V1608H352V1616H344V1624H336V1640H328V1648H320V1672H312V1680H304V1688H296V1696H280V1688H272V1680H264V1672H256V1648H248V1640H240V1624H232V1616H224V1608H216V1576H224V1568H232ZM232 1576V1608H248V1616H256V1640H264V1648H272V1672H280V1680H296V1672H304V1648H312V1640H320V1616H328V1608H344V1576Z" />
+      <path
+         id="flame-panel-bottom-flame-1-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 232,1576 h 40 v 40 h 32 v -40 h 40 v 32 h -16 v 8 h -8 v 24 h -8 v 8 h -8 v 24 h -8 v 8 h -16 v -8 h -8 v -24 h -8 v -8 h -8 v -24 h -8 v -8 h -16 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-bottom-flame-1-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 272,1576 h 32 v 40 h -32 z"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <g
+       id="flame-panel-bottom-flame-6">
+      <path
+         id="flame-panel-bottom-flame-6-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1880 1560H1992V1568H2000V1576H2008V1608H2000V1616H1992V1624H1984V1640H1976V1648H1968V1672H1960V1680H1952V1688H1944V1696H1928V1688H1920V1680H1912V1672H1904V1648H1896V1640H1888V1624H1880V1616H1872V1608H1864V1576H1872V1568H1880ZM1880 1576V1608H1896V1616H1904V1640H1912V1648H1920V1672H1928V1680H1944V1672H1952V1648H1960V1640H1968V1616H1976V1608H1992V1576Z" />
+      <path
+         id="flame-panel-bottom-flame-6-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1880,1576 h 40 v 40 h 32 v -40 h 40 v 32 h -16 v 8 h -8 v 24 h -8 v 8 h -8 v 24 h -8 v 8 h -16 v -8 h -8 v -24 h -8 v -8 h -8 v -24 h -8 v -8 h -16 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-bottom-flame-6-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1920,1576 h 32 v 40 h -32 z"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <g
+       id="flame-panel-bottom-flame-2">
+      <path
+         id="flame-panel-bottom-flame-2-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M424 1560H504V1568H512V1576H520V1608H512V1616H504V1624H496V1632H488V1640H480V1648H472V1656H456V1648H448V1640H440V1632H432V1624H424V1616H416V1608H408V1576H416V1568H424ZM424 1576V1608H440V1616H448V1632H456V1640H472V1632H480V1616H488V1608H504V1576Z" />
+      <path
+         id="flame-panel-bottom-flame-2-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M424 1576H448V1616H440V1608H424ZM480 1576H504V1608H488V1616H480Z" />
+      <path
+         id="flame-panel-bottom-flame-2-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M448 1576H480V1632H472V1640H456V1632H448Z" />
+    </g>
+    <g
+       id="flame-panel-bottom-flame-5">
+      <path
+         id="flame-panel-bottom-flame-5-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1720 1560H1800V1568H1808V1576H1816V1608H1808V1616H1800V1624H1792V1632H1784V1640H1776V1648H1768V1656H1752V1648H1744V1640H1736V1632H1728V1624H1720V1616H1712V1608H1704V1576H1712V1568H1720ZM1720 1576V1608H1736V1616H1744V1632H1752V1640H1768V1632H1776V1616H1784V1608H1800V1576Z" />
+      <path
+         id="flame-panel-bottom-flame-5-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M1720 1576H1744V1616H1736V1608H1720ZM1776 1576H1800V1608H1784V1616H1776Z" />
+      <path
+         id="flame-panel-bottom-flame-5-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M1744 1576H1776V1632H1768V1640H1752V1632H1744Z" />
+    </g>
+    <g
+       id="flame-panel-bottom-flame-3">
+      <path
+         id="flame-panel-bottom-flame-3-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M744 1560H864V1568H872V1576H880V1608H872V1616H864V1624H856V1632H848V1640H840V1648H832V1672H824V1680H816V1688H808V1696H800V1688H792V1680H784V1672H776V1648H768V1640H760V1632H752V1624H744V1616H736V1608H728V1576H736V1568H744ZM744 1576V1608H760V1616H768V1632H776V1640H784V1648H792V1672H800V1680H808V1672H816V1648H824V1640H832V1632H840V1616H848V1608H864V1576Z" />
+      <path
+         id="flame-panel-bottom-flame-3-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 744,1576 h 40 v 16 h 8 v 24 h 24 v -24 h 8 v -16 h 40 v 32 h -16 v 8 h -8 v 16 h -8 v 8 h -8 v 8 h -8 v 24 h -8 l 0,8 h -8 v -8 h -8 v -24 h -8 v -8 h -8 v -8 h -8 v -16 h -8 v -8 h -16 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-bottom-flame-3-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 784,1576 h 40 v 16 h -8 v 24 h -24 v -24 h -8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="flame-panel-bottom-flame-4">
+      <path
+         id="flame-panel-bottom-flame-4-outline"
+         fill="#14120E"
+         fill-rule="evenodd"
+         d="M1360 1560H1480V1568H1488V1576H1496V1608H1488V1616H1480V1624H1472V1632H1464V1640H1456V1648H1448V1672H1440V1680H1432V1688H1424V1696H1416V1688H1408V1680H1400V1672H1392V1648H1384V1640H1376V1632H1368V1624H1360V1616H1352V1608H1344V1576H1352V1568H1360ZM1360 1576V1608H1376V1616H1384V1632H1392V1640H1400V1648H1408V1672H1416V1680H1424V1672H1432V1648H1440V1640H1448V1632H1456V1616H1464V1608H1480V1576Z" />
+      <path
+         id="flame-panel-bottom-flame-4-ember-orange"
+         fill="#d25e2b"
+         fill-rule="evenodd"
+         d="m 1360,1576 h 40 v 16 h 8 v 24 h 24 v -24 h 8 v -16 h 40 v 32 h -16 v 8 h -8 v 16 h -8 v 8 h -8 v 8 h -8 v 24 h -8 v 8 h -8 v -8 h -8 v -24 h -8 v -8 h -8 v -8 h -8 v -16 h -8 v -8 h -16 z"
+         sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="flame-panel-bottom-flame-4-fire-gold"
+         fill="#f2bd4e"
+         fill-rule="evenodd"
+         d="m 1400,1576 h 40 v 16 h -8 v 24 h -24 v -24 h -8 z"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+  </g>
+  <g
+     id="fireball">
+    <g
+       id="fireball-outer-flame">
+      <path
+         id="fireball-outer-flame-outline"
+         fill="#14120e"
+         fill-rule="evenodd"
+         d="m 3128,1048 h 40 v 24 h 16 v 32 h 16 v 32 h 8 v 8 h 16 v 32 h 8 v -40 h 16 v -24 h 32 v 24 h 16 v 8 8 16 h 8 v 8 h 16 v 8 h 8 v 32 h 24 v 48 h 24 v 48 h 24 v 152 h -8 v 8 h -16 v 48 h -24 v 24 h -24 v 24 h -16 v 16 h -32 v 24 h -48 v 24 h -168 v -24 h -48 v -24 h -32 v -16 h -16 v -24 h -24 v -24 h -24 v -48 h -16 v -8 h -8 v -152 h 24 v -48 h 24 v -48 h 24 v -32 h 8 v -8 h 16 v -8 h 8 v -16 -8 -8 h 16 v -24 h 32 v 24 h 16 v 40 h 8 v -32 h 16 v -8 h 8 v -32 h 16 v -32 h 16 z m 24,16 h -8 v 8 h -8 v 8 h -8 v 24 h -8 v 8 h -8 v 24 h -8 v 8 h -8 v 8 h -8 v 24 h -8 v 8 h -8 v 8 h -8 v -8 h -8 v -8 h -8 v -32 h -8 v -8 h -16 v 8 h -8 v 24 h -8 v 8 h -8 v 8 h -8 v 8 h -8 v 24 h -8 v 8 h -8 v 8 h -8 v 32 h -8 v 8 h -8 v 8 h -8 v 32 h -8 v 8 h -8 v 8 h -8 v 128 h 8 v 8 h 8 v 8 h 8 v 32 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 8 h 8 v 16 h 8 v 8 h 24 v 8 h 8 v 8 h 8 v 8 h 32 v 8 h 8 v 8 h 8 v 8 h 136 v -8 h 8 v -8 h 8 v -8 h 32 v -8 h 8 v -8 h 8 v -8 h 24 v -8 h 8 v -16 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -8 h 8 v -32 h 8 v -8 h 8 v -8 h 8 v -128 h -8 v -8 h -8 v -8 h -8 v -32 h -8 v -8 h -8 v -8 h -8 v -32 h -8 v -8 h -8 v -8 h -8 v -24 h -8 v -8 h -8 v -8 h -8 v -8 h -8 v -24 h -8 v -8 h -16 v 8 h -8 v 32 h -8 v 8 h -8 v 8 h -8 v -8 h -8 v -8 h -8 v -24 h -8 v -8 h -8 v -8 h -8 v -24 h -8 v -8 h -8 v -24 h -8 v -8 h -8 z"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         id="fireball-outer-flame-ember-orange"
+         fill="#D25E2B"
+         fill-rule="evenodd"
+         d="M3144 1064H3152V1072H3160V1080H3168V1104H3176V1112H3184V1136H3192V1144H3200V1152H3208V1176H3216V1184H3224V1192H3232V1184H3240V1176H3248V1144H3256V1136H3272V1144H3280V1168H3288V1176H3296V1184H3304V1192H3312V1216H3320V1224H3328V1232H3336V1264H3344V1272H3352V1280H3360V1312H3368V1320H3376V1328H3384V1456H3376V1464H3368V1472H3360V1504H3352V1512H3344V1520H3336V1528H3328V1536H3320V1544H3312V1560H3304V1568H3280V1576H3272V1584H3264V1592H3232V1600H3224V1608H3216V1616H3080V1608H3072V1600H3064V1592H3032V1584H3024V1576H3016V1568H2992V1560H2984V1544H2976V1536H2968V1528H2960V1520H2952V1512H2944V1504H2936V1472H2928V1464H2920V1456H2912V1328H2920V1320H2928V1312H2936V1280H2944V1272H2952V1264H2960V1232H2968V1224H2976V1216H2984V1192H2992V1184H3000V1176H3008V1168H3016V1144H3024V1136H3040V1144H3048V1176H3056V1184H3064V1192H3072V1184H3080V1176H3088V1152H3096V1144H3104V1136H3112V1112H3120V1104H3128V1080H3136V1072H3144ZM3136 1224V1232H3128V1248H3120V1264H3104V1272H3096V1288H3080V1296H3072V1312H3024V1320H3016V1352H3000V1360H2992V1400H2976V1408H2968V1488H2984V1496H2992V1512H3000V1520H3016V1536H3024V1544H3040V1560H3048V1568H3096V1576H3104V1584H3192V1576H3200V1568H3248V1560H3256V1544H3272V1536H3280V1520H3296V1512H3304V1496H3312V1488H3328V1408H3320V1400H3304V1360H3296V1352H3280V1320H3272V1312H3224V1296H3216V1288H3200V1272H3192V1264H3176V1248H3168V1232H3160V1224Z" />
+    </g>
+    <g
+       id="fireball-gold-inner-flame">
+      <path
+         id="fireball-gold-inner-flame-fire-gold"
+         fill="#F2BD4E"
+         fill-rule="evenodd"
+         d="M3136 1224H3160V1232H3168V1248H3176V1264H3192V1272H3200V1288H3216V1296H3224V1312H3272V1320H3280V1352H3296V1360H3304V1400H3320V1408H3328V1488H3312V1496H3304V1512H3296V1520H3280V1536H3272V1544H3256V1560H3248V1568H3200V1576H3192V1584H3104V1576H3096V1568H3048V1560H3040V1544H3024V1536H3016V1520H3000V1512H2992V1496H2984V1488H2968V1408H2976V1400H2992V1360H3000V1352H3016V1320H3024V1312H3072V1296H3080V1288H3096V1272H3104V1264H3120V1248H3128V1232H3136ZM3112 1328V1352H3088V1376H3072V1400H3056V1416H3048V1496H3072V1520H3104V1544H3192V1520H3224V1496H3248V1416H3240V1400H3224V1376H3208V1352H3184V1328Z" />
+    </g>
+    <g
+       id="fireball-cream-core">
+      <path
+         id="fireball-cream-core-parchment-cream"
+         fill="#EBD6B3"
+         fill-rule="evenodd"
+         d="M3112 1328H3184V1352H3208V1376H3224V1400H3240V1416H3248V1496H3224V1520H3192V1544H3104V1520H3072V1496H3048V1416H3056V1400H3072V1376H3088V1352H3112Z" />
+    </g>
+  </g>
+</svg>
