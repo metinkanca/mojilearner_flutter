@@ -2,6 +2,7 @@ import { createApp } from './app.js';
 import { GeminiProvider } from './gemini.js';
 import { MemorySessionStore } from './sessions.js';
 import { SlidingWindowLimiter, SpendLedger } from './limits.js';
+import { AccountQuotas } from './quotas.js';
 import { OpenRouterProvider } from './openrouter.js';
 import { FallbackProvider } from './fallback.js';
 
@@ -28,6 +29,7 @@ const {
   MAX_OUTPUT_TOKENS = '2048',
   DEFAULT_THINKING_BUDGET = '0',
   TRUST_PROXY,
+  FIREBASE_PROJECT_ID,
   OPENROUTER_API_KEY,
   OPENROUTER_MODEL,
   OPENROUTER_TIMEOUT_MS = '8000',
@@ -74,6 +76,20 @@ if (!(dailyBudgetUsd > 0)) {
 const limiter = ratePerMinute > 0
   ? new SlidingWindowLimiter({ windowMs: 60_000, max: ratePerMinute })
   : null;
+
+// The per-account allowance, and the only control here that meters a *person*
+// rather than an address or a total. Needs a project id because that is what a
+// Firebase ID token is verified against; without one there is no identity to
+// meter and this stays off. See quotas.js and identity.js.
+const quotas = FIREBASE_PROJECT_ID ? new AccountQuotas() : null;
+
+if (!quotas) {
+  console.warn(
+    'FIREBASE_PROJECT_ID is not set, so per-account daily allowances are off. ' +
+    'Spend is bounded only by the address limiter and the daily budget, neither ' +
+    'of which can tell one user from a thousand behind the same carrier NAT.',
+  );
+}
 
 /**
  * `none` disables the injected thinking budget.
@@ -126,6 +142,8 @@ const app = createApp({
   corsOrigins: CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean),
   limiter,
   spend: new SpendLedger({ dailyBudgetUsd }),
+  quotas,
+  firebaseProjectId: FIREBASE_PROJECT_ID || null,
   trustProxy: TRUST_PROXY === 'true',
   maxOutputTokensCap: Number(MAX_OUTPUT_TOKENS),
   defaultThinkingBudget,
@@ -138,6 +156,7 @@ app.listen(Number(PORT), () => {
     `route=${OPENROUTER_API_KEY && OPENROUTER_MODEL ? `${OPENROUTER_MODEL} -> ${DEFAULT_MODEL}` : 'gemini direct'}  ` +
     `budget=${dailyBudgetUsd > 0 ? `$${dailyBudgetUsd}/day` : 'OFF'}  ` +
     `rate=${limiter ? `${ratePerMinute}/min/ip` : 'OFF'}  ` +
+    `quotas=${quotas ? 'per-account' : 'OFF'}  ` +
     `history=${MAX_HISTORY_MESSAGES}`,
   );
 });

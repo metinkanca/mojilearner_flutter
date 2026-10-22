@@ -5,6 +5,8 @@ import { MemorySessionStore, newSessionId } from './sessions.js';
 import { PromptRequestError, buildPrompt, buildSystemInstruction } from './prompts.js';
 // Providers translate the neutral shapes below into their own wire format.
 import { SpendLedger, clientKey } from './limits.js';
+import { AccountQuotas, meterForBody } from './quotas.js';
+import { TokenCerts, idTokenFrom, verifyIdToken } from './identity.js';
 import { costOf } from './pricing.js';
 
 /**
@@ -60,6 +62,12 @@ export function createApp({
   // them — every existing test — gets exactly the previous behaviour.
   limiter = null,
   spend = new SpendLedger(),
+  // Per-account daily allowances. Inert unless a Firebase project id is
+  // configured, since without one there is no identity to meter against and
+  // the request falls back to the shared bucket the address limiter covers.
+  quotas = null,
+  firebaseProjectId = null,
+  certs = new TokenCerts(),
   trustProxy = false,
   chatGenerationConfig = DEFAULT_CHAT_GENERATION_CONFIG,
   maxOutputTokensCap = DEFAULT_MAX_OUTPUT_TOKENS_CAP,
@@ -141,6 +149,50 @@ export function createApp({
     logger.info(
       `${req.method} ${req.path} source=${source} status=${status} ${Date.now() - started}ms${extra}`,
     );
+  }
+
+  /**
+   * Resolves the calling account, then charges its daily allowance.
+   *
+   * Runs after `meter`, so an address already being rate-limited never costs
+   * the work of a signature check.
+   *
+   * An unverifiable or absent token is not refused. Anonymous sign-in gives
+   * every install a uid, so in practice a missing one means an older client or
+   * a sign-in that has not finished yet — and refusing those would break the
+   * app for people who did nothing wrong. They share one bucket instead, which
+   * is strictly tighter than the per-account allowance and is still bounded by
+   * the address limiter and the spend ceiling above.
+   */
+  function accountQuota(fixedMeter = null) {
+    return async function chargeAccount(req, res, next) {
+      if (!quotas || !firebaseProjectId) return next();
+
+      // `/chat/send` carries a session id rather than a mode, so the route
+      // names its own meter. Without this the per-message path — the largest
+      // cost the proxy carries — would read as unmetered and pass straight
+      // through.
+      const meterName = fixedMeter ?? meterForBody(req.body);
+      if (!meterName) return next();
+
+      const claims = await verifyIdToken(idTokenFrom(req), {
+        projectId: firebaseProjectId,
+        certs,
+      });
+      const uid = claims?.sub ?? `anon:${clientKey(req, { trustProxy })}`;
+
+      // Premium is deliberately not read from the token. A custom claim would
+      // have to be written by a trusted process that has already verified a
+      // store receipt, and until that exists every account is metered at the
+      // free tier — which is the safe direction to be wrong in. See the note
+      // on the entitlement cache in `lib/services/purchase_service.dart`.
+      const verdict = quotas.check(uid, meterName, false);
+      if (!verdict.allowed) {
+        record(req, Date.now(), 429, ` refused=quota meter=${meterName}`);
+        return res.status(429).json({ error: 'daily_quota_exhausted' });
+      }
+      return next();
+    };
   }
 
   /**
@@ -240,6 +292,7 @@ export function createApp({
       ok: true,
       sessions: sessions.size,
       budget: spend.snapshot(),
+      ...(quotas ? { quotas: quotas.snapshot() } : {}),
       // Only present when a fallback pair is configured. Watch `fallback`: a
       // number that climbs means the cheap primary is failing and every request
       // is quietly costing backup prices.
@@ -247,7 +300,7 @@ export function createApp({
     });
   });
 
-  app.post('/v1/ai/generate', requireAuth, meter, async (req, res) => {
+  app.post('/v1/ai/generate', requireAuth, meter, accountQuota(), async (req, res) => {
     const started = Date.now();
     const model = resolveModel(req, res);
     if (!model) return;
@@ -311,7 +364,8 @@ export function createApp({
     res.json({ sessionId });
   });
 
-  app.post('/v1/ai/chat/send', requireAuth, meter, async (req, res) => {
+  app.post('/v1/ai/chat/send', requireAuth, meter, accountQuota('message'),
+    async (req, res) => {
     const started = Date.now();
     const model = resolveModel(req, res);
     if (!model) return;

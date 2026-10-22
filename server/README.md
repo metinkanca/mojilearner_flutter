@@ -26,14 +26,13 @@ that contract on this side; change one without the other and it fails.
 ### The caller names a prompt; it does not write one
 
 `mode` picks one of the prompts in `src/prompts.js` and `params` fills in its
-blanks. `chat`, `pet` and `assessment` open a session; `quiz` and `level`
-answer a single generate call. An unknown mode — or a generate mode used as a
+blanks. `chat` and `assessment` open a session; `quiz` and `level` answer a
+single generate call. An unknown mode — or a generate mode used as a
 persona, or the reverse — is a 400 before the provider is touched.
 
 | mode | params |
 |---|---|
 | `chat` | `targetCode`, `nativeCode`, `scenario?{title, objectives?[{id,label,bonus?,cleared?}]}`, `review?{trouble[],due[]}` |
-| `pet` | `targetCode` |
 | `assessment` | `targetCode`, `selfLevel` |
 | `quiz` | `targetCode`, `nativeCode`, `level`, `review?{trouble[],due[]}` |
 | `level` | `targetCode`, `selfLevel`, `transcript[{speaker,text}]` |

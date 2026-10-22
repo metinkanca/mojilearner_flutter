@@ -160,7 +160,7 @@ test('an exhausted budget refuses every billable endpoint but not healthz', asyn
   try {
     const cases = [
       ['/v1/ai/generate', { mode: 'quiz', params: {} }],
-      ['/v1/ai/chat/start', { mode: 'pet', params: {}, history: [] }],
+      ['/v1/ai/chat/start', { mode: 'chat', params: {}, history: [] }],
       ['/v1/ai/chat/send', { sessionId: 'whatever', message: 'x' }],
     ];
     for (const [path, body] of cases) {
@@ -201,7 +201,7 @@ test('chat turns get the settings the eval actually validated', async () => {
   const provider = stubProvider('reply');
   const srv = await serve({ provider });
   try {
-    const { body } = await srv.post('/v1/ai/chat/start', { mode: 'pet', params: {}, history: [] });
+    const { body } = await srv.post('/v1/ai/chat/start', { mode: 'chat', params: {}, history: [] });
     await srv.post('/v1/ai/chat/send', { sessionId: body.sessionId, message: 'hi' });
     // The client sends no config for chat at all, so anything here came from
     // the server. thinkingBudget 0 is the one that matters: reasoning bills at
@@ -269,7 +269,7 @@ test('a long chat stops growing instead of going quadratic', async () => {
   const provider = stubProvider('reply');
   const srv = await serve({ provider, sessions: new MemorySessionStore({ maxHistory: 6 }) });
   try {
-    const { body } = await srv.post('/v1/ai/chat/start', { mode: 'pet', params: {}, history: [] });
+    const { body } = await srv.post('/v1/ai/chat/start', { mode: 'chat', params: {}, history: [] });
     for (let i = 0; i < 20; i += 1) {
       await srv.post('/v1/ai/chat/send', { sessionId: body.sessionId, message: `turn ${i}` });
     }
@@ -290,7 +290,7 @@ test('a failed turn still rolls back the user message it added', async () => {
   const sessions = new MemorySessionStore({ maxHistory: 6 });
   const srv = await serve({ provider, sessions });
   try {
-    const { body } = await srv.post('/v1/ai/chat/start', { mode: 'pet', params: {}, history: [] });
+    const { body } = await srv.post('/v1/ai/chat/start', { mode: 'chat', params: {}, history: [] });
     const res = await srv.post('/v1/ai/chat/send', { sessionId: body.sessionId, message: 'hi' });
     assert.equal(res.status, 500);
     assert.equal(sessions.get(body.sessionId).history.length, 0, 'a retry must not send it twice');

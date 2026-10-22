@@ -129,8 +129,8 @@ test('chat start returns a sessionId and send continues the conversation', async
     const start = await s.post('/v1/ai/chat/start', {
       model: MODEL,
       source: 'chat_screen',
-      mode: 'pet',
-      params: { targetCode: 'ja' },
+      mode: 'chat',
+      params: { targetCode: 'ja', nativeCode: 'en' },
       history: [{ role: 'user', text: 'hi' }, { role: 'model', text: 'hello' }],
     });
     assert.equal(start.status, 200);
@@ -146,8 +146,7 @@ test('chat start returns a sessionId and send continues the conversation', async
     // Two seeded turns plus the new user message.
     assert.equal(first.body.text, 'turns:3');
     // Likewise the persona: the caller named the mode, this service wrote it.
-    assert.match(provider.calls[0].systemInstruction, /You are a friendly virtual pet/);
-    assert.match(provider.calls[0].systemInstruction, /The user is learning Japanese\./);
+    assert.match(provider.calls[0].systemInstruction, /Japanese/);
 
     // The reply is remembered, so the next turn carries five.
     const second = await s.post('/v1/ai/chat/send', {
@@ -196,7 +195,7 @@ test('a failed turn is rolled back so a retry does not double-send', async () =>
   try {
     const start = await s.post('/v1/ai/chat/start', {
       model: MODEL, source: 'chat_screen',
-      mode: 'pet', params: {}, history: [],
+      mode: 'chat', params: {}, history: [],
     });
     const bad = await s.post('/v1/ai/chat/send', {
       model: MODEL, source: 'chat_screen',
