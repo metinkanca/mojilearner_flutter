@@ -36,10 +36,10 @@ export const METER_BY_MODE = {
 };
 
 /** The free tier. Mirrors `EntitlementConstants.free`. */
-export const FREE = { quiz: 3, message: 30 };
+export const FREE = { quiz: 3, message: 80 };
 
 /** What Mimikin Plus buys. Mirrors `EntitlementConstants.premium`. */
-export const PREMIUM = { quiz: 10, message: 200 };
+export const PREMIUM = { quiz: 10, message: 300 };
 
 /**
  * The most extra quizzes rewarded ads can add in a day.

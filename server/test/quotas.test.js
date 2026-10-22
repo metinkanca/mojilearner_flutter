@@ -24,9 +24,9 @@ test('the free and premium tables match the app', () => {
   // These are the numbers `EntitlementConstants` shows the player. If they
   // drift, the app promises an allowance the proxy will refuse.
   assert.equal(FREE.quiz, 3);
-  assert.equal(FREE.message, 30);
+  assert.equal(FREE.message, 80);
   assert.equal(PREMIUM.quiz, 10);
-  assert.equal(PREMIUM.message, 200);
+  assert.equal(PREMIUM.message, 300);
 });
 
 test('modes map onto the two meters, and onboarding onto neither', () => {

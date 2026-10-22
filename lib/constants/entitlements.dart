@@ -68,17 +68,21 @@ class EntitlementConstants {
   /// unlimited, and it is also the better way to study. The message allowance
   /// is set well above what an engaged day actually produces — `gold.dart`
   /// caps conversation coins at 15 a day on the grounds that a real
-  /// conversation never notices it — so 30 is a runaway-cost backstop rather
-  /// than a felt limit.
-  static const AiAllowance free = AiAllowance(quizzes: 3, messages: 30);
+  /// conversation never notices it — so 80 is a runaway-cost backstop rather
+  /// than a felt limit. It was 30, and that was too tight: chat and every
+  /// town scenario share it, so a daily player doing a couple of scenarios
+  /// could meet the wall on a first day, and a new player who meets a wall at
+  /// launch writes the review that follows. At about $0.00018 a turn on the
+  /// main model, 80 a day costs a free player about 1.5 cents.
+  static const AiAllowance free = AiAllowance(quizzes: 3, messages: 80);
 
   /// What Mimikin Plus buys.
   ///
   /// Not "unlimited": an unlimited tier prices a subscription against the
   /// heaviest possible user, and the honest way to sell more capacity is to
-  /// say how much more. Ten quizzes and two hundred messages are past what a
+  /// say how much more. Ten quizzes and three hundred messages are past what a
   /// long study day reaches, so in practice a member never meets the ceiling.
-  static const AiAllowance premium = AiAllowance(quizzes: 10, messages: 200);
+  static const AiAllowance premium = AiAllowance(quizzes: 10, messages: 300);
 
   static AiAllowance forTier({required bool isPremium}) {
     final base = isPremium ? premium : free;
