@@ -20,10 +20,10 @@ void main() {
         final xp = ProgressionUtils.getXPRequiredForNextLevel(1);
         
         // Assert
-        expect(xp, equals(100));
+        expect(xp, equals(ProgressionConstants.baseXP));
       });
 
-      test('should calculate XP required using exponential formula', () {
+      test('should calculate XP required using the curve formula', () {
         // Act & Assert
         // Formula: baseXP * level^growthRate
         expect(ProgressionUtils.getXPRequiredForNextLevel(2),
@@ -41,19 +41,25 @@ void main() {
         }
       });
 
-      test('keeps level 20 inside a committed year of study', () {
+      test('keeps the whole ladder inside three months of daily study', () {
         // The curve was 1.8, which put the cap at 146,115 XP — about 1.4
-        // years at ~290 XP/day, so most of `levelRewards` was unreachable
-        // decoration. Guard that the ladder stays finishable.
+        // years — and then 1.5, still a year, with the boss trials months
+        // apart. Guard that the ladder stays quick to climb at the ~184 XP a
+        // day a daily learner earns.
         final toMaxLevel =
             ProgressionUtils.getTotalXPForLevel(ProgressionConstants.maxLevel);
 
-        expect(toMaxLevel, lessThan(290 * 365));
+        expect(toMaxLevel, lessThan(184 * 90));
+      });
+
+      test('puts the first boss trial, at level 5, within a few days', () {
+        expect(ProgressionUtils.getTotalXPForLevel(5), lessThan(184 * 3));
       });
 
       test('should return 0 XP required when at max level', () {
         // Act
-        final xp = ProgressionUtils.getXPRequiredForNextLevel(20);
+        final xp = ProgressionUtils.getXPRequiredForNextLevel(
+            ProgressionConstants.maxLevel);
         
         // Assert
         expect(xp, equals(0));
@@ -71,11 +77,12 @@ void main() {
 
       test('should calculate cumulative XP by summing level requirements', () {
         // Act & Assert
-        // Level 2 requires 100 XP from level 1
-        expect(ProgressionUtils.getTotalXPForLevel(2), equals(100));
-        // Level 3 requires level 1's 100 plus level 2's step
+        // Level 2 requires level 1's step
+        expect(ProgressionUtils.getTotalXPForLevel(2),
+            equals(expectedXpForLevel(1)));
+        // Level 3 requires level 1's step plus level 2's
         expect(ProgressionUtils.getTotalXPForLevel(3),
-            equals(100 + expectedXpForLevel(2)));
+            equals(expectedXpForLevel(1) + expectedXpForLevel(2)));
       });
     });
 
@@ -89,10 +96,14 @@ void main() {
       });
 
       test('should return correct level from total XP', () {
+        final level2 = ProgressionUtils.getTotalXPForLevel(2);
+        final level3 = ProgressionUtils.getTotalXPForLevel(3);
+
         // Act & Assert
-        expect(ProgressionUtils.getLevelFromTotalXP(100), equals(2));
-        expect(ProgressionUtils.getLevelFromTotalXP(250), equals(2)); // Still level 2
-        expect(ProgressionUtils.getLevelFromTotalXP(500), equals(3));
+        expect(ProgressionUtils.getLevelFromTotalXP(level2), equals(2));
+        expect(ProgressionUtils.getLevelFromTotalXP(level3 - 1),
+            equals(2)); // Still level 2
+        expect(ProgressionUtils.getLevelFromTotalXP(level3), equals(3));
       });
 
       test('should cap level at max level', () {
@@ -100,7 +111,7 @@ void main() {
         final level = ProgressionUtils.getLevelFromTotalXP(999999);
         
         // Assert
-        expect(level, equals(20));
+        expect(level, equals(ProgressionConstants.maxLevel));
       });
 
       test('should handle negative XP as level 1', () {
@@ -114,8 +125,8 @@ void main() {
 
     group('getLevelProgress', () {
       test('should return 0.0 progress at level start', () {
-        // Arrange: Level 2 starts at 100 XP
-        const xp = 100;
+        // Arrange: the first XP of level 2
+        final xp = ProgressionUtils.getTotalXPForLevel(2);
         
         // Act
         final progress = ProgressionUtils.getLevelProgress(xp);
@@ -126,7 +137,8 @@ void main() {
 
       test('should return approximately 0.5 progress at level midpoint', () {
         // Arrange: halfway through the level-2 step
-        final midpoint = 100 + (expectedXpForLevel(2) ~/ 2);
+        final midpoint = ProgressionUtils.getTotalXPForLevel(2) +
+            (expectedXpForLevel(2) ~/ 2);
         
         // Act
         final progress = ProgressionUtils.getLevelProgress(midpoint);
@@ -147,13 +159,13 @@ void main() {
     group('getXPToNextLevel', () {
       test('should calculate XP remaining to next level', () {
         // Arrange: partway through level 2
-        const currentXP = 150;
+        final currentXP = ProgressionUtils.getTotalXPForLevel(2) + 10;
 
         // Act
         final remaining = ProgressionUtils.getXPToNextLevel(currentXP);
 
         // Assert
-        expect(remaining, equals(100 + expectedXpForLevel(2) - currentXP));
+        expect(remaining, equals(expectedXpForLevel(2) - 10));
       });
 
       test('should return 0 at max level', () {

@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, TargetPlatform;
 
+import 'coin_packs.dart';
+import 'season_pass.dart';
+
 /// Deployment-specific, non-secret runtime values.
 ///
 /// Every value here can be supplied at build time with `--dart-define`, and
@@ -113,9 +116,14 @@ class AppRuntimeConfig {
         defaultValue: checkedInGoogleIosClientId,
       );
 
-  /// Treat every accessory and every bought coat/eye colour as owned, so the
-  /// whole wardrobe can be tried on without buying anything or grinding bond
-  /// stages.
+  /// Treat every accessory, every bought coat/eye colour and every scene as
+  /// owned, so the whole wardrobe and every world can be tried on without
+  /// buying anything or grinding bond stages.
+  ///
+  /// Scenes are in here despite the define's name because they are the other
+  /// half of the same errand: showing the app off means dressing the pet *and*
+  /// standing it somewhere. A second define for one more ownership gate would
+  /// only make the command line longer for the same intent.
   ///
   /// A testing affordance, not a gameplay one, so it is doubly fenced:
   ///
@@ -135,6 +143,54 @@ class AppRuntimeConfig {
         'UNLOCK_ALL_ACCESSORIES',
         defaultValue: false,
       );
+
+  /// Shrinks a day's AI allowance so the wall can be reached on purpose.
+  ///
+  /// Both walls otherwise take a real session to reach — three generated
+  /// quizzes, or thirty messages — which makes the one screen that carries the
+  /// upgrade offer the most tedious thing in the app to look at. Set either to
+  /// 1 and the next quiz or the next message hits it:
+  ///
+  ///     flutter run --dart-define=AI_QUIZ_LIMIT=1 --dart-define=AI_MESSAGE_LIMIT=1
+  ///
+  /// Debug-gated for the same reason [unlockAllAccessories] is, and with the
+  /// same care about the test suite: -1 means "no override", so a run that
+  /// sets nothing gets exactly `EntitlementConstants` and the allowance tests
+  /// are testing the shipping numbers.
+  static int get aiQuizLimitOverride => _limitOverride('AI_QUIZ_LIMIT');
+
+  static int get aiMessageLimitOverride => _limitOverride('AI_MESSAGE_LIMIT');
+
+  /// Pretends the season pass is owned and this far along it, so the pass
+  /// screen's real states can be looked at without a store product.
+  ///
+  /// The track is otherwise unreachable in a dev build: buying is what starts
+  /// it, and there is nothing to buy until the store listing exists. Set this
+  /// to the XP earned *since purchase* and every tier below it reads as
+  /// reached — 0 shows a freshly bought pass, 2600 a half-finished one, 5000 a
+  /// complete one:
+  ///
+  ///     flutter run --dart-define=SEASON_PASS_XP=2600
+  ///
+  /// Display only. It does not grant the pass, write anything to storage or
+  /// mark a tier claimed, so no dev run can leave a real purchase record
+  /// behind. Debug-gated for the same reason [unlockAllAccessories] is, and
+  /// -1 means "no override" so the test suite sees the shipping behaviour.
+  static int get seasonPassXpOverride {
+    if (!kDebugMode) return -1;
+    return const int.fromEnvironment('SEASON_PASS_XP', defaultValue: -1);
+  }
+
+  static int _limitOverride(String key) {
+    if (!kDebugMode) return -1;
+    return switch (key) {
+      'AI_QUIZ_LIMIT' =>
+        const int.fromEnvironment('AI_QUIZ_LIMIT', defaultValue: -1),
+      'AI_MESSAGE_LIMIT' =>
+        const int.fromEnvironment('AI_MESSAGE_LIMIT', defaultValue: -1),
+      _ => -1,
+    };
+  }
 
   /// Keep the pet awake, so its face can actually be looked at.
   ///
@@ -185,6 +241,42 @@ class AppRuntimeConfig {
       kDebugMode &&
       const bool.fromEnvironment(
         'SKIP_ONBOARDING',
+        defaultValue: false,
+      );
+
+  /// Show the boss-trial badge on the home screen, the only way into the
+  /// trial prototype while it is being tuned. It opens the climb up through
+  /// the six bosses' floors, where every level's fight can be tried.
+  ///
+  /// Milestone trials are not wired to the player's progress yet (the climb
+  /// only marks where their level is), so without this the screens are
+  /// unreachable. Fenced like the flags above: ANDed with [kDebugMode] so a
+  /// release build can never show a half-built fight, and off by default so
+  /// the home screen's layout tests measure the badge row players actually
+  /// get.
+  ///
+  ///     flutter run --dart-define=BOSS_TRIAL=true
+  static bool get bossTrial =>
+      kDebugMode &&
+      const bool.fromEnvironment(
+        'BOSS_TRIAL',
+        defaultValue: false,
+      );
+
+  /// Fill the Mistakes list and the review queue with a few sample English
+  /// sentences explained in Turkish (`constants/sample_mistakes.dart`), so the
+  /// screens can be seen with something on them.
+  ///
+  /// Fenced like the flags above: ANDed with [kDebugMode], and off by default
+  /// so tests and release builds are unaffected. The samples are held in
+  /// memory only and never written to storage, so they cannot reach a real
+  /// save or the cloud copy of one.
+  ///
+  ///     flutter run --dart-define=SAMPLE_MISTAKES=true
+  static bool get sampleMistakes =>
+      kDebugMode &&
+      const bool.fromEnvironment(
+        'SAMPLE_MISTAKES',
         defaultValue: false,
       );
 
@@ -268,4 +360,54 @@ class AppRuntimeConfig {
     'ADS_ENABLED',
     defaultValue: true,
   );
+
+  /// Store product ids for Mimikin Plus.
+  ///
+  /// Empty by default, and that emptiness is the switch: with no ids
+  /// configured `PurchaseService` reports the store as unavailable and the
+  /// paywall says subscriptions are not open rather than drawing a button
+  /// that cannot charge. So a build made before the Play Console and App
+  /// Store Connect products exist is honest about it instead of broken.
+  ///
+  ///     flutter build appbundle   ///       --dart-define=IAP_PLUS_MONTHLY=mimikin_plus_monthly   ///       --dart-define=IAP_PLUS_ANNUAL=mimikin_plus_annual
+  ///
+  /// Same reasoning as [aiProxyBaseUrl] and the AdMob units above: a
+  /// deployment's own identifiers stay out of the repo.
+  static const String plusMonthlyProductId = String.fromEnvironment(
+    'IAP_PLUS_MONTHLY',
+  );
+
+  static const String plusAnnualProductId = String.fromEnvironment(
+    'IAP_PLUS_ANNUAL',
+  );
+
+  /// Every Plus product id that is actually configured, in the order the
+  /// paywall should offer them — annual second, so the cheaper commitment is
+  /// read first and the better value is the one you land on.
+  static List<String> get plusProductIds => [
+        if (plusMonthlyProductId.isNotEmpty) plusMonthlyProductId,
+        if (plusAnnualProductId.isNotEmpty) plusAnnualProductId,
+      ];
+
+  /// Whether this build has any subscription to sell.
+  static bool get subscriptionsConfigured => plusProductIds.isNotEmpty;
+
+  /// Every product the store should be asked about: subscriptions, passes and
+  /// coin packs.
+  ///
+  /// Pass and coin-pack ids are NOT dart-defines like the two above. A pass id
+  /// is recorded against every tier a player claims and has to survive for as
+  /// long as their save does, and a coin pack's id decides how many coins a
+  /// purchase is worth — so both belong in the catalogue beside the thing they
+  /// sell (`constants/season_pass.dart`, `constants/coin_packs.dart`) rather
+  /// than in a build flag that a later deployment could quietly point
+  /// somewhere else.
+  static List<String> get storeProductIds => [
+        ...plusProductIds,
+        for (final pass in seasonPasses) pass.productId,
+        for (final pack in coinPacks) pack.productId,
+      ];
+
+  /// Whether there is anything at all to ask the store about.
+  static bool get storeConfigured => storeProductIds.isNotEmpty;
 }

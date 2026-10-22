@@ -91,7 +91,6 @@ void main() {
     when(() => mockCharacter.customization)
         .thenReturn(TestFixtures.buildCustomization());
     when(() => mockCharacter.isSleeping).thenReturn(false);
-    when(() => mockCharacter.isAiIssueSleepMode).thenReturn(false);
     when(() => mockCharacter.isTemporarilyAwake).thenReturn(false);
     when(() => mockCharacter.isSleepingForNight).thenReturn(false);
     when(() => mockCharacter.awakeUntil).thenReturn(null);

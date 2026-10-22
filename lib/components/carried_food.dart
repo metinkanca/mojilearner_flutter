@@ -8,6 +8,7 @@ import '../providers/character_provider.dart';
 import '../providers/settings_provider.dart';
 import '../utils/fonts.dart';
 import '../utils/rtl_locale.dart';
+import 'shop_item_icon.dart';
 
 /// The food the player is carrying, as something they can drag onto the pet.
 ///
@@ -60,13 +61,13 @@ class CarriedFood extends StatelessWidget {
                 Draggable<String>(
                   data: item.id,
                   dragAnchorStrategy: pointerDragAnchorStrategy,
-                  feedback: _Bubble(icon: item.icon, size: 56),
+                  feedback: _Bubble(item: item, size: 56),
                   // The pet stops anticipating if the drag is abandoned
                   // mid-air, otherwise it sits with its mouth open forever.
                   onDraggableCanceled: (_, __) => character.setFoodHovering(false),
                   childWhenDragging: Opacity(
                     opacity: 0.3,
-                    child: _Bubble(icon: item.icon),
+                    child: _Bubble(item: item),
                   ),
                   child: GestureDetector(
                     // Tap is the fallback for anyone who does not discover the
@@ -77,7 +78,7 @@ class CarriedFood extends StatelessWidget {
                       character.putDownFood();
                       character.offerFood(id);
                     },
-                    child: _Bubble(icon: item.icon),
+                    child: _Bubble(item: item),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -111,7 +112,7 @@ class CarriedFood extends StatelessWidget {
   }
 }
 
-/// The food itself, as a bare glyph.
+/// The food itself, as a bare picture.
 ///
 /// It used to sit in a bordered box the same off-white as the rest of the
 /// chrome, which read as a UI tile rather than as an apple the player is
@@ -119,34 +120,24 @@ class CarriedFood extends StatelessWidget {
 /// grass. Now it is just the food, with a hard offset shadow in the pixel
 /// idiom to keep it legible on any sky or ground the time of day produces.
 class _Bubble extends StatelessWidget {
-  const _Bubble({required this.icon, this.size = 44});
+  const _Bubble({required this.item, this.size = 44});
 
-  final String icon;
+  final ShopItem item;
   final double size;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: SizedBox(
-        // Kept square at [size] so the tap target does not shrink to the
-        // glyph's own ink.
-        width: size,
-        height: size,
-        child: Center(
-          child: Text(
-            icon,
-            style: TextStyle(
-              fontSize: size * 0.78,
-              shadows: const [
-                Shadow(
-                  color: AppTheme.retroDark,
-                  offset: Offset(2, 2),
-                  blurRadius: 0,
-                ),
-              ],
-            ),
-          ),
+      // Kept square at [size] so the tap target does not shrink to the art's
+      // own ink.
+      child: ShopItemIcon(
+        item: item,
+        size: size,
+        shadow: const Shadow(
+          color: AppTheme.retroDark,
+          offset: Offset(2, 2),
+          blurRadius: 0,
         ),
       ),
     );

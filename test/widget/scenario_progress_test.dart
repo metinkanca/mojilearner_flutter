@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mojilearner_flutter/components/scenario_city.dart';
 import 'package:mojilearner_flutter/components/scenario_complete_popup.dart';
 import 'package:mojilearner_flutter/components/scenario_objective_tracker.dart';
 import 'package:mojilearner_flutter/constants/scenarios.dart';
+import 'package:mojilearner_flutter/constants/theme.dart';
 import 'package:mojilearner_flutter/providers/scenario_provider.dart';
 import 'package:mojilearner_flutter/screens/scenarios_screen.dart';
+import 'package:mojilearner_flutter/utils/pet_recolor.dart';
 import 'package:mojilearner_flutter/utils/progression_utils.dart';
 
 import '../helpers/mock_providers.dart';
@@ -15,11 +18,24 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late MockSettingsProvider mockSettings;
+  late MockCharacterProvider character;
   late ScenarioDefinition coffee;
 
   setUp(() {
     mockSettings = MockSettingsProvider();
     when(() => mockSettings.usePixelFont).thenReturn(true);
+    // The town draws the player's pet walking between the buildings.
+    character = MockCharacterProvider();
+    when(() => character.currentCharacterType).thenReturn('cat');
+    when(() => character.currentCharacterAsset)
+        .thenReturn('assets/svgs/cat.svg');
+    when(() => character.colorSpecFor(any())).thenReturn(const PetColorSpec(
+      bodyColor: '#959379',
+      eyeMode: EyeMode.solid,
+      eyeColor1: '#F4C430',
+      eyeColor2: '#5AA0E0',
+    ));
+    when(() => character.equippedAccessoriesFor(any())).thenReturn(const []);
     coffee = ScenarioCatalog.byId('coffee')!;
   });
 
@@ -36,7 +52,7 @@ void main() {
     return provider;
   }
 
-  group('ScenariosScreen - card progress', () {
+  group('ScenariosScreen - building progress', () {
     Future<void> pumpGrid(
       WidgetTester tester,
       ScenarioProvider scenarios,
@@ -50,22 +66,59 @@ void main() {
         tester,
         const ScenariosScreen(),
         settingsProvider: mockSettings,
+        characterProvider: character,
         scenarioProvider: scenarios,
       );
       await tester.pump();
     }
 
-    testWidgets('a fresh scenario shows zero of its required objectives',
+    /// Picks the coffee shop as the map would report a tap on it. Called
+    /// rather than tapped: the cafe is below the fold of a town taller than
+    /// the screen.
+    Future<void> pickCoffee(WidgetTester tester) async {
+      tester
+          .widget<CityBuilding>(find.byWidgetPredicate(
+              (w) => w is CityBuilding && w.scenario?.id == 'coffee'))
+          .onTap();
+      await tester.pump();
+    }
+
+    Color signColor(WidgetTester tester, String id) {
+      final box = tester.widget<Container>(
+          find.byKey(ValueKey('building-name-$id')));
+      return (box.decoration as BoxDecoration).color!;
+    }
+
+    testWidgets('every building carries its name, without being picked',
         (tester) async {
       await pumpGrid(tester, ScenarioProvider());
 
-      expect(find.text('0/${coffee.requiredCount}'), findsWidgets);
+      for (final scenario in ScenarioCatalog.all) {
+        expect(find.byKey(ValueKey('building-name-${scenario.id}')),
+            findsOneWidget,
+            reason: scenario.id);
+      }
+      expect(find.byKey(const ValueKey('building-name-school')),
+          findsOneWidget);
+      expect(find.text('ORDERING COFFEE'), findsOneWidget);
+      expect(find.text('SCHOOL'), findsOneWidget);
+    });
+
+    testWidgets('the map carries no tally; the card does', (tester) async {
+      await pumpGrid(tester, ScenarioProvider());
+
+      expect(find.text('0/${coffee.requiredCount}'), findsNothing);
+
+      await pickCoffee(tester);
+
+      expect(find.text('0/${coffee.requiredCount}'), findsOneWidget);
       expect(find.text('CLEARED'), findsNothing);
     });
 
     testWidgets('a part-finished scenario shows its running tally',
         (tester) async {
       await pumpGrid(tester, buildProgress(cleared: ['order', 'price']));
+      await pickCoffee(tester);
 
       expect(find.text('2/${coffee.requiredCount}'), findsOneWidget);
     });
@@ -73,8 +126,37 @@ void main() {
     testWidgets('a cleared scenario is stamped rather than tallied',
         (tester) async {
       await pumpGrid(tester, buildProgress(completed: true));
+      await pickCoffee(tester);
 
       expect(find.text('CLEARED'), findsOneWidget);
+    });
+
+    testWidgets('a cleared building has a green sign, the rest white',
+        (tester) async {
+      await pumpGrid(tester, buildProgress(completed: true));
+
+      expect(signColor(tester, 'coffee'), AppTheme.retroGrass);
+      expect(signColor(tester, 'shopping'), Colors.white);
+      expect(signColor(tester, 'school'), Colors.white);
+    });
+
+    testWidgets('picking a building draws no frame round it', (tester) async {
+      await pumpGrid(tester, ScenarioProvider());
+      await pickCoffee(tester);
+
+      final building = find.byWidgetPredicate(
+          (w) => w is CityBuilding && w.scenario?.id == 'coffee');
+      expect(
+        find.descendant(
+          of: building,
+          matching: find.byWidgetPredicate((w) =>
+              w is Container &&
+              w.decoration is BoxDecoration &&
+              (w.decoration as BoxDecoration).border != null &&
+              w.key == null),
+        ),
+        findsNothing,
+      );
     });
 
     testWidgets('replaying a cleared scenario shows the tally again',
@@ -83,6 +165,7 @@ void main() {
         tester,
         buildProgress(completed: true, cleared: ['order']),
       );
+      await pickCoffee(tester);
 
       expect(find.text('CLEARED'), findsNothing);
       expect(find.text('1/${coffee.requiredCount}'), findsOneWidget);
@@ -91,8 +174,31 @@ void main() {
     testWidgets('a bonus objective does not move the required tally',
         (tester) async {
       await pumpGrid(tester, buildProgress(cleared: ['small_talk']));
+      await pickCoffee(tester);
 
-      expect(find.text('0/${coffee.requiredCount}'), findsWidgets);
+      expect(find.text('0/${coffee.requiredCount}'), findsOneWidget);
+    });
+
+    testWidgets('tapping a building brings up who works there', (tester) async {
+      await pumpGrid(tester, ScenarioProvider());
+      final shopping = ScenarioCatalog.byId('shopping')!;
+
+      expect(find.text('BIRD'), findsNothing);
+
+      // The shop is on the street nearest the square, so it is in view when
+      // the town opens.
+      await tester.tap(find.byWidgetPredicate(
+          (w) => w is CityBuilding && w.scenario?.id == 'shopping'));
+      await tester.pump();
+
+      expect(shopping.hostPet, 'bird');
+      expect(find.text('BIRD'), findsOneWidget);
+
+      // The walk over runs to the end without tripping anything.
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(find.text('BIRD'), findsOneWidget);
     });
   });
 

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../providers/settings_provider.dart';
 import '../utils/fonts.dart';
+import '../utils/pixel_clock.dart';
 
 /// The "z z z" that drifts off a sleeping pet.
 ///
@@ -26,10 +27,14 @@ class SleepZs extends StatefulWidget {
   State<SleepZs> createState() => _SleepZsState();
 }
 
-class _SleepZsState extends State<SleepZs> with SingleTickerProviderStateMixin {
-  /// One full trip through the trail. Slow enough to read as breathing rather
-  /// than blinking.
-  static const Duration _cycle = Duration(milliseconds: 2600);
+class _SleepZsState extends State<SleepZs> {
+  /// One full trip through the trail, in [PixelClock] steps: 2.6 s, slow
+  /// enough to read as breathing rather than blinking.
+  ///
+  /// Stepped like the pet's own motion rather than fading smoothly. A smooth
+  /// fade redrew the whole screen at the display's full rate for as long as
+  /// the pet slept, which on the home screen is hours.
+  static const int _cycleSteps = 21;
 
   /// Where each z sits, as a fraction of [SleepZs.baseSize]: right and up from
   /// the largest one, which anchors the bottom-left.
@@ -42,31 +47,25 @@ class _SleepZsState extends State<SleepZs> with SingleTickerProviderStateMixin {
   /// Each z is smaller than the one below it.
   static const List<double> _scales = [1.0, 0.68, 0.46];
 
-  late final AnimationController _controller;
+  late final PixelClockListener _clock = PixelClockListener(_step);
+
+  /// Where the trail is in its cycle, in steps.
+  final ValueNotifier<int> _frame = ValueNotifier(0);
   bool _reduceMotion = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this, duration: _cycle)..repeat();
-  }
+  void _step() => _frame.value = (_frame.value + 1) % _cycleSteps;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-    if (reduce == _reduceMotion) return;
-    _reduceMotion = reduce;
-    if (reduce) {
-      _controller.stop();
-    } else {
-      _controller.repeat();
-    }
+    _reduceMotion = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    _clock.update(context, animate: !_reduceMotion);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _clock.dispose();
+    _frame.dispose();
     super.dispose();
   }
 
@@ -107,9 +106,9 @@ class _SleepZsState extends State<SleepZs> with SingleTickerProviderStateMixin {
         width: base * 2.4,
         height: base * 2.8,
         child: AnimatedBuilder(
-          animation: _controller,
+          animation: _frame,
           builder: (context, _) {
-            final t = _controller.value;
+            final t = _frame.value / _cycleSteps;
 
             return Stack(
               clipBehavior: Clip.none,

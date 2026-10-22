@@ -12,19 +12,24 @@ import 'providers/daily_reward_provider.dart';
 import 'providers/language_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/chat_provider.dart';
+import 'providers/premium_provider.dart';
 import 'providers/quiz_provider.dart';
 import 'providers/mistakes_provider.dart';
 import 'providers/ads_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/vocab_provider.dart';
 import 'providers/scenario_provider.dart';
+import 'providers/tutorial_provider.dart';
+import 'components/character_sprite.dart' show warmPetArt;
 import 'components/notification_scheduler.dart';
+import 'components/tutorial/tutorial_scope.dart';
 import 'router.dart';
 import 'constants/theme.dart';
 import 'l10n/app_localizations.dart';
 import 'utils/fonts.dart';
 import 'utils/security_logger.dart';
 import 'services/account_service.dart';
+import 'services/ai_service.dart';
 import 'services/cloud_sync.dart';
 import 'services/firebase_account_backend.dart';
 import 'services/firebase_sync_backend.dart';
@@ -75,16 +80,18 @@ Future<void> main() async {
           final characterProvider = CharacterProvider();
           final userProvider = Provider.of<UserProvider>(context, listen: false);
           characterProvider.subscribeToRewards(userProvider);
+          characterProvider.updateFromUser(userProvider);
           return characterProvider;
         },
         update: (context, userProvider, characterProvider) {
           characterProvider?.subscribeToRewards(userProvider);
+          characterProvider?.updateFromUser(userProvider);
           return characterProvider ?? CharacterProvider();
         },
       ),
       ChangeNotifierProvider(create: (_) => ChatProvider()),
       ChangeNotifierProvider(create: (_) => QuizProvider()),
-      ChangeNotifierProvider(create: (_) => MistakesProvider()),
+      ChangeNotifierProvider(create: (_) => MistakesProvider()..loadMistakes()),
       // Learning memory. Subscribes to mistakes so every correction the AI
       // records becomes a scheduled review item, tagged with whichever
       // language is being studied at the time.
@@ -103,6 +110,10 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(create: (_) => ScenarioProvider()..load()),
       ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
+      // Which per-page tours have already been offered. Eager, like
+      // settings: the first screen asks about its tour on the first
+      // frame, and a late answer would ask a player who said no once.
+      ChangeNotifierProvider(create: (_) => TutorialProvider()..load()),
       // Ads. Proxied off UserProvider for the membership flag, which is the
       // only thing that suppresses an interstitial — see `constants/ads.dart`.
       ChangeNotifierProxyProvider<UserProvider, AdsProvider>(
@@ -113,6 +124,15 @@ Future<void> main() async {
         update: (context, userProvider, adsProvider) =>
             (adsProvider ?? (AdsProvider()..load()))
               ..updateFromUser(userProvider),
+      ),
+      // The store connection. Proxied off UserProvider because the
+      // entitlement it receives is written straight back there, and lifted to
+      // app scope so a purchase that lands after the paywall closed is still
+      // heard — see `providers/premium_provider.dart`.
+      ChangeNotifierProxyProvider<UserProvider, PremiumProvider>(
+        create: (_) => PremiumProvider(),
+        update: (context, userProvider, premiumProvider) =>
+            (premiumProvider ?? PremiumProvider())..attach(userProvider),
       ),
       // Nullable on purpose: when cloud sync could not start there is no
       // account to attach anything to, and the screens that offer signing in
@@ -146,10 +166,17 @@ Future<void> _startCloudSync() async {
     // costs one missed restore, and the next launch tries again.
     await sync.start().timeout(const Duration(seconds: 8));
     cloudSync = sync;
-    accountService = AccountService(
+    final account = AccountService(
       backend: FirebaseAccountBackend(),
       sync: sync,
     );
+    accountService = account;
+
+    // Lets the proxy meter a day's model calls per account. Wired here rather
+    // than read inside AiService so a build where cloud sync could not start
+    // simply sends no identity and is metered anonymously — which is tighter
+    // than a per-account allowance, not looser. See `services/ai_service.dart`.
+    AiService.instance.idTokenResolver = account.currentIdToken;
   } catch (e) {
     debugPrint('⚠️ SYNC: cloud save unavailable, running local-only - $e');
   }
@@ -177,6 +204,22 @@ class _MojiLearnerAppState extends State<MojiLearnerApp> {
       Provider.of<CalibrationProvider>(context, listen: false),
     ]);
     _router = createRouter(refreshListenable: _routerRefresh);
+    _warmPet(Provider.of<CharacterProvider>(context, listen: false));
+  }
+
+  /// Reads and parses the pet's drawings while the splash is still up, so the
+  /// first screen that shows the pet shows it whole instead of waiting for it.
+  /// Starts when the saved pet has been read, since which pet, which coat and
+  /// which hat it is are all in that save.
+  void _warmPet(CharacterProvider character) {
+    void warm() {
+      if (!character.isLoaded) return;
+      character.removeListener(warm);
+      warmPetArt(character);
+    }
+
+    character.addListener(warm);
+    warm();
   }
 
   // Strip underline decoration from every text style in the theme
@@ -230,7 +273,13 @@ class _MojiLearnerAppState extends State<MojiLearnerApp> {
             return NotificationScheduler(
               child: Directionality(
                 textDirection: TextDirection.ltr,
-                child: child ?? const SizedBox.shrink(),
+                // Registers the showcase controller before any screen below
+                // builds a coach mark against it. It renders its child
+                // untouched — the overlay attaches itself to the router's
+                // navigator, not to this position in the tree.
+                child: TutorialScope(
+                  child: child ?? const SizedBox.shrink(),
+                ),
               ),
             );
           },

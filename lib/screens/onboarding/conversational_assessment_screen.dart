@@ -516,7 +516,7 @@ class _ConversationalAssessmentScreenState
                 child: Text(
                   'ONLINE MODE - LOCAL SAFE FALLBACK',
                   textDirection: textDirection,
-                  textAlign: textAlign,
+                  textAlign: TextAlign.center,
                   style: AppFonts.pressStart2p(
                     fontSize: 8,
                     color: AppTheme.retroDark,
@@ -563,7 +563,7 @@ class _ConversationalAssessmentScreenState
               child: Text(
                 'CHAT ASSESSMENT',
                 textDirection: textDirection,
-                textAlign: textAlign,
+                textAlign: TextAlign.center,
                 style: AppFonts.pressStart2p(
                   fontSize: 12,
                   color: AppTheme.retroDark,
@@ -701,7 +701,7 @@ class _ConversationalAssessmentScreenState
                     child: Text(
                       'CONTINUE',
                       textDirection: textDirection,
-                      textAlign: textAlign,
+                      textAlign: TextAlign.center,
                       style: AppFonts.pressStart2p(
                         fontSize: 12,
                         color: Colors.white,
@@ -772,7 +772,7 @@ class _ConversationalAssessmentScreenState
                         child: Text(
                           'SEND',
                           textDirection: textDirection,
-                          textAlign: textAlign,
+                          textAlign: TextAlign.center,
                           style: AppFonts.pressStart2p(
                             fontSize: 8,
                             color: Colors.white,

@@ -165,7 +165,7 @@ void main() {
     await settle(tester);
   }
 
-  testWidgets('all three pets are whole and clear of each other once chosen',
+  testWidgets('the pets on screen are whole and clear of each other',
       (tester) async {
     await pumpFirstLaunch(tester);
     await reachPetPhase(tester);
@@ -175,8 +175,9 @@ void main() {
         tester.getRect(find.byType(CharacterTile).at(i)),
     ];
 
-    // Nothing runs off either edge: all three are on screen whole, rather
-    // than the outer two being clipped as the in-app pet-changer shows them.
+    // Nothing runs off either edge: the three the layout shows at a time
+    // are on screen whole, rather than the outer two being clipped as the
+    // in-app pet-changer shows them.
     for (final rect in rects) {
       expect(rect.left, greaterThanOrEqualTo(0.0));
       expect(rect.right, lessThanOrEqualTo(kHandsetSurface.width));

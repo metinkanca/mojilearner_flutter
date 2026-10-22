@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../constants/gold.dart';
+import '../../constants/shop.dart';
 import '../../constants/theme.dart';
 import '../../components/chat_header.dart';
+import '../../components/tutorial/retro_showcase.dart';
+import '../../components/tutorial/tutorial_offer_host.dart';
+import '../../constants/tutorials.dart';
 import '../../components/chat_input.dart';
 import '../../components/message_bubble.dart';
 import '../../components/chat_sidebar.dart';
@@ -13,10 +17,11 @@ import '../../models/models.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../providers/mistakes_provider.dart';
-import '../constants/bond.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/ads_provider.dart';
 import '../../providers/user_provider.dart';
+import '../components/ai_limit_sheet.dart';
+import '../constants/entitlements.dart';
 import '../../providers/vocab_provider.dart';
 import '../../utils/review_selection.dart';
 import '../../utils/rtl_locale.dart';
@@ -28,11 +33,17 @@ import '../../utils/objective_extractor.dart';
 import '../../utils/progression_utils.dart';
 import '../../components/scenario_complete_popup.dart';
 import '../../components/scenario_objective_tracker.dart';
+import '../../components/scenario_stage.dart';
 import '../../services/ai_guard.dart';
 import '../../services/ai_prompt_spec.dart';
 import '../../services/ai_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/fonts.dart';
+
+/// The chat tour's steps, in the order it visits them.
+final GlobalKey chatMenuShowcaseKey = GlobalKey();
+final GlobalKey chatMessagesShowcaseKey = GlobalKey();
+final GlobalKey chatInputShowcaseKey = GlobalKey();
 
 class ChatScreen extends StatefulWidget {
   final String? chatId;
@@ -66,6 +77,21 @@ class _ChatScreenState extends State<ChatScreen>
   String? _aiSessionId;
   bool _isConnecting = true;
   String? _currentChatId;
+
+  /// A message is out and the tutor has not answered yet. Only drawn — the
+  /// scenario host wears a thinking bubble — never used to block a send.
+  bool _awaitingReply = false;
+
+  /// The scenario's service, put on the table when the goal that asks for it
+  /// lands, until it is paid for or turned down. Not saved: leaving the scene
+  /// leaves the meal behind.
+  ShopItem? _serviceOffer;
+
+  /// The last service paid for, and how many have been this visit — what the
+  /// scene plays the pet eating.
+  ShopItem? _lastService;
+  int _servicesBought = 0;
+  bool _payingForService = false;
 
   /// Guards against paying out a scenario twice if another response
   /// lands while the completion popup is still open.
@@ -231,8 +257,9 @@ class _ChatScreenState extends State<ChatScreen>
     final l10n = AppLocalizations.of(context)!;
 
     List<AiObjective> objectives = const [];
+    ScenarioDefinition? scenario;
     if (isScenarioChat) {
-      final scenario = _resolveScenario(chatProvider);
+      scenario = _resolveScenario(chatProvider);
       if (scenario != null) {
         final progress = Provider.of<ScenarioProvider>(context, listen: false)
             .forScenario(scenario.id);
@@ -260,6 +287,7 @@ class _ChatScreenState extends State<ChatScreen>
       targetCode: targetCode,
       nativeCode: languageProvider.nativeLanguage.code,
       scenarioTitle: effectiveScenarioTitle,
+      scenarioHost: scenario?.hostPet,
       objectives: objectives,
       troubleSpots: briefed.trouble,
       dueItems: briefed.due,
@@ -385,6 +413,20 @@ class _ChatScreenState extends State<ChatScreen>
       );
     }
 
+    // The day's message allowance. Checked before the message is added to the
+    // transcript, so a turned-away send leaves no half-exchange sitting there
+    // with nothing answering it.
+    //
+    // This is the one wall with no free version of itself behind it — you
+    // cannot talk to the pet without the model. So the sheet points at the
+    // review queue and the locally-built quiz instead: there is always
+    // something to study, even when there is nothing to say.
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (!userProvider.canSpendAi(AiSpend.message)) {
+      await AiLimitSheet.show(context, AiSpend.message);
+      return;
+    }
+
     AiGuard.recordRequest('chat_screen');
 
     // 1. Add User Message to Provider (redacted when sensitive)
@@ -394,6 +436,7 @@ class _ChatScreenState extends State<ChatScreen>
       sender: 'user',
       timestamp: DateTime.now()
     ));
+    if (mounted) setState(() => _awaitingReply = true);
 
     // 2. Send to AI (sanitized and redacted text)
     try {
@@ -402,6 +445,13 @@ class _ChatScreenState extends State<ChatScreen>
         message: guard.outboundText,
         source: 'chat_screen',
       );
+
+      // Charged on an exchange the player actually got, matching the quiz
+      // side: a failed call cost the provider, but taking the player's
+      // allowance for it is how a cap starts feeling arbitrary.
+      if (responseText.isNotEmpty) {
+        await userProvider.spendAi(AiSpend.message);
+      }
 
       if (responseText.isNotEmpty && mounted) {
         // 🔒 SECURITY: Validate AI response
@@ -431,12 +481,17 @@ class _ChatScreenState extends State<ChatScreen>
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         final isScenarioChat = _resolveScenarioTitle(chatProvider) != null;
         
+        // XP is deliberately not passed through scaleReward, unlike the
+        // coins below. XP is what the pet's bond stage is projected from, and
+        // a sick pet slowing its own closeness is exactly the coupling bond
+        // was built without: the relationship grows through the language, not
+        // through whether the player could afford food this week.
         if (isScenarioChat) {
           characterProvider.rewardScenario();
-          userProvider.addXp(characterProvider.scaleReward(10));
+          userProvider.addXp(10);
         } else {
           characterProvider.rewardChat();
-          userProvider.addXp(characterProvider.scaleReward(5));
+          userProvider.addXp(5);
         }
 
         // Talking to the pet in the target language is the app's core act,
@@ -452,9 +507,9 @@ class _ChatScreenState extends State<ChatScreen>
         ));
 
         // Every exchange is a turn in the target language, scenario or not.
-        // The daily cap is what stops a long session from being the fastest
-        // route to a grown pet; there is no per-message limit here.
-        characterProvider.recordLearning(BondSource.conversation);
+        // The XP above is what grows the bond; this only tells the pet it was
+        // not forgotten today.
+        characterProvider.recordLearningMoment();
       }
     } catch (e) {
        if (mounted) {
@@ -468,6 +523,8 @@ class _ChatScreenState extends State<ChatScreen>
            ),
          );
        }
+    } finally {
+      if (mounted) setState(() => _awaitingReply = false);
     }
   }
 
@@ -584,12 +641,51 @@ class _ChatScreenState extends State<ChatScreen>
         scenarioProvider.markObjectives(scenario, objectiveIds);
     if (newlyCleared.isEmpty) return;
 
+    // The order was understood, so the host brings it out. Offered rather
+    // than charged: the tutor decided the goal was met, and only the player
+    // decides to spend coins.
+    final service = scenario.serviceOrderedBy(newlyCleared);
+    final item = service == null ? null : shopItemById(service.itemId);
+    if (item != null) setState(() => _serviceOffer = item);
+
     if (!scenarioProvider.isComplete(scenario) || _completionHandled) return;
 
     // Latch before any await: a second response arriving mid-popup must not
     // pay out twice.
     _completionHandled = true;
     _completeScenario(scenario, scenarioProvider);
+  }
+
+  /// Pays for the service on the table and gives it to the pet — at the
+  /// shop's price, with the shop's effect.
+  Future<void> _payForService() async {
+    final item = _serviceOffer;
+    if (item == null || _payingForService) return;
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final user = Provider.of<UserProvider>(context, listen: false);
+    final character = Provider.of<CharacterProvider>(context, listen: false);
+
+    setState(() => _payingForService = true);
+    final paid = await character.purchaseAndFeed(item, user);
+    if (!mounted) return;
+    setState(() {
+      _payingForService = false;
+      if (paid) {
+        _serviceOffer = null;
+        _lastService = item;
+        _servicesBought++;
+      }
+    });
+    // Left on the table when it cannot be paid for, so a player who tops up
+    // their coins can come back to it.
+    if (!paid) {
+      _showGuardMessage(
+        l10n.notEnoughCoinsMessage,
+        textDirectionForLocale(locale),
+        textAlignForLocale(locale),
+      );
+    }
   }
 
   Future<void> _completeScenario(
@@ -708,18 +804,13 @@ class _ChatScreenState extends State<ChatScreen>
     // Scale while the pet is still in its pre-reward condition, matching the
     // quiz flow — a sick pet earns half.
     final wasSick = characterProvider.isSick;
-    final grantedXp = characterProvider.scaleReward(reward.xpReward);
+    // Not scaled by sickness: see the note on the per-message XP above.
+    final grantedXp = reward.xpReward;
 
     characterProvider.applyQuizRewards(
       happinessDelta: reward.happinessDelta,
       hungerDelta: reward.hungerDelta,
     );
-    // Clearing the scenario, on top of the per-message bond already paid for
-    // the conversation that got here. A run the learner walked out of doesn't
-    // earn this — the conversation was already paid for, message by message.
-    if (!reward.isPartial) {
-      characterProvider.recordLearning(BondSource.scenario);
-    }
     await userProvider.addXp(grantedXp);
     final coinAward = await userProvider.awardLearningGold(
       characterProvider.scaleReward(reward.coinReward),
@@ -828,161 +919,17 @@ class _ChatScreenState extends State<ChatScreen>
     _dragStartX = null;
   }
 
-  void _showNewChatTypeDialog() {
-    final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context);
-    final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(color: AppTheme.retroDark, width: 4),
-          borderRadius: BorderRadius.zero,
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: AppTheme.retroDark, width: 4),
-          ),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l10n.chooseChatType.toUpperCase(),
-                textDirection: textDirection,
-                textAlign: textAlign,
-                style: AppFonts.pressStart2p(
-                  fontSize: 11,
-                  color: AppTheme.retroDark,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(dialogContext).pop();
-                  context.goNamed('new_chat');
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.retroLight,
-                    border: Border.all(color: AppTheme.retroDark, width: 3),
-                    boxShadow: const [
-                      BoxShadow(color: AppTheme.retroDark, offset: Offset(3, 3), blurRadius: 0)
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.blankChat.toUpperCase(),
-                        textDirection: textDirection,
-                        textAlign: textAlign,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 9,
-                          color: AppTheme.retroDark,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        l10n.blankChatDesc,
-                        textDirection: textDirection,
-                        textAlign: textAlign,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 7,
-                          color: AppTheme.retroDark.withValues(alpha: 0.8),
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(dialogContext).pop();
-                  context.goNamed('scenarios');
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.retroLight,
-                    border: Border.all(color: AppTheme.retroDark, width: 3),
-                    boxShadow: const [
-                      BoxShadow(color: AppTheme.retroDark, offset: Offset(3, 3), blurRadius: 0)
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.roleplayScenario.toUpperCase(),
-                        textDirection: textDirection,
-                        textAlign: textAlign,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 9,
-                          color: AppTheme.retroDark,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        l10n.roleplayScenarioDesc,
-                        textDirection: textDirection,
-                        textAlign: textAlign,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 7,
-                          color: AppTheme.retroDark.withValues(alpha: 0.85),
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              GestureDetector(
-                onTap: () => Navigator.of(dialogContext).pop(),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: AppTheme.retroDark, width: 3),
-                  ),
-                  child: Center(
-                    child: Text(
-                      l10n.cancel.toUpperCase(),
-                      textDirection: textDirection,
-                      textAlign: textAlign,
-                      style: AppFonts.pressStart2p(
-                        fontSize: 8,
-                        color: AppTheme.retroDark,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  /// The sidebar's new-chat button. Roleplay scenarios are not offered here:
+  /// they live in the town, which has its own tab.
+  void _startNewChat() {
+    if (!mounted) return;
+    context.goNamed('new_chat');
   }
 
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context);
+    final l10n = AppLocalizations.of(context);
     final textDirection = textDirectionForLocale(locale);
     final textAlign = textAlignForLocale(locale);
 
@@ -997,8 +944,23 @@ class _ChatScreenState extends State<ChatScreen>
     final chatProvider = Provider.of<ChatProvider>(context);
     // Safe access to messages
     final messages = _currentChatId != null ? chatProvider.getMessages(_currentChatId!) : <Message>[];
+    final scenario = _resolveScenario(chatProvider);
+    // Read here, above this screen's Scaffold: its body sees no keyboard
+    // inset, because the Scaffold has already made room for the keyboard.
+    final keyboardUp = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final coins = Provider.of<UserProvider>(context).coins;
 
-    return Scaffold(
+    return TutorialOfferHost(
+      id: TutorialId.chat,
+      // The message list is a spinner until the session is up, and the tour
+      // opens on the button that reveals the chat list.
+      enabled: !_isConnecting,
+      steps: () => [
+        chatMenuShowcaseKey,
+        chatMessagesShowcaseKey,
+        chatInputShowcaseKey,
+      ],
+      child: Scaffold(
       backgroundColor: AppTheme.retroLight,
       body: AnimatedBuilder(
         animation: _sidebarController,
@@ -1025,7 +987,9 @@ class _ChatScreenState extends State<ChatScreen>
               ChatHeader(
                 onOpenSidebar: () {
                   _openSidebar();
-                }
+                },
+                menuShowcaseKey: chatMenuShowcaseKey,
+                menuShowcaseDescription: l10n?.tutorialChatMenu,
               ),
               
               // Date Badge
@@ -1041,7 +1005,27 @@ class _ChatScreenState extends State<ChatScreen>
                 ),
               ),
 
-              if (_resolveScenarioTitle(chatProvider) != null)
+              // A tracked scenario is set in its place, with its host pet;
+              // the room's sign carries the title. A custom scenario has no
+              // place, so it keeps the plain banner.
+              if (scenario != null)
+                ScenarioStage(
+                  scenario: scenario,
+                  learnerTurns:
+                      messages.where((m) => m.sender == 'user').length,
+                  hostTurns: messages.where((m) => m.sender == 'bot').length,
+                  hostThinking: _awaitingReply ||
+                      (_isConnecting && messages.isEmpty),
+                  compact: keyboardUp,
+                  offer: _serviceOffer,
+                  canAffordOffer: _serviceOffer != null &&
+                      coins >= _serviceOffer!.price,
+                  onPay: _payForService,
+                  onDecline: () => setState(() => _serviceOffer = null),
+                  lastBought: _lastService,
+                  servicesBought: _servicesBought,
+                )
+              else if (_resolveScenarioTitle(chatProvider) != null)
                  Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -1056,33 +1040,47 @@ class _ChatScreenState extends State<ChatScreen>
 
               // Objective checklist for tracked scenarios. The tutor never
               // says what's left, so this is the only place that answers it.
-              if (_resolveScenario(chatProvider) != null)
+              if (scenario != null)
                 ScenarioObjectiveTracker(
-                  scenario: _resolveScenario(chatProvider)!,
+                  scenario: scenario,
                   onFinish: _completionHandled ? null : _finishRunEarly,
                 ),
 
               Expanded(
-                child: _isConnecting 
-                ? const Center(child: CircularProgressIndicator(color: AppTheme.retroDark))
-                : ListView.builder(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 20),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    final msg = messages[index];
-                    if (msg.sender == 'system') return const SizedBox.shrink(); 
+                // Inside the Expanded, which has to stay a direct child of
+                // the Column.
+                child: RetroShowcase(
+                  showcaseKey: chatMessagesShowcaseKey,
+                  description:
+                      l10n?.tutorialChatMessages ?? 'Your conversation.',
+                  targetPadding: EdgeInsets.zero,
+                  child: _isConnecting 
+                  ? const Center(child: CircularProgressIndicator(color: AppTheme.retroDark))
+                  : ListView.builder(
+                    padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 20),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final msg = messages[index];
+                      if (msg.sender == 'system') return const SizedBox.shrink(); 
                     
-                    return MessageBubble(
-                      text: msg.content, 
-                      isUser: msg.sender == 'user',
-                      translation: msg.translation,
-                      grammarAnalysis: msg.grammarAnalysis,
-                      reading: msg.reading,
-                    );
-                  },
+                      return MessageBubble(
+                        text: msg.content, 
+                        isUser: msg.sender == 'user',
+                        translation: msg.translation,
+                        grammarAnalysis: msg.grammarAnalysis,
+                        reading: msg.reading,
+                      );
+                    },
+                  ),
                 ),
               ),
-              ChatInput(onSend: _handleSend),
+              RetroShowcase(
+                showcaseKey: chatInputShowcaseKey,
+                description: l10n?.tutorialChatInput ?? 'Write here.',
+                isLast: true,
+                targetPadding: EdgeInsets.zero,
+                child: ChatInput(onSend: _handleSend),
+              ),
             ],
           ),
               if (sidebarProgress > 0)
@@ -1104,7 +1102,7 @@ class _ChatScreenState extends State<ChatScreen>
                   chats: chatProvider.chats,
                   activeChatId: _currentChatId,
                   onClose: _closeSidebar,
-                  onStartNewChat: _showNewChatTypeDialog,
+                  onStartNewChat: _startNewChat,
                   onSelectChat: (id) {
                     _closeSidebar();
                     if (id == _currentChatId) return;
@@ -1123,6 +1121,7 @@ class _ChatScreenState extends State<ChatScreen>
             ),
           );
         },
+      ),
       ),
     );
   }

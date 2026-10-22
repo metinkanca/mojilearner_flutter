@@ -7,6 +7,13 @@ class ShopItem {
   final int price;
   final String description;
   final String icon; // Emoji character
+
+  /// Pixel-art SVG under `assets/svgs/`, drawn instead of [icon] where the
+  /// item is shown as a picture rather than inside a sentence.
+  ///
+  /// Only the food has art so far; everything else still falls back to the
+  /// emoji, which is also what the reward *text* uses in every case.
+  final String? art;
   final int? hungerRestore;
   final int? happinessRestore;
 
@@ -22,6 +29,7 @@ class ShopItem {
     required this.price,
     required this.description,
     required this.icon,
+    this.art,
     this.hungerRestore,
     this.happinessRestore,
     this.healthRestore,
@@ -38,15 +46,17 @@ const List<ShopItem> _catalogue = [
       price: 5,
       description: 'A healthy snack.',
       icon: '🍎',
+      art: 'assets/svgs/food_apple.svg',
       hungerRestore: 10,
       happinessRestore: 2),
   ShopItem(
-      id: 'croissant',
+      id: 'donut',
       type: 'food',
-      name: 'Croissant',
+      name: 'Donut',
       price: 12,
-      description: 'Buttery goodness.',
-      icon: '🥐',
+      description: 'Sweet and sticky.',
+      icon: '🍩',
+      art: 'assets/svgs/food_donut.svg',
       hungerRestore: 20,
       happinessRestore: 5),
   ShopItem(
@@ -56,6 +66,7 @@ const List<ShopItem> _catalogue = [
       price: 25,
       description: 'Cheesy and filling.',
       icon: '🍕',
+      art: 'assets/svgs/food_pizza.svg',
       hungerRestore: 40,
       happinessRestore: 10),
   ShopItem(
@@ -65,6 +76,7 @@ const List<ShopItem> _catalogue = [
       price: 50,
       description: 'Premium fish.',
       icon: '🍱',
+      art: 'assets/svgs/food_sushi.svg',
       hungerRestore: 60,
       happinessRestore: 20),
 
@@ -76,6 +88,7 @@ const List<ShopItem> _catalogue = [
       price: 8,
       description: 'Quick energy boost.',
       icon: '☕',
+      art: 'assets/svgs/food_coffee.svg',
       hungerRestore: 5,
       happinessRestore: 5),
 
@@ -88,6 +101,7 @@ const List<ShopItem> _catalogue = [
       price: 40,
       description: 'Nurses Moji back to health.',
       icon: '💊',
+      art: 'assets/svgs/food_medicine.svg',
       happinessRestore: 5,
       healthRestore: 50),
 
@@ -146,6 +160,15 @@ final List<ShopItem> accessoryShopItems = visibleAccessories
     .toList(growable: false);
 
 final List<ShopItem> shopItems = [..._catalogue, ...accessoryShopItems];
+
+/// The catalogue entry with [id], or null when there is none — a free
+/// starter, a bond-gated accessory, or one of the free scenes.
+ShopItem? shopItemById(String id) {
+  for (final item in shopItems) {
+    if (item.id == id) return item;
+  }
+  return null;
+}
 
 /// The shop entry for a purchasable accessory, or null when it is a free
 /// starter or bond-gated. Lets the wardrobe reuse the one purchase path

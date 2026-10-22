@@ -24,8 +24,8 @@ class _LevelRewardsScreenState extends State<LevelRewardsScreen> {
     switch (itemId) {
       case 'apple':
         return l10n.shopItemAppleName;
-      case 'croissant':
-        return l10n.shopItemCroissantName;
+      case 'donut':
+        return l10n.shopItemDonutName;
       case 'pizza':
         return l10n.shopItemPizzaName;
       case 'sushi':

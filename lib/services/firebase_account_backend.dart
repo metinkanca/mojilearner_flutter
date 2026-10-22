@@ -29,6 +29,18 @@ class FirebaseAccountBackend implements AccountBackend {
   String? get currentUid => _auth.currentUser?.uid;
 
   @override
+  Future<String?> currentIdToken() async {
+    try {
+      // Not forced: the SDK caches a token for an hour and refreshes it on
+      // its own when it is close to expiring. Forcing a refresh on every AI
+      // request would put a network round trip in front of each one.
+      return await _auth.currentUser?.getIdToken();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
   String? get currentEmail => _auth.currentUser?.email;
 
   @override

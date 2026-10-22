@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mojilearner_flutter/components/character_sprite.dart';
 import 'package:mojilearner_flutter/components/sleep_zs.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
@@ -136,7 +137,6 @@ void main() {
       when(() => mockCharacter.customization)
           .thenReturn(TestFixtures.buildCustomization());
       when(() => mockCharacter.isSleeping).thenReturn(false);
-      when(() => mockCharacter.isAiIssueSleepMode).thenReturn(false);
       when(() => mockCharacter.isTemporarilyAwake).thenReturn(false);
       when(() => mockCharacter.isSleepingForNight).thenReturn(false);
       when(() => mockCharacter.awakeUntil).thenReturn(null);
@@ -183,17 +183,6 @@ void main() {
       expect(find.byType(SleepZs), findsOneWidget);
     });
 
-    // Reconnect-dozing is the other half of `isSleeping`, and the bubble
-    // already calls it dozing, so the trail belongs there too.
-    testWidgets('so does a pet dozing through a reconnect', (tester) async {
-      when(() => mockCharacter.isSleeping).thenReturn(true);
-      when(() => mockCharacter.isAiIssueSleepMode).thenReturn(true);
-
-      await pumpHome(tester);
-
-      expect(find.byType(SleepZs), findsOneWidget);
-    });
-
     // Up and to the right of the pet's head, in the headroom the art's viewBox
     // already reserves — not floating out over the sky somewhere.
     testWidgets('sits at the top right of the pet', (tester) async {
@@ -203,7 +192,7 @@ void main() {
       await pumpHome(tester);
 
       final trail = tester.getRect(find.byType(SleepZs));
-      final pet = tester.getRect(find.byType(HomeScreen));
+      final pet = tester.getRect(find.byType(CharacterSprite));
 
       expect(trail.center.dx, greaterThan(pet.center.dx));
       expect(trail.top, lessThan(pet.center.dy));
@@ -218,7 +207,7 @@ void main() {
     // imported: the pivot lives in a private map.
     Iterable<double> eyeScales(WidgetTester tester) => tester
         .widgetList<Transform>(find.byType(Transform))
-        .where((t) => t.alignment == const Alignment(0.248, 0.091))
+        .where((t) => t.alignment == const Alignment(0.231, 0.281))
         .map((t) => t.transform.getRow(1)[1]);
 
     testWidgets('a sleeping pet holds its eyes shut', (tester) async {

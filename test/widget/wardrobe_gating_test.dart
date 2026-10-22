@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/constants/accessories.dart';
+import 'package:mojilearner_flutter/constants/bond.dart';
+import 'package:mojilearner_flutter/constants/scenes.dart';
+import 'package:mojilearner_flutter/constants/season_pass.dart';
+import 'package:mojilearner_flutter/constants/shop.dart';
 import 'package:mojilearner_flutter/models/models.dart';
 import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/screens/wardrobe_screen.dart';
 import 'package:mojilearner_flutter/utils/pet_recolor.dart';
+import 'package:mojilearner_flutter/utils/progression_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/mock_providers.dart';
@@ -46,23 +52,38 @@ void main() {
   Future<void> settle(WidgetTester tester) =>
       tester.pump(const Duration(milliseconds: 300));
 
+  /// Scrolls a tile into view, then taps it.
+  ///
+  /// The wardrobe is taller than the test surface and grows with every
+  /// accessory the catalogue gains, so a bare tap below the shelves lands
+  /// outside the view and does nothing. That is not a visible failure here --
+  /// it reads as "the tap changed nothing", which is exactly what some of
+  /// these tests assert -- so scenery taps go through this rather than
+  /// trusting a fixed layout.
+  Future<void> tapTile(WidgetTester tester, String label) async {
+    final tile = find.text(label);
+    await tester.ensureVisible(tile);
+    await settle(tester);
+    await tester.tap(tile);
+  }
+
+  /// Cumulative XP for the level the Attached stage gates on, off the real
+  /// curve and gates.
+  final attachedXP = ProgressionUtils.getTotalXPForLevel(
+      petStageGates.firstWhere((g) => g.stage == PetStage.attached).minLevel);
+
   Future<CharacterProvider> pumpWardrobe(
     WidgetTester tester, {
-    int bondPoints = 0,
-    String? assessedLevel,
+    int totalXP = 0,
+    List<String> unlockedItems = const [],
   }) async {
-    if (bondPoints > 0) {
-      SharedPreferences.setMockInitialValues({'pet_bond_points': bondPoints});
+    final prefs = <String, Object>{
+      if (unlockedItems.isNotEmpty) 'unlocked_items': unlockedItems,
+    };
+    if (prefs.isNotEmpty) {
+      SharedPreferences.setMockInitialValues(prefs);
     }
-    if (assessedLevel != null) {
-      when(() => mockCalibration.getLanguageProficiency('es')).thenReturn(
-        LanguageProficiency(
-          languageCode: 'es',
-          aiDeterminedLevel: assessedLevel,
-          isCalibrated: true,
-        ),
-      );
-    }
+    mockUser.totalXP = totalXP;
     final character = CharacterProvider(startDecayTimer: false);
 
     await pumpApp(
@@ -120,20 +141,132 @@ void main() {
   });
 
   // Coins are not a way in, so reaching the stage is the only thing that
-  // changes here. Note it takes both halves: stages are fluency-gated too, so
-  // bond points alone leave a beginner short of Attached.
+  // changes here — and XP alone reaches it, whatever the player's language
+  // level: activity is rewarded, fluency never is.
   testWidgets('reaching the stage makes a bond-gated accessory wearable',
       (tester) async {
-    final character = await pumpWardrobe(
-      tester,
-      bondPoints: 400,
-      assessedLevel: 'intermediate',
-    );
+    final character = await pumpWardrobe(tester, totalXP: attachedXP);
 
     await tester.tap(find.text('Top Hat'));
     await tester.pump();
 
     expect(character.equippedInSlot(AccessorySlots.hat), 'tophat');
+  });
+
+  // Scenery is the one shelf that is not about the pet: it changes the world
+  // every pet lives in. The gate is the same as the accessories' — you cannot
+  // move somewhere you have not bought — and the payoff is different: a scene
+  // you own goes up on one tap, and one goes up the moment it is paid for.
+  group('scenery', () {
+    testWidgets('an unbought scene is priced and does not go up',
+        (tester) async {
+      final character = await pumpWardrobe(tester);
+
+      await tapTile(tester, 'Galaxy Purple');
+      await tester.pump();
+
+      expect(character.sceneId, kDefaultSceneId);
+    });
+
+    testWidgets('an owned scene goes up with one tap', (tester) async {
+      final character = await pumpWardrobe(
+        tester,
+        unlockedItems: const ['bg_forest'],
+      );
+
+      await tapTile(tester, 'Forest Green');
+      await settle(tester);
+
+      expect(character.sceneId, 'bg_forest');
+
+      // And back: owning several and living in one is the point of the shelf.
+      await tapTile(tester, 'Meadow');
+      await settle(tester);
+
+      expect(character.sceneId, kMeadowSceneId);
+
+      // The room is a tile like any other, named like any other.
+      await tapTile(tester, 'Cozy Room');
+      await settle(tester);
+
+      expect(character.sceneId, kCozyRoomSceneId);
+
+      // ...and so is the enchanted meadow, which is free.
+      await tapTile(tester, 'Enchanted Meadow');
+      await settle(tester);
+
+      expect(character.sceneId, kEnchantedMeadowSceneId);
+
+      // ...and the mushroom glade, which is free too.
+      await tapTile(tester, 'Mushroom Glade');
+      await settle(tester);
+
+      expect(character.sceneId, kMushroomGladeSceneId);
+    });
+
+    testWidgets('buying one moves the pet in straight away', (tester) async {
+      when(() => mockUser.coins).thenReturn(500);
+      when(() => mockUser.spendCoins(any())).thenAnswer((_) async {});
+
+      final character = await pumpWardrobe(tester);
+
+      await tapTile(tester, 'Ocean Blue');
+      await settle(tester);
+
+      expect(find.text('BUY'), findsOneWidget);
+      await tester.tap(find.text('BUY'));
+      await settle(tester);
+
+      verify(() => mockUser.spendCoins(shopItemById('bg_blue')!.price))
+          .called(1);
+      expect(character.sceneId, 'bg_blue');
+    });
+  });
+
+  // Pass worlds have no price, so a tap goes to the pass that carries them. With
+  // two passes that has to be the right one: the pass screen opens on season one
+  // when it is not told otherwise, and a tile for season two's world that opened
+  // season one's track would show the player nothing about how to get it.
+  testWidgets('a locked pass world opens the pass that carries it',
+      (tester) async {
+    final character = CharacterProvider(startDecayTimer: false);
+    addTearDown(character.dispose);
+    final router = GoRouter(routes: [
+      GoRoute(path: '/', builder: (_, __) => const WardrobeScreen()),
+      GoRoute(
+        path: '/pass',
+        name: 'pass',
+        builder: (_, state) =>
+            Scaffold(body: Text('pass:${state.uri.queryParameters['id']}')),
+      ),
+    ]);
+    addTearDown(router.dispose);
+
+    await pumpAppWithRouter(
+      tester,
+      router,
+      characterProvider: character,
+      settingsProvider: mockSettings,
+      userProvider: mockUser,
+      languageProvider: mockLanguage,
+      calibrationProvider: mockCalibration,
+      surfaceSize: surface,
+    );
+    await settle(tester);
+
+    for (final (label, passId) in [
+      ('Pumpkin Patch', kSeasonTwoId),
+      ('Departures', kSeasonOneId),
+    ]) {
+      await tapTile(tester, label);
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      expect(find.text('pass:$passId'), findsOneWidget, reason: label);
+      // Nothing was bought or moved into.
+      expect(character.sceneId, kDefaultSceneId);
+
+      router.pop();
+      await settle(tester);
+    }
   });
 
   group('buying from the shelf', () {
@@ -182,7 +315,6 @@ void main() {
       verifyNever(() => mockUser.spendCoins(any()));
       expect(character.equippedInSlot(AccessorySlots.neck), isNull);
     });
-
   });
 
   // Coats and eye colours are the other thing coins buy here. Void heads the
@@ -204,8 +336,7 @@ void main() {
       expect(character.design.bodyColor, kDefaultBodyColor);
     });
 
-    testWidgets('confirming a purchase paints the pet with it',
-        (tester) async {
+    testWidgets('confirming a purchase paints the pet with it', (tester) async {
       when(() => mockUser.coins).thenReturn(999);
       when(() => mockUser.spendCoins(any())).thenAnswer((_) async {});
 
@@ -258,24 +389,18 @@ void main() {
     });
   });
 
-  // The bird is drawn in profile and shows one eye, so odd-eyed would colour a
-  // cell nobody can see. It still gets both colour panels -- being rigged is
-  // what the pickers are gated on, and the chick is.
-  group('a pet with one eye', () {
-    testWidgets('is offered colours but not the odd-eyed mode',
-        (tester) async {
+  // Only a pet with a beak gets a beak panel, and picking a colour there
+  // paints the beak rather than the coat.
+  group('the beak colour', () {
+    testWidgets('is offered to a bird and not to a cat', (tester) async {
       final character = await pumpWardrobe(tester);
 
-      expect(find.text('SOLID'), findsOneWidget);
-      expect(find.text('ODD-EYED'), findsOneWidget);
+      expect(find.text('BEAK COLOR'), findsNothing);
 
       await character.updateCharacterType('bird');
       await settle(tester);
 
-      expect(find.text('BODY & TAIL COLOR'), findsOneWidget);
-      expect(find.text('EYE COLOR'), findsOneWidget);
-      expect(find.text('SOLID'), findsNothing);
-      expect(find.text('ODD-EYED'), findsNothing);
+      expect(find.text('BEAK COLOR'), findsOneWidget);
     });
   });
 }

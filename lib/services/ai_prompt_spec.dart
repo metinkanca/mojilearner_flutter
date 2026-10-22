@@ -16,13 +16,12 @@ import '../models/models.dart';
 
 /// The prompts the service knows how to build.
 ///
-/// Split the way the endpoints are: [chat], [pet] and [assessment] open a
-/// session, [quiz] and [level] answer a single generate call. The server
-/// refuses a generate mode used as a persona and vice versa, so the split is
-/// enforced on both sides.
+/// Split the way the endpoints are: [chat] and [assessment] open a session,
+/// [quiz] and [level] answer a single generate call. The server refuses a
+/// generate mode used as a persona and vice versa, so the split is enforced on
+/// both sides.
 enum AiPromptMode {
   chat('chat'),
-  pet('pet'),
   assessment('assessment'),
   quiz('quiz'),
   level('level');
@@ -114,10 +113,14 @@ class AiPromptSpec {
   /// [troubleSpots] and [dueItems] are already trimmed by the caller, which
   /// decides what is worth showing the tutor. The server caps them again, so
   /// sending more simply wastes the request rather than growing the prompt.
+  ///
+  /// [scenarioHost] is the pet type playing the scene's other side, which the
+  /// tutor is cast as.
   factory AiPromptSpec.chat({
     required String? targetCode,
     required String? nativeCode,
     String? scenarioTitle,
+    String? scenarioHost,
     List<AiObjective> objectives = const [],
     List<AiReviewItem> troubleSpots = const [],
     List<AiReviewItem> dueItems = const [],
@@ -128,6 +131,7 @@ class AiPromptSpec {
       if (scenarioTitle != null && scenarioTitle.isNotEmpty)
         'scenario': {
           'title': scenarioTitle,
+          if (scenarioHost != null) 'host': scenarioHost,
           if (objectives.isNotEmpty)
             'objectives': objectives.map((o) => o.toJson()).toList(),
         },
@@ -140,10 +144,6 @@ class AiPromptSpec {
         },
     });
   }
-
-  /// The pet on the home screen.
-  factory AiPromptSpec.pet({required String? targetCode}) =>
-      AiPromptSpec._(AiPromptMode.pet, {'targetCode': targetCode});
 
   /// The onboarding assessment conversation.
   factory AiPromptSpec.assessment({

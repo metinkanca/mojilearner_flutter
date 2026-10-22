@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/components/character_sprite.dart';
+import 'package:mojilearner_flutter/constants/pets.dart';
 import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/mock_providers.dart';
+import '../helpers/pet_art.dart';
 import '../helpers/pump_app.dart';
 
 /// The petting reaction has to be *visible*. The first version of it was a
@@ -32,11 +34,12 @@ void main() {
   /// the real clock, the art test below passes all day and fails all night.
   final daytime = DateTime(2026, 3, 1, 15, 0);
 
-  CharacterProvider buildCharacter({int happiness = 50}) {
+  CharacterProvider buildCharacter({int happiness = 50, String? type}) {
     SharedPreferences.setMockInitialValues({
       'pet_hunger': 20,
       'pet_happiness': happiness,
       'pet_health': 100,
+      if (type != null) 'character_type': type,
     });
     return CharacterProvider(startDecayTimer: false, now: () => daytime);
   }
@@ -171,58 +174,65 @@ void main() {
   });
 
   group('the art', () {
-    testWidgets('renders the pet differently while it is being petted',
-        (tester) async {
-      final character = buildCharacter();
+    // Every pet, not just the cat. The squint is generated from the pet's own
+    // eye geometry, so a pet added to the rank without being split into
+    // layers would render fine and quietly have no reaction at all — which is
+    // exactly the sort of thing nobody notices until they adopt that pet.
+    for (final type in kPetTypes) {
+      testWidgets('the $type is rendered differently while it is being petted',
+          (tester) async {
+        final character = buildCharacter(type: type);
 
-      await pumpApp(
-        tester,
-        const SizedBox(
-          width: 222,
-          height: 328,
-          child: CharacterSprite(
+        await pumpApp(
+          tester,
+          const SizedBox(
             width: 222,
             height: 328,
-            motionProfile: CharacterMotionProfile.full,
+            child: CharacterSprite(
+              width: 222,
+              height: 328,
+              motionProfile: CharacterMotionProfile.full,
+            ),
           ),
-        ),
-        settingsProvider: mockSettings,
-        characterProvider: character,
-      );
-      await tester.pump(const Duration(milliseconds: 100));
+          settingsProvider: mockSettings,
+          characterProvider: character,
+        );
+        await settlePet(tester);
+        await tester.pump(const Duration(milliseconds: 100));
 
-      // The eyes are the loudest part of the reaction: a squint the idle pet
-      // never holds. Reading the eye layer's own transform is what tells the
-      // two apart without a golden file.
-      //
-      // Found by its pivot, the cat's eye anchor: the eyes are the one layer
-      // scaled about a point on the face, and every other transform in the
-      // sprite is anchored at the pet's feet or is a plain translation.
-      const eyePivot = Alignment(0.248, 0.091);
-      double eyeScale() {
-        final eyes = tester
-            .widgetList<Transform>(find.descendant(
-              of: find.byType(CharacterSprite),
-              matching: find.byType(Transform),
-            ))
-            .where((t) => t.alignment == eyePivot);
-        expect(eyes, hasLength(1), reason: 'exactly one eye layer');
-        return eyes.first.transform.getColumn(1)[1];
-      }
+        // The eyes are the loudest part of the reaction: a squint the idle
+        // pet never holds. Reading the eye layer's own transform is what
+        // tells the two apart without a golden file.
+        //
+        // Found by its pivot: the eyes are the one layer scaled about a point
+        // on the face, and every other transform in the sprite is anchored at
+        // the pet's feet or is a plain translation.
+        final eyePivot = eyesPivotFor(type);
+        double eyeScale() {
+          final eyes = tester
+              .widgetList<Transform>(find.descendant(
+                of: find.byType(CharacterSprite),
+                matching: find.byType(Transform),
+              ))
+              .where((t) => t.alignment == eyePivot);
+          expect(eyes, hasLength(1), reason: 'exactly one eye layer');
+          return eyes.first.transform.getColumn(1)[1];
+        }
 
-      final idle = eyeScale();
+        final idle = eyeScale();
 
-      character.petThePet();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 16));
+        character.petThePet();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 16));
 
-      expect(eyeScale(), lessThan(idle * 0.6),
-          reason: 'a petted pet squints; an idle one does not');
+        expect(eyeScale(), lessThan(idle * 0.6),
+            reason: 'a petted pet squints; an idle one does not');
 
-      // And it goes back to normal once the hand is off.
-      await tester.pump(const Duration(seconds: 2));
-      await tester.pump(const Duration(milliseconds: 16));
-      expect(eyeScale(), closeTo(idle, 0.2));
-    });
+        // And it goes back to normal once the hand is off.
+        await tester.pump(const Duration(seconds: 2));
+        await tester.pump(const Duration(milliseconds: 16));
+        expect(eyeScale(), closeTo(idle, 0.2));
+      });
+    }
   });
 }

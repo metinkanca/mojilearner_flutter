@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
-import '../../constants/ads.dart';
-import '../../providers/ads_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/rtl_locale.dart';
@@ -20,50 +17,24 @@ class UsernameScreen extends StatefulWidget {
 
 class _UsernameScreenState extends State<UsernameScreen> {
   final TextEditingController _controller = TextEditingController();
-  final TextEditingController _birthYearController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
-  /// Shown under the year field once a typed year has been rejected.
-  String? _birthYearError;
 
   @override
   void dispose() {
     _controller.dispose();
-    _birthYearController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
 
-  /// Whether both answers are filled in enough to be worth submitting.
-  ///
-  /// Only a shape check — whether the year is a *sensible* one is
-  /// [audienceForBirthYear]'s call, and judging that before the player has
-  /// finished typing would flag "20" on the way to "2015".
-  bool get _canContinue =>
-      _controller.text.trim().isNotEmpty &&
-      _birthYearController.text.trim().length == 4;
+  /// Whether there is a name worth submitting.
+  bool get _canContinue => _controller.text.trim().isNotEmpty;
 
   Future<void> _continue() async {
     final username = _controller.text.trim();
     if (username.isEmpty) return;
 
-    final l10n = AppLocalizations.of(context)!;
-    final year = int.tryParse(_birthYearController.text.trim());
-
-    // The year is required rather than skippable. An unanswered age question
-    // means the conservative ad treatment for everybody, which costs real
-    // revenue on every adult — and a field most people skip is not the age
-    // screen Play's Families policy is asking for either.
-    if (audienceForBirthYear(year, DateTime.now()) == AdAudience.unknown) {
-      setState(() => _birthYearError = l10n.onboardingBirthYearInvalid);
-      return;
-    }
-
-    final adsProvider = Provider.of<AdsProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     await userProvider.updateUsername(username);
-    await adsProvider.setBirthYear(year!);
 
     if (!mounted) return;
     context.go('/onboarding/target-language');
@@ -116,10 +87,10 @@ class _UsernameScreenState extends State<UsernameScreen> {
             ),
 
             const SizedBox(height: 40),
-            // Scrollable so the two fields and the on-screen keyboard
-            // cannot squeeze the layout past the bottom of a short
-            // screen -- the name field autofocuses, so the keyboard is up
-            // from the moment this screen opens.
+            // Scrollable so the field and the on-screen keyboard cannot
+            // squeeze the layout past the bottom of a short screen -- the
+            // name field autofocuses, so the keyboard is up from the moment
+            // this screen opens.
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -215,85 +186,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
                       ),
                     ),
 
-                    // The age question, asked here because this screen is already
-                    // the "tell us about you" step -- the opening before it is one
-                    // continuous flow around meeting the pet, and a form field in
-                    // the middle of that would break the thing it was built to do.
-                    //
-                    // Neutral by design: it asks for a year rather than "are you
-                    // over 13?", which signals the answer that unlocks more and is
-                    // not an age screen Play's Families policy accepts.
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border:
-                              Border.all(color: AppTheme.retroDark, width: 4),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: AppTheme.retroDark,
-                              offset: Offset(4, 4),
-                              blurRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: TextField(
-                          controller: _birthYearController,
-                          textDirection: textDirection,
-                          textAlign: textAlign,
-                          keyboardType: TextInputType.number,
-                          maxLength: 4,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          style: AppFonts.pressStart2p(
-                            fontSize: 16,
-                            color: AppTheme.retroDark,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: l10n.onboardingBirthYearHint,
-                            hintTextDirection: textDirection,
-                            hintStyle: AppFonts.pressStart2p(
-                              fontSize: 10,
-                              color: AppTheme.retroDark.withValues(alpha: 0.5),
-                            ),
-                            border: InputBorder.none,
-                            counterText: '',
-                            errorText: _birthYearError,
-                            errorStyle: AppFonts.pressStart2p(
-                              fontSize: 8,
-                              color: AppTheme.retroPrimary,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 20,
-                            ),
-                          ),
-                          onChanged: (_) {
-                            if (_birthYearError != null) {
-                              setState(() => _birthYearError = null);
-                            }
-                          },
-                          onSubmitted: (_) => _continue(),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: Text(
-                        l10n.onboardingBirthYearWhy,
-                        textDirection: textDirection,
-                        textAlign: TextAlign.center,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 7,
-                          color: AppTheme.textSecondary,
-                        ),
-                      ),
-                    ),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -304,9 +196,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: AnimatedBuilder(
-                // Both fields are required now, so the button watches both.
-                animation:
-                    Listenable.merge([_controller, _birthYearController]),
+                animation: _controller,
                 builder: (context, child) {
                   final hasText = _canContinue;
                   return GestureDetector(

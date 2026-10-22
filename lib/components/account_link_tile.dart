@@ -8,6 +8,7 @@ import '../screens/onboarding/first_launch/login_panel.dart';
 import '../services/account_service.dart';
 import '../utils/fonts.dart';
 import '../utils/rtl_locale.dart';
+import 'tutorial/retro_showcase.dart';
 
 /// The way back to signing in for a player who said "maybe later".
 ///
@@ -17,7 +18,29 @@ import '../utils/rtl_locale.dart';
 /// Renders nothing at all when there is no account layer (cloud sync did not
 /// start) — an offer that cannot be taken is worse than no offer.
 class AccountLinkTile extends StatelessWidget {
-  const AccountLinkTile({super.key});
+  const AccountLinkTile({
+    super.key,
+    this.showcaseKey,
+    this.showcaseDescription,
+  });
+
+  /// Set by the profile tour. Taken as parameters rather than wrapped at the
+  /// call site because this tile decides for itself whether it exists, and a
+  /// step registered against the empty branch would point at nothing instead
+  /// of being skipped.
+  final GlobalKey? showcaseKey;
+  final String? showcaseDescription;
+
+  Widget _showcase(Widget child) {
+    final key = showcaseKey;
+    final description = showcaseDescription;
+    if (key == null || description == null) return child;
+    return RetroShowcase(
+      showcaseKey: key,
+      description: description,
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +60,7 @@ class AccountLinkTile extends StatelessWidget {
 
     // Already attached: there is nothing to offer, only something to confirm.
     if (!account.isAnonymous) {
-      return Container(
+      return _showcase(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -58,10 +81,10 @@ class AccountLinkTile extends StatelessWidget {
             ),
           ],
         ),
-      );
+      ));
     }
 
-    return GestureDetector(
+    return _showcase(GestureDetector(
       onTap: () => _openSheet(context, account, l10n, locale, textDirection,
           usePixelFont: usePixelFont),
       child: Container(
@@ -93,7 +116,7 @@ class AccountLinkTile extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 
   void _openSheet(

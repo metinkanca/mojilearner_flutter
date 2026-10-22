@@ -10,9 +10,12 @@ import 'package:mojilearner_flutter/providers/chat_provider.dart';
 import 'package:mojilearner_flutter/providers/quiz_provider.dart';
 import 'package:mojilearner_flutter/providers/mistakes_provider.dart';
 import 'package:mojilearner_flutter/providers/settings_provider.dart';
+import 'package:mojilearner_flutter/constants/tutorials.dart';
+import 'package:mojilearner_flutter/providers/tutorial_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
 import 'package:mojilearner_flutter/providers/scenario_provider.dart';
 import 'package:mojilearner_flutter/providers/calibration_provider.dart';
+import 'package:mojilearner_flutter/providers/premium_provider.dart';
 import 'package:mojilearner_flutter/providers/ads_provider.dart';
 import 'package:mojilearner_flutter/services/ads_service.dart';
 import 'package:mojilearner_flutter/l10n/app_localizations.dart';
@@ -48,9 +51,15 @@ Future<void> pumpApp(
   QuizProvider? quizProvider,
   MistakesProvider? mistakesProvider,
   SettingsProvider? settingsProvider,
+  /// Which page tours are still on offer. Defaults to none: a screen test is
+  /// about the screen, not about being asked whether you want a tour of it.
+  /// Tests about the tours pass a fresh one — and mount a TutorialScope, since
+  /// without a registered controller the coach marks stay inert.
+  TutorialProvider? tutorialProvider,
   VocabProvider? vocabProvider,
   ScenarioProvider? scenarioProvider,
   CalibrationProvider? calibrationProvider,
+  PremiumProvider? premiumProvider,
   AdsProvider? adsProvider,
   /// Stands in for AdMob. Defaults to one that reports nothing loaded, so a
   /// screen carrying the free-coins offer simply does not show it and the
@@ -100,6 +109,9 @@ Future<void> pumpApp(
         ChangeNotifierProvider<SettingsProvider>.value(
           value: settingsProvider ?? MockSettingsProvider(),
         ),
+        ChangeNotifierProvider<TutorialProvider>.value(
+          value: tutorialProvider ?? _allToursSeen(),
+        ),
         // A real (empty) VocabProvider rather than a mock: with no items its
         // queue is empty and nothing needs stubbing.
         ChangeNotifierProvider<VocabProvider>.value(
@@ -121,6 +133,11 @@ Future<void> pumpApp(
           create: (_) => adsProvider ?? AdsProvider(),
           update: (_, user, ads) =>
               (ads ?? adsProvider ?? AdsProvider())..updateFromUser(user),
+        ),
+        // Defaults to a store that never answers, which is what a test run
+        // is. Tests about the paywall pass their own.
+        ChangeNotifierProvider<PremiumProvider>.value(
+          value: premiumProvider ?? MockPremiumProvider(),
         ),
       ],
       child: MaterialApp(
@@ -157,6 +174,11 @@ Future<void> pumpAppWithRouter(
   QuizProvider? quizProvider,
   MistakesProvider? mistakesProvider,
   SettingsProvider? settingsProvider,
+  /// Which page tours are still on offer. Defaults to none: a screen test is
+  /// about the screen, not about being asked whether you want a tour of it.
+  /// Tests about the tours pass a fresh one — and mount a TutorialScope, since
+  /// without a registered controller the coach marks stay inert.
+  TutorialProvider? tutorialProvider,
   VocabProvider? vocabProvider,
   ScenarioProvider? scenarioProvider,
   CalibrationProvider? calibrationProvider,
@@ -206,6 +228,9 @@ Future<void> pumpAppWithRouter(
         ChangeNotifierProvider<SettingsProvider>.value(
           value: settingsProvider ?? MockSettingsProvider(),
         ),
+        ChangeNotifierProvider<TutorialProvider>.value(
+          value: tutorialProvider ?? _allToursSeen(),
+        ),
         // A real (empty) VocabProvider rather than a mock: with no items its
         // queue is empty and nothing needs stubbing.
         ChangeNotifierProvider<VocabProvider>.value(
@@ -236,4 +261,18 @@ Future<void> pumpAppWithRouter(
       ),
     ),
   );
+}
+
+/// A [TutorialProvider] with every tour already retired, for the screen tests
+/// that are not about tours.
+///
+/// Loaded synchronously off a mocked empty prefs store, then marked — the
+/// awaits resolve on the next microtask, well before the first pump.
+TutorialProvider _allToursSeen() {
+  final provider = TutorialProvider();
+  provider.load();
+  for (final id in TutorialId.values) {
+    provider.markSeen(id);
+  }
+  return provider;
 }

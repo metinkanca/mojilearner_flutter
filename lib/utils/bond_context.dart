@@ -3,36 +3,18 @@ import 'package:provider/provider.dart';
 
 import '../constants/bond.dart';
 import '../l10n/app_localizations.dart';
-import '../providers/calibration_provider.dart';
-import '../providers/character_provider.dart';
-import '../providers/language_provider.dart';
+import '../providers/user_provider.dart';
 import 'bond_progress.dart';
 
-/// Resolves the pet's bond stage from the three providers that each hold a
-/// piece of it: the bond points ([CharacterProvider]), the language being
-/// learned ([LanguageProvider]) and the assessed level for that language
-/// ([CalibrationProvider]).
+/// Resolves the pet's bond stage from the XP the player has earned.
 ///
-/// Exists so the assembly has one home. Two screens need the stage, and if
-/// each did its own lookup they would eventually disagree about what happens
-/// when no language is selected or no assessment has been run.
+/// Exists so the lookup has one home: the bond meter and the wardrobe both
+/// need the stage, and two lookups would eventually disagree.
 BondStatus bondStatusOf(BuildContext context, {bool listen = true}) {
-  final character = listen
-      ? context.watch<CharacterProvider>()
-      : context.read<CharacterProvider>();
-  final calibration = listen
-      ? context.watch<CalibrationProvider>()
-      : context.read<CalibrationProvider>();
-  final language = listen
-      ? context.watch<LanguageProvider>()
-      : context.read<LanguageProvider>();
-
-  final code = language.targetLanguage?.code;
-  final assessedLevel = code == null
-      ? null
-      : calibration.getLanguageProficiency(code)?.aiDeterminedLevel;
-
-  return character.bondStatusFor(assessedLevel);
+  final user = listen
+      ? context.watch<UserProvider>()
+      : context.read<UserProvider>();
+  return BondProgress.statusFor(totalXP: user.totalXP);
 }
 
 /// The stage alone, for callers that only need to know what is unlocked.

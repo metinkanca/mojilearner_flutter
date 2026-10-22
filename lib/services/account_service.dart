@@ -73,6 +73,15 @@ abstract class AccountBackend {
   /// Current uid, or null when signed out entirely.
   String? get currentUid;
 
+  /// A fresh ID token for the current user, or null when there is nobody
+  /// signed in.
+  ///
+  /// Sent to the AI proxy so a day's allowance can be metered per account
+  /// rather than per address — see `server/src/quotas.js`. Returns null rather
+  /// than throwing when the refresh fails: an unmetered request is handled by
+  /// the server, an exception here would not be.
+  Future<String?> currentIdToken();
+
   /// The signed-in address, or null while still anonymous.
   String? get currentEmail;
 
@@ -118,6 +127,11 @@ class AccountService {
 
   bool get isAnonymous => _backend.isAnonymous;
   String? get email => _backend.currentEmail;
+
+  /// A fresh ID token for the AI proxy, so a day's allowance is metered
+  /// against this account rather than against whatever address the phone
+  /// happens to share. See `server/src/quotas.js`.
+  Future<String?> currentIdToken() => _backend.currentIdToken();
 
   /// See [AccountBackend.supportsGoogleSignIn].
   bool get supportsGoogle => _backend.supportsGoogleSignIn;

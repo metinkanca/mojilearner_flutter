@@ -50,6 +50,51 @@ void main() {
       expect(kAccessories.where((a) => a.isFreeStarter), isNotEmpty);
     });
 
+    test('never counts pass content as a free starter', () {
+      // A pass piece carries no price and no stage, so the free-starter test
+      // says yes to it unless it also excludes the pass -- and `isOwned` asks
+      // that question first, so a slip here hands every season track away.
+      for (final a in kAccessories.where((a) => a.requiredPass != null)) {
+        expect(
+          a.isFreeStarter,
+          isFalse,
+          reason: '${a.id} is pass content and would be free to everyone',
+        );
+      }
+    });
+
+    test('pass content is owned only once its tier is claimed', () {
+      const piece = AccessoryDef(
+        id: 'test_pass_piece',
+        name: 'Test Pass Piece',
+        slot: AccessorySlots.hat,
+        asset: 'assets/svgs/acc_cap.svg',
+        icon: 'X',
+        requiredPass: 'season-test',
+      );
+
+      expect(
+        AccessoryOwnership.isOwned(
+          piece,
+          unlockedItemIds: const {},
+          stage: PetStage.inseparable,
+          claimedPassItemIds: const {},
+        ),
+        isFalse,
+        reason: 'unclaimed, and no bond stage should substitute for claiming',
+      );
+
+      expect(
+        AccessoryOwnership.isOwned(
+          piece,
+          unlockedItemIds: const {},
+          stage: PetStage.curious,
+          claimedPassItemIds: const {'test_pass_piece'},
+        ),
+        isTrue,
+      );
+    });
+
     test('offers something to buy in the first slot a player opens', () {
       expect(
         accessoriesForSlot(AccessorySlots.hat).where((a) => a.price != null),

@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../components/ai_limit_sheet.dart';
+import '../constants/entitlements.dart';
 import '../constants/gold.dart';
 import '../constants/theme.dart';
-import '../components/character_sprite.dart';
+import '../components/quiz_stage.dart';
+import '../components/tutorial/tutorial_offer_host.dart';
+import '../constants/tutorials.dart';
 import '../components/quiz_rewards_popup.dart';
 import '../providers/ads_provider.dart';
 import '../providers/user_provider.dart';
@@ -76,6 +80,10 @@ class _QuizScreenState extends State<QuizScreen> {
   bool _showExplanation = false;
   String? _selectedAnswer;
 
+  /// Bumped on a right answer, which is what plays the hearts. See
+  /// [QuizClassFloor.heartBurstId].
+  int _heartBursts = 0;
+
   /// Questions built from the review queue. Empty until
   /// [_buildSrsQuestions] runs, and left empty when the queue is too thin
   /// to build a fair set.
@@ -101,6 +109,13 @@ class _QuizScreenState extends State<QuizScreen> {
   /// cached quiz would otherwise pay full price every time. What the payout
   /// should follow is whether the schedule had work for the player today.
   bool _drawnFromDueQueue = false;
+
+  /// Set when the day's AI quiz allowance turned the generation away.
+  ///
+  /// Surfaced once the local quiz has settled rather than at the moment of the
+  /// refusal, so the player sees the quiz they can take before being told what
+  /// they cannot have. A wall shown over an empty screen reads as a door.
+  bool _aiQuizLimitReached = false;
 
   @override
   void initState() {
@@ -148,6 +163,11 @@ class _QuizScreenState extends State<QuizScreen> {
         _selectedAnswer = null;
       }
     });
+
+    if (_aiQuizLimitReached) {
+      _aiQuizLimitReached = false;
+      await AiLimitSheet.show(context, AiSpend.quiz);
+    }
   }
 
   void _restoreProgress(QuizProvider quizProvider) {
@@ -199,6 +219,17 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (!AiService.instance.isAiAvailable) return const [];
 
+    // The daily allowance, checked after the cache so revisiting a quiz the
+    // player already paid for costs nothing, and before the request so the
+    // call is never made. Returning empty leaves the locally-built SRS quiz
+    // on screen, which is the whole reason a cap is defensible here: the
+    // player is stopped from *generating*, never from studying.
+    final user = Provider.of<UserProvider>(context, listen: false);
+    if (!user.canSpendAi(AiSpend.quiz)) {
+      _aiQuizLimitReached = true;
+      return const [];
+    }
+
     final guard = AiGuard.checkRequest(
       kind: AiRequestKind.quiz,
       source: 'quiz_screen',
@@ -238,6 +269,15 @@ class _QuizScreenState extends State<QuizScreen> {
         // Only ids the model was actually shown may reschedule an item.
         allowedReviewItemIds: briefed.offeredIds,
       );
+
+      // Charged on a generation that produced something, not on the attempt.
+      // A call that failed or came back unusable still cost the provider, but
+      // the player did not get a quiz out of it, and taking their allowance
+      // for the app's bad day is how a cap starts feeling arbitrary. The
+      // proxy's own budget ledger is what bounds the money.
+      if (questions.isNotEmpty) {
+        await user.spendAi(AiSpend.quiz);
+      }
 
       if (questions.isNotEmpty) {
         await quizProvider.cacheQuiz(CachedQuiz(
@@ -284,6 +324,7 @@ class _QuizScreenState extends State<QuizScreen> {
       _showExplanation = true;
       if (isCorrect) {
         _score++;
+        _heartBursts++;
       }
     });
 
@@ -296,6 +337,18 @@ class _QuizScreenState extends State<QuizScreen> {
         reviewItemId,
         isCorrect ? ReviewGrade.good : ReviewGrade.again,
       );
+    }
+  }
+
+  /// Out of the quiz, the way it was come in: back to the town, with the pet
+  /// where it was left, at the school's door. Reached some other way, with no
+  /// town under it, it goes to the town rather than home -- the quizzes live
+  /// there now.
+  void _leaveQuiz(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/scenarios');
     }
   }
 
@@ -315,7 +368,10 @@ class _QuizScreenState extends State<QuizScreen> {
       // Scale before applying the pet deltas, while the pet is still in its
       // pre-quiz condition — a sick pet earns half.
       final wasSick = characterProvider.isSick;
-      final grantedXp = characterProvider.scaleReward(reward.xpReward);
+      // XP is not scaled by sickness, unlike the coins and the happiness
+      // bump below. The pet's bond stage is projected from XP, and a quiz
+      // taken with a hungry pet still counts as learning together.
+      final grantedXp = reward.xpReward;
 
       // A quiz the spaced-repetition schedule did not ask for pays a
       // fraction. The schedule already knows how much there is worth studying
@@ -329,13 +385,7 @@ class _QuizScreenState extends State<QuizScreen> {
         happinessDelta: reward.happinessDelta,
         hungerDelta: reward.hungerDelta,
       );
-      // Bond, unlike the happiness bump above, is not scaled by sickness and
-      // not spendable — a quiz taken with a hungry pet still counts as
-      // learning together.
-      characterProvider.recordQuizLearning(
-        correctAnswers: _score,
-        totalQuestions: _questions.length,
-      );
+      characterProvider.recordLearningMoment();
       await userProvider.addXp(grantedXp);
       final coinAward = await userProvider.awardLearningGold(
         characterProvider.scaleReward(rawCoins),
@@ -374,7 +424,7 @@ class _QuizScreenState extends State<QuizScreen> {
       await adsProvider.maybeShowInterstitial();
 
       if (!mounted) return;
-      context.go('/');
+      _leaveQuiz(context);
     } else {
       setState(() {
         _showExplanation = false;
@@ -384,517 +434,243 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
-  Widget _pixel(Color color) {
-    return Container(width: 8, height: 8, color: color);
-  }
-
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context);
-    final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
-    
+    final textDirection =
+        textDirectionForLocale(Localizations.localeOf(context));
+
     // Safety check just in case
-    if (_questions.isEmpty) return const SizedBox.shrink();
+    final questionData =
+        _questions.isEmpty ? null : _questions[_currentQuestionIndex];
 
-    final questionData = _questions[_currentQuestionIndex];
-    final mainTopic = questionData.topic;
-    final subText = questionData.question.isEmpty
-        ? 'Select the correct option'
-        : questionData.question;
-    final options = questionData.options;
-    
-    // Bubble logic
-    final bubbleText = _showExplanation 
-        ? (questionData.explanation.isEmpty
-            ? "Great job!"
-            : questionData.explanation)
-        : "You got this!";
-
-    return Container(
-      color: AppTheme.retroSky, // Consistent BG
-      child: Stack(
-        children: [
-          // 1. Background Layer
-          Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Container(
-                  color: AppTheme.retroSky,
-                  child: Stack(
-                    children: [
-                       Positioned(
-                         top: 40, left: 30,
-                         child: Container(
-                           width: 48, height: 48, 
-                           color: AppTheme.retroAccent, 
-                           child: Container(decoration: BoxDecoration(border: Border.all(width: 4, color: AppTheme.retroDark)))
-                         )
-                      ),
-                      Positioned(
-                         top: 70, right: 40,
-                         child: Row(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                              Container(width: 64, height: 32, decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppTheme.retroDark, width: 4))),
-                              Transform.translate(offset: const Offset(-16, -16), child: Container(width: 48, height: 32, decoration: BoxDecoration(color: Colors.white, border: Border.all(color: AppTheme.retroDark, width: 4)))),
-                           ],
-                         )
-                      ),
-                    ],
+    return TutorialOfferHost(
+      id: TutorialId.quiz,
+      // Nothing worth pointing at until a real question is on screen: while
+      // the tailored set is being written the card says "PREPARING..." and
+      // the options are placeholders.
+      enabled: questionData != null && !_isGenerating,
+      steps: () => [
+        quizHeaderShowcaseKey,
+        quizQuestionShowcaseKey,
+        quizOptionsShowcaseKey,
+        quizContinueShowcaseKey,
+      ],
+      child: questionData == null
+          ? const SizedBox.shrink()
+          : QuizStage(
+            showcase: true,
+            // No level here: it is a number about the player, and this is a
+            // lesson. The meter takes the room so Pause stays at the end even
+            // when the meter is hidden.
+            header: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: _allowanceMeter(userProvider, l10n, textDirection),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 4, 
-                child: Container(
-                  width: double.infinity,
-                  color: AppTheme.retroGrass,
-                  child: Stack(
-                    children: [
-                        Align(alignment: Alignment.topCenter, child: Container(height: 4, color: AppTheme.retroDark)),
-                        Positioned(top: 8, left: 0, right: 0, child: Container(height: 16, color: AppTheme.retroGrassDark.withValues(alpha: 0.2))),
-                        Positioned(top: 40, left: 40, child: _pixel(AppTheme.retroGrassDark)),
-                        Positioned(top: 48, left: 48, child: _pixel(AppTheme.retroGrassDark)),
-                        Positioned(top: 80, right: 80, child: _pixel(AppTheme.retroGrassDark)),
-                        Positioned(top: 150, left: 100, child: _pixel(AppTheme.retroGrassDark)),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          // 2. Main Content
-          SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false, 
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16), // Bottom padding for scrolling
-                    child: Column(
-                      children: [
-                        // Top Bar
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Level Pill (Matched to Home Screen)
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 24, height: 24,
-                                      decoration: BoxDecoration(
-                                        color: AppTheme.retroAccent,
-                                        border: Border.all(color: AppTheme.retroDark, width: 2),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '${userProvider.stats.level}', 
-                                          textDirection: TextDirection.ltr,
-                                          textAlign: TextAlign.left,
-                                          style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark)
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${l10n.xp}: ${userProvider.stats.currentLevelXP}/${userProvider.stats.nextLevelXP}',
-                                          textDirection: TextDirection.ltr,
-                                          textAlign: TextAlign.left,
-                                          style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Container(
-                                          width: 80, height: 8,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[300],
-                                            border: Border.all(color: AppTheme.retroDark, width: 2),
-                                          ),
-                                          child: FractionallySizedBox(
-                                            alignment: Alignment.centerLeft,
-                                            widthFactor: userProvider.stats.progress,
-                                            child: Container(color: AppTheme.retroPrimary),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              // Pause Button
-                              Container(
-                                width: 48, height: 48,
-                                decoration: BoxDecoration(
-                                  color: AppTheme.retroUi,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
-                                ),
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  // No round ink ripple inside the square
-                                  // retro frame.
-                                  style: const ButtonStyle(
-                                    overlayColor: WidgetStatePropertyAll(
-                                        Colors.transparent),
-                                  ),
-                                  icon: const Icon(Icons.pause, color: AppTheme.retroDark),
-                                  onPressed: () {
-                                     // Use standard dialog
-                                     showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (context) => AlertDialog(
-                                          backgroundColor: Colors.white,
-                                          shape: const RoundedRectangleBorder(),
-                                          contentPadding: const EdgeInsets.all(24),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                l10n.quizPausedTitle.toUpperCase(),
-                                                textDirection: textDirection,
-                                                textAlign: TextAlign.center,
-                                                style: AppFonts.pressStart2p(
-                                                  fontSize: 16,
-                                                  color: AppTheme.retroDark,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              Text(
-                                                l10n.quizPausedPrompt,
-                                                textDirection: textDirection,
-                                                textAlign: TextAlign.center,
-                                                style: AppFonts.pressStart2p(
-                                                  fontSize: 10,
-                                                  height: 1.5,
-                                                  color: Colors.grey[700],
-                                                ),
-                                              ),
-                                              const SizedBox(height: 24),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  // Play Button
-                                                  GestureDetector(
-                                                    onTap: () => Navigator.pop(context),
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                                      decoration: BoxDecoration(
-                                                        color: AppTheme.retroGreen,
-                                                        border: Border.all(color: AppTheme.retroDark, width: 2),
-                                                        boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
-                                                      ),
-                                                      child: Text(
-                                                        l10n.quizPlay.toUpperCase(),
-                                                        textDirection: textDirection,
-                                                        textAlign: TextAlign.center,
-                                                        style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  // Pause Button
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      // Save current progress and exit to home
-                                                      final quizProvider = Provider.of<QuizProvider>(context, listen: false);
-                                                      await quizProvider.saveProgress(_currentQuestionIndex, _score);
-                                                      if (context.mounted) {
-                                                        Navigator.pop(context); // Close dialog
-                                                        context.go('/'); // Go home - progress will be restored next time
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                                      decoration: BoxDecoration(
-                                                        color: AppTheme.retroAccent,
-                                                        border: Border.all(color: AppTheme.retroDark, width: 2),
-                                                        boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
-                                                      ),
-                                                      child: Text(
-                                                        l10n.quizPause.toUpperCase(),
-                                                        textDirection: textDirection,
-                                                        textAlign: TextAlign.center,
-                                                        style: AppFonts.pressStart2p(fontSize: 8, color: AppTheme.retroDark),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  // Exit Button
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                       final quizProvider = Provider.of<QuizProvider>(context, listen: false);
-                                                       await quizProvider.clearProgress();
-                                                       if (context.mounted) {
-                                                         Navigator.pop(context);
-                                                         context.go('/');
-                                                       }
-                                                    }, 
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                                      decoration: BoxDecoration(
-                                                        color: AppTheme.retroPrimary,
-                                                        border: Border.all(color: AppTheme.retroDark, width: 2),
-                                                        boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
-                                                      ),
-                                                      child: Text(
-                                                        l10n.quizExit.toUpperCase(),
-                                                        textDirection: textDirection,
-                                                        textAlign: TextAlign.center,
-                                                        style: AppFonts.pressStart2p(fontSize: 8, color: Colors.white),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                     );
-                                  }, 
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Question Box
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            alignment: Alignment.topCenter,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                constraints: const BoxConstraints(minHeight: 180),
-                                padding: const EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(6, 6), blurRadius: 0)],
-                                ),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 32), // Space for header overlap
-                                    Text(
-                                      subText, // e.g. "How do you say..."
-                                      textDirection: textDirection,
-                                      textAlign: TextAlign.center,
-                                      style: AppFonts.pressStart2p(
-                                        fontSize: 10,
-                                        height: 1.8,
-                                        color: Colors.grey[600],
-                                        decoration: TextDecoration.none,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      mainTopic, // e.g. "Greetings"
-                                      textDirection: textDirection,
-                                      textAlign: TextAlign.center,
-                                      style: AppFonts.pressStart2p(
-                                        fontSize: 20,
-                                        height: 1.4,
-                                        color: AppTheme.retroDark,
-                                        decoration: TextDecoration.none,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // "Question X/10" Header
-                              Positioned(
-                                top: -16,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.retroPrimary,
-                                    border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  ),
-                                  child: Text(
-                                    // While the tailored quiz is still being
-                                    // written, say so rather than counting
-                                    // questions that are about to be replaced.
-                                    _isGenerating
-                                        ? "PREPARING..."
-                                        : "QUESTION ${_currentQuestionIndex + 1}/${_questions.length}",
-                                    textDirection: TextDirection.ltr,
-                                    textAlign: TextAlign.left,
-                                    style: AppFonts.pressStart2p(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Corner dots
-                              Positioned(top: 8, left: 8, child: _pixel(AppTheme.retroDark)),
-                              Positioned(top: 8, right: 8, child: _pixel(AppTheme.retroDark)),
-                              Positioned(bottom: 8, left: 8, child: _pixel(AppTheme.retroDark)),
-                              Positioned(bottom: 8, right: 8, child: _pixel(AppTheme.retroDark)),
-                            ],
-                          ),
-                        ),
-
-                        // Spacer to push content down gently, but collapses on small screens
-                        const SizedBox(height: 12),
-
-                        // Options Grid
-                        // Options Grid (Custom Wrap/Column to avoid ShrinkWrappingViewport issues)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < options.length; i += 2)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 12.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(child: _buildOption(options[i], questionData)),
-                                      const SizedBox(width: 16),
-                                      if (i + 1 < options.length)
-                                        Expanded(child: _buildOption(options[i + 1], questionData))
-                                      else
-                                        const Spacer(),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        
-                        // Spacer pushes the Pet to the bottom
-                        const SizedBox(height: 24),
-
-                        // Character & Speech Bubble
-                        Padding(
-                          padding: const EdgeInsets.only(right: 24, bottom: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                               // Speech Bubble
-                               Container(
-                                 padding: const EdgeInsets.all(12),
-                                 margin: const EdgeInsets.only(right: 8), 
-                                 constraints: const BoxConstraints(maxWidth: 180),
-                                 decoration: BoxDecoration(
-                                   color: Colors.white,
-                                   border: Border.all(color: AppTheme.retroDark, width: 3),
-                                   boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(3, 3), blurRadius: 0)],
-                                 ),
-                                 child: Text(
-                                   bubbleText,
-                                   textDirection: textDirection,
-                                   textAlign: textAlign,
-                                   style: AppFonts.pressStart2p(fontSize: 8, height: 1.5, color: AppTheme.retroDark),
-                                 ),
-                               ),
-                               // Pet Avatar
-                               const CharacterSprite(
-                                width: 96,
-                                height: 96,
-                               ),
-                            ],
-                          ),
-                        ),
-
-                        // Continue Button (appears after answer is selected)
-                        if (_showExplanation)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: GestureDetector(
-                              onTap: _goToNextQuestion,
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.retroPrimary,
-                                  border: Border.all(color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: AppTheme.retroDark,
-                                      offset: Offset(4, 4),
-                                      blurRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  'CONTINUE',
-                                  textDirection: textDirection,
-                                  textAlign: TextAlign.center,
-                                  style: AppFonts.pressStart2p(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
+                _pauseButton(l10n, textDirection),
               ],
             ),
+            // While the tailored quiz is still being written, say so rather than
+            // counting questions that are about to be replaced.
+            badgeLabel: _isGenerating
+                ? l10n.quizPreparing
+                : l10n.quizQuestionCounter(
+                    _currentQuestionIndex + 1, _questions.length),
+            prompt: questionData.question.isEmpty
+                ? l10n.quizPickAnswer
+                : questionData.question,
+            topic: questionData.topic,
+            options: questionData.options,
+            stateOf: (option) {
+              if (!_showExplanation) return QuizOptionState.idle;
+              if (option == questionData.correct) return QuizOptionState.correct;
+              if (option == _selectedAnswer) return QuizOptionState.wrong;
+              return QuizOptionState.idle;
+            },
+            onAnswer: _showExplanation ? null : _handleAnswer,
+            bubbleText: _showExplanation
+                ? (questionData.explanation.isEmpty
+                    ? l10n.quizWellDone
+                    : questionData.explanation)
+                : l10n.quizEncouragement,
+            heartBurstId: _heartBursts,
+            continueLabel: l10n.continueBtn,
+            onContinue: _showExplanation ? _goToNextQuestion : null,
           ),
-        ],
+    );
+  }
+
+  /// Today's AI quizzes, spent against the allowance.
+  ///
+  /// Added because without it the wall was the first time anyone learned a
+  /// limit existed — a rule you only meet by breaking it reads as the app
+  /// changing its mind, not as a rule. A player who can see two of three left
+  /// is being told what to expect; one who cannot is being ambushed.
+  ///
+  /// Hidden for members, who have enough that counting is noise rather than
+  /// information, and hidden once the meter is spent — at that point the sheet
+  /// has already said it, and a zero sitting in the header while the player
+  /// works through the local quiz is a reproach for studying.
+  Widget _allowanceMeter(
+    UserProvider userProvider,
+    AppLocalizations l10n,
+    TextDirection textDirection,
+  ) {
+    final remaining = userProvider.aiRemaining(AiSpend.quiz);
+    if (userProvider.isPremium || remaining <= 0) {
+      return const SizedBox.shrink();
+    }
+
+    final total = userProvider.aiLimit(AiSpend.quiz);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Text(
+        l10n.aiLimitUsage(total - remaining, total),
+        textDirection: textDirection,
+        textAlign: TextAlign.center,
+        style: AppFonts.pressStart2p(
+          fontSize: 8,
+          color: AppTheme.textSecondary,
+        ),
       ),
     );
   }
 
-  Widget _buildOption(String opt, QuizQuestion questionData) {
-    bool isSelected = _selectedAnswer == opt;
-    bool isCorrect = opt == questionData.correct;
-    Color bgColor = Colors.white;
-    
-    if (_showExplanation) {
-      if (isCorrect) {
-        bgColor = AppTheme.retroGrass;
-      } else if (isSelected) {
-        bgColor = AppTheme.retroPrimary;
-      }
-    }
+  Widget _pauseButton(AppLocalizations l10n, TextDirection textDirection) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppTheme.retroUi,
+        border: Border.all(color: AppTheme.retroDark, width: 4),
+        boxShadow: const [
+          BoxShadow(
+              color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)
+        ],
+      ),
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        // No round ink ripple inside the square retro frame.
+        style: const ButtonStyle(
+          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        ),
+        icon: const Icon(Icons.pause, color: AppTheme.retroDark),
+        onPressed: () => _showPauseDialog(l10n, textDirection),
+      ),
+    );
+  }
 
-    return GestureDetector(
-      onTap: () => _handleAnswer(opt),
-      child: AspectRatio(
-        aspectRatio: 1.4,
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: bgColor,
-            border: Border.all(color: AppTheme.retroDark, width: 4),
-            boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(4, 4), blurRadius: 0)],
-          ),
-          child: Text(
-            opt,
-            textDirection: textDirectionForLocale(Localizations.localeOf(context)),
-            textAlign: TextAlign.center,
-            style: AppFonts.pressStart2p(
-              fontSize: 10,
-              color: AppTheme.retroDark,
-              height: 1.5,
+  void _showPauseDialog(AppLocalizations l10n, TextDirection textDirection) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(),
+        contentPadding: const EdgeInsets.all(24),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.quizPausedTitle.toUpperCase(),
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: AppFonts.pressStart2p(
+                fontSize: 16,
+                color: AppTheme.retroDark,
+              ),
             ),
-          ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.quizPausedPrompt,
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: AppFonts.pressStart2p(
+                fontSize: 10,
+                height: 1.5,
+                color: Colors.grey[700],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _pauseAction(
+                  label: l10n.quizPlay.toUpperCase(),
+                  color: AppTheme.retroGreen,
+                  textColor: AppTheme.retroDark,
+                  textDirection: textDirection,
+                  onTap: () => Navigator.pop(context),
+                ),
+                _pauseAction(
+                  label: l10n.quizPause.toUpperCase(),
+                  color: AppTheme.retroAccent,
+                  textColor: AppTheme.retroDark,
+                  textDirection: textDirection,
+                  onTap: () async {
+                    // Save current progress and exit to home.
+                    final quizProvider =
+                        Provider.of<QuizProvider>(context, listen: false);
+                    await quizProvider.saveProgress(
+                        _currentQuestionIndex, _score);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                      // Progress will be restored next time.
+                      _leaveQuiz(context);
+                    }
+                  },
+                ),
+                _pauseAction(
+                  label: l10n.quizExit.toUpperCase(),
+                  color: AppTheme.retroPrimary,
+                  textColor: Colors.white,
+                  textDirection: textDirection,
+                  onTap: () async {
+                    final quizProvider =
+                        Provider.of<QuizProvider>(context, listen: false);
+                    await quizProvider.clearProgress();
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                      _leaveQuiz(context);
+                    }
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _pauseAction({
+    required String label,
+    required Color color,
+    required Color textColor,
+    required TextDirection textDirection,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: color,
+          border: Border.all(color: AppTheme.retroDark, width: 2),
+          boxShadow: const [
+            BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))
+          ],
+        ),
+        child: Text(
+          label,
+          textDirection: textDirection,
+          textAlign: TextAlign.center,
+          style: AppFonts.pressStart2p(fontSize: 8, color: textColor),
         ),
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/components/daily_rewards_dialog.dart';
+import 'package:mojilearner_flutter/components/reward_art.dart';
 import '../helpers/test_fixtures.dart';
 import '../helpers/pump_app.dart';
 import '../helpers/mock_providers.dart';
@@ -36,9 +38,19 @@ void main() {
 
       // Assert
       expect(find.text('Day 5 Streak'), findsOneWidget);
-      expect(find.text('🔥'), findsOneWidget);
+      // The flame is drawn, not typed. See [kFlameAsset].
+      expect(find.text('🔥'), findsNothing);
+      expect(
+        find.byWidgetPredicate((w) =>
+            w is SvgPicture &&
+            (w.bytesLoader as SvgAssetLoader).assetName == kFlameAsset),
+        findsOneWidget,
+      );
     });
 
+    // The reward is drawn from the app's own art, not from whatever the
+    // platform's emoji font happens to ship, so the assertion is that a
+    // picture is there and that no emoji is left doubling it.
     testWidgets('should show coin reward icon and amount', (tester) async {
       // Arrange
       final rewardInfo = TestFixtures.createTestReward(dayNumber: 1);
@@ -54,8 +66,10 @@ void main() {
         languageProvider: mockLanguage,
       );
 
-      // Assert - coin icon is displayed
-      expect(find.text('🪙'), findsWidgets);
+      // Assert - the coin is a picture, and the amount reads as coins
+      expect(find.byType(SvgPicture), findsWidgets);
+      expect(find.text('🪙'), findsNothing);
+      expect(find.text('12 coins'), findsOneWidget);
     });
 
     testWidgets('should show item reward icon and quantity when applicable',
@@ -63,7 +77,7 @@ void main() {
       // Arrange
       final rewardInfo = TestFixtures.createTestReward(
         dayNumber: 3,
-        currentStreak: 3,
+        claimCount: 3,
       );
 
       // Act
@@ -82,16 +96,17 @@ void main() {
       expect(find.byType(DailyRewardsDialog), findsOneWidget);
     });
 
-    testWidgets('should display "Welcome back!" message when streakReset=true',
+    // The pill is the only place the run of days is shown, and it is a
+    // different number from the position in the cycle the seven boxes below
+    // it draw. Someone thirty days in on the sixth reward sees both.
+    testWidgets('shows the run of days, not the place in the cycle',
         (tester) async {
-      // Arrange
       final rewardInfo = TestFixtures.createTestReward(
-        dayNumber: 1,
-        streakReset: true,
-        currentStreak: 1,
+        dayNumber: 6,
+        claimCount: 34,
+        loginStreak: 30,
       );
 
-      // Act
       await pumpApp(
         tester,
         DailyRewardsDialog(
@@ -102,8 +117,32 @@ void main() {
         languageProvider: mockLanguage,
       );
 
-      // Assert
-      expect(find.text('Welcome back! Starting fresh'), findsOneWidget);
+      expect(find.text('Day 30 Streak'), findsOneWidget);
+      expect(find.text('Day 6 Streak'), findsNothing);
+    });
+
+    // Coming back after a gap is not an event the dialog marks. The cycle
+    // carries on from where it stopped, so day one after a month away is the
+    // same day one as any other — there is nothing to apologise for.
+    testWidgets('never greets a returning player with a broken run',
+        (tester) async {
+      final rewardInfo = TestFixtures.createTestReward(
+        dayNumber: 1,
+        claimCount: 1,
+      );
+
+      await pumpApp(
+        tester,
+        DailyRewardsDialog(
+          rewardInfo: rewardInfo,
+          onClaim: () {},
+        ),
+        settingsProvider: mockSettings,
+        languageProvider: mockLanguage,
+      );
+
+      expect(find.textContaining('Starting fresh'), findsNothing);
+      expect(find.text('Keep it going!'), findsOneWidget);
     });
 
     testWidgets('should display "Amazing!" message when high streak',
@@ -111,8 +150,8 @@ void main() {
       // Arrange
       final rewardInfo = TestFixtures.createTestReward(
         dayNumber: 7,
-        streakReset: false,
-        currentStreak: 7,
+        claimCount: 7,
+        loginStreak: 7,
       );
 
       // Act
@@ -135,8 +174,7 @@ void main() {
       // Arrange
       final rewardInfo = TestFixtures.createTestReward(
         dayNumber: 3,
-        streakReset: false,
-        currentStreak: 3,
+        claimCount: 3,
       );
 
       // Act
@@ -158,7 +196,7 @@ void main() {
       // Arrange
       final rewardInfo = TestFixtures.createTestReward(
         dayNumber: 4,
-        currentStreak: 4,
+        claimCount: 4,
       );
 
       // Act
@@ -179,8 +217,43 @@ void main() {
       );
       expect(containers, findsWidgets);
 
-      // Check for checkmarks in completed days (4 checkmarks)
+      // Days 1-3 are collected and show a check. Day 4 is today: its reward
+      // is still on the table until the claim button is pressed, so it draws
+      // the reward rather than a check.
+      expect(find.text('✓'), findsNWidgets(3));
+      for (var day = 1; day <= 7; day++) {
+        expect(find.byKey(ValueKey('daily-reward-day-$day')), findsOneWidget);
+      }
+    });
+
+    // The boundary box: today is only stamped once the reward is actually
+    // taken, so the row never claims credit for a day still in progress.
+    testWidgets("today's box turns into a check once claimed",
+        (tester) async {
+      final rewardInfo = TestFixtures.createTestReward(
+        dayNumber: 4,
+        claimCount: 4,
+      );
+
+      await pumpApp(
+        tester,
+        DailyRewardsDialog(
+          rewardInfo: rewardInfo,
+          onClaim: () {},
+        ),
+        settingsProvider: mockSettings,
+        languageProvider: mockLanguage,
+      );
+
+      expect(find.text('✓'), findsNWidgets(3));
+
+      await tester.tap(find.text('CLAIM REWARD'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
       expect(find.text('✓'), findsNWidgets(4));
+
+      await tester.pumpAndSettle(const Duration(seconds: 2));
     });
 
     testWidgets('should have claim button that exists and is tappable',

@@ -27,8 +27,6 @@ class FallbackPrompts {
     switch (spec.mode) {
       case AiPromptMode.chat:
         return _chat(spec);
-      case AiPromptMode.pet:
-        return _pet(spec);
       case AiPromptMode.assessment:
         return _assessment(spec);
       case AiPromptMode.quiz:
@@ -45,7 +43,6 @@ class FallbackPrompts {
       case AiPromptMode.level:
         return _level(spec);
       case AiPromptMode.chat:
-      case AiPromptMode.pet:
       case AiPromptMode.assessment:
         return null;
     }
@@ -101,24 +98,6 @@ MISTAKE HANDLING:
 If the user makes a clear grammar or vocabulary mistake, append this HIDDEN block at the very end:
 |||MISTAKE|||
 { "original": "user's wrong text", "correction": "correct text", "explanation": "brief reason in $native", "type": "grammar" }
-''';
-  }
-
-  static String _pet(AiPromptSpec spec) {
-    final target = _languageName(spec.params['targetCode'], 'Spanish');
-
-    return '''
-You are a friendly virtual pet living on the home screen of a language app.
-The user is learning $target.
-
-${_safetyFloor('Being this pet')}
-Keep responses to 1-3 short sentences. Never give long explanations, never ask
-multiple questions at once, and stay encouraging, warm and simple.
-
-MISTAKE TRACKING:
-If the user makes a mistake, append this HIDDEN block at the very end:
-|||MISTAKE|||
-{ "original": "user's wrong text", "correction": "correct text", "explanation": "brief reason", "type": "grammar" }
 ''';
   }
 

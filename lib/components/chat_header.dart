@@ -2,13 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../providers/user_provider.dart';
+import '../utils/pixel_clock.dart';
 import '../utils/rtl_locale.dart';
 import '../../utils/fonts.dart';
+import 'tutorial/retro_showcase.dart';
 
 class ChatHeader extends StatelessWidget {
   final VoidCallback onOpenSidebar;
 
-  const ChatHeader({super.key, required this.onOpenSidebar});
+  /// Set by the chat tour. The step is about the hamburger specifically —
+  /// what is behind it — so it points at the button rather than the bar.
+  final GlobalKey? menuShowcaseKey;
+  final String? menuShowcaseDescription;
+
+  const ChatHeader({
+    super.key,
+    required this.onOpenSidebar,
+    this.menuShowcaseKey,
+    this.menuShowcaseDescription,
+  });
+
+  Widget _menuShowcase(Widget child) {
+    final key = menuShowcaseKey;
+    final description = menuShowcaseDescription;
+    if (key == null || description == null) return child;
+    return RetroShowcase(
+      showcaseKey: key,
+      description: description,
+      isFirst: true,
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +57,7 @@ class ChatHeader extends StatelessWidget {
             Row(
               children: [
                 // Hamburger Menu (Square Box)
-                GestureDetector(
+                _menuShowcase(GestureDetector(
                   onTap: onOpenSidebar,
                   child: Container(
                     width: 32, 
@@ -57,7 +81,7 @@ class ChatHeader extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+                )),
                 const SizedBox(width: 12),
                 // Title
                 Column(
@@ -127,28 +151,41 @@ class BlinkingDot extends StatefulWidget {
   State<BlinkingDot> createState() => _BlinkingDotState();
 }
 
-class _BlinkingDotState extends State<BlinkingDot> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _BlinkingDotState extends State<BlinkingDot> {
+  /// Steps each way of the pulse: up over a second, back over a second, a
+  /// [PixelClock] step at a time. A smooth fade asked for a frame at every
+  /// refresh of the screen, for as long as the chat was open.
+  static const int _half = PixelClock.fps;
+
+  late final PixelClockListener _clock = PixelClockListener(_step);
+  final ValueNotifier<int> _frame = ValueNotifier(0);
+
+  void _step() => _frame.value = (_frame.value + 1) % (2 * _half);
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1))..repeat(reverse: true);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _clock.update(context, animate: true);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _clock.dispose();
+    _frame.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _controller,
+    return ValueListenableBuilder<int>(
+      valueListenable: _frame,
+      builder: (context, frame, dot) => Opacity(
+        opacity: (frame <= _half ? frame : 2 * _half - frame) / _half,
+        child: dot,
+      ),
       child: Container(
-        width: 8, 
-        height: 8, 
+        width: 8,
+        height: 8,
         color: AppTheme.retroGrass
       ),
     );

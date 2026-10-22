@@ -281,7 +281,7 @@ class _MockConversationalAssessmentScreenState
                     child: Text(
                       'MOCK',
                       textDirection: textDirection,
-                      textAlign: textAlign,
+                      textAlign: TextAlign.center,
                       style: AppFonts.pressStart2p(
                         fontSize: 8,
                         color: AppTheme.retroDark,
@@ -292,7 +292,7 @@ class _MockConversationalAssessmentScreenState
                   Text(
                     l10n.chatAssessment,
                     textDirection: textDirection,
-                    textAlign: textAlign,
+                    textAlign: TextAlign.center,
                     style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: AppTheme.retroDark,

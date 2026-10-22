@@ -138,7 +138,7 @@ class _PetHeartsState extends State<PetHearts>
           child: CustomPaint(
             size: Size(base * _scales[index] * pop,
                 base * _scales[index] * pop * _kHeartRows / _kHeartCols),
-            painter: const _PixelHeart(),
+            painter: const PixelHeartPainter(),
           ),
         ),
       ),
@@ -152,8 +152,8 @@ class _PetHeartsState extends State<PetHearts>
 /// the game is set in has no such character. Painting it makes the heart match
 /// the pet's own art — same hard outline, same blocky edges — and removes the
 /// question of which fonts on which devices happen to carry the glyph.
-class _PixelHeart extends CustomPainter {
-  const _PixelHeart();
+class PixelHeartPainter extends CustomPainter {
+  const PixelHeartPainter();
 
   /// '#' outline, 'o' fill, '.' empty. Read top-down.
   static const List<String> _pattern = [
@@ -188,5 +188,5 @@ class _PixelHeart extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_PixelHeart oldDelegate) => false;
+  bool shouldRepaint(PixelHeartPainter oldDelegate) => false;
 }

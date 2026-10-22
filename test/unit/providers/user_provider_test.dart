@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/constants/gold.dart';
 import 'package:mojilearner_flutter/constants/progression.dart';
 import 'package:mojilearner_flutter/providers/user_provider.dart';
+import 'package:mojilearner_flutter/utils/progression_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/test_fixtures.dart';
@@ -10,6 +11,9 @@ import '../../helpers/test_fixtures.dart';
 final int welcomeCoins = levelRewards
     .firstWhere((r) => r.level == ProgressionConstants.welcomeRewardLevel)
     .value;
+
+/// Ten XP short of level 2, whatever the curve is tuned to.
+final int justShyOfLevel2 = ProgressionUtils.getTotalXPForLevel(2) - 10;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +42,11 @@ void main() {
       // Assert
       expect(provider.username, equals('TestUser'));
       expect(provider.coins, equals(500));
-      expect(provider.streak, equals(5));
+      expect(provider.rewardClaims, equals(5));
+      // No `login_streak` in this save, which is what everyone playing before
+      // the two counters were told apart looks like: the claim count is the
+      // better of the two guesses, being days they did turn up.
+      expect(provider.loginStreak, equals(5));
       expect(provider.stats.totalXP, equals(250));
       expect(provider.isLoading, isFalse);
     });
@@ -53,7 +61,8 @@ void main() {
 
       // Assert - a new player gets the starting float plus the welcome gift
       expect(provider.coins, equals(UserProvider.startingCoins + welcomeCoins));
-      expect(provider.streak, equals(0));
+      expect(provider.rewardClaims, equals(0));
+      expect(provider.loginStreak, equals(0));
       expect(provider.stats.totalXP, equals(0));
       expect(provider.stats.level, equals(1));
     });
@@ -144,22 +153,22 @@ void main() {
 
     test('should trigger level up when XP crosses threshold', () async {
       // Arrange
-      SharedPreferences.setMockInitialValues({'total_xp': 90});
+      SharedPreferences.setMockInitialValues({'total_xp': justShyOfLevel2});
       final provider = UserProvider();
       await Future.delayed(const Duration(milliseconds: 100));
       expect(provider.stats.level, equals(1));
 
       // Act
-      await provider.addXp(20); // 90 + 20 = 110, should be level 2
+      await provider.addXp(20); // 10 past the threshold: level 2
 
       // Assert
-      expect(provider.stats.totalXP, equals(110));
+      expect(provider.stats.totalXP, equals(justShyOfLevel2 + 20));
       expect(provider.stats.level, equals(2));
     });
 
     test('should emit event on onLevelUp stream when leveling up', () async {
       // Arrange
-      SharedPreferences.setMockInitialValues({'total_xp': 90});
+      SharedPreferences.setMockInitialValues({'total_xp': justShyOfLevel2});
       final provider = UserProvider();
       await Future.delayed(const Duration(milliseconds: 100));
 
@@ -199,7 +208,7 @@ void main() {
     test('should grant level-up rewards correctly', () async {
       // Arrange
       SharedPreferences.setMockInitialValues({
-        'total_xp': 90,
+        'total_xp': justShyOfLevel2,
         'coins': 100,
       });
       final provider = UserProvider();
@@ -212,6 +221,30 @@ void main() {
 
       // Assert
       expect(provider.coins, equals(initialCoins + 150));
+    });
+
+    test('pays every level crossed in one grant, not just the last', () async {
+      // Arrange: level 1, about to jump straight to level 4.
+      SharedPreferences.setMockInitialValues({
+        ...TestFixtures.welcomeGiftAlreadyGiven,
+        'total_xp': 0,
+        'coins': 100,
+      });
+      final provider = UserProvider();
+      await Future.delayed(const Duration(milliseconds: 100));
+      final items = <int>[];
+      provider.onReward.listen((reward) => items.add(reward.level));
+
+      // Act
+      await provider.addXp(ProgressionUtils.getTotalXPForLevel(4));
+      await Future.delayed(const Duration(milliseconds: 50));
+
+      // Assert: level 2's and level 4's coins, and level 3's apples.
+      int coinsAt(int level) =>
+          levelRewards.firstWhere((r) => r.level == level).value;
+      expect(provider.stats.level, equals(4));
+      expect(provider.coins, equals(100 + coinsAt(2) + coinsAt(4)));
+      expect(items, equals([3]));
     });
   });
 

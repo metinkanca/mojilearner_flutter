@@ -8,6 +8,7 @@ import '../providers/quiz_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/rtl_locale.dart';
 import '../../utils/fonts.dart';
+import 'tutorial/retro_showcase.dart';
 
 /// The label slot inside a nav item.
 ///
@@ -19,25 +20,89 @@ import '../../utils/fonts.dart';
 /// drawn on a 12px grid now, and "プロフィール" is six of those wide.
 const double navLabelSlotWidth = 72;
 
-class NavigationWrapper extends StatelessWidget {
+/// The nav items the home tour points at, in the order it visits them.
+///
+/// They live here rather than on the home screen because this is where the
+/// bar is built, but they belong to the home tour: the bar is only on screen
+/// for four of the nine shell routes, and home is the one every player
+/// reaches first. A [Showcase] is inert until its key is in a running
+/// sequence, so carrying them on the shop and chat routes too costs nothing.
+final GlobalKey navTownShowcaseKey = GlobalKey();
+final GlobalKey navChatShowcaseKey = GlobalKey();
+final GlobalKey navShopShowcaseKey = GlobalKey();
+final GlobalKey navProfileShowcaseKey = GlobalKey();
+
+/// The app's furniture: the nav bar, and the floating back arrow.
+///
+/// Stateful for one reason — the bar slides up into place instead of
+/// appearing. That matters most on the very first arrival, coming off the
+/// meet-your-pet screen, where a bar that simply blinked into existence
+/// under the pet would undo a transition built to have no seam in it. It is
+/// written as "animate whenever the bar appears" rather than as a special
+/// case for onboarding, because every other route that brings it back —
+/// leaving a quiz, backing out of the profile — wants the same thing.
+class NavigationWrapper extends StatefulWidget {
   final Widget child;
 
   const NavigationWrapper({super.key, required this.child});
 
   @override
+  State<NavigationWrapper> createState() => _NavigationWrapperState();
+}
+
+class _NavigationWrapperState extends State<NavigationWrapper>
+    with SingleTickerProviderStateMixin {
+  /// Matched to the home screen's own arrival, so the bar and the pet settle
+  /// together rather than one chasing the other.
+  static const Duration _kSlideIn = Duration(milliseconds: 620);
+
+  late final AnimationController _slide = AnimationController(
+    vsync: this,
+    duration: _kSlideIn,
+  );
+
+  late final Animation<Offset> _offset = Tween<Offset>(
+    begin: const Offset(0, 1),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _slide, curve: Curves.easeOutCubic));
+
+  /// Whether the bar was up on the previous build, so its arrival can be
+  /// told from an ordinary rebuild on a route that already had it.
+  bool _barWasShown = false;
+
+  @override
+  void dispose() {
+    _slide.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
     final l10n = AppLocalizations.of(context)!;
+    // The shop and the town are the bar's own destinations, so the bar stays
+    // up on them: tapping "shop" and watching the way back out of it disappear
+    // reads as a dead end rather than as a tab.
     final bool showNavChrome = location == '/' ||
+        location == '/shop' ||
+        location == '/scenarios' ||
         location == '/new-chat' ||
         location.startsWith('/chat/');
     // Screens that draw their own back button in a header opt out here, so
     // the floating one doesn't duplicate it.
-    final bool showWrapperBackArrow = !showNavChrome &&
-        location != '/quiz' &&
-        location != '/profile' &&
-        location != '/shop' &&
-        location != '/scenarios';
+    final bool showWrapperBackArrow =
+        !showNavChrome && location != '/quiz' && location != '/profile';
+
+    if (showNavChrome != _barWasShown) {
+      _barWasShown = showNavChrome;
+      // Not setState: this runs during build, and the only thing that has to
+      // change is the controller the SlideTransition is already listening to.
+      if (showNavChrome) {
+        _slide.forward(from: 0);
+      } else {
+        _slide.value = 0;
+      }
+    }
 
     return Scaffold(
       extendBody:
@@ -46,7 +111,7 @@ class NavigationWrapper extends StatelessWidget {
           false, // Keyboard overlays content instead of pushing navigation up
       body: Stack(
         children: [
-          child,
+          widget.child,
           if (showWrapperBackArrow)
             SafeArea(
               child: Align(
@@ -93,7 +158,14 @@ class NavigationWrapper extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: showNavChrome
-          ? Container(
+          ? SlideTransition(
+              // Named because the bar is singular, addressable app furniture
+              // -- the tests that check it slides in rather than blinking on
+              // have to be able to pick it out from the page transitions
+              // wrapping it.
+              key: const ValueKey('nav-bar'),
+              position: _offset,
+              child: Container(
               height: 80, // Reduced from 90 to save space
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -108,10 +180,17 @@ class NavigationWrapper extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _navItem(context, 'assets/svgs/icon-quiz.svg',
-                            l10n.quizMode, '/quiz', location),
+                        // The quizzes are at the school, in the town: this
+                        // tab is the way to both.
+                        _navItem(context, 'assets/svgs/icon-town.svg',
+                            l10n.townTab, '/scenarios', location,
+                            showcaseKey: navTownShowcaseKey,
+                            showcaseDescription: l10n.tutorialNavTown),
                         _navItem(context, 'assets/svgs/icon-chat.svg',
-                            l10n.chats, '/new-chat', location, onTap: () async {
+                            l10n.chats, '/new-chat', location,
+                            showcaseKey: navChatShowcaseKey,
+                            showcaseDescription: l10n.tutorialNavChat,
+                            onTap: () async {
                           if (location == '/quiz') {
                             _showPauseDialog(context,
                                 targetRoute: '/new-chat', isChat: true);
@@ -130,13 +209,19 @@ class NavigationWrapper extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _navItem(context, 'assets/svgs/icon-shop.svg',
-                            l10n.shop, '/shop', location),
+                            l10n.shop, '/shop', location,
+                            showcaseKey: navShopShowcaseKey,
+                            showcaseDescription: l10n.tutorialNavShop),
                         _navItem(context, 'assets/svgs/icon-user.svg',
-                            l10n.profile, '/profile', location),
+                            l10n.profile, '/profile', location,
+                            showcaseKey: navProfileShowcaseKey,
+                            showcaseDescription: l10n.tutorialNavProfile,
+                            showcaseIsLast: true),
                       ],
                     ),
                   ),
                 ],
+              ),
               ),
             )
           : null,
@@ -324,7 +409,10 @@ class NavigationWrapper extends StatelessWidget {
 
   Widget _navItem(BuildContext context, String svgPath, String? label,
       String route, String currentLocation,
-      {VoidCallback? onTap}) {
+      {VoidCallback? onTap,
+      GlobalKey? showcaseKey,
+      String? showcaseDescription,
+      bool showcaseIsLast = false}) {
     final bool isActive = currentLocation == route;
     final Color itemColor = isActive ? AppTheme.retroPrimary : Colors.grey;
     final navLabel = label?.toUpperCase();
@@ -334,7 +422,7 @@ class NavigationWrapper extends StatelessWidget {
     final textAlign = textAlignForLocale(locale,
         ltr: TextAlign.center, rtl: TextAlign.center);
 
-    return SizedBox(
+    final item = SizedBox(
       width: 72,
       height: 80,
       child: GestureDetector(
@@ -385,6 +473,16 @@ class NavigationWrapper extends StatelessWidget {
           ],
         ),
       ),
+    );
+
+    if (showcaseKey == null || showcaseDescription == null) return item;
+
+    return RetroShowcase(
+      showcaseKey: showcaseKey,
+      description: showcaseDescription,
+      isLast: showcaseIsLast,
+      targetPadding: EdgeInsets.zero,
+      child: item,
     );
   }
 }

@@ -22,8 +22,7 @@ class MockVocabProvider extends Mock implements VocabProvider {}
 void main() {
   const handset = Size(400, 844);
   const greeting = 'I love learning! What shall we practice today?';
-  const reconnect =
-      'Zzz... Moji is dozing while the language link reconnects. Try again soon.';
+  const night = 'Shhh... Moji is sleeping. Tap Moji to wake up.';
 
   late MockUserProvider mockUser;
   late MockDailyRewardProvider mockDailyReward;
@@ -56,7 +55,6 @@ void main() {
     when(() => mockCharacter.customization)
         .thenReturn(TestFixtures.buildCustomization());
     when(() => mockCharacter.isSleeping).thenReturn(false);
-    when(() => mockCharacter.isAiIssueSleepMode).thenReturn(false);
     when(() => mockCharacter.isTemporarilyAwake).thenReturn(false);
     when(() => mockCharacter.isSleepingForNight).thenReturn(false);
     when(() => mockCharacter.awakeUntil).thenReturn(null);
@@ -162,19 +160,19 @@ void main() {
     verifyNever(() => mockCharacter.petThePet());
   });
 
-  group('states the player cannot act on', () {
+  group('while the pet sleeps', () {
     setUp(() {
-      when(() => mockCharacter.isAiIssueSleepMode).thenReturn(true);
+      when(() => mockCharacter.isSleepingForNight).thenReturn(true);
       when(() => mockCharacter.isSleeping).thenReturn(true);
     });
 
-    // The reconnect message is the only thing on screen explaining the greyed
-    // out input, now that the ticker and the placeholder copy of it are gone.
+    // The bubble is the only thing on screen saying why the pet is not
+    // answering, so it stays up past the fade.
     testWidgets('pin the bubble open past the fade', (tester) async {
       await pumpHome(tester);
       await waitOutTheRemark(tester);
 
-      expect(bubbleOpacity(tester, reconnect), 1);
+      expect(bubbleOpacity(tester, night), 1);
     });
 
     // Derived from the provider rather than stored, so a pet that falls asleep
@@ -182,7 +180,7 @@ void main() {
     testWidgets('say why, not whatever was said last', (tester) async {
       await pumpHome(tester);
 
-      expect(find.text(reconnect), findsOneWidget);
+      expect(find.text(night), findsOneWidget);
       expect(find.text(greeting), findsNothing);
     });
   });

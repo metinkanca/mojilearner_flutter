@@ -31,6 +31,25 @@ class CalibrationProvider extends ChangeNotifier {
   LanguageProficiency? getLanguageProficiency(String languageCode) =>
       _languageProficiencies[languageCode];
 
+  /// Every language the player has actually been assessed in.
+  ///
+  /// The pet's bond stage reads this rather than only the current language:
+  /// its fluency gate ratchets on the best level ever reached, so switching
+  /// target language cannot walk the pet back down the ladder. See
+  /// `utils/bond_context.dart`.
+  Iterable<LanguageProficiency> get calibratedProficiencies =>
+      _languageProficiencies.values.where((p) => p.isCalibrated);
+
+  /// Every assessed level on record, one per language that has been
+  /// calibrated.
+  ///
+  /// Exposed for callers that care about the player rather than about one
+  /// language. The bond ladder is the case: gating the pet's stage on the
+  /// currently selected language would un-grow the pet the moment its owner
+  /// started a second one. See `utils/bond_context.dart`.
+  Iterable<String?> get assessedLevels =>
+      _languageProficiencies.values.map((p) => p.aiDeterminedLevel);
+
   /// Language seeded by [AppRuntimeConfig.skipOnboarding]. Matches
   /// `LanguageProvider`'s default target language, so the seeded proficiency
   /// describes the language the rest of the app will actually be using.

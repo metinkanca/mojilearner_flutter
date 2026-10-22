@@ -115,3 +115,8 @@ server/node_modules/
 server/.env
 # Widget Preview related
 .widget_preview/
+
+# Style-model training (art_src/train_style_lora.py): the LoRA weights are
+# hundreds of MB and the samples are scratch.
+art_src/style_lora/
+art_src/style_samples/

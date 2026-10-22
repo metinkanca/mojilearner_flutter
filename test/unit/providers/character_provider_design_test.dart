@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/constants/accessories.dart';
 import 'package:mojilearner_flutter/constants/bond.dart';
-import 'package:mojilearner_flutter/models/models.dart';
+import 'package:mojilearner_flutter/constants/pets.dart';
 import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:mojilearner_flutter/utils/pet_recolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,8 +30,8 @@ void main() {
       provider.updateBodyColor('#E0883B'); // ginger cat
       await provider.updateCharacterType('dog');
 
-      expect(provider.design.bodyColor, kDefaultBodyColor);
-      expect(provider.colorSpec.bodyColor, kDefaultBodyColor);
+      expect(provider.design.bodyColor, naturalCoatFor('dog'));
+      expect(provider.colorSpec.bodyColor, naturalCoatFor('dog'));
     });
 
     test('each pet keeps its own coat and eyes', () async {
@@ -161,7 +161,7 @@ void main() {
       final provider = await buildProvider();
       await provider.updateCharacterType('cat');
 
-      expect(provider.design.bodyColor, kDefaultBodyColor);
+      expect(provider.design.bodyColor, naturalCoatFor('cat'));
       expect(provider.equippedInSlot(AccessorySlots.hat), isNull);
     });
 

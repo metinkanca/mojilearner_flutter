@@ -1,19 +1,25 @@
 class ProgressionConstants {
-  /// The starting XP for level 1 to 2
-  static const int baseXP = 100;
+  /// The XP from level 1 to 2, and what each level after adds to the step.
+  static const int baseXP = 30;
 
-  /// The exponential growth rate of the XP curve.
+  /// The growth rate of the XP curve: level n to n+1 costs baseXP · n^rate.
   ///
   /// Was 1.8, which put level 20 at 146,115 XP — around 1.4 years for a
-  /// committed daily learner and effectively never for anyone else. Three
-  /// quarters of [levelRewards] was therefore decoration: unreachable coins
-  /// and two backgrounds nobody would ever be shown. At 1.5 the cap is 67,135
-  /// XP, which a daily learner reaches inside a year, so the back half of the
-  /// ladder is a real reward again.
-  static const double growthRate = 1.5;
+  /// committed daily learner and effectively never for anyone else. Then 1.5
+  /// on a base of 100, which still left level 20 a year away and the boss
+  /// trials months apart: levelling felt like it had stopped. Now linear on a
+  /// base of 30 (owner's call, 2026-09-18): against the ~184 XP/day a daily
+  /// learner earns, the bosses at 5/10/15/20/25/30 land at about 2, 7, 17,
+  /// 31, 49 and 71 days, and every level costs the same 30 XP more than the
+  /// last, so the later ones never drag.
+  ///
+  /// Levels follow activity, never how good someone already is at the
+  /// language: everyone climbs this same ladder at the same price.
+  static const double growthRate = 1.0;
 
-  /// Max level cap
-  static const int maxLevel = 20;
+  /// Max level cap. Raised from 20 to make room for more boss trials, one
+  /// every five levels.
+  static const int maxLevel = 30;
 
   /// The first entry in [levelRewards], granted once at the start of a new
   /// game.
@@ -55,7 +61,7 @@ const List<RewardDef> levelRewards = [
   RewardDef(level: 3, type: RewardType.item, value: 3, description: 'Apple x3', itemId: 'apple'),
   RewardDef(level: 4, type: RewardType.coins, value: 200, description: '200 gold'),
   // MILESTONE Level 5
-  RewardDef(level: 5, type: RewardType.item, value: 2, description: 'Croissant x2', itemId: 'croissant'),
+  RewardDef(level: 5, type: RewardType.item, value: 2, description: 'Donut x2', itemId: 'donut'),
   
   // Level 6-10: Moderate progression
   RewardDef(level: 6, type: RewardType.coins, value: 300, description: '300 gold'),
@@ -80,6 +86,9 @@ const List<RewardDef> levelRewards = [
   RewardDef(level: 19, type: RewardType.unlock, value: 0, description: 'Sunset Orange', itemId: 'bg_sunset'),
   // MILESTONE Level 20
   RewardDef(level: 20, type: RewardType.unlock, value: 0, description: 'Galaxy Purple + 1000 gold', itemId: 'bg_galaxy'),
+
+  // Levels 21-30: nothing yet. The cap went from 20 to 30 for more boss
+  // trials; what these levels pay is still to be decided.
 ];
 
 /// Daily rewards schedule (cycles every 7 days with bonuses)
@@ -101,7 +110,7 @@ const List<RewardDef> dailyRewards = [
   // Day 1: a greeting, not an income.
   RewardDef(level: 1, type: RewardType.coins, value: 12, description: 'Day 1: 12 coins'),
   // Day 2: two days of light rations.
-  RewardDef(level: 2, type: RewardType.item, value: 2, description: 'Day 2: Croissant x2', itemId: 'croissant'),
+  RewardDef(level: 2, type: RewardType.item, value: 2, description: 'Day 2: Donut x2', itemId: 'donut'),
   RewardDef(level: 3, type: RewardType.coins, value: 15, description: 'Day 3: 15 coins'),
   // Day 4: the week's bulk of the pet's food.
   RewardDef(level: 4, type: RewardType.item, value: 2, description: 'Day 4: Pizza x2', itemId: 'pizza'),

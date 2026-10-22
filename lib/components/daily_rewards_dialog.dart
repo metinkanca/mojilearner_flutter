@@ -1,15 +1,16 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../constants/theme.dart';
 import '../constants/progression.dart';
-import '../constants/shop.dart';
 import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../providers/settings_provider.dart';
 import '../utils/fonts.dart';
 import '../utils/rtl_locale.dart';
+import 'reward_art.dart';
 
 class DailyRewardsDialog extends StatefulWidget {
   final DailyRewardInfo rewardInfo;
@@ -50,11 +51,14 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
   }
 
   String _getMotivationalMessage(AppLocalizations l10n) {
-    if (widget.rewardInfo.streakReset) {
-      return l10n.streak_broken;
-    }
-    if (widget.rewardInfo.dayNumber == 7) {
-      return l10n.amazing_streak(widget.rewardInfo.dayNumber);
+    // No "welcome back, starting fresh" branch to write any more: nothing
+    // starts fresh, so there is nothing to apologise for on the way in.
+    //
+    // The line says "streak", so it follows the run of days rather than the
+    // reward cycle, and it comes round every seventh of them rather than once.
+    final streak = widget.rewardInfo.loginStreak;
+    if (streak > 0 && streak % 7 == 0) {
+      return l10n.amazing_streak(streak);
     }
     return l10n.keep_going;
   }
@@ -64,8 +68,8 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
     switch (itemId) {
       case 'apple':
         return l10n.shopItemAppleName;
-      case 'croissant':
-        return l10n.shopItemCroissantName;
+      case 'donut':
+        return l10n.shopItemDonutName;
       case 'pizza':
         return l10n.shopItemPizzaName;
       case 'sushi':
@@ -85,33 +89,22 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
     }
   }
 
+  /// The line under the reward's picture.
+  ///
+  /// It no longer opens with the emoji the picture above already draws — the
+  /// two were the same symbol twice, and on a platform whose emoji font
+  /// differs from the pixel art they were the same reward drawn two ways.
   String _getRewardDisplayText(AppLocalizations l10n) {
     final reward = widget.rewardInfo.reward;
     if (reward.type == RewardType.coins) {
-      return '${reward.value} 🪙';
-    } else if (reward.type == RewardType.item && reward.itemId != null) {
-      final item = shopItems.firstWhere(
-        (i) => i.id == reward.itemId,
-        orElse: () => shopItems.first,
-      );
+      return l10n.topUpCoins(reward.value);
+    }
+    final item = rewardShopItem(reward);
+    if (item != null) {
       final itemName = _localizedShopItemName(l10n, item.id, item.name);
-      return '${item.icon} $itemName ${reward.value > 1 ? 'x${reward.value}' : ''}';
+      return reward.value > 1 ? '$itemName x${reward.value}' : itemName;
     }
     return reward.description;
-  }
-
-  String _getRewardIcon() {
-    final reward = widget.rewardInfo.reward;
-    if (reward.type == RewardType.coins) {
-      return '🪙';
-    } else if (reward.type == RewardType.item && reward.itemId != null) {
-      final item = shopItems.firstWhere(
-        (i) => i.id == reward.itemId,
-        orElse: () => shopItems.first,
-      );
-      return item.icon;
-    }
-    return '🎁';
   }
 
   void _handleClaim() async {
@@ -182,17 +175,19 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      '🔥',
-                      style: TextStyle(fontSize: 24),
-                    ),
+                    SvgPicture.asset(kFlameAsset, width: 24, height: 24),
                     const SizedBox(width: 8),
                     // Flexible, not a bare Text: the label runs past the pill
                     // on a 320pt handset, and in the longer locales sooner
                     // than that. It wraps instead of overflowing.
                     Flexible(
                       child: Text(
-                        l10n.day_streak(widget.rewardInfo.dayNumber),
+                        // The run of days, not the position in the cycle:
+                        // the seven boxes below already say where in the week
+                        // this reward falls, and a pill reading "Day 3" to
+                        // someone on their thirtieth day running was the last
+                        // place the two numbers were still confused.
+                        l10n.day_streak(widget.rewardInfo.loginStreak),
                         textDirection: textDirection,
                         textAlign: textAlign,
                         style: fontFunction(
@@ -218,9 +213,9 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        _getRewardIcon(),
-                        style: const TextStyle(fontSize: 48),
+                      RewardArt(
+                        reward: widget.rewardInfo.reward,
+                        size: 48,
                       ),
                       const SizedBox(height: 12),
                       Text(
@@ -284,7 +279,7 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
               // 7-Day Calendar
               _SevenDayCalendar(
                 currentDayNumber: widget.rewardInfo.dayNumber,
-                fontFunction: fontFunction,
+                todayClaimed: _claimed,
               ),
 
               const SizedBox(height: 24),
@@ -335,72 +330,86 @@ class _DailyRewardsDialogState extends State<DailyRewardsDialog>
   }
 }
 
+/// The cycle drawn as a row of boxes: what each day of the week gives, and how
+/// far through it the player is.
+///
+/// A box used to carry its own day number, which its position in the row
+/// already said, so the row spent seven labels repeating itself and never
+/// showed a single reward. Each box now draws the reward that day pays out,
+/// and a day already collected is stamped with a check over green instead.
+///
+/// Today is the box on the boundary: it holds its reward while the claim
+/// button is still there to press, and turns into a check the moment it is.
 class _SevenDayCalendar extends StatelessWidget {
   final int currentDayNumber;
-  final TextStyle Function({
-    double? fontSize,
-    Color? color,
-    FontWeight? fontWeight,
-  }) fontFunction;
+
+  /// Whether today's reward has been collected in this sitting. Days before
+  /// today are always collected; today is only collected once claimed.
+  final bool todayClaimed;
 
   const _SevenDayCalendar({
     required this.currentDayNumber,
-    required this.fontFunction,
+    required this.todayClaimed,
   });
 
   @override
   Widget build(BuildContext context) {
+    final days = dailyRewards.length;
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Seven markers at their full 32pt, plus the gaps between them, need
-        // 280pt — more than the dialog leaves on a handset, where it gets 264.
+        // The markers at their full 32pt, plus the gaps between them, need
+        // 280pt - more than the dialog leaves on a handset, where it gets 264.
         // Shrink the markers and their gaps together to fit rather than
         // dropping any, keeping full size wherever there is room for it.
         const maxMarkerSize = 32.0;
         const gapRatio = 0.25; // an 8pt gap at full marker size
         final available = constraints.maxWidth;
         final markerSize = available.isFinite
-            ? math.min(maxMarkerSize, available / (7 + 6 * gapRatio))
+            ? math.min(
+                maxMarkerSize, available / (days + (days - 1) * gapRatio))
             : maxMarkerSize;
-        // The check glyph is the one label sized off the marker: at 16pt its
-        // line box is taller than a shrunk marker's interior.
+        // The check glyph is sized off the marker: at 16pt its line box is
+        // taller than a shrunk marker's interior.
         final checkFontSize =
             (16.0 * markerSize / maxMarkerSize).clamp(10.0, 16.0);
+        // The art sits inside the marker's border with a little air around it,
+        // so a wide sprite does not touch the frame on either side.
+        final artSize = markerSize * 0.72;
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: markerSize * gapRatio,
-          children: List.generate(7, (index) {
+          children: List.generate(days, (index) {
             final dayNumber = index + 1;
-            final isCompleted = dayNumber <= currentDayNumber;
             final isToday = dayNumber == currentDayNumber;
+            final isClaimed =
+                dayNumber < currentDayNumber || (isToday && todayClaimed);
 
             return Container(
+              key: ValueKey('daily-reward-day-$dayNumber'),
               width: markerSize,
               height: markerSize,
               decoration: BoxDecoration(
-                color: isCompleted ? AppTheme.retroGrass : AppTheme.retroLight,
+                color: isClaimed ? AppTheme.retroGrass : AppTheme.retroLight,
                 border: Border.all(
                   color: isToday ? AppTheme.retroAccent : AppTheme.retroDark,
                   width: isToday ? 3 : 2,
                 ),
               ),
               child: Center(
-                child: isCompleted
+                child: isClaimed
                     ? Text(
-                        '✓',
+                        '\u2713',
                         style: TextStyle(
                           fontSize: checkFontSize,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       )
-                    : Text(
-                        dayNumber.toString(),
-                        style: fontFunction(
-                          fontSize: 8,
-                          color: AppTheme.textSecondary,
-                        ),
+                    : RewardArt(
+                        reward: dailyRewards[index],
+                        size: artSize,
                       ),
               ),
             );

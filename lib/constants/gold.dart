@@ -1,8 +1,9 @@
 /// The coin axis: what learning pays, and what stops it becoming a grind.
 ///
-/// Coins are the *fast* half of the economy, the counterpart to
-/// [BondConstants] in `bond.dart`. Bond measures whether the relationship
-/// grew; coins measure what the player may dress it in. Two rules keep them
+/// Coins are the *fast* half of the economy, the counterpart to the XP ledger
+/// in `progression.dart`. XP measures whether the relationship grew — the
+/// pet's bond stage is projected from it, see `bond.dart` — while coins
+/// measure what the player may dress it in. Two rules keep them
 /// from collapsing into each other:
 ///
 /// * **Coins buy appearance, never survival.** The daily login reward hands
@@ -19,9 +20,9 @@ library;
 
 /// A repeatable thing the player did that pays coins.
 ///
-/// Deliberately parallel to `BondSource`, and deliberately not identical:
-/// there is no member for feeding, petting or logging in, because those must
-/// not pay coins at all.
+/// Deliberately parallel to the events that pay XP, and deliberately not
+/// identical: there is no member for feeding, petting or logging in, because
+/// those must not pay coins at all.
 enum GoldSource {
   /// A finished quiz. See [GoldConstants] for why the payout barely moves
   /// with accuracy.
@@ -65,12 +66,14 @@ class GoldConstants {
   /// coins' worth of learning each day pay in full" is literally what the
   /// arithmetic does.
   ///
-  /// This is the coin analogue of `BondConstants.dailyCap`, and it exists for
-  /// the same reason: without it the fastest route to the whole catalogue is
-  /// one long grinding session rather than a habit. A hard cap was the wrong
-  /// shape — hitting a wall mid-session tells the player to stop studying —
-  /// so the rate tapers instead. Play as long as you like; the tenth quiz of
-  /// the day is simply worth less than the first.
+  /// Without it the fastest route to the whole catalogue is one long grinding
+  /// session rather than a habit. A hard cap was the wrong shape — hitting a
+  /// wall mid-session tells the player to stop studying — so the rate tapers
+  /// instead. Play as long as you like; the tenth quiz of the day is simply
+  /// worth less than the first.
+  ///
+  /// Note this taper is on coins only. XP is uncapped, so grinding does move
+  /// the pet's bond stage; it just does not fund the wardrobe any faster.
   ///
   /// A normal session lands inside the full band. Reaching the tail takes
   /// roughly seven quizzes plus a capped-out day of chat and review.

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mojilearner_flutter/components/character_sprite.dart';
+import 'package:mojilearner_flutter/constants/pets.dart';
 import 'package:mojilearner_flutter/l10n/app_localizations.dart';
 import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
@@ -134,9 +136,11 @@ void main() {
     final character = await pumpOpening(tester);
     await reachPetPhase(tester);
 
-    // cat -> bird, the last of the three.
-    await tester.drag(find.byType(PageView), const Offset(-onePet, 0));
-    await settle(tester);
+    // Forward to the end of the rank, from the cat it opens on...
+    for (var i = kStarterPetTypes.indexOf('cat'); i < kStarterPetTypes.length - 1; i++) {
+      await tester.drag(find.byType(PageView), const Offset(-onePet, 0));
+      await settle(tester);
+    }
     // ...and on again, which wraps rather than stopping dead.
     await tester.drag(find.byType(PageView), const Offset(-onePet, 0));
     await settle(tester);
@@ -144,7 +148,7 @@ void main() {
     await tester.tap(find.text(spanish().onboardingPetConfirm));
     await settle(tester);
 
-    expect(character.currentCharacterType, 'dog');
+    expect(character.currentCharacterType, kStarterPetTypes.first);
   });
 
   testWidgets('before the first pet the rank comes round to the last',
@@ -152,9 +156,11 @@ void main() {
     final character = await pumpOpening(tester);
     await reachPetPhase(tester);
 
-    // cat -> dog, the first of the three.
-    await tester.drag(find.byType(PageView), const Offset(onePet, 0));
-    await settle(tester);
+    // Back to the front of the rank, from the cat it opens on...
+    for (var i = kStarterPetTypes.indexOf('cat'); i > 0; i--) {
+      await tester.drag(find.byType(PageView), const Offset(onePet, 0));
+      await settle(tester);
+    }
     // ...and back again, off the front end.
     await tester.drag(find.byType(PageView), const Offset(onePet, 0));
     await settle(tester);
@@ -162,7 +168,21 @@ void main() {
     await tester.tap(find.text(spanish().onboardingPetConfirm));
     await settle(tester);
 
-    expect(character.currentCharacterType, 'bird');
+    expect(character.currentCharacterType, kStarterPetTypes.last);
+  });
+
+  // A first choice is never a pet that costs anything: the rest of the rank
+  // is bought later, on the pet changer.
+  testWidgets('offers only the free pets', (tester) async {
+    await pumpOpening(tester);
+    await reachPetPhase(tester);
+
+    final shown = tester
+        .widgetList<CharacterSprite>(find.byType(CharacterSprite))
+        .map((s) => s.previewType)
+        .toSet();
+    expect(shown, isNotEmpty);
+    expect(shown.difference(kStarterPetTypes.toSet()), isEmpty);
   });
 
   testWidgets('confirming hands over to the rest of onboarding',

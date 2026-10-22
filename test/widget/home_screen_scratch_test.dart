@@ -53,7 +53,6 @@ void main() {
     when(() => mockCharacter.customization)
         .thenReturn(TestFixtures.buildCustomization());
     when(() => mockCharacter.isSleeping).thenReturn(false);
-    when(() => mockCharacter.isAiIssueSleepMode).thenReturn(false);
     when(() => mockCharacter.isTemporarilyAwake).thenReturn(false);
     when(() => mockCharacter.isSleepingForNight).thenReturn(false);
     when(() => mockCharacter.awakeUntil).thenReturn(null);
@@ -162,18 +161,6 @@ void main() {
     await pumpHome(tester);
 
     await rub(tester, pawPoint(tester), const [60, -60, 60]);
-
-    verifyNever(() => mockCharacter.petThePet());
-  });
-
-  // A pet dozing through an AI outage stays down: the provider refuses the
-  // burst anyway, so firing at it would just be a lie in the call log.
-  testWidgets('scratching a dozing pet does nothing', (tester) async {
-    when(() => mockCharacter.isAiIssueSleepMode).thenReturn(true);
-    when(() => mockCharacter.isSleeping).thenReturn(true);
-    await pumpHome(tester);
-
-    await rub(tester, headPoint(tester), const [60, -60, 60]);
 
     verifyNever(() => mockCharacter.petThePet());
   });

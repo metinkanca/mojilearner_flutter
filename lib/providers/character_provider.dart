@@ -6,11 +6,15 @@ import '../constants/shop.dart';
 import '../constants/progression.dart';
 import '../constants/accessories.dart';
 import '../constants/bond.dart';
+import '../constants/entitlements.dart';
+import '../constants/scenes.dart';
 import '../constants/app_runtime_config.dart';
+import '../constants/pets.dart';
 import '../utils/accessory_ownership.dart';
 import '../utils/color_ownership.dart';
 import '../utils/bond_progress.dart';
 import '../utils/pet_recolor.dart';
+import '../utils/play_games.dart';
 import 'user_provider.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -20,8 +24,6 @@ import 'dart:convert';
 /// being petted is a thing happening to it this second, and they do not look
 /// alike. It outranks [happy] because a rub should read through a good mood.
 enum PetVisualState { sleeping, eating, petted, happy, sad, breathing }
-
-enum SleepReason { aiIssue, night, awake }
 
 enum PetEatingPhase { none, waiting, consuming }
 
@@ -42,6 +44,12 @@ class CharacterProvider extends ChangeNotifier {
   /// during the cooldown still animate, they just don't move stats.
   static const Duration petCooldown = Duration(minutes: 10);
   static const int _petHappinessGain = 8;
+
+  /// How often a toy chest game pays happiness — any of them, one clock for
+  /// all. Longer than petting's clock because a game is worth up to twice a
+  /// petting — see [PlayRewards.happiness]. Games in between are still played
+  /// in full, they just leave the stats where they were.
+  static const Duration playCooldown = Duration(minutes: 30);
 
   /// XP and coins are scaled by this while the pet is sick, so neglect costs
   /// progression speed rather than locking the player out of the app.
@@ -71,30 +79,58 @@ class CharacterProvider extends ChangeNotifier {
   final Set<String> _unlockedItems = {'apple', 'coffee'};
   final List<String> _inventory = ['apple', 'coffee']; // Owned items
 
+  /// The world the pet is shown in. Global rather than per pet: it is where
+  /// they all live, not something one of them wears. Held as an id so the
+  /// palette can be retuned without rewriting saves.
+  String _sceneId = kDefaultSceneId;
+
+  /// Scenes the player has claimed from a season pass, as last reported by
+  /// [updateFromUser].
+  ///
+  /// Held rather than consulted directly because the pass record loads on its
+  /// own schedule: this is applied to [_unlockedItems] once, whenever both
+  /// halves are in, and after that a pass scene is owned exactly the way a
+  /// bought one is. See [_applyClaimedPassScenes].
+  Set<String> _claimedPassScenes = const {};
+
+  /// Whether the save has been read. Nothing may write [_unlockedItems] on the
+  /// strength of a pass record before then, or the write would race the load
+  /// and could persist a set with the player's bought items missing.
+  bool _petStateLoaded = false;
+
   /// Appearance per character type: the coat, eyes and equipped accessories of
   /// each pet, kept side by side so switching pets restores the look that pet
   /// was last given instead of carrying one design across all of them.
   /// A type with no entry has never been customised and uses the defaults.
   final Map<String, PetDesign> _designs = {};
 
+  /// Whether this pet decays at the slower membership rate — see
+  /// [PlusCareConstants].
+  ///
+  /// Persisted rather than only pushed in from [UserProvider], because the
+  /// decay that matters most is the batch applied at launch for the hours the
+  /// app was closed, and that runs long before any provider has finished
+  /// loading a membership from disk. The stored flag is the right one to use
+  /// there anyway: what should govern those hours is whether the membership
+  /// was paying for them, not whether one is paying now.
+  bool _slowDecay = false;
+
   // Pet Stats (0-100)
   int _hunger = 50;
   int _happiness = 70;
   int _health = 100;
 
-  // Bond: the slow axis. Monotonic by construction — nothing in this class
-  // subtracts from it. See lib/constants/bond.dart for why.
-  int _bondPoints = 0;
+  // Bond: when the player last learned something, which is all this class
+  // still holds of it. The stage ladder itself reads the player's level from
+  // UserProvider — see lib/constants/bond.dart for why there is one ledger.
   DateTime? _lastLearningAt;
-  int _bondEarnedToday = 0;
-  DateTime? _bondDay;
   late DateTime _lastUpdate;
   Timer? _decayTimer;
   StreamSubscription<RewardDef>? _rewardSubscription;
   DateTime? _awakeUntil;
   DateTime? _lastInteractionAt;
   DateTime? _lastPetAt;
-  bool _aiIssueSleepMode = false;
+  DateTime? _lastPlayAt;
   PetEatingPhase _eatingPhase = PetEatingPhase.none;
   DateTime? _happyBurstUntil;
   DateTime? _pettedUntil;
@@ -111,13 +147,82 @@ class CharacterProvider extends ChangeNotifier {
   Set<String> get unlockedItems => _unlockedItems;
   List<String> get inventory => _inventory;
 
+  /// The scene the home screen paints. Never null: an id that is no longer in
+  /// the catalogue falls back to the default scene rather than leaving
+  /// nothing to draw.
+  SceneTheme get scene => sceneThemeOrDefault(_sceneId);
+  String get sceneId => scene.id;
+
+  /// Whether [id] can be put on: the free scene, or one that has been bought.
+  bool ownsScene(String id) =>
+      // Debug-only testing override; see AppRuntimeConfig.unlockAllAccessories.
+      AppRuntimeConfig.unlockAllAccessories ||
+      isFreeScene(id) ||
+      _unlockedItems.contains(id);
+
+  /// Changes the world the pet lives in. Returns false and changes nothing
+  /// when the scene is unknown or unowned — the same guard accessories get,
+  /// and for the same reason: the gate belongs here, not only in the UI.
+  bool equipScene(String id) {
+    if (sceneThemeById(id) == null) return false;
+    if (!ownsScene(id)) return false;
+    if (_sceneId == id) return false;
+    _sceneId = id;
+    _savePetState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Hands over a world the player earned rather than bought — a claimed
+  /// season pass tier, which is the only way this happens today.
+  ///
+  /// Deliberately the same act as a purchase: the scene lands in the unlocked
+  /// set, and the pet moves in. A bought scene does that because the reason to
+  /// buy one was to see it (see [purchaseItem]), and the last rung of a track
+  /// somebody studied 5,500 XP for has a better claim on the same beat.
+  ///
+  /// Idempotent, and returns whether anything changed, so a re-claim or a
+  /// reconciliation cannot move the pet twice.
+  bool grantScene(String id) {
+    if (sceneThemeById(id) == null) return false;
+    if (!_unlockedItems.add(id)) return false;
+    _sceneId = id;
+    _savePetState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Puts back a claimed pass scene whose unlock never reached the save.
+  ///
+  /// The claim record is the durable one — it is what a restore carries and
+  /// what a new device rebuilds from — so it gets the last word over the
+  /// unlocked set, which is a working copy. Silent: it changes no pixel on the
+  /// frame it runs in, and it is called from a provider update that is already
+  /// inside a build. The pet is not moved, either. This is the path for a
+  /// hand-over that already happened, and re-staging that ceremony on a later
+  /// launch would look like a bug.
+  void _applyClaimedPassScenes() {
+    if (!_petStateLoaded) return;
+    var changed = false;
+    for (final id in _claimedPassScenes) {
+      if (sceneThemeById(id) == null) continue;
+      changed = _unlockedItems.add(id) || changed;
+    }
+    if (changed) _savePetState();
+  }
+
   /// The design of the pet currently out — what every appearance getter below
   /// reads and every customisation setter writes.
   PetDesign get design => designFor(_customization.characterType);
 
   /// The design of [type], whether or not it is the pet currently out, so the
   /// character picker can show each pet as it was last dressed.
-  PetDesign designFor(String type) => _designs[type] ?? const PetDesign();
+  /// A pet that has never been customised wears the coat it was drawn in —
+  /// see [kNaturalCoats]. Only the untouched case: the moment the player
+  /// picks a colour a design is stored, and that is what is returned from
+  /// then on, so nothing here can overwrite a choice.
+  PetDesign designFor(String type) =>
+      _designs[type] ?? PetDesign(bodyColor: naturalCoatFor(type));
 
   /// Replaces the current pet's design, persists it and notifies.
   void _setDesign(PetDesign next) {
@@ -138,6 +243,7 @@ class CharacterProvider extends ChangeNotifier {
       eyeMode: eyeModeFromString(d.eyeMode),
       eyeColor1: d.eyeColor1,
       eyeColor2: d.eyeColor2,
+      beakColor: d.beakColor,
     );
   }
 
@@ -182,16 +288,20 @@ class CharacterProvider extends ChangeNotifier {
   /// Whether [id] is wearable: a free starter, one that has been bought, or
   /// one whose bond stage has been reached.
   ///
-  /// [stage] comes from the caller because bond stages depend on the assessed
-  /// level, which is per-language and lives in CalibrationProvider — see
-  /// [bondStatusFor].
-  bool ownsAccessory(String id, {required PetStage stage}) {
+  /// [stage] comes from the caller because bond stages are read off the
+  /// player's XP, which lives in UserProvider — see `bondStatusOf`.
+  bool ownsAccessory(
+    String id, {
+    required PetStage stage,
+    Set<String> claimedPassItemIds = const {},
+  }) {
     final def = accessoryById(id);
     if (def == null) return false;
     return AccessoryOwnership.isOwned(
       def,
       unlockedItemIds: _unlockedItems,
       stage: stage,
+      claimedPassItemIds: claimedPassItemIds,
     );
   }
 
@@ -200,7 +310,11 @@ class CharacterProvider extends ChangeNotifier {
   /// Returns false and changes nothing when the accessory is not owned. The
   /// guard lives here rather than only in the wardrobe so no future caller can
   /// dress the pet in something the player has not earned or paid for.
-  bool equipAccessory(String id, {required PetStage stage}) {
+  bool equipAccessory(
+    String id, {
+    required PetStage stage,
+    Set<String> claimedPassItemIds = const {},
+  }) {
     final def = accessoryById(id);
     if (def == null) return false;
 
@@ -211,7 +325,13 @@ class CharacterProvider extends ChangeNotifier {
       return true;
     }
 
-    if (!ownsAccessory(id, stage: stage)) return false;
+    if (!ownsAccessory(
+      id,
+      stage: stage,
+      claimedPassItemIds: claimedPassItemIds,
+    )) {
+      return false;
+    }
 
     _setDesign(design.withSlot(def.slot, id));
     return true;
@@ -294,9 +414,6 @@ class CharacterProvider extends ChangeNotifier {
   int get happiness => _happiness;
   int get health => _health;
 
-  /// Total bond ever earned. Only ever goes up.
-  int get bondPoints => _bondPoints;
-
   /// When the player last did something in the target language, or null if
   /// they never have.
   DateTime? get lastLearningAt => _lastLearningAt;
@@ -312,25 +429,6 @@ class CharacterProvider extends ChangeNotifier {
   /// Whether the pet reads as missing the player. Costs nothing — see
   /// [PetWarmth].
   PetWarmth get warmth => BondProgress.warmthFor(sinceLastLearning);
-
-  /// Bond earned so far today, against [BondConstants.dailyCap].
-  int get bondEarnedToday =>
-      _isSameDay(_bondDay, _now()) ? _bondEarnedToday : 0;
-
-  /// Bond the rest of today can still pay.
-  int get bondRemainingToday => (BondConstants.dailyCap - bondEarnedToday)
-      .clamp(0, BondConstants.dailyCap);
-
-  /// The pet's stage and its distance from the next one.
-  ///
-  /// Takes the level rather than reading it, because proficiency belongs to
-  /// [CalibrationProvider] and is per-language — duplicating it here would
-  /// give the app two answers to the same question. Pass the assessed level
-  /// for the language currently being learned; null reads as beginner.
-  BondStatus bondStatusFor(String? assessedLevel) => BondProgress.statusFor(
-        bondPoints: _bondPoints,
-        tier: BondProgress.tierFromLevel(assessedLevel),
-      );
 
   // Pet mood based on stats
   String get mood {
@@ -396,8 +494,6 @@ class CharacterProvider extends ChangeNotifier {
   String _animationState = 'idle';
   String get animationState => _animationState;
 
-  bool get isAiIssueSleepMode => _aiIssueSleepMode;
-
   bool get isNightHours {
     final hour = _now().hour;
     return hour >= _sleepStartHour || hour < _sleepEndHour;
@@ -414,19 +510,15 @@ class CharacterProvider extends ChangeNotifier {
   }
 
   bool get isSleeping {
-    return _aiIssueSleepMode || isSleepingForNight;
+    return isSleepingForNight;
   }
 
   DateTime? get awakeUntil => _awakeUntil;
 
-  /// Why the pet is (or isn't) sleeping. The UI maps this to a localized
-  /// string (l10n keys: mojiDozingReconnect / mojiSleepingTapWake /
-  /// mojiAwakeReady).
-  SleepReason get sleepReason {
-    if (_aiIssueSleepMode) return SleepReason.aiIssue;
-    if (isSleepingForNight) return SleepReason.night;
-    return SleepReason.awake;
-  }
+  /// Whether the saved pet has been read yet. Until it has, the pet out, its
+  /// coat and what it wears are the defaults, not the player's -- a sprite
+  /// that drew them would show a stranger for a moment and then change.
+  bool get isLoaded => _petStateLoaded;
 
   /// [startDecayTimer] exists for widget tests. The periodic decay timer runs
   /// forever by design, and `testWidgets` fails any test that leaves a timer
@@ -449,6 +541,30 @@ class CharacterProvider extends ChangeNotifier {
   final DateTime Function() _now;
 
   /// Call this to set up reward subscription from UserProvider
+  /// Whether this pet is currently on the slower membership decay rate.
+  bool get hasSlowDecay => _slowDecay;
+
+  /// Pushed in from the proxy provider whenever [UserProvider] changes, the
+  /// same way [AdsProvider.updateFromUser] takes the membership flag.
+  ///
+  /// Notifies nothing: the rate changes no pixel by itself, it only changes
+  /// how fast the next few hours move. Notifying here would mean calling
+  /// listeners from inside a `ChangeNotifierProxyProvider.update`, which runs
+  /// during a build.
+  void updateFromUser(UserProvider user) {
+    updateSlowDecay(active: user.isPremium);
+    _claimedPassScenes = user.claimedPassSceneIds;
+    _applyClaimedPassScenes();
+  }
+
+  /// The same, stated directly, so the rule can be tested without standing up
+  /// a [UserProvider].
+  void updateSlowDecay({required bool active}) {
+    if (_slowDecay == active) return;
+    _slowDecay = active;
+    _savePetState();
+  }
+
   void subscribeToRewards(UserProvider userProvider) {
     _rewardSubscription?.cancel(); // Cancel if already subscribed
     _rewardSubscription = userProvider.onReward.listen(_handleReward);
@@ -495,7 +611,6 @@ class CharacterProvider extends ChangeNotifier {
 
   void _forceWakeForInteraction() {
     final now = _now();
-    _aiIssueSleepMode = false;
     _lastInteractionAt = now;
     _awakeUntil = now.add(_awakeDuration);
   }
@@ -636,6 +751,17 @@ class CharacterProvider extends ChangeNotifier {
     return consumeFoodAndAnimate(itemId);
   }
 
+  /// Buys [item] and gives it to the pet on the spot — the meal a restaurant
+  /// serves, the medicine a doctor hands over. Charged and applied exactly as
+  /// buying it in the shop and feeding it would be. Returns false, having
+  /// changed nothing, when the player cannot afford it.
+  Future<bool> purchaseAndFeed(ShopItem item, UserProvider userProvider) async {
+    if (item.type != 'food') return false;
+    if (!await purchaseItem(item, userProvider)) return false;
+    feedPet(item.id);
+    return true;
+  }
+
   bool consumeFoodAndAnimate(String itemId) {
     final hadItem = _inventory.contains(itemId);
     if (!hadItem) {
@@ -647,20 +773,15 @@ class CharacterProvider extends ChangeNotifier {
 
   Future<void> _loadPetState() async {
     final prefs = await SharedPreferences.getInstance();
+    // Read before the offline decay below, which is the one pass that most
+    // needs to know about it.
+    _slowDecay = prefs.getBool('pet_slow_decay') ?? false;
     _hunger = prefs.getInt('pet_hunger') ?? 50;
     _happiness = prefs.getInt('pet_happiness') ?? 70;
     _health = prefs.getInt('pet_health') ?? 100;
-    _bondPoints = prefs.getInt('pet_bond_points') ?? 0;
     final lastLearningMs = prefs.getInt('pet_last_learning');
     if (lastLearningMs != null) {
       _lastLearningAt = DateTime.fromMillisecondsSinceEpoch(lastLearningMs);
-    }
-    // The daily cap is stored with the day it belongs to, so a restart cannot
-    // be used to clear it and a stale count from an earlier day is ignored.
-    final bondDayMs = prefs.getInt('pet_bond_day');
-    if (bondDayMs != null) {
-      _bondDay = DateTime.fromMillisecondsSinceEpoch(bondDayMs);
-      _bondEarnedToday = prefs.getInt('pet_bond_today') ?? 0;
     }
     final lastUpdateMs = prefs.getInt('pet_last_update');
     if (lastUpdateMs != null) {
@@ -679,7 +800,19 @@ class CharacterProvider extends ChangeNotifier {
       _inventory.addAll(inv);
     }
 
-    final savedCharacterType = prefs.getString('character_type') ?? 'cat';
+    // The scene is validated against both the catalogue and the purchase
+    // record: a retired id, or one whose purchase never happened, puts the pet
+    // back in the default scene rather than leaving the screen with nothing to
+    // paint.
+    final savedScene = prefs.getString('scene_id');
+    if (savedScene != null &&
+        sceneThemeById(savedScene) != null &&
+        (isFreeScene(savedScene) || _unlockedItems.contains(savedScene))) {
+      _sceneId = savedScene;
+    }
+
+    final savedCharacterType =
+        prefs.getString('character_type') ?? kDefaultPetType;
     final savedAwakeUntilMs = prefs.getInt('pet_awake_until');
     if (savedAwakeUntilMs != null) {
       _awakeUntil = DateTime.fromMillisecondsSinceEpoch(savedAwakeUntilMs);
@@ -694,15 +827,38 @@ class CharacterProvider extends ChangeNotifier {
     if (savedLastPetMs != null) {
       _lastPetAt = DateTime.fromMillisecondsSinceEpoch(savedLastPetMs);
     }
+    // Persisted for the same reason: a restart must not reset the clock.
+    final savedLastPlayMs = prefs.getInt('pet_last_played');
+    if (savedLastPlayMs != null) {
+      _lastPlayAt = DateTime.fromMillisecondsSinceEpoch(savedLastPlayMs);
+    }
     _customization = _customization.copyWith(
-      characterType: {'dog', 'cat', 'bird'}.contains(savedCharacterType)
+      characterType: isKnownPetType(savedCharacterType)
           ? savedCharacterType
-          : 'cat',
+          : kDefaultPetType,
     );
 
     // After the character type, since a legacy design migrates onto whichever
     // pet was out at the time.
     await _loadDesigns(prefs);
+
+    // Every pet used to be free, so a player may already live with — or have
+    // dressed — one that now has a price. As with the accessories in
+    // [_loadDesigns], what they already have stays theirs rather than being
+    // taken back at the next launch.
+    var petsGrandfathered = false;
+    for (final type in {_customization.characterType, ..._designs.keys}) {
+      if (!isKnownPetType(type) || isStarterPet(type)) continue;
+      petsGrandfathered =
+          _unlockedItems.add(petUnlockId(type)) || petsGrandfathered;
+    }
+    if (petsGrandfathered) await _savePetState();
+
+    // Only now may a pass record write to the unlocked set — see
+    // [_petStateLoaded]. A claim that landed on a previous run reaches the
+    // save here, whichever of the two providers finished loading first.
+    _petStateLoaded = true;
+    _applyClaimedPassScenes();
 
     notifyListeners();
   }
@@ -712,16 +868,12 @@ class CharacterProvider extends ChangeNotifier {
     await prefs.setInt('pet_hunger', _hunger);
     await prefs.setInt('pet_happiness', _happiness);
     await prefs.setInt('pet_health', _health);
-    await prefs.setInt('pet_bond_points', _bondPoints);
     if (_lastLearningAt != null) {
       await prefs.setInt(
           'pet_last_learning', _lastLearningAt!.millisecondsSinceEpoch);
     }
-    if (_bondDay != null) {
-      await prefs.setInt('pet_bond_day', _bondDay!.millisecondsSinceEpoch);
-      await prefs.setInt('pet_bond_today', _bondEarnedToday);
-    }
     await prefs.setInt('pet_last_update', _lastUpdate.millisecondsSinceEpoch);
+    await prefs.setBool('pet_slow_decay', _slowDecay);
     if (_awakeUntil != null) {
       await prefs.setInt(
           'pet_awake_until', _awakeUntil!.millisecondsSinceEpoch);
@@ -735,7 +887,11 @@ class CharacterProvider extends ChangeNotifier {
     if (_lastPetAt != null) {
       await prefs.setInt('pet_last_petted', _lastPetAt!.millisecondsSinceEpoch);
     }
+    if (_lastPlayAt != null) {
+      await prefs.setInt('pet_last_played', _lastPlayAt!.millisecondsSinceEpoch);
+    }
     await prefs.setString('character_type', _customization.characterType);
+    await prefs.setString('scene_id', _sceneId);
     // One entry per pet. The legacy `pet_body_color` / `pet_eye_*` /
     // `equipped_accessories` keys are left untouched: they are only read when
     // `pet_designs` is absent, and keeping them means a half-finished
@@ -757,24 +913,32 @@ class CharacterProvider extends ChangeNotifier {
     });
   }
 
-  /// Applies whole hours of decay accrued since [_lastUpdate], both for
+  /// Applies whole steps of decay accrued since [_lastUpdate], both for
   /// offline gaps and while the app is running. [_lastUpdate] advances only
-  /// by the hours consumed, so partial hours keep accruing across timer
-  /// ticks and app restarts. Returns true when any stat changed.
+  /// by the hours consumed, so partial steps keep accruing across timer ticks
+  /// and app restarts. Returns true when any stat changed.
+  ///
+  /// A step is one hour, or [PlusCareConstants.decayDivisor] hours while a
+  /// membership is paying for the upkeep. Slowing the *clock* rather than
+  /// scaling the amounts is what keeps this in integers: a multiplier would
+  /// have to round something away on every tick, and rounding a rate of two
+  /// points an hour is the difference between a quarter of the speed and half
+  /// of it.
   bool _applyElapsedDecay(DateTime now) {
-    final hours = now.difference(_lastUpdate).inHours;
-    if (hours <= 0) return false;
+    final hoursPerStep = _slowDecay ? PlusCareConstants.decayDivisor : 1;
+    final steps = now.difference(_lastUpdate).inHours ~/ hoursPerStep;
+    if (steps <= 0) return false;
 
     final oldHunger = _hunger;
     final oldHappiness = _happiness;
     final oldHealth = _health;
 
-    _hunger = (_hunger + hours * _hungerGainPerHour).clamp(0, 100);
-    _happiness = (_happiness - hours * _happinessLossPerHour).clamp(0, 100);
+    _hunger = (_hunger + steps * _hungerGainPerHour).clamp(0, 100);
+    _happiness = (_happiness - steps * _happinessLossPerHour).clamp(0, 100);
     if (_hunger > _criticalHunger || _happiness < _miserableHappiness) {
-      _health = (_health - hours * _healthLossPerHour).clamp(0, 100);
+      _health = (_health - steps * _healthLossPerHour).clamp(0, 100);
     }
-    _lastUpdate = _lastUpdate.add(Duration(hours: hours));
+    _lastUpdate = _lastUpdate.add(Duration(hours: steps * hoursPerStep));
 
     return _hunger != oldHunger ||
         _happiness != oldHappiness ||
@@ -805,9 +969,6 @@ class CharacterProvider extends ChangeNotifier {
   }
 
   void wakeUp() {
-    if (_aiIssueSleepMode) {
-      return;
-    }
     final now = _now();
     _lastInteractionAt = now;
     _awakeUntil = now.add(_awakeDuration);
@@ -816,9 +977,6 @@ class CharacterProvider extends ChangeNotifier {
   }
 
   void registerInteraction() {
-    if (_aiIssueSleepMode) {
-      return;
-    }
     _touchInteraction();
 
     // Unconditional, and it has to stay that way: rewardChat, rewardScenario,
@@ -843,23 +1001,6 @@ class CharacterProvider extends ChangeNotifier {
     return true;
   }
 
-  void setAiIssueSleepMode(bool enabled) {
-    if (AppRuntimeConfig.keepPetAwake) {
-      enabled = false;
-    }
-    if (_aiIssueSleepMode == enabled) {
-      return;
-    }
-
-    _aiIssueSleepMode = enabled;
-    if (enabled) {
-      _awakeUntil = null;
-      _eatingPhase = PetEatingPhase.none;
-    }
-    _savePetState();
-    notifyListeners();
-  }
-
   void setAnimationState(String state) {
     if (_animationState != state) {
       _animationState = state;
@@ -872,54 +1013,23 @@ class CharacterProvider extends ChangeNotifier {
   //
   // Kept separate from the activity rewards below on purpose. Those move the
   // fast survival stats and are called from anywhere something nice happened;
-  // these are only ever called for something the player did in the target
-  // language, so the ledger stays readable.
+  // this one is only ever called for something the player did in the target
+  // language, so the meaning of the timestamp stays readable.
   // ---------------------------------------------------------------------------
 
-  static bool _isSameDay(DateTime? a, DateTime b) =>
-      a != null && a.year == b.year && a.month == b.month && a.day == b.day;
-
-  /// Credits a learning event to the bond and returns the points actually
-  /// awarded, which is 0 once [BondConstants.dailyCap] is reached.
+  /// Marks that the player just did something in the target language.
   ///
-  /// [units] is how many of the thing happened — messages exchanged, cards
-  /// corrected — so callers can settle a whole session in one call.
-  int recordLearning(BondSource source, {int units = 1}) {
-    if (units <= 0) return 0;
-    return _awardBond(BondProgress.pointsFor(source) * units);
-  }
-
-  /// Bond for a finished quiz, which is worth more the better it went.
-  int recordQuizLearning({
-    required int correctAnswers,
-    required int totalQuestions,
-  }) {
-    return _awardBond(BondProgress.quizPoints(
-      correctAnswers: correctAnswers,
-      totalQuestions: totalQuestions,
-    ));
-  }
-
-  /// Adds [raw] bond, trimmed to what today has left.
+  /// This used to also credit a points ledger; the points are XP now and are
+  /// awarded by the caller through `UserProvider.addXp`. What is left is the
+  /// timestamp behind [warmth] — the pet noticing an absence is the one part
+  /// of bond that was never a score.
   ///
-  /// [_lastLearningAt] advances even when the cap pays nothing: the player did
-  /// learn, and the pet has no business acting like it missed them because
-  /// they studied too much.
-  int _awardBond(int raw) {
-    final now = _now();
-    if (!_isSameDay(_bondDay, now)) {
-      _bondDay = now;
-      _bondEarnedToday = 0;
-    }
-
-    final awarded = raw.clamp(0, bondRemainingToday);
-    _bondPoints += awarded;
-    _bondEarnedToday += awarded;
-    _lastLearningAt = now;
-
+  /// Idempotent by nature: recording twice in a session is harmless, since
+  /// only the most recent moment is kept.
+  void recordLearningMoment() {
+    _lastLearningAt = _now();
     _savePetState();
     notifyListeners();
-    return awarded;
   }
 
   // Activity rewards - called when user completes activities
@@ -995,6 +1105,34 @@ class CharacterProvider extends ChangeNotifier {
     return _now().difference(_lastPetAt!) >= petCooldown;
   }
 
+  /// Whether a finished toy chest game would pay happiness now.
+  bool get canEarnFromPlay {
+    if (_lastPlayAt == null) return true;
+    return _now().difference(_lastPlayAt!) >= playCooldown;
+  }
+
+  /// Pays for a finished toy chest game: [right] of [rounds]. Returns the
+  /// happiness actually added — nothing for a game with nothing right, or one
+  /// finished inside [playCooldown], which every game shares: more games in
+  /// the chest are more to play, not more happiness an hour.
+  ///
+  /// Saves directly rather than through [registerInteraction], which skips
+  /// the save while the pet dozes through an AI outage. The games need no AI,
+  /// so a game played then still counts.
+  int rewardPlay({required int right, required int rounds}) {
+    final gain = PlayRewards.happiness(right: right, rounds: rounds);
+    if (gain <= 0 || !canEarnFromPlay) return 0;
+
+    final before = _happiness;
+    _happiness = (_happiness + gain).clamp(0, 100);
+    _lastPlayAt = _now();
+    _touchInteraction();
+    _startHappyBurst();
+    _savePetState();
+    notifyListeners();
+    return _happiness - before;
+  }
+
   /// Time until petting pays out again, or [Duration.zero] when it's ready.
   Duration get petCooldownRemaining {
     if (_lastPetAt == null) return Duration.zero;
@@ -1012,10 +1150,6 @@ class CharacterProvider extends ChangeNotifier {
   /// use to decide about hearts — the reward feedback belongs to the reward,
   /// not to the rub.
   bool petThePet() {
-    // A pet dozing through an AI outage shouldn't perk up — registerInteraction
-    // ignores it too, so the burst would never be cleared by a notify.
-    if (_aiIssueSleepMode) return false;
-
     // Two reactions with different lifetimes: the rub itself, which lasts
     // about as long as the hand is there, and the contentment it leaves
     // behind, which outlives it.
@@ -1085,11 +1219,6 @@ class CharacterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateBackgroundColor(String color) {
-    _customization = _customization.copyWith(backgroundColor: color);
-    notifyListeners();
-  }
-
   /// Whether [swatch] is wearable — free, or already bought.
   bool ownsSwatch(PetSwatch swatch) =>
       ColorOwnership.isOwned(swatch, unlockedItemIds: _unlockedItems);
@@ -1125,7 +1254,7 @@ class CharacterProvider extends ChangeNotifier {
     if (design.bodyColor == hex) return;
     if (!ColorOwnership.isHexAllowed(
       hex,
-      kAllBodySwatches,
+      bodySwatchesFor(_customization.characterType),
       unlockedItemIds: _unlockedItems,
     )) {
       return;
@@ -1161,9 +1290,46 @@ class CharacterProvider extends ChangeNotifier {
     ));
   }
 
+  /// Sets the beak colour of the pet currently out, or returns it to the beak
+  /// as drawn when [hex] is null. A colour outside [kBeakSwatches] is ignored,
+  /// like an unowned coat, so a stray value can never reach the save.
+  void updateBeakColor(String? hex) {
+    if (design.beakColor == hex) return;
+    if (hex != null && swatchByHex(kBeakSwatches, hex) == null) return;
+    _setDesign(design.withBeak(hex));
+  }
+
+  /// Whether [type] can be lived with: a starter, or one that has been bought.
+  bool ownsPet(String type) =>
+      // Debug-only testing override; see AppRuntimeConfig.unlockAllAccessories.
+      AppRuntimeConfig.unlockAllAccessories ||
+      isStarterPet(type) ||
+      _unlockedItems.contains(petUnlockId(type));
+
+  /// Buys [type]. Returns false without side effects when it is unknown, a
+  /// starter, already owned, or unaffordable.
+  ///
+  /// Bought, not adopted: the caller decides whether the purchase also brings
+  /// the pet out, the way [purchaseSwatch] leaves wearing a colour to the
+  /// wardrobe.
+  Future<bool> purchasePet(String type, UserProvider userProvider) async {
+    final price = petPrice(type);
+    if (!isKnownPetType(type) || price == null) return false;
+    if (_unlockedItems.contains(petUnlockId(type))) return false;
+    if (userProvider.coins < price) return false;
+
+    await userProvider.spendCoins(price);
+    _unlockedItems.add(petUnlockId(type));
+    await _savePetState();
+    notifyListeners();
+    return true;
+  }
+
+  /// Brings [type] out. A pet that has not been bought is ignored, so the
+  /// price holds even if a caller skips the pet changer's own check.
   Future<void> updateCharacterType(String type) async {
-    const validTypes = {'dog', 'cat', 'bird'};
-    if (!validTypes.contains(type)) return;
+    if (!isKnownPetType(type)) return;
+    if (!ownsPet(type)) return;
 
     if (_customization.characterType == type) return;
 
@@ -1187,6 +1353,13 @@ class CharacterProvider extends ChangeNotifier {
       for (int i = 0; i < quantity; i++) {
         _inventory.add(item.id);
       }
+    }
+    // A bought scene goes up straight away. Unlike a hat there is nothing to
+    // choose between — one world is showing at a time — so leaving the screen
+    // unchanged after paying for it is the whole reason these were bought and
+    // never seen.
+    if (item.type == 'background' && sceneThemeById(item.id) != null) {
+      _sceneId = item.id;
     }
     await _savePetState();
     notifyListeners();

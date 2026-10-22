@@ -11,6 +11,7 @@ import '../utils/fonts.dart';
 import '../utils/pet_care_status.dart';
 import '../utils/shop_item_localizer.dart';
 import '../utils/rtl_locale.dart';
+import 'shop_item_icon.dart';
 
 /// The pet's status, and the actions that change it.
 ///
@@ -498,7 +499,7 @@ class _FoodRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(item.icon, style: const TextStyle(fontSize: 18)),
+            ShopItemIcon(item: item, size: 22),
             const SizedBox(width: 10),
             Expanded(
               child: Text(

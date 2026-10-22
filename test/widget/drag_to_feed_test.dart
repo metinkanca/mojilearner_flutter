@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/components/carried_food.dart';
+import 'package:mojilearner_flutter/components/shop_item_icon.dart';
 import 'package:mojilearner_flutter/providers/character_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +11,12 @@ import '../helpers/pump_app.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  /// The carried apple, found by the item it draws rather than by a glyph:
+  /// food is pixel art now, not an emoji.
+  final apple = find.byWidgetPredicate(
+    (w) => w is ShopItemIcon && w.item.id == 'apple',
+  );
 
   late MockSettingsProvider mockSettings;
 
@@ -68,7 +75,7 @@ void main() {
       await pumpFeedingArea(tester, buildCharacter());
 
       expect(find.textContaining('Drag onto Moji'), findsNothing);
-      expect(find.text('🍎'), findsNothing);
+      expect(apple, findsNothing);
     });
 
     testWidgets('appears once food is picked up', (tester) async {
@@ -79,7 +86,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Drag onto Moji to feed'), findsOneWidget);
-      expect(find.text('🍎'), findsWidgets);
+      expect(apple, findsWidgets);
     });
 
     testWidgets('the cancel button puts the food back', (tester) async {
@@ -109,7 +116,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final gesture = await tester.startGesture(
-        tester.getCenter(find.text('🍎').first),
+        tester.getCenter(apple.first),
       );
       await tester.pump();
 
@@ -139,7 +146,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final gesture = await tester.startGesture(
-        tester.getCenter(find.text('🍎').first),
+        tester.getCenter(apple.first),
       );
       await tester.pump();
       await gesture.moveTo(tester.getCenter(find.byKey(const Key('pet'))));
@@ -163,7 +170,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final gesture = await tester.startGesture(
-        tester.getCenter(find.text('🍎').first),
+        tester.getCenter(apple.first),
       );
       await tester.pump();
       await gesture.moveTo(tester.getCenter(find.byKey(const Key('pet'))));
@@ -189,7 +196,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final gesture = await tester.startGesture(
-        tester.getCenter(find.text('🍎').first),
+        tester.getCenter(apple.first),
       );
       await tester.pump();
       await gesture.moveTo(tester.getCenter(find.byKey(const Key('pet'))));

@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/ads_provider.dart';
 import '../providers/user_provider.dart';
 import '../utils/fonts.dart';
+import 'tutorial/retro_showcase.dart';
 
 /// Runs one rewarded ad and tells the player what it paid.
 ///
@@ -47,9 +48,21 @@ Future<int> watchRewardedAd(BuildContext context) async {
 /// Collapses to nothing once the day's ads are used up, rather than sitting
 /// there greyed out — a dead control on a shop shelf reads as broken.
 class FreeCoinsTile extends StatefulWidget {
-  const FreeCoinsTile({super.key, required this.usePixelFont});
+  const FreeCoinsTile({
+    super.key,
+    required this.usePixelFont,
+    this.showcaseKey,
+    this.showcaseDescription,
+  });
 
   final bool usePixelFont;
+
+  /// Set by the shop tour. Taken as parameters rather than wrapped at the
+  /// call site because the tile decides for itself whether it exists, and a
+  /// step registered against the empty branch would point at nothing instead
+  /// of being skipped.
+  final GlobalKey? showcaseKey;
+  final String? showcaseDescription;
 
   @override
   State<FreeCoinsTile> createState() => _FreeCoinsTileState();
@@ -76,7 +89,7 @@ class _FreeCoinsTileState extends State<FreeCoinsTile> {
     final reward = ads.nextRewardValue;
     if (reward == null || !ads.canOfferRewarded) return const SizedBox.shrink();
 
-    return Padding(
+    final tile = Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: GestureDetector(
         onTap: ads.isWatchingRewarded ? null : () => watchRewardedAd(context),
@@ -141,6 +154,17 @@ class _FreeCoinsTileState extends State<FreeCoinsTile> {
           ),
         ),
       ),
+    );
+
+    final key = widget.showcaseKey;
+    final description = widget.showcaseDescription;
+    if (key == null || description == null) return tile;
+
+    return RetroShowcase(
+      showcaseKey: key,
+      description: description,
+      targetPadding: EdgeInsets.zero,
+      child: tile,
     );
   }
 }

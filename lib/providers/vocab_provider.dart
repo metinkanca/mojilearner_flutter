@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../constants/app_runtime_config.dart';
+import '../constants/sample_mistakes.dart';
 import '../models/models.dart';
 import '../utils/secure_storage.dart';
 import '../utils/vocab_extractor.dart';
@@ -18,6 +20,9 @@ class VocabProvider extends ChangeNotifier {
   final List<ReviewItem> _items = [];
   bool _isLoaded = false;
   StreamSubscription<Mistake>? _mistakeSubscription;
+
+  /// Review items made from `kSampleMistakes`, which are shown and never saved.
+  final Set<String> _sampleKeys = {};
 
   /// Cap on a single review session, so a long absence doesn't present a
   /// hundred-item backlog that the user simply abandons.
@@ -55,6 +60,7 @@ class VocabProvider extends ChangeNotifier {
           ..clear()
           ..addAll(data.map(ReviewItem.fromJson));
       }
+      if (AppRuntimeConfig.sampleMistakes) _addSamples();
     } catch (e) {
       debugPrint('⚠️ VOCAB: Failed to load review items - $e');
     } finally {
@@ -65,10 +71,35 @@ class VocabProvider extends ChangeNotifier {
     }
   }
 
+  /// The sample sentences as due review items, in English. Added only when
+  /// they are not there already, so a launch never resets a sample's schedule.
+  void _addSamples() {
+    for (final sample in kSampleMistakes) {
+      final key = ReviewItem.dedupeKey(
+        languageCode: 'en',
+        kind: ReviewItemKind.correction,
+        prompt: sample.original,
+      );
+      if (_items.any((item) => item.key == key)) continue;
+      _sampleKeys.add(key);
+      _upsert(
+        languageCode: 'en',
+        prompt: sample.original,
+        answer: sample.correction,
+        context: sample.explanation,
+        kind: ReviewItemKind.correction,
+        flush: false,
+      );
+    }
+  }
+
   Future<void> _save() async {
     try {
       await SecureStorage.saveReviewItems(
-        _items.map((item) => item.toJson()).toList(),
+        _items
+            .where((item) => !_sampleKeys.contains(item.key))
+            .map((item) => item.toJson())
+            .toList(),
       );
     } catch (e) {
       debugPrint('⚠️ VOCAB: Failed to save review items - $e');

@@ -1,59 +1,21 @@
-/// The bond axis: the slow, permanent half of the pet relationship.
+/// The bond axis: how close the pet has grown, and how long since the player
+/// last showed up.
 ///
-/// The survival stats (hunger/happiness/health) decay in hours and are bought
-/// back with coins, so they only ever measure whether you opened the app and
-/// could afford food. Bond measures whether you *learned*. It is earned from
-/// learning events alone, and it is never taken away.
+/// Bond used to be its own point ledger, earned from four learning events and
+/// capped daily. It no longer is. Every event that paid bond also paid XP, at
+/// the same call sites, within a line or two — bond was XP at a second
+/// exchange rate, and two ledgers over one stream of events can only drift.
+/// So the ladder below reads the player's level instead, and this file keeps
+/// only what level cannot say: which rung the *pet* is on, and whether it has
+/// been waiting.
 ///
-/// Feeding, petting, shopping and daily-login rewards deliberately pay nothing
-/// here. The premise of the game is that the relationship grows through the
-/// language, so anything the player can buy has to stay on the survival side
-/// of the line or the premise stops being true.
+/// The premise survives the merge because XP is already the learning ledger:
+/// nothing in the app grants XP for feeding, petting, shopping or logging in.
+/// Anything the player can buy still stays on the survival side of the line.
 library;
-
-/// A kind of learning event that grows the bond.
-///
-/// Every member is something the player did *in the target language*. There is
-/// deliberately no member for feeding, petting or purchases.
-enum BondSource {
-  /// One exchange with the pet in the target language.
-  conversation,
-
-  /// Finishing a quiz. Worth more the better it went — see
-  /// [BondConstants.quizBase] and [BondConstants.quizAccuracyBonus].
-  quiz,
-
-  /// Reviewing an item the player previously got wrong. Worth the most per
-  /// unit: acting on a correction is the event most likely to be actual
-  /// learning rather than exposure.
-  correction,
-
-  /// Clearing a role-play scenario — the longest single stretch of target
-  /// language the app asks for.
-  scenario,
-}
 
 class BondConstants {
   BondConstants._();
-
-  static const int conversation = 2;
-  static const int correction = 3;
-  static const int scenario = 8;
-
-  /// A quiz always pays [quizBase], plus up to [quizAccuracyBonus] scaled by
-  /// accuracy. Finishing a quiz badly still grows the bond a little — the pet
-  /// cares that you showed up and tried, which is also what keeps a struggling
-  /// learner in the app.
-  static const int quizBase = 2;
-  static const int quizAccuracyBonus = 6;
-
-  /// Most bond a single day can pay, across all sources.
-  ///
-  /// Without a ceiling the fastest route to a grown pet is a long grinding
-  /// session rather than a habit, which is the opposite of what a language app
-  /// wants. Roughly two solid days of engaged study reach it; a normal session
-  /// does not come close.
-  static const int dailyCap = 40;
 
   /// Days of no learning before the pet reads as missing the player.
   static const int missingYouAfterDays = 2;
@@ -69,67 +31,49 @@ class BondConstants {
 /// every stage. When per-stage art exists, [PetStage] is what selects it.
 enum PetStage { curious, friendly, attached, devoted, inseparable }
 
-/// The app stores proficiency as beginner/intermediate/advanced
-/// ([LevelValidator]) while assessments talk in CEFR bands. This is the single
-/// ordered ladder both map onto.
-enum FluencyTier { beginner, intermediate, advanced }
-
-/// What a stage costs: bond points *and* a floor on the player's fluency.
+/// What a stage costs: a player level, and nothing else.
 ///
-/// Both are required, which is the whole point. Bond alone would let a player
-/// grind the pet to its final stage without their language moving; fluency
-/// alone would evolve the pet off a single calibration and then never again.
+/// It also used to need a floor on the player's assessed fluency, so that
+/// grinding could not carry a pet past the point where their language had to
+/// move. That made the later stages — and the wardrobe pieces they unlock — a
+/// reward for already being good at the language, which an active beginner
+/// could never reach however much they played. The owner's rule since
+/// 2026-09-18 is the opposite: activity is rewarded, language level never is.
+/// Everyone climbs the same ladder at the same price, and XP is what they
+/// climb it with.
 class PetStageGate {
   const PetStageGate({
     required this.stage,
-    required this.bondPoints,
-    required this.minTier,
+    required this.minLevel,
   });
 
   final PetStage stage;
-  final int bondPoints;
-  final FluencyTier minTier;
+  final int minLevel;
 }
 
 /// The stage ladder, in order. The first gate is the starting state and costs
 /// nothing.
 ///
-/// Point costs are set against [BondConstants.dailyCap]: friendly lands in
-/// about a week of real use, attached about a month, and inseparable is a
-/// season-long arc that no amount of grinding can shorten past the cap.
+/// The levels are deliberately offset from the milestones every five levels
+/// in `progression.dart`, so a stage-up is its own moment rather than a
+/// footnote on a background unlock or a boss trial. They sit where they did
+/// on the old 20-level ladder, scaled to the 30-level one (4/8/13/18 became
+/// 6/12/19/27). Against the ~184 XP/day the XP curve is tuned for (see
+/// [ProgressionConstants.growthRate]), they land at roughly two days, a week
+/// and a half, four weeks and eight weeks.
 const List<PetStageGate> petStageGates = [
-  PetStageGate(
-    stage: PetStage.curious,
-    bondPoints: 0,
-    minTier: FluencyTier.beginner,
-  ),
-  PetStageGate(
-    stage: PetStage.friendly,
-    bondPoints: 100,
-    minTier: FluencyTier.beginner,
-  ),
-  PetStageGate(
-    stage: PetStage.attached,
-    bondPoints: 300,
-    minTier: FluencyTier.intermediate,
-  ),
-  PetStageGate(
-    stage: PetStage.devoted,
-    bondPoints: 700,
-    minTier: FluencyTier.intermediate,
-  ),
-  PetStageGate(
-    stage: PetStage.inseparable,
-    bondPoints: 1500,
-    minTier: FluencyTier.advanced,
-  ),
+  PetStageGate(stage: PetStage.curious, minLevel: 1),
+  PetStageGate(stage: PetStage.friendly, minLevel: 6),
+  PetStageGate(stage: PetStage.attached, minLevel: 12),
+  PetStageGate(stage: PetStage.devoted, minLevel: 19),
+  PetStageGate(stage: PetStage.inseparable, minLevel: 27),
 ];
 
 /// How long it has been since the player last learned anything.
 ///
-/// This is the softened failure state. It never touches bond, never touches
-/// coins and never scales a reward — an absence costs the player nothing but
-/// the pet saying it noticed, and the first learning event back clears it.
-/// Absence in a language app is usually life getting in the way, and charging
-/// for it is how people decide not to come back at all.
+/// This is the softened failure state. It never touches the level, never
+/// touches coins and never scales a reward — an absence costs the player
+/// nothing but the pet saying it noticed, and the first learning event back
+/// clears it. Absence in a language app is usually life getting in the way,
+/// and charging for it is how people decide not to come back at all.
 enum PetWarmth { warm, missingYou, lonely }

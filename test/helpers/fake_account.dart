@@ -23,6 +23,14 @@ class FakeAccountBackend implements AccountBackend {
   final bool googleCancels;
 
   String uid = 'anon-uid';
+
+  /// The ID token this backend hands the AI proxy. Null stands for a refresh
+  /// that failed, which the proxy meters anonymously rather than refusing.
+  String? idToken = 'fake-id-token';
+
+  @override
+  Future<String?> currentIdToken() async => idToken;
+
   @override
   String? currentEmail;
   @override

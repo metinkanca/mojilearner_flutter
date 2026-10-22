@@ -434,6 +434,9 @@ class PetDesign {
   /// Secondary eye colour: the right eye (heterochromia). Ignored for solid.
   final String eyeColor2;
 
+  /// Beak colour, for a pet that has one. Null is the beak as drawn.
+  final String? beakColor;
+
   /// Slot id -> equipped accessory id. A missing (or null) slot is empty.
   final Map<String, String?> accessories;
 
@@ -442,6 +445,7 @@ class PetDesign {
     this.eyeMode = kDefaultEyeMode,
     this.eyeColor1 = kDefaultEyeColor1,
     this.eyeColor2 = kDefaultEyeColor2,
+    this.beakColor,
     this.accessories = const {},
   });
 
@@ -457,9 +461,22 @@ class PetDesign {
       eyeMode: eyeMode ?? this.eyeMode,
       eyeColor1: eyeColor1 ?? this.eyeColor1,
       eyeColor2: eyeColor2 ?? this.eyeColor2,
+      beakColor: beakColor,
       accessories: accessories ?? this.accessories,
     );
   }
+
+  /// The same design with its beak set to [hex], or back to the beak as drawn
+  /// when [hex] is null — which [copyWith] cannot express, since a null there
+  /// means "unchanged".
+  PetDesign withBeak(String? hex) => PetDesign(
+        bodyColor: bodyColor,
+        eyeMode: eyeMode,
+        eyeColor1: eyeColor1,
+        eyeColor2: eyeColor2,
+        beakColor: hex,
+        accessories: accessories,
+      );
 
   /// The same design with [slot] set to [id] (or emptied when [id] is null).
   PetDesign withSlot(String slot, String? id) {
@@ -477,6 +494,7 @@ class PetDesign {
         'eyeMode': eyeMode,
         'eyeColor1': eyeColor1,
         'eyeColor2': eyeColor2,
+        if (beakColor != null) 'beakColor': beakColor,
         'accessories': {
           for (final e in accessories.entries)
             if (e.value != null) e.key: e.value,
@@ -508,27 +526,31 @@ class PetDesign {
       eyeMode: str('eyeMode', kDefaultEyeMode),
       eyeColor1: str('eyeColor1', kDefaultEyeColor1),
       eyeColor2: str('eyeColor2', kDefaultEyeColor2),
+      beakColor: json['beakColor'] is String &&
+              (json['beakColor'] as String).isNotEmpty
+          ? json['beakColor'] as String
+          : null,
       accessories: accessories,
     );
   }
 }
 
 class CharacterCustomization {
-  final String characterType; // 'dog', 'cat', 'bird'
+  final String characterType; // one of `constants/pets.dart` kPetTypes
   final String openFace;
   final String closedFace;
   final String color;
-  final String backgroundColor;
 
   // The coat and eye colours used to live here, shared by every pet. They are
-  // per character type now — see [PetDesign].
+  // per character type now — see [PetDesign]. A `backgroundColor` hex lived
+  // here too and was never drawn; the world the pet stands in is a whole
+  // palette rather than one colour, and lives in `constants/scenes.dart`.
 
   CharacterCustomization({
     this.characterType = 'cat',
     this.openFace = '(•_•)',
     this.closedFace = '(-_-)',
     this.color = '#FFFFFF', // Default white
-    this.backgroundColor = '#60A5FA', // Default blue-400 equivalent
   });
 
   CharacterCustomization copyWith({
@@ -536,14 +558,12 @@ class CharacterCustomization {
     String? openFace,
     String? closedFace,
     String? color,
-    String? backgroundColor,
   }) {
     return CharacterCustomization(
       characterType: characterType ?? this.characterType,
       openFace: openFace ?? this.openFace,
       closedFace: closedFace ?? this.closedFace,
       color: color ?? this.color,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
     );
   }
 }
@@ -551,14 +571,27 @@ class CharacterCustomization {
 class DailyRewardInfo {
   final int dayNumber;
   final RewardDef reward;
-  final bool streakReset;
-  final int currentStreak;
+
+  /// How many rewards this player will have claimed once this one is taken.
+  ///
+  /// A running total of claims rather than of consecutive days — nothing
+  /// resets it, so a gap in the calendar leaves no mark on it. This is what
+  /// [dayNumber] is derived from. See
+  /// `DailyRewardProvider.checkDailyReward`.
+  final int claimCount;
+
+  /// Days claimed in a row, once this one is taken.
+  ///
+  /// The number the player is shown. Unlike [claimCount] a gap does break it,
+  /// and breaking it costs nothing at all: no reward on this screen or any
+  /// other reads it.
+  final int loginStreak;
 
   DailyRewardInfo({
     required this.dayNumber,
     required this.reward,
-    required this.streakReset,
-    required this.currentStreak,
+    required this.claimCount,
+    required this.loginStreak,
   });
 }
 

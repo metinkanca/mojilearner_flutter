@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/theme.dart';
 import '../../components/character_sprite.dart';
+import '../../components/quiz_stage.dart';
 import '../../components/quiz_rewards_popup.dart';
+import '../../l10n/app_localizations.dart';
+import '../../router.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/user_provider.dart';
@@ -34,6 +37,10 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
   bool _showExplanation = false;
   bool _usingLocalFallback = false;
   String? _selectedAnswer;
+
+  /// Bumped on a right answer, which is what plays the hearts. See
+  /// [QuizClassFloor.heartBurstId].
+  int _heartBursts = 0;
 
   @override
   void initState() {
@@ -355,6 +362,7 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
       _showExplanation = true;
       if (answer == _questions[_currentQuestionIndex]['correct']) {
         _score++;
+        _heartBursts++;
       }
     });
   }
@@ -378,7 +386,6 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
       await userProvider.addXp(reward.xpReward);
       // No sickness scaling during onboarding — the pet starts at full health.
       await userProvider.addCoins(reward.coinReward);
-      await userProvider.markOnboardingComplete();
 
       if (!mounted) return;
 
@@ -400,7 +407,9 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
       );
 
       if (!mounted) return;
-      context.go('/');
+      // Not home yet: the pet has one thing left to teach, and onboarding is
+      // only marked complete once it has. See [petTutorialRoute].
+      context.go(petTutorialRoute);
     } else {
       // More questions - go to next question
       setState(() {
@@ -411,63 +420,11 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
     }
   }
 
-  Widget _pixel(Color color) {
-    return Container(width: 8, height: 8, color: color);
-  }
-
-  Widget _buildOption(String opt, Map<String, dynamic> questionData) {
-    bool isSelected = _selectedAnswer == opt;
-    bool isCorrect = opt == questionData['correct'];
-    Color bgColor = Colors.white;
-
-    if (_showExplanation) {
-      if (isCorrect) {
-        bgColor = AppTheme.retroGrass;
-      } else if (isSelected) {
-        bgColor = AppTheme.retroPrimary;
-      }
-    }
-
-    return GestureDetector(
-      onTap: () => _handleAnswer(opt),
-      child: AspectRatio(
-        aspectRatio: 1.4,
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: bgColor,
-            border: Border.all(color: AppTheme.retroDark, width: 4),
-            boxShadow: const [
-              BoxShadow(
-                  color: AppTheme.retroDark,
-                  offset: Offset(4, 4),
-                  blurRadius: 0)
-            ],
-          ),
-          child: Text(
-            opt,
-            textDirection:
-                textDirectionForLocale(Localizations.localeOf(context)),
-            textAlign: textAlignForLocale(Localizations.localeOf(context)),
-            style: AppFonts.pressStart2p(
-              fontSize: 10,
-              color: AppTheme.retroDark,
-              height: 1.5,
-              decoration: TextDecoration.none,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isOffline = OfflineDetector.isOfflineMode;
     final showLocalFallbackIndicator = _usingLocalFallback && !isOffline;
-    final locale = Localizations.localeOf(context);
-    final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
 
     if (_isLoading) {
       return Scaffold(
@@ -504,8 +461,9 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
                     : (_usingLocalFallback
                         ? 'Loading local fallback quiz...'
                         : 'Generating quiz...'),
-                textDirection: textDirection,
-                textAlign: textAlign,
+                textDirection:
+                    textDirectionForLocale(Localizations.localeOf(context)),
+                textAlign: TextAlign.center,
                 style: AppFonts.pressStart2p(
                   fontSize: 10,
                   color: AppTheme.retroDark,
@@ -519,426 +477,91 @@ class _AdaptiveQuizScreenState extends State<AdaptiveQuizScreen> {
     }
 
     final question = _questions[_currentQuestionIndex];
-    final mainTopic = question['topic'] ?? '';
-    final subText = question['question'] ?? 'Select the correct option';
-    final options = (question['options'] as List).cast<String>();
+    final correct = question['correct'];
 
-    // Bubble logic
-    final bubbleText = _showExplanation
-        ? (question['explanation'] ?? "Great job!")
-        : "You got this!";
-
-    return Container(
-      color: AppTheme.retroSky, // Consistent BG
-      child: Stack(
+    return QuizStage(
+      banner: _banner(isOffline, showLocalFallbackIndicator),
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // 1. Background Layer
-          Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Container(
-                  color: AppTheme.retroSky,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                          top: 40,
-                          left: 30,
-                          child: Container(
-                              width: 48,
-                              height: 48,
-                              color: AppTheme.retroAccent,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 4,
-                                          color: AppTheme.retroDark))))),
-                      Positioned(
-                          top: 70,
-                          right: 40,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  width: 64,
-                                  height: 32,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          color: AppTheme.retroDark,
-                                          width: 4))),
-                              Transform.translate(
-                                  offset: const Offset(-16, -16),
-                                  child: Container(
-                                      width: 48,
-                                      height: 32,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: AppTheme.retroDark,
-                                              width: 4)))),
-                            ],
-                          )),
-                      // Offline mode indicator (positioned in sky)
-                      if (isOffline)
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            color: const Color(0xFFFFC107),
-                            child: Text(
-                              'OFFLINE MODE - USING MOCK QUIZ',
-                              textDirection: textDirection,
-                              textAlign: textAlign,
-                              style: AppFonts.pressStart2p(
-                                fontSize: 8,
-                                color: AppTheme.retroDark,
-                                decoration: TextDecoration.none,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      if (showLocalFallbackIndicator)
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            color: const Color(0xFFFFC107),
-                            child: Text(
-                              'ONLINE MODE - LOCAL FALLBACK QUIZ',
-                              textDirection: textDirection,
-                              textAlign: textAlign,
-                              style: AppFonts.pressStart2p(
-                                fontSize: 8,
-                                color: AppTheme.retroDark,
-                                decoration: TextDecoration.none,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Container(
-                  width: double.infinity,
-                  color: AppTheme.retroGrass,
-                  child: Stack(
-                    children: [
-                      Align(
-                          alignment: Alignment.topCenter,
-                          child:
-                              Container(height: 4, color: AppTheme.retroDark)),
-                      Positioned(
-                          top: 8,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                              height: 16,
-                              color: AppTheme.retroGrassDark.withValues(alpha: 0.2))),
-                      Positioned(
-                          top: 40,
-                          left: 40,
-                          child: _pixel(AppTheme.retroGrassDark)),
-                      Positioned(
-                          top: 48,
-                          left: 48,
-                          child: _pixel(AppTheme.retroGrassDark)),
-                      Positioned(
-                          top: 80,
-                          right: 80,
-                          child: _pixel(AppTheme.retroGrassDark)),
-                      Positioned(
-                          top: 150,
-                          left: 100,
-                          child: _pixel(AppTheme.retroGrassDark)),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          // 2. Main Content
-          SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 16), // Bottom padding for scrolling
-                    child: Column(
-                      children: [
-                        // Top Bar
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              // Progress indicator only
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: AppTheme.retroDark,
-                                        offset: Offset(4, 4),
-                                        blurRadius: 0)
-                                  ],
-                                ),
-                                child: Text(
-                                  '${_currentQuestionIndex + 1}/${_questions.length}',
-                                  textDirection: TextDirection.ltr,
-                                  textAlign: TextAlign.center,
-                                  style: AppFonts.pressStart2p(
-                                    fontSize: 8,
-                                    color: AppTheme.retroDark,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Question Box
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            alignment: Alignment.topCenter,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                constraints:
-                                    const BoxConstraints(minHeight: 180),
-                                padding: const EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: AppTheme.retroDark,
-                                        offset: Offset(6, 6),
-                                        blurRadius: 0)
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(
-                                        height: 32), // Space for header overlap
-                                    Text(
-                                      subText, // e.g. "How do you say..."
-                                      textDirection: textDirection,
-                                      textAlign: textAlign,
-                                      style: AppFonts.pressStart2p(
-                                        fontSize: 10,
-                                        height: 1.8,
-                                        color: Colors.grey[600],
-                                        decoration: TextDecoration.none,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      mainTopic, // e.g. "Greetings"
-                                      textDirection: textDirection,
-                                      textAlign: textAlign,
-                                      style: AppFonts.pressStart2p(
-                                        fontSize: 20,
-                                        height: 1.4,
-                                        color: AppTheme.retroDark,
-                                        decoration: TextDecoration.none,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // "Question X/Y" Header
-                              Positioned(
-                                top: -16,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.retroPrimary,
-                                    border: Border.all(
-                                        color: AppTheme.retroDark, width: 4),
-                                  ),
-                                  child: Text(
-                                    "QUESTION ${_currentQuestionIndex + 1}/${_questions.length}",
-                                    textDirection: TextDirection.ltr,
-                                    textAlign: TextAlign.center,
-                                    style: AppFonts.pressStart2p(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                      decoration: TextDecoration.none,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Corner dots
-                              Positioned(
-                                  top: 8,
-                                  left: 8,
-                                  child: _pixel(AppTheme.retroDark)),
-                              Positioned(
-                                  top: 8,
-                                  right: 8,
-                                  child: _pixel(AppTheme.retroDark)),
-                              Positioned(
-                                  bottom: 8,
-                                  left: 8,
-                                  child: _pixel(AppTheme.retroDark)),
-                              Positioned(
-                                  bottom: 8,
-                                  right: 8,
-                                  child: _pixel(AppTheme.retroDark)),
-                            ],
-                          ),
-                        ),
-
-                        // Fixed spacing to prevent layout shift
-                        const SizedBox(height: 12),
-
-                        // Options Grid (2x2 layout)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 12),
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < options.length; i += 2)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 12.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: _buildOption(
-                                              options[i], question)),
-                                      const SizedBox(width: 16),
-                                      if (i + 1 < options.length)
-                                        Expanded(
-                                            child: _buildOption(
-                                                options[i + 1], question))
-                                      else
-                                        const Spacer(),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-
-                        // Fixed spacing to prevent layout shift
-                        const SizedBox(height: 24),
-
-                        // Character & Speech Bubble
-                        Padding(
-                          padding: const EdgeInsets.only(right: 24, bottom: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // Speech Bubble
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                margin: const EdgeInsets.only(right: 8),
-                                constraints:
-                                    const BoxConstraints(maxWidth: 180),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: AppTheme.retroDark, width: 3),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: AppTheme.retroDark,
-                                        offset: Offset(3, 3),
-                                        blurRadius: 0)
-                                  ],
-                                ),
-                                child: Text(
-                                  bubbleText,
-                                  textDirection: textDirection,
-                                  textAlign: textAlign,
-                                  style: AppFonts.pressStart2p(
-                                    fontSize: 8,
-                                    height: 1.5,
-                                    color: AppTheme.retroDark,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ),
-                              // Pet Avatar
-                              const CharacterSprite(
-                                width: 96,
-                                height: 96,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Continue Button (appears after answer is selected)
-                        if (_showExplanation)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: GestureDetector(
-                              onTap: _goToNextQuestion,
-                              child: Container(
-                                width: double.infinity,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.retroPrimary,
-                                  border: Border.all(
-                                      color: AppTheme.retroDark, width: 4),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: AppTheme.retroDark,
-                                      offset: Offset(4, 4),
-                                      blurRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  'CONTINUE',
-                                  textAlign: TextAlign.center,
-                                  style: AppFonts.pressStart2p(
-                                    fontSize: 12,
-                                    color: Colors.white,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: AppTheme.retroDark, width: 4),
+              boxShadow: const [
+                BoxShadow(
+                    color: AppTheme.retroDark,
+                    offset: Offset(4, 4),
+                    blurRadius: 0)
               ],
+            ),
+            child: Text(
+              '${_currentQuestionIndex + 1}/${_questions.length}',
+              textDirection: TextDirection.ltr,
+              textAlign: TextAlign.center,
+              style: AppFonts.pressStart2p(
+                fontSize: 8,
+                color: AppTheme.retroDark,
+                decoration: TextDecoration.none,
+              ),
             ),
           ),
         ],
+      ),
+      badgeLabel: l10n.quizQuestionCounter(
+        _currentQuestionIndex + 1,
+        _questions.length,
+      ),
+      // Empty as well as absent: a generated question can come back with the
+      // field present and blank, and the daily quiz already falls back on
+      // both. Two quizzes, one rule.
+      prompt: _orElse(question['question'], l10n.quizPickAnswer),
+      topic: question['topic'] ?? '',
+      options: (question['options'] as List).cast<String>(),
+      stateOf: (option) {
+        if (!_showExplanation) return QuizOptionState.idle;
+        if (option == correct) return QuizOptionState.correct;
+        if (option == _selectedAnswer) return QuizOptionState.wrong;
+        return QuizOptionState.idle;
+      },
+      onAnswer: _showExplanation ? null : _handleAnswer,
+      bubbleText: _showExplanation
+          ? _orElse(question['explanation'], l10n.quizWellDone)
+          : l10n.quizEncouragement,
+      heartBurstId: _heartBursts,
+      continueLabel: l10n.continueBtn,
+      onContinue: _showExplanation ? _goToNextQuestion : null,
+    );
+  }
+
+  /// [value] when it is a string with something in it, else [fallback].
+  static String _orElse(Object? value, String fallback) =>
+      (value is String && value.trim().isNotEmpty) ? value : fallback;
+
+  /// The yellow strip that says the quiz did not come from where it should
+  /// have. Null when it came from the AI, which is the quiet case.
+  Widget? _banner(bool isOffline, bool showLocalFallback) {
+    final label = isOffline
+        ? 'OFFLINE MODE - USING MOCK QUIZ'
+        : (showLocalFallback ? 'ONLINE MODE - LOCAL FALLBACK QUIZ' : null);
+    if (label == null) return null;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      color: const Color(0xFFFFC107),
+      child: Text(
+        label,
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+        style: AppFonts.pressStart2p(
+          fontSize: 8,
+          color: AppTheme.retroDark,
+          decoration: TextDecoration.none,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

@@ -30,20 +30,26 @@ class DailyRewardProvider extends ChangeNotifier {
 
   DailyRewardInfo? get pendingDailyReward => _pendingDailyReward;
 
-  int get _streak => _userProvider?.streak ?? 0;
+  int get _claims => _userProvider?.rewardClaims ?? 0;
 
-  int get dailyRewardClaimCount => _streak;
+  int get _loginStreak => _userProvider?.loginStreak ?? 0;
+
+  int get dailyRewardClaimCount => _claims;
+
+  /// Days claimed in a row. Shown, and nothing else — see
+  /// [UserProvider.loginStreak].
+  int get loginStreak => _loginStreak;
 
   int get completedRewardCycleDay {
-    if (_streak == 0) {
+    if (_claims == 0) {
       return 0;
     }
-    final remainder = _streak % dailyRewards.length;
+    final remainder = _claims % dailyRewards.length;
     return remainder == 0 ? dailyRewards.length : remainder;
   }
 
   int get nextRewardCycleDay {
-    final nextClaimCount = _streak + 1;
+    final nextClaimCount = _claims + 1;
     final remainder = nextClaimCount % dailyRewards.length;
     return remainder == 0 ? dailyRewards.length : remainder;
   }
@@ -101,8 +107,24 @@ class DailyRewardProvider extends ChangeNotifier {
   }
 
   /// Check if a daily reward is available.
-  /// Rewards advance one step per claim, up to once per calendar day.
-  /// Missing days does not reset progress.
+  ///
+  /// Rewards advance one step per claim, at most once per calendar day, and
+  /// **a missed day costs nothing**. Someone who claims on Monday and next
+  /// opens the app a fortnight later picks up at the step after Monday's.
+  ///
+  /// The alternative — sending a broken run back to day one — was in here for
+  /// a while, and it did far more damage than it looked like it did, because
+  /// the cycle is not flat. `dailyRewards` is food, and it is back-loaded:
+  /// 260 of the week's 300 hunger points sit on days 4, 6 and 7, against a pet
+  /// that burns 336 a week. A player resetting every other day therefore
+  /// claimed day one's 12 coins forever and *never ate* — and then paid for
+  /// the shortfall twice, because a hungry pet gets sick and a sick pet halves
+  /// coin income (`CharacterProvider.sickRewardMultiplier`). Missing a Tuesday
+  /// compounded into an economy that never recovered.
+  ///
+  /// So the cycle is a queue of seven rewards to work through, not a test to
+  /// fail. `BOND.md` takes the same position on absence, and `PetWarmth` is
+  /// the shape of it: being away costs nothing but the pet saying it noticed.
   Future<DailyRewardInfo?> checkDailyReward() async {
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
@@ -146,16 +168,23 @@ class DailyRewardProvider extends ChangeNotifier {
       }
     }
 
-    final streakReset = daysSinceLastLogin > 1;
-    final nextClaimCount = streakReset ? 1 : _streak + 1;
+    // A missed day costs the cycle nothing: the next claim is the next step,
+    // whether the last one was yesterday or last month. See this method's own
+    // note for why.
+    final nextClaimCount = _claims + 1;
     final rewardIndex = (nextClaimCount - 1) % dailyRewards.length;
     final reward = dailyRewards[rewardIndex];
+
+    // The run of days *is* broken by a gap — that is what a run means, and
+    // the player is shown it. It buys nothing and costs nothing, which is the
+    // only reason it is safe to let it break.
+    final nextLoginStreak = daysSinceLastLogin == 1 ? _loginStreak + 1 : 1;
 
     return DailyRewardInfo(
       dayNumber: rewardIndex + 1,
       reward: reward,
-      streakReset: streakReset,
-      currentStreak: nextClaimCount,
+      claimCount: nextClaimCount,
+      loginStreak: nextLoginStreak,
     );
   }
 
@@ -170,7 +199,10 @@ class DailyRewardProvider extends ChangeNotifier {
     if (rewardInfo == null) return; // No reward available
 
     await user.grantReward(rewardInfo.reward);
-    await user.setStreak(rewardInfo.currentStreak);
+    await user.setRewardProgress(
+      claims: rewardInfo.claimCount,
+      loginStreak: rewardInfo.loginStreak,
+    );
 
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);

@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
+import '../components/tutorial/retro_showcase.dart';
+import '../components/tutorial/tutorial_offer_host.dart';
+import '../constants/tutorials.dart';
 import '../models/models.dart';
-import '../constants/bond.dart';
 import '../constants/gold.dart';
 import '../providers/character_provider.dart';
 import '../providers/language_provider.dart';
@@ -18,6 +20,11 @@ import '../utils/srs_scheduler.dart';
 
 /// Spaced-repetition review: a flip card per due item, self-graded on SM-2's
 /// four-point scale.
+/// The review tour's steps, in the order it visits them.
+final GlobalKey reviewCardShowcaseKey = GlobalKey();
+final GlobalKey reviewGradesShowcaseKey = GlobalKey();
+final GlobalKey reviewCountShowcaseKey = GlobalKey();
+
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({super.key});
 
@@ -75,10 +82,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
         Provider.of<CharacterProvider>(context, listen: false);
 
     vocab.grade(item.id, grade);
-    await userProvider.addXp(characterProvider.scaleReward(_xpPerReview));
+    // Unscaled by sickness on purpose: XP is what the bond stage is built
+    // from, and correcting a mistake is learning whatever the pet's health is.
+    await userProvider.addXp(_xpPerReview);
     // Per card, not per session: acting on a correction is the single event
     // most likely to be real learning rather than exposure.
-    characterProvider.recordLearning(BondSource.correction);
+    characterProvider.recordLearningMoment();
     // And the same per card in coins, up to a daily cap. Reviewing paid
     // nothing at all before, which put the app's most valuable learning act
     // level with idling. The cap is what keeps grading fast from being a
@@ -120,7 +129,18 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     final session = _session ?? const <ReviewItem>[];
 
-    return Scaffold(
+    return TutorialOfferHost(
+      id: TutorialId.review,
+      // Held back until there is a card on screen. The empty state and the
+      // session-complete screen have nothing the tour is about, and being
+      // offered a tour of a page that says "nothing due" is noise.
+      enabled: session.isNotEmpty && !_isComplete,
+      steps: () => [
+        reviewCardShowcaseKey,
+        reviewGradesShowcaseKey,
+        reviewCountShowcaseKey,
+      ],
+      child: Scaffold(
       backgroundColor: AppTheme.retroSky,
       body: SafeArea(
         child: Column(
@@ -148,15 +168,22 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           fontFunction: fontFunction,
                           characterProvider: characterProvider,
                         )
-                      : _buildCard(
-                          l10n: l10n,
-                          textDirection: textDirection,
-                          textAlign: textAlign,
-                          fontFunction: fontFunction,
+                      : RetroShowcase(
+                          showcaseKey: reviewCardShowcaseKey,
+                          description: l10n.tutorialReviewCard,
+                          isFirst: true,
+                          targetPadding: EdgeInsets.zero,
+                          child: _buildCard(
+                            l10n: l10n,
+                            textDirection: textDirection,
+                            textAlign: textAlign,
+                            fontFunction: fontFunction,
+                          ),
                         ),
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -217,10 +244,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ),
           ),
           if (session.isNotEmpty && !_isComplete)
-            Text(
-              l10n.reviewProgress(_index + 1, session.length),
-              textDirection: TextDirection.ltr,
-              style: fontFunction(fontSize: 10, color: AppTheme.retroDark),
+            RetroShowcase(
+              showcaseKey: reviewCountShowcaseKey,
+              description: l10n.tutorialReviewCount,
+              isLast: true,
+              child: Text(
+                l10n.reviewProgress(_index + 1, session.length),
+                textDirection: TextDirection.ltr,
+                style: fontFunction(fontSize: 10, color: AppTheme.retroDark),
+              ),
             ),
         ],
       ),
@@ -390,16 +422,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          if (_answerShown)
-            _buildGradeButtons(l10n: l10n, fontFunction: fontFunction)
-          else
-            _buildRetroButton(
-              label: l10n.reviewShowAnswer,
-              color: AppTheme.retroAccent,
-              fontFunction: fontFunction,
-              textDirection: textDirection,
-              onTap: () => setState(() => _answerShown = true),
-            ),
+          // One step over both buttons. The grades only exist once the card
+          // has been flipped, and the tour runs before that — pointing at
+          // them alone would mean the step teaching the whole mechanic got
+          // skipped for having no target.
+          RetroShowcase(
+            showcaseKey: reviewGradesShowcaseKey,
+            description: l10n.tutorialReviewGrades,
+            child: _answerShown
+                ? _buildGradeButtons(l10n: l10n, fontFunction: fontFunction)
+                : _buildRetroButton(
+                    label: l10n.reviewShowAnswer,
+                    color: AppTheme.retroAccent,
+                    fontFunction: fontFunction,
+                    textDirection: textDirection,
+                    onTap: () => setState(() => _answerShown = true),
+                  ),
+          ),
         ],
       ),
     );

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/character_carousel.dart';
+import '../../constants/pets.dart';
 import '../../constants/theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/character_provider.dart';
@@ -35,9 +36,11 @@ const String afterPetRoute = '/onboarding/username';
 class FirstLaunchScreen extends StatefulWidget {
   const FirstLaunchScreen({super.key});
 
-  /// Carousel order, left to right — the same rank the in-app pet-changer
-  /// shows, so the pet a player met here is where they left it.
-  static const petTypes = <String>['dog', 'cat', 'bird'];
+  /// Carousel order, left to right: the free starters, in the order the
+  /// in-app pet-changer ranks them, so the pet a player met here is where they
+  /// left it. The rest of the rank is bought on the pet-changer — a first
+  /// choice is never a pet that costs anything.
+  static const petTypes = kStarterPetTypes;
 
   /// How long each language holds the question before the next one takes over.
   static const cycleInterval = Duration(seconds: 2);

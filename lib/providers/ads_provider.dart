@@ -183,6 +183,13 @@ class AdsProvider extends ChangeNotifier {
       _ledger = _ledger.recordingRewarded();
       await _repository.save(_ledger);
       await user.addCoins(reward);
+
+      // One ad, both rewards. The scarce thing is the slot, not which screen
+      // the offer was taken from, so an ad watched in the shop is worth the
+      // same extra quiz as one watched at the wall — and a player who is out
+      // of quizzes never has to guess which button was the right one. See
+      // `constants/entitlements.dart`.
+      await user.addRewardedQuiz();
       return reward;
     } finally {
       _watchingRewarded = false;

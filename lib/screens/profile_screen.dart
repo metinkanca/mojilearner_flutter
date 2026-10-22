@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,12 +10,28 @@ import '../providers/daily_reward_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
 import '../components/account_link_tile.dart';
+import '../components/premium_tile.dart';
+import '../components/season_pass_tile.dart';
 import '../components/character_sprite.dart';
 import '../components/pixel_flag.dart';
 import '../components/daily_rewards_dialog.dart';
+import '../components/reward_art.dart';
+import '../components/tutorial/retro_showcase.dart';
+import '../components/tutorial/tutorial_offer_host.dart';
+import '../constants/tutorials.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/rtl_locale.dart';
 import '../../utils/fonts.dart';
+
+/// The profile tour's steps, in the order it visits them.
+///
+/// File-level because this screen is stateless — and harmless, since a
+/// showcase key is a registry id rather than a widget key.
+final GlobalKey profileAvatarShowcaseKey = GlobalKey();
+final GlobalKey profileStatsShowcaseKey = GlobalKey();
+final GlobalKey profileDailyShowcaseKey = GlobalKey();
+final GlobalKey profileLanguagesShowcaseKey = GlobalKey();
+final GlobalKey profileAccountShowcaseKey = GlobalKey();
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -106,10 +123,21 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          Text(
-                            isCompleted ? '✅' : _getRewardIcon(reward),
-                            style: const TextStyle(fontSize: 16),
-                          ),
+                          // A day still to come shows what it pays out, drawn
+                          // from the catalogue rather than from a hand-written
+                          // emoji map that had already fallen a cycle behind.
+                          // A day already collected shows the same check the
+                          // daily dialog stamps its boxes with.
+                          isCompleted
+                              ? const Text(
+                                  '✓',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: AppTheme.retroGreen,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : RewardArt(reward: reward, size: 28),
                         ],
                       ),
                     );
@@ -134,14 +162,6 @@ class ProfileScreen extends StatelessWidget {
         );
       },
     );
-  }
-
-  String _getRewardIcon(RewardDef reward) {
-    if (reward.type == RewardType.coins) return '🪙';
-    if (reward.itemId == 'apple') return '🍎';
-    if (reward.itemId == 'coffee') return '☕';
-    if (reward.itemId == 'pizza') return '🍕';
-    return '🎁';
   }
 
   void _handleTargetLanguageChange(BuildContext context, Language newLanguage) async {
@@ -369,288 +389,345 @@ class ProfileScreen extends StatelessWidget {
     // Calculate level progress (safe division)
     final double progress = stats.progress;
 
-    return Scaffold(
-      backgroundColor: AppTheme.retroSky,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Retro Header
-            Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: AppTheme.retroUi,
-                border: Border.all(color: AppTheme.retroDark, width: 4),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppTheme.retroDark,
-                    offset: Offset(4, 4),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (Navigator.of(context).canPop()) {
-                        context.pop();
-                      } else {
-                        context.go('/');
-                      }
-                    },
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: AppTheme.retroDark, width: 3),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: AppTheme.retroDark,
-                            offset: Offset(2, 2),
-                            blurRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        color: AppTheme.retroDark,
-                        size: 18,
-                      ),
+    return TutorialOfferHost(
+      id: TutorialId.profile,
+      // The account tile is absent when cloud sync never started, and the
+      // sequence skips it when it is. The rest run past the fold, which is
+      // what `enableAutoScroll` on the controller is for.
+      steps: () => [
+        profileAvatarShowcaseKey,
+        profileStatsShowcaseKey,
+        profileDailyShowcaseKey,
+        profileLanguagesShowcaseKey,
+        profileAccountShowcaseKey,
+      ],
+      child: Scaffold(
+        backgroundColor: AppTheme.retroSky,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Retro Header
+              Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppTheme.retroUi,
+                  border: Border.all(color: AppTheme.retroDark, width: 4),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: AppTheme.retroDark,
+                      offset: Offset(4, 4),
+                      blurRadius: 0,
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        l10n.profile.toUpperCase(),
-                        textDirection: textDirection,
-                        textAlign: TextAlign.center,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 16,
-                          color: AppTheme.retroDark,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 48),
-                ],
-              ),
-            ),
-
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                children: [
-                  // User Header Card
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppTheme.retroLight,
-                      border: Border.all(color: AppTheme.retroDark, width: 4),
-                      boxShadow: const [
-                         BoxShadow(
-                          color: AppTheme.retroDark,
-                          offset: Offset(4, 4),
-                          blurRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        // Pet Avatar (Link to Design)
-                        GestureDetector(
-                          onTap: () => context.pushNamed('design_moji'),
-                          child: Container(
-                            width: 120,
-                            height: 120,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (Navigator.of(context).canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/');
+                        }
+                      },
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: AppTheme.retroDark, width: 3),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppTheme.retroDark,
+                              offset: Offset(2, 2),
+                              blurRadius: 0,
                             ),
-                            child: const CharacterSprite(width: 120, height: 120),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        
-                        // "MOJI" Title
-                        Text(
-                          "MOJI",
-                          textDirection: textDirection,
-                          textAlign: textAlign,
-                          style: AppFonts.pressStart2p(
-                            fontSize: 24,
-                            color: AppTheme.retroDark,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Level Progress Bar
-                        Column(
-                          children: [
-                             Text(
-                                "LVL ${stats.level}",
-                                textDirection: TextDirection.ltr,
-                                textAlign: TextAlign.left,
-                                style: AppFonts.pressStart2p(
-                                  fontSize: 12,
-                                  color: AppTheme.retroDark.withValues(alpha: 0.6),
-                                ),
-                             ),
-                             const SizedBox(height: 8),
-                             // Bar Container
-                             Container(
-                               height: 20,
-                               width: 200,
-                               decoration: BoxDecoration(
-                                 color: Colors.white,
-                                 border: Border.all(color: AppTheme.retroDark, width: 3),
-                               ),
-                               child: LayoutBuilder(
-                                 builder: (context, constraints) {
-                                   return Row(
-                                     children: [
-                                       Container(
-                                         width: constraints.maxWidth * progress,
-                                         color: AppTheme.retroPrimary,
-                                       ),
-                                     ],
-                                   );
-                                 }
-                               ),
-                             ),
                           ],
                         ),
-                        
-                        const SizedBox(height: 24),
-                        
-                        // Daily Reward Tracker Item
-                        GestureDetector(
-                          onTap: () => _showDailyRewardManually(context),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: AppTheme.retroAccent.withValues(alpha: 0.1),
-                              border: Border.all(color: AppTheme.retroDark, width: 4),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  offset: Offset(2, 2),
-                                  blurRadius: 0,
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                const Text("🎁", style: TextStyle(fontSize: 20)),
-                                const SizedBox(width: 12),
-                                Text(
-                                  l10n.daily_reward.toUpperCase(),
-                                  textDirection: textDirection,
-                                  textAlign: textAlign,
-                                  style: AppFonts.pressStart2p(
-                                    fontSize: 10,
-                                    color: AppTheme.retroDark,
-                                  ),
-                                ),
-                                const Spacer(),
-                                const Icon(Icons.chevron_right, color: AppTheme.retroDark, size: 20),
-                              ],
-                            ),
-                          ),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: AppTheme.retroDark,
+                          size: 18,
                         ),
-                      ],
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 32),
-                  
-                  // Language Settings Header
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: Text(
-                      l10n.header.toUpperCase(),
-                      textDirection: textDirection,
-                      textAlign: textAlign,
-                      style: AppFonts.pressStart2p(
-                        fontSize: 14,
-                        color: Colors.white,
-                        shadows: [
-                          const Shadow(color: AppTheme.retroDark, offset: Offset(2, 2)),
-                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  _buildRetroLanguageSelector(
-                    context, 
-                    label: l10n.iSpeak,
-                    current: langProvider.nativeLanguage,
-                    options: langProvider.availableLanguages,
-                    onSelect: (lang) => langProvider.setNativeLanguage(lang),
-                  ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  _buildRetroLanguageSelector(
-                     context, 
-                    label: l10n.imLearning,
-                     current: langProvider.targetLanguage ?? langProvider.availableLanguages[1],
-                     options: langProvider.availableLanguages,
-                     onSelect: (lang) => _handleTargetLanguageChange(context, lang),
-                  ),
-                  
-                  const SizedBox(height: 32),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          l10n.profile.toUpperCase(),
+                          textDirection: textDirection,
+                          textAlign: TextAlign.center,
+                          style: AppFonts.pressStart2p(
+                            fontSize: 16,
+                            color: AppTheme.retroDark,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 48),
+                  ],
+                ),
+              ),
 
-                  // The way back for a player who skipped signing in
-                  // during the opening. Hides itself when there is no
-                  // account layer to sign in to.
-                  const AccountLinkTile(),
-
-                  const SizedBox(height: 32),
-                  
-                  // Reset App Button
-                  GestureDetector(
-                    onTap: () => _showResetDialog(context),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  children: [
+                    // User Header Card
+                    Container(
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF44336),
+                        color: AppTheme.retroLight,
                         border: Border.all(color: AppTheme.retroDark, width: 4),
                         boxShadow: const [
-                          BoxShadow(
+                           BoxShadow(
                             color: AppTheme.retroDark,
                             offset: Offset(4, 4),
                             blurRadius: 0,
-                          )
+                          ),
                         ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
                         children: [
-                          const Icon(Icons.refresh, color: Colors.white, size: 20),
-                          const SizedBox(width: 12),
+                          // Pet Avatar (Link to Design)
+                          RetroShowcase(
+                            showcaseKey: profileAvatarShowcaseKey,
+                            description: l10n.tutorialProfileAvatar,
+                            isFirst: true,
+                            targetShapeBorder: const CircleBorder(),
+                            child: GestureDetector(
+                              onTap: () => context.pushNamed('design_moji'),
+                              child: Container(
+                                width: 120,
+                                height: 120,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child:
+                                    const CharacterSprite(width: 120, height: 120),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                        
+                          // "MOJI" Title
                           Text(
-                            l10n.resetAppButton.toUpperCase(),
+                            "MOJI",
                             textDirection: textDirection,
                             textAlign: textAlign,
                             style: AppFonts.pressStart2p(
-                              fontSize: 12,
-                              color: Colors.white,
+                              fontSize: 24,
+                              color: AppTheme.retroDark,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Level Progress Bar
+                          RetroShowcase(
+                            showcaseKey: profileStatsShowcaseKey,
+                            description: l10n.tutorialProfileStats,
+                            child: Column(
+                              children: [
+                                 Text(
+                                    "LVL ${stats.level}",
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.left,
+                                    style: AppFonts.pressStart2p(
+                                      fontSize: 12,
+                                      color: AppTheme.retroDark.withValues(alpha: 0.6),
+                                    ),
+                                 ),
+                                 const SizedBox(height: 8),
+                                 // Bar Container
+                                 Container(
+                                   height: 20,
+                                   width: 200,
+                                   decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     border: Border.all(color: AppTheme.retroDark, width: 3),
+                                   ),
+                                   child: LayoutBuilder(
+                                     builder: (context, constraints) {
+                                       return Row(
+                                         children: [
+                                           Container(
+                                             width: constraints.maxWidth * progress,
+                                             color: AppTheme.retroPrimary,
+                                           ),
+                                         ],
+                                       );
+                                     }
+                                   ),
+                                 ),
+                              ],
+                            ),
+                          ),
+                        
+                          const SizedBox(height: 24),
+                        
+                          // Daily Reward Tracker Item
+                          RetroShowcase(
+                            showcaseKey: profileDailyShowcaseKey,
+                            description: l10n.tutorialProfileDaily,
+                            child: GestureDetector(
+                              onTap: () => _showDailyRewardManually(context),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.retroAccent.withValues(alpha: 0.1),
+                                  border: Border.all(color: AppTheme.retroDark, width: 4),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      offset: Offset(2, 2),
+                                      blurRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(kGiftAsset,
+                                        width: 22, height: 22),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      l10n.daily_reward.toUpperCase(),
+                                      textDirection: textDirection,
+                                      textAlign: textAlign,
+                                      style: AppFonts.pressStart2p(
+                                        fontSize: 10,
+                                        color: AppTheme.retroDark,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    const Icon(Icons.chevron_right, color: AppTheme.retroDark, size: 20),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
                   
-                  const SizedBox(height: 80), // Bottom nav padding
-                ],
+                    const SizedBox(height: 32),
+                  
+                    // Language Settings Header
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Text(
+                        l10n.header.toUpperCase(),
+                        textDirection: textDirection,
+                        textAlign: textAlign,
+                        style: AppFonts.pressStart2p(
+                          fontSize: 14,
+                          color: Colors.white,
+                          shadows: [
+                            const Shadow(color: AppTheme.retroDark, offset: Offset(2, 2)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  
+                    // One step over both: the copy is about the pair, and
+                    // highlighting them one at a time would say the same
+                    // sentence twice.
+                    RetroShowcase(
+                      showcaseKey: profileLanguagesShowcaseKey,
+                      description: l10n.tutorialProfileLanguages,
+                      child: Column(
+                        children: [
+                          _buildRetroLanguageSelector(
+                            context, 
+                            label: l10n.iSpeak,
+                            current: langProvider.nativeLanguage,
+                            options: langProvider.availableLanguages,
+                            onSelect: (lang) =>
+                                langProvider.setNativeLanguage(lang),
+                          ),
+                        
+                          const SizedBox(height: 16),
+                        
+                          _buildRetroLanguageSelector(
+                             context, 
+                            label: l10n.imLearning,
+                             current: langProvider.targetLanguage ?? langProvider.availableLanguages[1],
+                             options: langProvider.availableLanguages,
+                             onSelect: (lang) =>
+                                 _handleTargetLanguageChange(context, lang),
+                          ),
+                        ],
+                      ),
+                    ),
+                  
+                    const SizedBox(height: 32),
+
+                    // The only door to the paywall that is not a wall. See
+                    // `components/premium_tile.dart` for why that matters.
+                    const PremiumTile(),
+
+                    const SizedBox(height: 16),
+
+                    // The pass's own door. Its content otherwise only ever
+                    // appears as locked tiles in the wardrobe.
+                    const SeasonPassTile(),
+
+                    const SizedBox(height: 32),
+
+                    // The way back for a player who skipped signing in
+                    // during the opening. Hides itself when there is no
+                    // account layer to sign in to.
+                    AccountLinkTile(
+                      showcaseKey: profileAccountShowcaseKey,
+                      showcaseDescription: l10n.tutorialProfileAccount,
+                    ),
+
+                    const SizedBox(height: 32),
+                  
+                    // Reset App Button
+                    GestureDetector(
+                      onTap: () => _showResetDialog(context),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF44336),
+                          border: Border.all(color: AppTheme.retroDark, width: 4),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppTheme.retroDark,
+                              offset: Offset(4, 4),
+                              blurRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.refresh, color: Colors.white, size: 20),
+                            const SizedBox(width: 12),
+                            Text(
+                              l10n.resetAppButton.toUpperCase(),
+                              textDirection: textDirection,
+                              textAlign: textAlign,
+                              style: AppFonts.pressStart2p(
+                                fontSize: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  
+                    const SizedBox(height: 80), // Bottom nav padding
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

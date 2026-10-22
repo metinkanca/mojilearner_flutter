@@ -35,12 +35,30 @@ class ScenarioObjective {
   final bool isBonus;
 }
 
+/// Something a scenario's host does for the player's pet, paid for in the
+/// scene: the restaurant serves a meal, the doctor gives a checkup.
+class ScenarioService {
+  const ScenarioService({required this.objectiveId, required this.itemId});
+
+  /// The goal that asks for it — ordering, describing the symptom. It is
+  /// offered the moment the tutor reports that goal, so the sentence that
+  /// earned it is the one that brings it to the table.
+  final String objectiveId;
+
+  /// The shop item it is. Price and effect are read from the shelf, so a meal
+  /// at the restaurant costs and fills exactly what the same dish bought in
+  /// the shop does, and food stays the coin sink the economy leans on.
+  final String itemId;
+}
+
 class ScenarioDefinition {
   const ScenarioDefinition({
     required this.id,
     required this.icon,
     required this.title,
     required this.objectives,
+    required this.hostPet,
+    this.service,
   });
 
   /// Stable id, e.g. 'coffee'. Persisted on the chat and on progress.
@@ -48,6 +66,15 @@ class ScenarioDefinition {
   final IconData icon;
   final String Function(AppLocalizations) title;
   final List<ScenarioObjective> objectives;
+
+  /// The pet playing the other side of the scene — the barista, the
+  /// interviewer. A type from `kPetTypes`: it stands at the door on the city
+  /// map, faces the player's pet in the chat, and is who the tutor plays.
+  final String hostPet;
+
+  /// What the host can do for the pet here, or null for a scene that is
+  /// conversation only.
+  final ScenarioService? service;
 
   /// Objectives that must be cleared for the scenario to count as complete.
   List<ScenarioObjective> get required =>
@@ -57,6 +84,16 @@ class ScenarioDefinition {
 
   bool hasObjective(String objectiveId) =>
       objectives.any((o) => o.id == objectiveId);
+
+  /// This scene's service, when the goal that asks for it is among
+  /// [newlyCleared] — the moment the host brings it out.
+  ScenarioService? serviceOrderedBy(Iterable<String> newlyCleared) {
+    final offered = service;
+    if (offered == null || !newlyCleared.contains(offered.objectiveId)) {
+      return null;
+    }
+    return offered;
+  }
 }
 
 class ScenarioCatalog {
@@ -65,6 +102,7 @@ class ScenarioCatalog {
   static const List<ScenarioDefinition> all = [
     ScenarioDefinition(
       id: 'coffee',
+      hostPet: 'raccoon',
       icon: LucideIcons.coffee,
       title: _coffeeTitle,
       objectives: [
@@ -77,6 +115,7 @@ class ScenarioCatalog {
     ),
     ScenarioDefinition(
       id: 'job_interview',
+      hostPet: 'rabbit',
       icon: LucideIcons.briefcase,
       title: _interviewTitle,
       objectives: [
@@ -89,6 +128,7 @@ class ScenarioCatalog {
     ),
     ScenarioDefinition(
       id: 'directions',
+      hostPet: 'dog',
       icon: LucideIcons.map,
       title: _directionsTitle,
       objectives: [
@@ -101,6 +141,8 @@ class ScenarioCatalog {
     ),
     ScenarioDefinition(
       id: 'doctor',
+      hostPet: 'cat',
+      service: ScenarioService(objectiveId: 'symptom', itemId: 'medicine'),
       icon: LucideIcons.stethoscope,
       title: _doctorTitle,
       objectives: [
@@ -113,6 +155,7 @@ class ScenarioCatalog {
     ),
     ScenarioDefinition(
       id: 'shopping',
+      hostPet: 'bird',
       icon: LucideIcons.store,
       title: _shoppingTitle,
       objectives: [
@@ -124,6 +167,8 @@ class ScenarioCatalog {
     ),
     ScenarioDefinition(
       id: 'restaurant',
+      hostPet: 'axolotl',
+      service: ScenarioService(objectiveId: 'order', itemId: 'pizza'),
       icon: LucideIcons.utensils,
       title: _restaurantTitle,
       objectives: [

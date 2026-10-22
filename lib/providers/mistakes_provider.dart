@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import '../constants/app_runtime_config.dart';
+import '../constants/sample_mistakes.dart';
 import '../models/models.dart';
 import '../utils/secure_storage.dart';
 
@@ -36,6 +38,7 @@ class MistakesProvider extends ChangeNotifier {
         );
         debugPrint('✅ MISTAKES: Loaded ${_mistakes.length} mistakes from SecureStorage');
       }
+      if (AppRuntimeConfig.sampleMistakes) _addSamples();
 
       _isLoaded = true;
       notifyListeners();
@@ -46,10 +49,20 @@ class MistakesProvider extends ChangeNotifier {
     }
   }
 
+  void _addSamples() {
+    for (final sample in kSampleMistakes) {
+      if (!_mistakes.any((m) => m.id == sample.id)) _mistakes.add(sample);
+    }
+  }
+
   /// Save mistakes to SecureStorage
   Future<void> _saveMistakes() async {
     try {
-      final mistakesData = _mistakes.map((m) => m.toJson()).toList();
+      // Samples are only ever shown, never kept.
+      final mistakesData = _mistakes
+          .where((m) => !m.id.startsWith(kSampleMistakeIdPrefix))
+          .map((m) => m.toJson())
+          .toList();
       await SecureStorage.saveMistakes(mistakesData);
       debugPrint('💾 MISTAKES: Saved ${_mistakes.length} mistakes to SecureStorage');
     } catch (e) {

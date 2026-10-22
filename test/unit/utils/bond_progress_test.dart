@@ -1,169 +1,81 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/constants/bond.dart';
 import 'package:mojilearner_flutter/utils/bond_progress.dart';
+import 'package:mojilearner_flutter/utils/progression_utils.dart';
+
+/// The XP at which [stage]'s level gate opens, off the real curve and gates,
+/// so retuning either does not mean rewriting these tests.
+int xpFor(PetStage stage) => ProgressionUtils.getTotalXPForLevel(
+    petStageGates.firstWhere((g) => g.stage == stage).minLevel);
 
 void main() {
-  group('tierFromLevel', () {
-    test('reads the stored beginner/intermediate/advanced values', () {
-      expect(BondProgress.tierFromLevel('beginner'), FluencyTier.beginner);
-      expect(
-          BondProgress.tierFromLevel('intermediate'), FluencyTier.intermediate);
-      expect(BondProgress.tierFromLevel('advanced'), FluencyTier.advanced);
-    });
-
-    test('reads the CEFR bands assessments speak in', () {
-      expect(BondProgress.tierFromLevel('A1'), FluencyTier.beginner);
-      expect(BondProgress.tierFromLevel('A2'), FluencyTier.beginner);
-      expect(BondProgress.tierFromLevel('B1'), FluencyTier.intermediate);
-      expect(BondProgress.tierFromLevel('B2'), FluencyTier.intermediate);
-      expect(BondProgress.tierFromLevel('C1'), FluencyTier.advanced);
-      expect(BondProgress.tierFromLevel('C2'), FluencyTier.advanced);
-    });
-
-    test('is case and whitespace insensitive', () {
-      expect(BondProgress.tierFromLevel('  b2 '), FluencyTier.intermediate);
-      expect(BondProgress.tierFromLevel('ADVANCED'), FluencyTier.advanced);
-    });
-
-    // A bad value must never hand out a stage the player has not earned.
-    test('falls back to beginner for null, empty and junk', () {
-      expect(BondProgress.tierFromLevel(null), FluencyTier.beginner);
-      expect(BondProgress.tierFromLevel(''), FluencyTier.beginner);
-      expect(BondProgress.tierFromLevel('fluent'), FluencyTier.beginner);
-    });
-  });
-
-  group('quizPoints', () {
-    test('scales with accuracy', () {
-      expect(
-        BondProgress.quizPoints(correctAnswers: 0, totalQuestions: 10),
-        BondConstants.quizBase,
-      );
-      expect(
-        BondProgress.quizPoints(correctAnswers: 10, totalQuestions: 10),
-        BondConstants.quizBase + BondConstants.quizAccuracyBonus,
-      );
-      expect(
-        BondProgress.quizPoints(correctAnswers: 5, totalQuestions: 10),
-        BondConstants.quizBase + (BondConstants.quizAccuracyBonus / 2).round(),
-      );
-    });
-
-    // Zeroing a failed quiz would make "attempt nothing hard" the safest way
-    // to protect the bond.
-    test('never pays zero, however badly it went', () {
-      expect(
-        BondProgress.quizPoints(correctAnswers: 0, totalQuestions: 20),
-        greaterThan(0),
-      );
-      expect(
-        BondProgress.quizPoints(correctAnswers: 0, totalQuestions: 0),
-        greaterThan(0),
-      );
-    });
-  });
-
   group('statusFor', () {
+    final friendlyXP = xpFor(PetStage.friendly);
+    final attachedXP = xpFor(PetStage.attached);
+    final devotedXP = xpFor(PetStage.devoted);
+    final inseparableXP = xpFor(PetStage.inseparable);
+
     test('a new pet starts curious', () {
-      final status = BondProgress.statusFor(
-        bondPoints: 0,
-        tier: FluencyTier.beginner,
-      );
+      final status = BondProgress.statusFor(totalXP: 0);
       expect(status.stage, PetStage.curious);
+      expect(status.level, 1);
       expect(status.nextGate?.stage, PetStage.friendly);
+      expect(status.xpToNextStage, friendlyXP);
       expect(status.progress, 0.0);
       expect(status.isFinalStage, isFalse);
     });
 
-    test('bond alone carries a beginner to friendly', () {
-      final status = BondProgress.statusFor(
-        bondPoints: 100,
-        tier: FluencyTier.beginner,
-      );
+    test('reaching a stage\'s level reaches the stage', () {
+      final status = BondProgress.statusFor(totalXP: friendlyXP);
       expect(status.stage, PetStage.friendly);
+      expect(status.level,
+          petStageGates.firstWhere((g) => g.stage == PetStage.friendly).minLevel);
     });
 
-    // The whole point of the two-part gate: grinding cannot evolve the pet
-    // past the point where the player's language has to move.
-    test('a beginner cannot grind past friendly', () {
-      final status = BondProgress.statusFor(
-        bondPoints: 99999,
-        tier: FluencyTier.beginner,
-      );
-      expect(status.stage, PetStage.friendly);
-      expect(status.nextGate?.stage, PetStage.attached);
-      expect(status.isFluencyBlocked, isTrue);
-      expect(status.pointsToNextStage, 0);
-      expect(status.progress, 1.0);
+    // Activity is what is rewarded, never how good someone already is at the
+    // language: XP alone carries every player up the whole ladder.
+    test('XP alone reaches every later stage', () {
+      expect(BondProgress.statusFor(totalXP: attachedXP).stage,
+          PetStage.attached);
+      expect(BondProgress.statusFor(totalXP: devotedXP).stage,
+          PetStage.devoted);
+      expect(BondProgress.statusFor(totalXP: inseparableXP).stage,
+          PetStage.inseparable);
     });
 
-    // ...and neither can fluency on its own.
-    test('fluency cannot evolve a pet the player never bonded with', () {
-      final status = BondProgress.statusFor(
-        bondPoints: 0,
-        tier: FluencyTier.advanced,
-      );
-      expect(status.stage, PetStage.curious);
-      expect(status.isFluencyBlocked, isFalse);
-      expect(status.pointsToNextStage, 100);
-    });
-
-    test('both together reach the later stages', () {
-      expect(
-        BondProgress.statusFor(
-          bondPoints: 300,
-          tier: FluencyTier.intermediate,
-        ).stage,
-        PetStage.attached,
-      );
-      expect(
-        BondProgress.statusFor(
-          bondPoints: 700,
-          tier: FluencyTier.intermediate,
-        ).stage,
-        PetStage.devoted,
-      );
-      expect(
-        BondProgress.statusFor(
-          bondPoints: 1500,
-          tier: FluencyTier.advanced,
-        ).stage,
-        PetStage.inseparable,
-      );
-    });
-
-    // A player blocked at attached must not reappear at devoted later just
-    // because devoted happens to share attached's tier requirement.
-    test('a blocked gate is not skipped by a later one with the same tier', () {
-      final status = BondProgress.statusFor(
-        bondPoints: 700,
-        tier: FluencyTier.beginner,
-      );
-      expect(status.stage, PetStage.friendly);
-      expect(status.nextGate?.stage, PetStage.attached);
+    test('one XP short of a stage is the stage before it', () {
+      expect(BondProgress.statusFor(totalXP: attachedXP - 1).stage,
+          PetStage.friendly);
+      expect(BondProgress.statusFor(totalXP: inseparableXP - 1).stage,
+          PetStage.devoted);
     });
 
     test('the final stage has nothing left to ask for', () {
-      final status = BondProgress.statusFor(
-        bondPoints: 99999,
-        tier: FluencyTier.advanced,
-      );
+      final status = BondProgress.statusFor(totalXP: 999999);
       expect(status.stage, PetStage.inseparable);
       expect(status.isFinalStage, isTrue);
       expect(status.nextGate, isNull);
       expect(status.progress, 1.0);
-      expect(status.isFluencyBlocked, isFalse);
-      expect(status.pointsToNextStage, 0);
+      expect(status.xpToNextStage, 0);
     });
 
+    // The reason progress is measured in XP rather than whole levels: it has
+    // to move within a session, not four times a year.
     test('progress measures across the current stage, not from zero', () {
-      // Half way from friendly (100) to attached (300).
       final status = BondProgress.statusFor(
-        bondPoints: 200,
-        tier: FluencyTier.intermediate,
+        totalXP: friendlyXP + ((attachedXP - friendlyXP) ~/ 2),
       );
       expect(status.stage, PetStage.friendly);
-      expect(status.progress, closeTo(0.5, 0.001));
+      expect(status.progress, closeTo(0.5, 0.01));
+    });
+
+    test('progress moves on XP that has not yet earned a level', () {
+      final before = BondProgress.statusFor(totalXP: friendlyXP + 10);
+      // Still short of the next level: its step is at least baseXP.
+      final after = BondProgress.statusFor(totalXP: friendlyXP + 25);
+      expect(after.level, before.level);
+      expect(after.progress, greaterThan(before.progress));
+      expect(after.xpToNextStage, lessThan(before.xpToNextStage));
     });
   });
 

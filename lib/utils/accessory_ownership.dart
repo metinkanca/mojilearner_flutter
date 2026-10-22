@@ -23,6 +23,13 @@ enum AccessoryAvailability {
 
   /// Gated behind a bond stage, and not for sale at any price.
   bondLocked,
+
+  /// On a season pass track the player either has not bought or has not
+  /// reached. A different answer from [bondLocked] on purpose: one says "keep
+  /// studying and it is yours", the other says "this belongs to a pass", and
+  /// telling a player to study for something no amount of study will give them
+  /// is the worst of the three things this enum can say.
+  passLocked,
 }
 
 /// One accessory as the wardrobe needs to render it.
@@ -43,6 +50,7 @@ class AccessoryStatus {
   bool get isOwned => availability == AccessoryAvailability.owned;
   bool get isForSale => availability == AccessoryAvailability.forSale;
   bool get isBondLocked => availability == AccessoryAvailability.bondLocked;
+  bool get isPassLocked => availability == AccessoryAvailability.passLocked;
 
   /// True when a tap should open the buy confirmation.
   bool get canBuyNow => isForSale && affordable;
@@ -61,10 +69,20 @@ class AccessoryOwnership {
     AccessoryDef accessory, {
     required Set<String> unlockedItemIds,
     required PetStage stage,
+    Set<String> claimedPassItemIds = const {},
   }) {
     // Debug-only testing override; see AppRuntimeConfig.unlockAllAccessories.
     if (AppRuntimeConfig.unlockAllAccessories) return true;
     if (accessory.isFreeStarter) return true;
+
+    // Pass content is owned only once the tier carrying it has been claimed.
+    // Unlike the bond pieces below it is *not* derived from a running total,
+    // because the claim is the point: a tier stays waiting until the player
+    // takes it, which is what makes an absence cost nothing.
+    if (accessory.requiredPass != null) {
+      return claimedPassItemIds.contains(accessory.id);
+    }
+
     final required = accessory.requiredStage;
     if (required != null) return stage.index >= required.index;
     return unlockedItemIds.contains(accessory.id);
@@ -75,15 +93,25 @@ class AccessoryOwnership {
     required Set<String> unlockedItemIds,
     required PetStage stage,
     required int coins,
+    Set<String> claimedPassItemIds = const {},
   }) {
     if (isOwned(
       accessory,
       unlockedItemIds: unlockedItemIds,
       stage: stage,
+      claimedPassItemIds: claimedPassItemIds,
     )) {
       return AccessoryStatus(
         accessory: accessory,
         availability: AccessoryAvailability.owned,
+        affordable: false,
+      );
+    }
+
+    if (accessory.requiredPass != null) {
+      return AccessoryStatus(
+        accessory: accessory,
+        availability: AccessoryAvailability.passLocked,
         affordable: false,
       );
     }
@@ -110,6 +138,7 @@ class AccessoryOwnership {
     required Set<String> unlockedItemIds,
     required PetStage stage,
     required int coins,
+    Set<String> claimedPassItemIds = const {},
   }) =>
       accessoriesForSlot(slot)
           .map((a) => statusFor(
@@ -117,6 +146,7 @@ class AccessoryOwnership {
                 unlockedItemIds: unlockedItemIds,
                 stage: stage,
                 coins: coins,
+                claimedPassItemIds: claimedPassItemIds,
               ))
           .toList();
 }

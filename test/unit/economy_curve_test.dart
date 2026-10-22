@@ -2,9 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/constants/accessories.dart';
 import 'package:mojilearner_flutter/constants/ads.dart';
 import 'package:mojilearner_flutter/constants/gold.dart';
+import 'package:mojilearner_flutter/constants/pets.dart';
 import 'package:mojilearner_flutter/constants/progression.dart';
 import 'package:mojilearner_flutter/constants/shop.dart';
 import 'package:mojilearner_flutter/utils/pet_recolor.dart';
+import 'package:mojilearner_flutter/utils/play_games.dart';
 import 'package:mojilearner_flutter/utils/progression_utils.dart';
 
 /// End-to-end guard on the shape of the economy.
@@ -19,7 +21,13 @@ import 'package:mojilearner_flutter/utils/progression_utils.dart';
 /// The bands are deliberately wide. They are here to catch a tenfold mistake,
 /// not to freeze the tuning.
 void main() {
-  /// Everything a player can buy: accessories, backgrounds, coats, eyes.
+  /// The pets the economy is tuned for: 27 on top of the three starters. This
+  /// build ships four of them while the art for the rest is finished, but a
+  /// curve checked against four pets would pass for the wrong reason.
+  const plannedBoughtPets = 27;
+
+  /// Everything a player can buy: accessories, backgrounds, coats, eyes and
+  /// every pet but the starters.
   final catalogueTotal = [
     visibleAccessories
         .where((a) => a.price != null)
@@ -29,6 +37,7 @@ void main() {
         .fold(0, (s, i) => s + i.price),
     kFancyBodySwatches.fold(0, (s, w) => s + w.price!),
     kFancyEyeSwatches.fold(0, (s, w) => s + w.price!),
+    plannedBoughtPets * kPetPrice,
   ].fold(0, (a, b) => a + b);
 
   const hungerPerDay = 2 * 24; // CharacterProvider's decay rate
@@ -122,10 +131,49 @@ void main() {
     return paid;
   }
 
+  /// XP from one day of learning. Never halved by sickness: XP is the
+  /// relationship's ledger, not the wallet's (see `chat_screen.dart`).
+  int learningXpFor(
+    ({
+      String name,
+      int quizzes,
+      int correct,
+      int chats,
+      int reviews,
+      int scenarios
+    }) p, {
+    required int firstClears,
+  }) {
+    var xp = p.quizzes *
+            ProgressionUtils.getQuizRewardOutcome(
+              correctAnswers: p.correct,
+              totalQuestions: 5,
+            ).xpReward +
+        p.chats * 5 +
+        p.reviews * 3;
+    var clearsLeft = firstClears;
+    for (var i = 0; i < p.scenarios; i++) {
+      final isFirst = clearsLeft > 0;
+      if (isFirst) clearsLeft--;
+      xp += ProgressionUtils.getScenarioRewardOutcome(
+        bonusObjectivesCleared: 1,
+        bonusObjectivesTotal: 1,
+        isFirstClear: isFirst,
+      ).xpReward;
+    }
+    return xp;
+  }
+
   /// Days to buy [target], playing [p] every day.
   ///
   /// A neglected pet earns half from learning but pays nothing for food —
   /// which is precisely the trade the old economy got backwards.
+  ///
+  /// Level rewards are in: the coins the XP curve pays out on the way up,
+  /// and the backgrounds it hands over, which are then not bought. On a
+  /// quick curve they arrive early and are a large share of the whole — the
+  /// model once left them out and put the catalogue at 83 days for a regular
+  /// player when it was really 27.
   int daysToAfford(
     ({
       String name,
@@ -143,18 +191,44 @@ void main() {
     /// learned something, which is what `AdsProvider.canOfferRewarded`
     /// enforces. See `constants/ads.dart`.
     int adsPerDay = 0,
+    /// XP from the toy chest's games every day, on top of the learning.
+    /// XP buys no coins directly, but levels do: the level rewards pay coins
+    /// and backgrounds, so a faster climb is a cheaper catalogue.
+    int playXpPerDay = 0,
   }) {
-    var coins = 50; // UserProvider.startingCoins
+    // UserProvider.startingCoins, and the welcome gift on first load.
+    var coins = 50 +
+        levelRewards
+            .firstWhere(
+                (r) => r.level == ProgressionConstants.welcomeRewardLevel)
+            .value;
+    var owed = target;
+    var totalXP = 0;
     var day = 0;
     var firstClears = 6; // one per scenario in the catalogue
 
-    while (coins < target && day < 20000) {
+    while (coins < owed && day < 20000) {
       day++;
       final reward = dailyRewards[(day - 1) % dailyRewards.length];
 
       final learned =
           learningGoldFor(p, firstClears: firstClears, sick: !caresForPet);
       coins += learned;
+
+      final levelBefore = ProgressionUtils.getLevelFromTotalXP(totalXP);
+      totalXP += learningXpFor(p, firstClears: firstClears) + playXpPerDay;
+      final levelAfter = ProgressionUtils.getLevelFromTotalXP(totalXP);
+      for (var level = levelBefore + 1; level <= levelAfter; level++) {
+        for (final r in levelRewards.where((r) => r.level == level)) {
+          if (r.type == RewardType.coins) coins += r.value;
+          // A background won by levelling is one fewer to buy.
+          if (r.type == RewardType.unlock) {
+            owed -= shopItems.firstWhere((i) => i.id == r.itemId).price;
+          }
+        }
+        if (level == 20) coins += 1000; // UserProvider's level-20 bonus
+      }
+
       if (p.scenarios > 0 && firstClears > 0) firstClears--;
 
       // No learning, no offer. This is the gate, and it is what stops a
@@ -345,6 +419,38 @@ void main() {
               target: catalogueTotal, caresForPet: false, adsPerDay: maxAds)),
           reason: '${p.name}: neglecting the pet must never pay better',
         );
+      }
+    });
+  });
+
+
+  /// The toy chest's games pay XP, which is the one learning payout a player
+  /// could repeat for an hour without tiring — so it is capped, and these ask
+  /// whether the cap keeps it a top-up. See `PlayRewards.dailyXpCap`.
+  group('the toy chest tops XP up without replacing learning', () {
+    const cap = PlayRewards.dailyXpCap;
+
+    test('its whole daily cap is a small share of a regular day', () {
+      final regularXp = learningXpFor(regular, firstClears: 0);
+
+      expect(cap, lessThan(regularXp * 0.25));
+    });
+
+    test('maxing it every day still leaves the catalogue months away', () {
+      expect(daysToAfford(regular, target: catalogueTotal, playXpPerDay: cap),
+          inInclusiveRange(60, 150));
+      expect(daysToAfford(casual, target: catalogueTotal, playXpPerDay: cap),
+          inInclusiveRange(150, 450));
+    });
+
+    test('a learner who also plays is faster, but not transformed', () {
+      for (final p in [casual, regular]) {
+        final without = daysToAfford(p, target: catalogueTotal);
+        final withGames =
+            daysToAfford(p, target: catalogueTotal, playXpPerDay: cap);
+
+        expect(withGames, lessThanOrEqualTo(without), reason: p.name);
+        expect(withGames * 1.25, greaterThan(without), reason: p.name);
       }
     });
   });

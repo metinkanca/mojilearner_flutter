@@ -111,7 +111,6 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
         Provider.of<LanguageProvider>(context).targetLanguage?.code ?? 'en';
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
     final calibrationProvider = Provider.of<CalibrationProvider>(context);
     final proficiency =
         calibrationProvider.getLanguageProficiency(languageCode);
@@ -162,7 +161,7 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
             Text(
               'CALIBRATION',
               textDirection: textDirection,
-              textAlign: textAlign,
+              textAlign: TextAlign.center,
               style: AppFonts.pressStart2p(
                 fontSize: 12,
                 color: AppTheme.retroDark,
@@ -172,7 +171,7 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
             Text(
               'COMPLETE!',
               textDirection: textDirection,
-              textAlign: textAlign,
+              textAlign: TextAlign.center,
               style: AppFonts.pressStart2p(
                 fontSize: 20,
                 color: AppTheme.retroDark,
@@ -267,7 +266,7 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
                 child: Text(
                   farewell,
                   textDirection: textDirection,
-                  textAlign: textAlign,
+                  textAlign: TextAlign.center,
                   style: AppFonts.pressStart2p(
                     fontSize: 12,
                     color: AppTheme.retroDark,
@@ -301,7 +300,7 @@ class _PetFarewellScreenState extends State<PetFarewellScreen>
                   child: Text(
                     'START LEARNING!',
                     textDirection: textDirection,
-                    textAlign: textAlign,
+                    textAlign: TextAlign.center,
                     style: AppFonts.pressStart2p(
                       fontSize: 12,
                       color: Colors.white,

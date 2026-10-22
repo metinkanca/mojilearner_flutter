@@ -46,7 +46,6 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
     final isSelected = _selectedLevel == level;
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
     
     return GestureDetector(
       onTap: () => _selectLevel(level),
@@ -82,7 +81,7 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                     title,
                     textDirection: textDirection,
                     maxLines: 1,
-                    textAlign: textAlign,
+                    textAlign: TextAlign.center,
                     style: AppFonts.pressStart2p(
                       fontSize: 14,
                       color: isSelected ? Colors.white : AppTheme.retroDark,
@@ -98,7 +97,7 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                 child: Text(
                   description,
                   textDirection: textDirection,
-                  textAlign: textAlign,
+                  textAlign: TextAlign.center,
                   style: AppFonts.pressStart2p(
                     fontSize: 8,
                     color: isSelected
@@ -122,7 +121,6 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
     final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context);
     final textDirection = textDirectionForLocale(locale);
-    final textAlign = textAlignForLocale(locale);
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
@@ -177,7 +175,7 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                       fontSize: 10,
                       color: AppTheme.retroDark,
                     ),
-                    textAlign: textAlign,
+                    textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -195,7 +193,7 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                         ),
                       ],
                     ),
-                    textAlign: textAlign,
+                    textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -203,7 +201,7 @@ class _SelfAssessmentScreenState extends State<SelfAssessmentScreen> {
                   Text(
                     l10n.dontWorryVerify,
                     textDirection: textDirection,
-                    textAlign: textAlign,
+                    textAlign: TextAlign.center,
                     style: AppFonts.pressStart2p(
                       fontSize: 8,
                       color: AppTheme.retroDark.withValues(alpha: 0.7),

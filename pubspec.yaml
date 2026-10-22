@@ -33,6 +33,10 @@ dependencies:
   google_fonts: ^8.2.1
   flutter_animate: ^4.5.0
   
+  # First-run coach marks. v5 is controller-based: ShowcaseView.register()
+  # replaces the deprecated ShowCaseWidget ancestor.
+  showcaseview: ^5.1.0
+
   # Icons
   cupertino_icons: ^1.0.2
   google_generative_ai: ^0.4.7
@@ -51,6 +55,11 @@ dependencies:
   google_sign_in: ^7.2.0
   lucide_icons_flutter: ^3.1.17
   google_mobile_ads: ^9.1.0
+
+  # Store subscriptions (Mimikin Plus, and later the season pass).
+  # Play Billing and StoreKit behind one API; the product ids arrive at build
+  # time through --dart-define, see `constants/app_runtime_config.dart`.
+  in_app_purchase: ^3.2.0
 
 dev_dependencies:
   flutter_test:

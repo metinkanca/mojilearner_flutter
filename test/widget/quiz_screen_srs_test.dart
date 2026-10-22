@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mojilearner_flutter/components/quiz_stage.dart';
+import 'package:mojilearner_flutter/constants/entitlements.dart';
 import 'package:mojilearner_flutter/models/models.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
@@ -158,12 +160,11 @@ void main() {
   // The bond half of the quiz payout. Unlike XP and coins it is not scaled by
   // sickness and cannot be bought, so it is settled once, at the end, from the
   // whole score rather than per answer.
-  testWidgets('finishing a quiz credits the bond once, with the score',
+  testWidgets('finishing a quiz settles once, at the end',
       (tester) async {
     // The stock quiz, used whenever the review queue is too thin.
     const stockQuestionCount = 5;
 
-    when(() => mockUser.addXp(any())).thenAnswer((_) async {});
     when(() => mockCharacter.isSick).thenReturn(false);
     when(() => mockCharacter.applyQuizRewards(
           happinessDelta: any(named: 'happinessDelta'),
@@ -174,16 +175,21 @@ void main() {
     await pumpQuiz(tester, VocabProvider());
 
     // Plays the whole quiz taking whichever option comes first, so the score
-    // lands where it lands — this is about when bond is credited, not about
+    // lands where it lands — this is about when the quiz settles, not about
     // accuracy.
     for (var i = 0; i < stockQuestionCount; i++) {
       expect(
-        mockCharacter.recordedQuizzes,
-        isEmpty,
-        reason: 'bond must not be credited before the last question',
+        mockCharacter.learningMoments,
+        0,
+        reason: 'the quiz must not settle before the last question',
       );
 
-      await tester.tap(find.byType(AspectRatio).first);
+      await tester.tap(find
+          .descendant(
+            of: find.byType(QuizOptionGrid),
+            matching: find.byType(GestureDetector),
+          )
+          .first);
       await tester.pump();
       await tester.tap(find.text('CONTINUE'));
       // Not pumpAndSettle: the last CONTINUE opens the rewards popup, whose
@@ -191,7 +197,40 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
     }
 
-    expect(mockCharacter.recordedQuizzes, hasLength(1));
-    expect(mockCharacter.recordedQuizzes.single.total, stockQuestionCount);
+    expect(mockCharacter.learningMoments, 1);
+    // The quiz's worth is XP now, credited on the same finish.
+    expect(mockUser.addedXp, hasLength(1));
+    expect(mockUser.addedXp.single, greaterThan(0));
+  });
+
+  // Added because the wall used to be the first time anyone learned a limit
+  // existed — a rule you only meet by breaking it reads as the app changing
+  // its mind rather than as a rule.
+  group('the allowance meter', () {
+    testWidgets('shows what today has left', (tester) async {
+      await pumpQuiz(tester, VocabProvider());
+
+      final quizzes = EntitlementConstants.free.quizzes;
+      expect(find.text('0 of $quizzes used today'), findsOneWidget);
+    });
+
+    // Counting is noise rather than information at 10 a day.
+    testWidgets('stays out of the way for a member', (tester) async {
+      mockUser.isPremium = true;
+
+      await pumpQuiz(tester, VocabProvider());
+
+      expect(find.textContaining('used today'), findsNothing);
+    });
+
+    // A zero in the header while the player works through the local quiz is a
+    // reproach for studying, and the sheet has already said it anyway.
+    testWidgets('disappears once the day is spent', (tester) async {
+      mockUser.exhaustAi(AiSpend.quiz);
+
+      await pumpQuiz(tester, VocabProvider());
+
+      expect(find.textContaining('used today'), findsNothing);
+    });
   });
 }

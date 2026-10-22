@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../components/character_sprite.dart';
-import '../components/free_coins_tile.dart';
+import '../components/purchase_dialogs.dart';
+import '../components/scene_thumbnail.dart';
+import '../components/accessory_icon.dart';
 import '../constants/accessories.dart';
 import '../constants/bond.dart';
+import '../constants/pets.dart';
+import '../constants/scenes.dart';
+import '../constants/season_pass.dart';
 import '../constants/shop.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
-import '../providers/ads_provider.dart';
 import '../providers/character_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/user_provider.dart';
@@ -36,7 +39,7 @@ typedef _FontFn = TextStyle Function({
 class WardrobeScreen extends StatelessWidget {
   const WardrobeScreen({super.key});
 
-  String _iconAsset(AccessoryDef a) => 'assets/svgs/acc_${a.id}_icon.svg';
+  String _iconAsset(AccessoryDef a) => AccessoryIcon.assetFor(a);
 
   String _slotLabel(AppLocalizations l10n, String slot) {
     switch (slot) {
@@ -88,7 +91,7 @@ class WardrobeScreen extends StatelessWidget {
         // The closet sells things now — coats, eyes and accessories — so it
         // shows the purse, like the shop does.
         actions: [
-          _CoinBalance(coins: coins, fontFunction: fontFunction),
+          CoinBalance(coins: coins, fontFunction: fontFunction),
         ],
       ),
       body: Padding(
@@ -119,7 +122,8 @@ class WardrobeScreen extends StatelessWidget {
                       textDirection: textDirection,
                       child: _SwatchRow(
                         statuses: ColorOwnership.statusesFor(
-                          kAllBodySwatches,
+                          bodySwatchesFor(
+                              characterProvider.currentCharacterType),
                           unlockedItemIds: characterProvider.unlockedItems,
                           coins: coins,
                         ),
@@ -146,6 +150,16 @@ class WardrobeScreen extends StatelessWidget {
                       l10n: l10n,
                     ),
                     const SizedBox(height: 16),
+                    if (petHasBeak(characterProvider.currentCharacterType)) ...[
+                      _BeakPanel(
+                        provider: characterProvider,
+                        coins: coins,
+                        fontFunction: fontFunction,
+                        textDirection: textDirection,
+                        l10n: l10n,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                   ],
                   // Accessory slots, each a "shelf" of the closet.
                   for (final slot in AccessorySlots.all) ...[
@@ -158,6 +172,13 @@ class WardrobeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                   ],
+                  // Scenery last: the shelves above dress whichever pet is
+                  // out, and this is the one thing here that belongs to all of
+                  // them at once.
+                  _SceneSection(
+                    fontFunction: fontFunction,
+                    textDirection: textDirection,
+                  ),
                   const SizedBox(height: 8),
                 ],
               ),
@@ -333,11 +354,15 @@ class _SlotSection extends StatelessWidget {
     final coins = context.select<UserProvider, int>((p) => p.coins);
     final stage = petStageOf(context);
 
+    final claimedPassItemIds =
+        context.select<UserProvider, Set<String>>((u) => u.claimedPassItemIds);
+
     final statuses = AccessoryOwnership.statusesForSlot(
       slot,
       unlockedItemIds: character.unlockedItems,
       stage: stage,
       coins: coins,
+      claimedPassItemIds: claimedPassItemIds,
     );
 
     return _WardrobePanel(
@@ -379,7 +404,7 @@ class _SlotSection extends StatelessWidget {
     }
 
     if (status.isBondLocked) {
-      _showWardrobeDialog(
+      showNoticeDialog(
         context: context,
         fontFunction: fontFunction,
         textDirection: textDirection,
@@ -405,14 +430,14 @@ class _SlotSection extends StatelessWidget {
     if (item == null) return;
 
     if (!status.affordable) {
-      _showWardrobeDialog(
+      showNoticeDialog(
         context: context,
         fontFunction: fontFunction,
         textDirection: textDirection,
         title: accessoryName(l10n, status.accessory),
         message: l10n.notEnoughCoinsMessage,
         detail: '${AccessoryTileIcons.coin} ${item.price}',
-        action: _rewardedAdAction(context),
+        action: rewardedAdAction(context),
       );
       return;
     }
@@ -422,7 +447,7 @@ class _SlotSection extends StatelessWidget {
 
     showDialog<void>(
       context: context,
-      builder: (dialogContext) => _BuyDialog(
+      builder: (dialogContext) => BuyDialog(
         preview: Text(
           status.accessory.icon,
           style: const TextStyle(fontSize: 48),
@@ -445,15 +470,254 @@ class _SlotSection extends StatelessWidget {
   }
 }
 
-/// Glyphs used on the tiles. Kept together so the wardrobe and the shop can be
-/// checked against each other at a glance.
-class AccessoryTileIcons {
-  AccessoryTileIcons._();
+/// Scenery: the world every pet lives in.
+///
+/// The shop sells these as "backgrounds", which undersells them — a scene is a
+/// palette and a decor set the home screen draws with, and it keeps its own
+/// day, sunset and night. Owning several and living in one is the point, so
+/// this shelf is a picker rather than a list of receipts.
+class _SceneSection extends StatelessWidget {
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
 
-  static const String coin = '\u{1FA99}';
-  static const String locked = '\u{1F512}';
+  const _SceneSection({
+    required this.fontFunction,
+    required this.textDirection,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    // Watched rather than selected, for the same reason the accessory shelves
+    // are: a purchase mutates the provider's own set in place.
+    final character = context.watch<CharacterProvider>();
+    final coins = context.select<UserProvider, int>((p) => p.coins);
+
+    return _WardrobePanel(
+      title: l10n.sceneryTitle,
+      fontFunction: fontFunction,
+      textDirection: textDirection,
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        children: [
+          for (final scene in kSceneThemes)
+            _SceneTile(
+              scene: scene,
+              owned: character.ownsScene(scene.id),
+              equipped: character.sceneId == scene.id,
+              price: shopItemById(scene.id)?.price,
+              // Named on the tile rather than left with an empty footer: a
+              // world with neither a price nor a lock on it reads as one the
+              // shelf forgot to finish.
+              passName: seasonPassForScene(scene.id)?.name,
+              fontFunction: fontFunction,
+              textDirection: textDirection,
+              onTap: () => _handleTap(
+                context,
+                scene,
+                owned: character.ownsScene(scene.id),
+                coins: coins,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// One tap, two meanings: move in, or buy the place first.
+  void _handleTap(
+    BuildContext context,
+    SceneTheme scene, {
+    required bool owned,
+    required int coins,
+  }) {
+    if (owned) {
+      context.read<CharacterProvider>().equipScene(scene.id);
+      return;
+    }
+
+    // Pass content has no price to quote, so the tap goes to the track that
+    // hands it over instead of opening a buy dialog it cannot fill in. The id
+    // matters once there is more than one pass: this world may not be on the
+    // one the pass screen opens on.
+    if (isPassScene(scene.id)) {
+      context.pushNamed('pass', queryParameters: {
+        if (seasonPassForScene(scene.id) case final pass?) 'id': pass.id,
+      });
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context)!;
+    final item = shopItemById(scene.id);
+    if (item == null) return;
+
+    if (coins < item.price) {
+      showNoticeDialog(
+        context: context,
+        fontFunction: fontFunction,
+        textDirection: textDirection,
+        title: sceneName(l10n, scene),
+        message: l10n.notEnoughCoinsMessage,
+        detail: '${AccessoryTileIcons.coin} ${item.price}',
+        action: rewardedAdAction(context),
+      );
+      return;
+    }
+
+    final character = context.read<CharacterProvider>();
+    final user = context.read<UserProvider>();
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => BuyDialog(
+        preview: SceneThumbnail(scene: scene, size: 72),
+        name: sceneName(l10n, scene),
+        price: item.price,
+        fontFunction: fontFunction,
+        textDirection: textDirection,
+        onConfirm: () async {
+          Navigator.of(dialogContext).pop();
+          // No equip call to follow it: buying a scene moves the pet into it,
+          // wherever the purchase was made. See CharacterProvider.purchaseItem.
+          await character.purchaseItem(item, user);
+        },
+      ),
+    );
+  }
 }
 
+/// One scene on the shelf, previewed as the world it is rather than named as
+/// the colour it used to be.
+class _SceneTile extends StatelessWidget {
+  final SceneTheme scene;
+  final bool owned;
+  final bool equipped;
+  final int? price;
+
+  /// The season pass this world belongs to, where it belongs to one. Left
+  /// untranslated on purpose, like the pass page's own title: it is a name.
+  final String? passName;
+
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
+  final VoidCallback onTap;
+
+  const _SceneTile({
+    required this.scene,
+    required this.owned,
+    required this.equipped,
+    required this.price,
+    required this.passName,
+    required this.fontFunction,
+    required this.textDirection,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    // Fixed-height footer, for the same reason the accessory tiles have one:
+    // buying a scene must not reflow the shelf under it.
+    final String footer;
+    if (equipped) {
+      footer = l10n.sceneInUse;
+    } else if (owned) {
+      footer = '';
+    } else if (price != null) {
+      footer = '${AccessoryTileIcons.coin} $price';
+    } else if (passName != null) {
+      footer = '${AccessoryTileIcons.locked} $passName';
+    } else {
+      footer = '';
+    }
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 88,
+        // Thicker border, less padding — identical outer metrics whichever
+        // scene is in use, so switching worlds never moves the shelf.
+        padding: EdgeInsets.all(equipped ? 6 : 8),
+        decoration: BoxDecoration(
+          color: equipped
+              ? AppTheme.wardrobeBrass.withValues(alpha: 0.45)
+              : AppTheme.retroLight,
+          border: Border.all(
+            color: AppTheme.retroDark,
+            width: equipped ? 4 : 2,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: AppTheme.retroDark,
+              offset: Offset(3, 3),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Dimmed rather than hidden when unowned: a world you can see is
+            // a reason to keep earning.
+            Opacity(
+              opacity: owned ? 1.0 : 0.45,
+              child: SceneThumbnail(scene: scene, size: 64),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              sceneName(l10n, scene),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textDirection: textDirection,
+              textAlign: TextAlign.center,
+              style: fontFunction(
+                fontSize: 7,
+                color: owned ? AppTheme.retroDark : AppTheme.textSecondary,
+                fontWeight: equipped ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            SizedBox(
+              height: 14,
+              child: Text(
+                footer,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textDirection: textDirection,
+                textAlign: TextAlign.center,
+                style: fontFunction(
+                  fontSize: 6,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Scene display name, routed through the shop localizer wherever there is a
+/// shop entry so the two screens cannot drift on what a world is called. Five
+/// worlds carry their own key instead: three of the free ones, because nothing
+/// free is in the shop (the meadow keeps an older key), and the two pass
+/// worlds, because nothing on a pass is sold.
+String sceneName(AppLocalizations l10n, SceneTheme scene) {
+  if (scene.id == kMeadowSceneId) return l10n.shopItemBgMeadowName;
+  if (scene.id == kCozyRoomSceneId) return l10n.sceneCozyRoomName;
+  if (scene.id == kEnchantedMeadowSceneId) return l10n.sceneEnchantedMeadowName;
+  if (scene.id == kMushroomGladeSceneId) return l10n.sceneMushroomGladeName;
+  if (scene.id == kAirfieldSceneId) return l10n.sceneAirfieldName;
+  if (scene.id == kPumpkinPatchSceneId) return l10n.scenePumpkinPatchName;
+  final item = shopItemById(scene.id);
+  if (item != null) return ShopItemLocalizer.localizedName(l10n, item);
+  return scene.name;
+}
+
+/// Glyphs used on the tiles. Kept together so the wardrobe and the shop can be
+/// checked against each other at a glance.
 /// Accessory display name, routed through the shared shop localizer wherever
 /// there is a shop entry so the two screens cannot drift on what a hat is
 /// called.
@@ -471,109 +735,41 @@ String accessoryName(AppLocalizations l10n, AccessoryDef accessory) {
       return l10n.accessoryMortarboardName;
     case 'medal':
       return l10n.accessoryMedalName;
+    // Season one. Pass pieces reach here for the same reason the bond-gated
+    // ones do: they carry no price, so there is no shop entry to take the
+    // name from.
+    case 'bandana':
+      return l10n.accessoryBandanaName;
+    case 'bandana_cloud':
+      return l10n.accessoryBandanaCloudName;
+    case 'scarf_dusk':
+      return l10n.accessoryScarfDuskName;
+    case 'goggles':
+      return l10n.accessoryGogglesName;
+    case 'goggles_brass':
+      return l10n.accessoryGogglesBrassName;
+    case 'beanie_dusk':
+      return l10n.accessoryBeanieDuskName;
+    case 'flightcap':
+      return l10n.accessoryFlightCapName;
+    case 'flightcap_cloud':
+      return l10n.accessoryFlightCapCloudName;
+    case 'cowboyhat_charcoal':
+      return l10n.accessoryCowboyHatCharcoalName;
+    case 'flightscarf':
+      return l10n.accessoryFlightScarfName;
+    // Season two, for the same reason.
+    case 'pumpkinwitch':
+      return l10n.accessoryPumpkinWitchName;
+    case 'devilband':
+      return l10n.accessoryDevilBandName;
+    case 'ghostbandana':
+      return l10n.accessoryGhostBandanaName;
+    case 'batchoker':
+      return l10n.accessoryBatChokerName;
     default:
       return accessory.name;
   }
-}
-
-/// Small retro dialog for the two "you cannot have this yet" answers.
-void _showWardrobeDialog({
-  required BuildContext context,
-  required _FontFn fontFunction,
-  required TextDirection textDirection,
-  required String title,
-  required String message,
-  String? detail,
-  _DialogAction? action,
-}) {
-  showDialog<void>(
-    context: context,
-    builder: (context) => Dialog(
-      backgroundColor: AppTheme.retroLight,
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(color: AppTheme.retroDark, width: 4),
-        borderRadius: BorderRadius.zero,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title.toUpperCase(),
-              textDirection: textDirection,
-              textAlign: TextAlign.center,
-              style: fontFunction(
-                fontSize: 11,
-                color: AppTheme.retroDark,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              message,
-              textDirection: textDirection,
-              textAlign: TextAlign.center,
-              style: fontFunction(fontSize: 8, color: AppTheme.retroDark),
-            ),
-            if (detail != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                detail,
-                textDirection: textDirection,
-                textAlign: TextAlign.center,
-                style: fontFunction(
-                  fontSize: 8,
-                  color: AppTheme.textSecondary,
-                ),
-              ),
-            ],
-            if (action != null) ...[
-              const SizedBox(height: 16),
-              _DialogButton(
-                label: action.label.toUpperCase(),
-                color: AppTheme.retroAccent,
-                fontFunction: fontFunction,
-                textDirection: textDirection,
-                // Closed first: the ad takes over the screen, and coming back
-                // to a stale "not enough coins" over a balance that has since
-                // gone up would read as the purchase having failed.
-                onTap: () {
-                  Navigator.of(context).pop();
-                  action.onTap();
-                },
-              ),
-            ],
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-/// An extra button on a wardrobe dialog.
-typedef _DialogAction = ({String label, VoidCallback onTap});
-
-/// The "watch a video for coins" action for a can't-afford dialog, or null
-/// when there is no ad to offer.
-///
-/// Deliberately reachable only from the two *purchase* paths. A bond-gated
-/// accessory has no price at any amount of coins — see
-/// `AccessoryAvailability.bondLocked` — so the branch that explains one never
-/// comes near this. Putting an ad button there would turn a piece that is
-/// earned by learning into one that is bought, which is the exact thing that
-/// rule exists to prevent.
-_DialogAction? _rewardedAdAction(BuildContext context) {
-  final ads = context.read<AdsProvider>();
-  if (!ads.canOfferRewarded) return null;
-
-  final reward = ads.nextRewardValue;
-  if (reward == null) return null;
-
-  return (
-    label: AppLocalizations.of(context)!.adsWatchForCoins(reward),
-    onTap: () => watchRewardedAd(context),
-  );
 }
 
 /// Buys one coat or eye colour, then wears it.
@@ -594,14 +790,14 @@ void _confirmColorPurchase({
   if (price == null) return;
 
   if (!status.affordable) {
-    _showWardrobeDialog(
+    showNoticeDialog(
       context: context,
       fontFunction: fontFunction,
       textDirection: textDirection,
       title: title,
       message: l10n.notEnoughCoinsMessage,
       detail: '${AccessoryTileIcons.coin} $price',
-      action: _rewardedAdAction(context),
+      action: rewardedAdAction(context),
     );
     return;
   }
@@ -611,7 +807,7 @@ void _confirmColorPurchase({
 
   showDialog<void>(
     context: context,
-    builder: (dialogContext) => _BuyDialog(
+    builder: (dialogContext) => BuyDialog(
       preview: _SwatchPreview(hex: status.swatch.hex),
       name: title,
       price: price,
@@ -649,189 +845,6 @@ class _SwatchPreview extends StatelessWidget {
             blurRadius: 0,
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// The purse, in the app bar. Mirrors the shop's so the two read as one
-/// wallet.
-class _CoinBalance extends StatelessWidget {
-  final int coins;
-  final _FontFn fontFunction;
-
-  const _CoinBalance({required this.coins, required this.fontFunction});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppTheme.retroAccent,
-        border: Border.all(color: AppTheme.retroDark, width: 3),
-        boxShadow: const [
-          BoxShadow(
-            color: AppTheme.retroDark,
-            offset: Offset(2, 2),
-            blurRadius: 0,
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.monetization_on,
-              color: AppTheme.retroDark, size: 16),
-          const SizedBox(width: 4),
-          Text(
-            '$coins',
-            textDirection: TextDirection.ltr,
-            style: fontFunction(
-              fontSize: 10,
-              color: AppTheme.retroDark,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Confirms one purchase. Deliberately agnostic about what is being bought —
-/// a hat shows its emoji, a colour shows the colour itself — so the wardrobe
-/// has one buy flow rather than one per shelf.
-class _BuyDialog extends StatelessWidget {
-  final Widget preview;
-  final String name;
-  final int price;
-  final _FontFn fontFunction;
-  final TextDirection textDirection;
-  final Future<void> Function() onConfirm;
-
-  const _BuyDialog({
-    required this.preview,
-    required this.name,
-    required this.price,
-    required this.fontFunction,
-    required this.textDirection,
-    required this.onConfirm,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return Dialog(
-      backgroundColor: AppTheme.retroLight,
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(color: AppTheme.retroDark, width: 4),
-        borderRadius: BorderRadius.zero,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            preview,
-            const SizedBox(height: 12),
-            Text(
-              name.toUpperCase(),
-              textDirection: textDirection,
-              textAlign: TextAlign.center,
-              style: fontFunction(
-                fontSize: 11,
-                color: AppTheme.retroDark,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              '${AccessoryTileIcons.coin} $price',
-              textDirection: textDirection,
-              style: fontFunction(
-                fontSize: 10,
-                color: AppTheme.retroDark,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _DialogButton(
-                    label: l10n.cancel.toUpperCase(),
-                    color: AppTheme.retroLight,
-                    fontFunction: fontFunction,
-                    textDirection: textDirection,
-                    onTap: () => Navigator.of(context).pop(),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _DialogButton(
-                    label: l10n.buy.toUpperCase(),
-                    color: AppTheme.retroGrass,
-                    fontFunction: fontFunction,
-                    textDirection: textDirection,
-                    onTap: onConfirm,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _DialogButton extends StatelessWidget {
-  final String label;
-  final Color color;
-  final _FontFn fontFunction;
-  final TextDirection textDirection;
-  final VoidCallback onTap;
-
-  const _DialogButton({
-    required this.label,
-    required this.color,
-    required this.fontFunction,
-    required this.textDirection,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(color: AppTheme.retroDark, width: 3),
-          boxShadow: const [
-            BoxShadow(
-              color: AppTheme.retroDark,
-              offset: Offset(3, 3),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: Text(
-          label,
-          textDirection: textDirection,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: fontFunction(
-            fontSize: 8,
-            color: AppTheme.retroDark,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
     );
   }
@@ -907,7 +920,10 @@ class _AccessoryTile extends StatelessWidget {
                 // Dimmed rather than hidden: a locked item you can see is a
                 // reason to keep earning, and a blank square is not.
                 opacity: locked ? 0.35 : 1.0,
-                child: SvgPicture.asset(iconAsset, fit: BoxFit.contain),
+                // Reads the def rather than the path so a palette variant
+                // borrows the source drawing and recolours it, instead of
+                // needing an icon file of its own.
+                child: AccessoryIcon(accessory: status.accessory),
               ),
             ),
             const SizedBox(height: 6),
@@ -1289,6 +1305,62 @@ class _EyePanel extends StatelessWidget {
           ],
           pickers,
         ],
+      ),
+    );
+  }
+}
+
+/// The beak colour, for a pet with a beak.
+///
+/// The first swatch is the pet's own beak — for the reworked bird that is the
+/// coat's shade, so it moves with the coat — and picking it clears the choice
+/// rather than pinning today's colour. Every beak colour is free, so there is
+/// nothing here to buy.
+class _BeakPanel extends StatelessWidget {
+  final CharacterProvider provider;
+  final int coins;
+  final _FontFn fontFunction;
+  final TextDirection textDirection;
+  final AppLocalizations l10n;
+
+  const _BeakPanel({
+    required this.provider,
+    required this.coins,
+    required this.fontFunction,
+    required this.textDirection,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final type = provider.currentCharacterType;
+    final spec = provider.colorSpec;
+    final natural = naturalBeakFor(type, spec.bodyColor);
+    if (natural == null) return const SizedBox.shrink();
+
+    final statuses = ColorOwnership.statusesFor(
+      [
+        PetSwatch(kNaturalBeakSwatchId, 'Natural', natural),
+        ...kBeakSwatches,
+      ],
+      unlockedItemIds: provider.unlockedItems,
+      coins: coins,
+    );
+
+    return _WardrobePanel(
+      title: l10n.beakColor,
+      fontFunction: fontFunction,
+      textDirection: textDirection,
+      child: _SwatchRow(
+        statuses: statuses,
+        selectedHex: spec.beakColor ?? natural,
+        fontFunction: fontFunction,
+        textDirection: textDirection,
+        onPick: (hex) => provider.updateBeakColor(
+          hex.toLowerCase() == natural.toLowerCase() ? null : hex,
+        ),
+        // Unreachable: every beak swatch is free.
+        onBuy: (_) {},
       ),
     );
   }

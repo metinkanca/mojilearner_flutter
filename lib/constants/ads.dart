@@ -1,9 +1,10 @@
 /// What ads are allowed to do, and what they pay.
 ///
-/// The third income axis, after [BondConstants] in `bond.dart` and
-/// [GoldConstants] in `gold.dart`. Bond measures whether the relationship
-/// grew, coins measure what the player may dress it in, and ads are a way to
-/// buy coins with attention instead of study. That last sentence is exactly
+/// The third income axis, after the XP ledger in `progression.dart` and
+/// [GoldConstants] in `gold.dart`. XP measures whether the relationship grew
+/// (the pet's bond stage is projected from it), coins measure what the player
+/// may dress it in, and ads are a way to buy coins with attention instead of
+/// study. That last sentence is exactly
 /// the risk, so three rules hold it in place:
 ///
 /// * **Ads top up a learning day; they never replace one.** Enforced rather

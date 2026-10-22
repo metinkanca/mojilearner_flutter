@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/components/daily_rewards_dialog.dart';
@@ -15,10 +14,19 @@ import '../helpers/test_fixtures.dart';
 ///
 /// Two things are asserted, because fixing only the first is how the markers
 /// end up unreadable instead of overflowing: a RenderFlex overflow fails the
-/// test on its own, and the day labels are then checked for not having been
-/// ellipsed away to buy that space.
+/// test on its own, and every marker is then checked for still being big
+/// enough to read the reward inside it.
+///
+/// The markers used to carry day numbers, and this file checked those labels
+/// for having been ellipsed. They draw the day's reward now, so what is
+/// measured is the marker itself.
 void main() {
   const handset = Size(400, 844);
+
+  /// Below this a marker is a coloured speck: its 2-3pt border eats the frame
+  /// and the sprite inside has nothing left. The tightest supported handset
+  /// leaves about 21pt, so real layouts clear this with room to spare.
+  const minReadableMarker = 18.0;
 
   late MockSettingsProvider mockSettings;
   late MockLanguageProvider mockLanguage;
@@ -51,40 +59,33 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  /// Fails if [text] is missing or rendered with an ellipsis.
-  void expectLabel(WidgetTester tester, String text) {
-    final finder = find.text(text);
-    expect(finder, findsOneWidget, reason: 'day marker "$text" not rendered');
-    expect(
-      tester.renderObject<RenderParagraph>(finder).didExceedMaxLines,
-      isFalse,
-      reason: 'day marker "$text" was truncated to fit',
-    );
+  /// Fails if any of the seven markers is missing or has been squeezed below
+  /// [minReadableMarker] to buy the row its space.
+  void expectMarkers(WidgetTester tester) {
+    for (var day = 1; day <= 7; day++) {
+      final finder = find.byKey(ValueKey('daily-reward-day-$day'));
+      expect(finder, findsOneWidget, reason: 'day $day marker not rendered');
+      expect(
+        tester.getSize(finder).width,
+        greaterThanOrEqualTo(minReadableMarker),
+        reason: 'day $day marker was shrunk to fit',
+      );
+    }
   }
 
   testWidgets('streak calendar fits a handset on day 1', (tester) async {
     await pumpDialog(tester, dayNumber: 1);
-
-    // Day 1 is complete (a check); days 2-7 still show their numbers.
-    for (var day = 2; day <= 7; day++) {
-      expectLabel(tester, '$day');
-    }
+    expectMarkers(tester);
   });
 
   testWidgets('streak calendar fits a handset mid-streak', (tester) async {
     await pumpDialog(tester, dayNumber: 4);
-
-    for (var day = 5; day <= 7; day++) {
-      expectLabel(tester, '$day');
-    }
+    expectMarkers(tester);
   });
 
   testWidgets('streak calendar fits a narrow handset', (tester) async {
     await pumpDialog(tester, dayNumber: 1, size: const Size(320, 640));
-
-    for (var day = 2; day <= 7; day++) {
-      expectLabel(tester, '$day');
-    }
+    expectMarkers(tester);
   });
 
   // Greek carries the longest translations, so it decides whether the copy
@@ -102,9 +103,6 @@ void main() {
   testWidgets('streak calendar fits a handset in the longest locale',
       (tester) async {
     await pumpDialog(tester, dayNumber: 1, locale: const Locale('el'));
-
-    for (var day = 2; day <= 7; day++) {
-      expectLabel(tester, '$day');
-    }
+    expectMarkers(tester);
   });
 }

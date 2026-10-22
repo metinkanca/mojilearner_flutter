@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/models.dart';
+import '../utils/play_games.dart';
 import '../utils/progression_utils.dart';
+import '../utils/season_pass_progress.dart';
+import '../constants/entitlements.dart';
 import '../constants/gold.dart';
 import '../constants/progression.dart';
 import '../constants/app_runtime_config.dart';
@@ -16,7 +20,12 @@ class UserProvider extends ChangeNotifier {
 
   String _username = 'Learner';
   int _coins = startingCoins;
-  int _streak = 0;
+  /// Where the player is in the seven-step reward cycle, as a running count
+  /// of claims. See [rewardClaims].
+  int _rewardClaims = 0;
+
+  /// Consecutive days claimed. See [loginStreak].
+  int _loginStreak = 0;
   int _totalXP = 0;
 
   /// Whether the player holds a membership.
@@ -36,6 +45,26 @@ class UserProvider extends ChangeNotifier {
   /// cannot be used to reset the taper.
   DateTime? _goldDay;
 
+  /// XP the toy chest's games have paid today, against
+  /// [PlayRewards.dailyXpCap], and the calendar day that count belongs to.
+  /// Persisted for the same reason as the gold day.
+  int _playXpToday = 0;
+  DateTime? _playXpDay;
+
+  /// Season passes this player has bought, oldest first.
+  ///
+  /// Purchases rather than pet state, which is why they live here beside the
+  /// coins and the XP their tracks are measured against. Never pruned: a pass
+  /// whose season is long over may still have tiers waiting, and dropping it
+  /// would be the expiry the design exists to avoid — see
+  /// `constants/season_pass.dart`.
+  List<OwnedPass> _ownedPasses = const [];
+
+  /// Today's model spend, against the tier's allowance. See
+  /// `constants/entitlements.dart` — and note that this copy is the meter and
+  /// the wall, not the enforcement: the proxy holds the real allowance.
+  AiUsageLedger _aiUsage = const AiUsageLedger();
+
   // Onboarding tracking
   bool _hasCompletedOnboarding = false;
 
@@ -47,7 +76,185 @@ class UserProvider extends ChangeNotifier {
 
   String get username => _username;
   int get coins => _coins;
-  int get streak => _streak;
+
+  /// Every pass the player owns, oldest first.
+  List<OwnedPass> get ownedPasses => List.unmodifiable(_ownedPasses);
+
+  bool ownsPass(String passId) =>
+      _ownedPasses.any((p) => p.passId == passId);
+
+  /// Every pass accessory actually claimed, which is what the wardrobe reads.
+  Set<String> get claimedPassItemIds =>
+      SeasonPassProgress.claimedAccessoryIds(_ownedPasses);
+
+  /// Every pass *scene* actually claimed.
+  ///
+  /// Not how a scene is owned — that is `CharacterProvider`'s unlocked set,
+  /// like every other world — but the durable record of what should be in it,
+  /// which is what puts a world back if the unlock never landed.
+  Set<String> get claimedPassSceneIds =>
+      SeasonPassProgress.claimedSceneIds(_ownedPasses);
+
+  /// Where the player is on [passId], or null when they do not own it.
+  PassProgress? passProgress(String passId) {
+    for (final owned in _ownedPasses) {
+      if (owned.passId == passId) {
+        return SeasonPassProgress.progressFor(owned, totalXP: _totalXP);
+      }
+    }
+    return null;
+  }
+
+  /// Records a bought pass, baselined on the XP the player has right now.
+  ///
+  /// Idempotent: a store that replays a purchase — which both of them do on a
+  /// restore — must not reset the baseline and take back the track. Returns
+  /// whether anything was actually added.
+  Future<bool> grantPass(String passId) async {
+    if (ownsPass(passId)) return false;
+
+    _ownedPasses = [
+      ..._ownedPasses,
+      OwnedPass(passId: passId, xpAtPurchase: _totalXP),
+    ];
+    await _savePasses();
+    notifyListeners();
+    return true;
+  }
+
+  /// Hands over every tier reached but not yet taken, and returns them.
+  ///
+  /// Claiming the whole run at once rather than one at a time because that is
+  /// what coming back after a fortnight looks like, and making someone tap
+  /// four times for four rungs they already earned is a chore, not a ceremony.
+  Future<List<int>> claimPassTiers(String passId) async {
+    final progress = passProgress(passId);
+    if (progress == null || !progress.hasClaimable) return const [];
+
+    final claimed = progress.claimableTierIndexes;
+    _ownedPasses = [
+      for (final owned in _ownedPasses)
+        owned.passId == passId
+            ? owned.copyWith(claimedThroughTier: claimed.last)
+            : owned,
+    ];
+    await _savePasses();
+    notifyListeners();
+    return claimed;
+  }
+
+  Future<void> _savePasses() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'season_passes',
+      json.encode([
+        for (final owned in _ownedPasses)
+          {
+            'id': owned.passId,
+            'xp': owned.xpAtPurchase,
+            'claimed': owned.claimedThroughTier,
+          },
+      ]),
+    );
+  }
+
+  void _loadPasses(SharedPreferences prefs) {
+    final raw = prefs.getString('season_passes');
+    if (raw == null || raw.isEmpty) return;
+
+    try {
+      final decoded = json.decode(raw);
+      if (decoded is! List) return;
+      _ownedPasses = [
+        for (final entry in decoded)
+          if (entry is Map && entry['id'] is String)
+            OwnedPass(
+              passId: entry['id'] as String,
+              xpAtPurchase: (entry['xp'] as num?)?.toInt() ?? 0,
+              claimedThroughTier: (entry['claimed'] as num?)?.toInt() ?? -1,
+            ),
+      ];
+    } catch (_) {
+      // A record that cannot be read is left alone rather than overwritten:
+      // the next save would otherwise erase a purchase over a parse bug.
+      _ownedPasses = const [];
+    }
+  }
+
+  /// The daily allowance this player is on.
+  AiAllowance get aiAllowance =>
+      EntitlementConstants.forTier(isPremium: _isPremium);
+
+  /// How much of [spend] is left today.
+  int aiRemaining(AiSpend spend) {
+    _rolloverAiDayIfNeeded();
+    return _aiUsage.remaining(spend, aiAllowance);
+  }
+
+  /// Everything [spend] may use today, including any quizzes ads have added.
+  int aiLimit(AiSpend spend) {
+    _rolloverAiDayIfNeeded();
+    return _aiUsage.limitFor(spend, aiAllowance);
+  }
+
+  /// Quizzes rewarded ads have added today, shown alongside the allowance so
+  /// a player can see what an ad bought them.
+  int get aiBonusQuizzesToday {
+    _rolloverAiDayIfNeeded();
+    return _aiUsage.bonusQuizzesToday;
+  }
+
+  /// Unused quizzes carried in from earlier days and still unspent.
+  ///
+  /// Filled only while Mimikin Plus is active — see [aiBanking] — and
+  /// included in [aiLimit] like any other quiz, so nothing has to add it back
+  /// on to display an honest total.
+  int get aiBankedQuizzes {
+    _rolloverAiDayIfNeeded();
+    return _aiUsage.bankedQuizzes;
+  }
+
+  /// The allowance whose leftovers carry forward, or null on a tier that does
+  /// not bank.
+  ///
+  /// The one place membership decides what happens to a closing day. Free
+  /// players do not bank: the bank is a Plus feature, and a free allowance
+  /// small enough to be a real limit is not one there is much point saving.
+  AiAllowance? get aiBanking => _isPremium ? aiAllowance : null;
+
+  /// Whether one more [spend] is allowed right now.
+  ///
+  /// Ask before generating, not after: the point is to not make the call.
+  bool canSpendAi(AiSpend spend) {
+    _rolloverAiDayIfNeeded();
+    return _aiUsage.canSpend(spend, aiAllowance);
+  }
+
+  /// Every XP the player has ever earned — the single learning ledger.
+  ///
+  /// Exposed raw as well as through [stats] because the pet's bond stage is a
+  /// projection of it (see `utils/bond_progress.dart`), and that projection
+  /// needs the running total rather than the level it rounds to.
+  int get totalXP => _totalXP;
+  /// How many daily rewards this player has claimed, ever.
+  ///
+  /// Nothing resets it, and a missed day leaves no mark. `DailyRewardProvider`
+  /// reads it as the player's position in the seven-step reward cycle, which
+  /// is the only thing it is used for.
+  ///
+  /// Still persisted under the key `streak`, which is what it was called when
+  /// it was one. Renaming the key would cost every existing player their place
+  /// in the cycle to fix a word only this file can see.
+  int get rewardClaims => _rewardClaims;
+
+  /// Days claimed in a row, and nothing more than that.
+  ///
+  /// Deliberately inert. It is a number the player is shown because a run of
+  /// days is worth being proud of; it is attached to no reward, no multiplier
+  /// and no penalty, and breaking it costs exactly nothing — see
+  /// `DailyRewardProvider.checkDailyReward` for why the reward cycle stopped
+  /// reading it.
+  int get loginStreak => _loginStreak;
   bool get isPremium => _isPremium;
   bool get isLoading => _isLoading;
   bool get hasCompletedOnboarding => _hasCompletedOnboarding;
@@ -62,7 +269,7 @@ class UserProvider extends ChangeNotifier {
       totalXP: _totalXP,
       currentLevelXP: _totalXP - startOfLevel,
       nextLevelXP: endOfLevel - startOfLevel,
-      streak: _streak,
+      streak: _loginStreak,
       coins: _coins,
       progress: ProgressionUtils.getLevelProgress(_totalXP),
     );
@@ -84,10 +291,17 @@ class UserProvider extends ChangeNotifier {
     _username = prefs.getString('username') ?? 'Learner';
     _coins = prefs.getInt('coins') ?? startingCoins;
     await _migrateTestingModeCoins(prefs);
-    _streak = prefs.getInt('streak') ?? 0;
+    _rewardClaims = prefs.getInt('streak') ?? 0;
+    // Absent for anyone who was playing before the two were told apart. Their
+    // claim count is the better guess of the pair: it is at least a number of
+    // days they turned up, where zero would say they never had.
+    _loginStreak = prefs.getInt('login_streak') ?? _rewardClaims;
     _totalXP = prefs.getInt('total_xp') ?? 0;
     _isPremium = prefs.getBool(_premiumKey) ?? false;
     _loadGoldLedger(prefs);
+    _loadPlayXp(prefs);
+    _loadAiUsage(prefs);
+    _loadPasses(prefs);
     await _grantWelcomeReward(prefs);
 
     // Load onboarding status
@@ -190,6 +404,75 @@ class UserProvider extends ChangeNotifier {
     return award;
   }
 
+  /// Records one [spend] against today, and returns whether it was allowed.
+  ///
+  /// Returns false without recording anything when the meter is spent, so a
+  /// caller that ignores [canSpendAi] still cannot overspend.
+  Future<bool> spendAi(AiSpend spend) async {
+    _rolloverAiDayIfNeeded();
+    if (!_aiUsage.canSpend(spend, aiAllowance)) return false;
+
+    _aiUsage = _aiUsage.recording(spend, aiAllowance);
+    await _saveAiUsage(await SharedPreferences.getInstance());
+    notifyListeners();
+    return true;
+  }
+
+  /// Adds the quizzes a finished rewarded ad bought.
+  ///
+  /// The route past the wall for a player who will not subscribe. Called only
+  /// once the ad has reported an earned reward, so an ad that failed to load
+  /// buys nothing.
+  Future<void> addRewardedQuiz() async {
+    _rolloverAiDayIfNeeded();
+    _aiUsage = _aiUsage.recordingRewardedQuiz();
+    await _saveAiUsage(await SharedPreferences.getInstance());
+    notifyListeners();
+  }
+
+  /// Advances the ledger to today, banking whatever the closing day left.
+  ///
+  /// Deliberately does not persist: it is called from getters, which cannot
+  /// await. That is safe because the result is a pure function of what is
+  /// already on disk — the same rollover recomputes to the same bank on the
+  /// next launch — and the first thing that actually spends writes the day,
+  /// the spend and the bank back together.
+  void _rolloverAiDayIfNeeded() {
+    final rolled = _aiUsage.rolledOver(DateTime.now(), banking: aiBanking);
+    if (identical(rolled, _aiUsage)) return;
+    _aiUsage = rolled;
+  }
+
+  Future<void> _saveAiUsage(SharedPreferences prefs) async {
+    await prefs.setInt('ai_day', _aiUsage.day!.millisecondsSinceEpoch);
+    await prefs.setInt('ai_bonus_quizzes', _aiUsage.bonusQuizzesToday);
+    await prefs.setInt('ai_banked_quizzes', _aiUsage.bankedQuizzes);
+    await prefs.setInt('ai_banked_used', _aiUsage.bankedQuizzesUsedToday);
+    for (final spend in AiSpend.values) {
+      await prefs.setInt('ai_spent_${spend.name}', _aiUsage.spent(spend));
+    }
+  }
+
+  void _loadAiUsage(SharedPreferences prefs) {
+    final dayMs = prefs.getInt('ai_day');
+    if (dayMs == null) return;
+
+    _aiUsage = AiUsageLedger(
+      day: DateTime.fromMillisecondsSinceEpoch(dayMs),
+      spentToday: {
+        for (final spend in AiSpend.values)
+          spend: prefs.getInt('ai_spent_${spend.name}') ?? 0,
+      },
+      bonusQuizzesToday: prefs.getInt('ai_bonus_quizzes') ?? 0,
+      bankedQuizzes: prefs.getInt('ai_banked_quizzes') ?? 0,
+      bankedQuizzesUsedToday: prefs.getInt('ai_banked_used') ?? 0,
+    );
+
+    // Same reason the gold ledger rolls over on load: the getters have to be
+    // honest before anything is spent, or the meter opens showing yesterday.
+    _rolloverAiDayIfNeeded();
+  }
+
   /// Clears the ledger when the calendar day has turned over.
   void _rolloverGoldDayIfNeeded() {
     final now = DateTime.now();
@@ -236,6 +519,60 @@ class UserProvider extends ChangeNotifier {
     _rolloverGoldDayIfNeeded();
   }
 
+  /// XP the toy chest's games can still pay today.
+  int get playXpRemainingToday {
+    _rolloverPlayXpDayIfNeeded();
+    return PlayRewards.xpAllowed(
+      earned: PlayRewards.dailyXpCap,
+      paidToday: _playXpToday,
+    );
+  }
+
+  /// Pays [earned] XP for a finished toy chest game, after the games' daily
+  /// cap, and returns what was actually paid — which is what the results
+  /// show, so a capped game says +0 rather than promising XP that never
+  /// arrived.
+  ///
+  /// The games' own path rather than [addXp], which is unbounded: every
+  /// other XP source is rationed by something else (the review queue, the
+  /// quiz allowance, how long a conversation takes), and a minute's game is
+  /// not.
+  Future<int> awardPlayXp(int earned) async {
+    _rolloverPlayXpDayIfNeeded();
+    final paid =
+        PlayRewards.xpAllowed(earned: earned, paidToday: _playXpToday);
+    if (paid <= 0) return 0;
+
+    _playXpToday += paid;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('play_xp_day', _playXpDay!.millisecondsSinceEpoch);
+    await prefs.setInt('play_xp_today', _playXpToday);
+    await addXp(paid);
+    return paid;
+  }
+
+  void _loadPlayXp(SharedPreferences prefs) {
+    final dayMs = prefs.getInt('play_xp_day');
+    if (dayMs == null) return;
+    _playXpDay = DateTime.fromMillisecondsSinceEpoch(dayMs);
+    _playXpToday = prefs.getInt('play_xp_today') ?? 0;
+    _rolloverPlayXpDayIfNeeded();
+  }
+
+  /// Clears the games' XP count when the calendar day has turned over.
+  void _rolloverPlayXpDayIfNeeded() {
+    final now = DateTime.now();
+    final day = _playXpDay;
+    final sameDay = day != null &&
+        day.year == now.year &&
+        day.month == now.month &&
+        day.day == now.day;
+    if (sameDay) return;
+
+    _playXpDay = now;
+    _playXpToday = 0;
+  }
+
   Future<void> addXp(int amount) async {
     int oldLevel = ProgressionUtils.getLevelFromTotalXP(_totalXP);
     _totalXP += amount;
@@ -244,7 +581,11 @@ class UserProvider extends ChangeNotifier {
     if (newLevel > oldLevel) {
       // Level Up!
       _levelUpController.add(newLevel);
-      _handleLevelUpRewards(newLevel);
+      // Every level crossed pays, not just the one landed on: on a flat
+      // curve a big enough grant can jump two.
+      for (var level = oldLevel + 1; level <= newLevel; level++) {
+        _handleLevelUpRewards(level);
+      }
     }
 
     final prefs = await SharedPreferences.getInstance();
@@ -300,11 +641,18 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Set and persist the streak counter (advanced by DailyRewardProvider).
-  Future<void> setStreak(int value) async {
-    _streak = value;
+  /// Set and persist both daily-reward counters, which only ever move
+  /// together — one claim advances the cycle and either extends the run of
+  /// days or starts a new one. Advanced by DailyRewardProvider.
+  Future<void> setRewardProgress({
+    required int claims,
+    required int loginStreak,
+  }) async {
+    _rewardClaims = claims;
+    _loginStreak = loginStreak;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('streak', _streak);
+    await prefs.setInt('streak', _rewardClaims);
+    await prefs.setInt('login_streak', _loginStreak);
     notifyListeners();
   }
 

@@ -10,7 +10,7 @@ import 'helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  
+
   setUpAll(() async {
     // Initialize dotenv with test values
     await dotenv.load(fileName: ".env.test");
@@ -30,7 +30,7 @@ void main() {
 
       // Act - Pump app
       await tester.pumpWidget(const app.MojiLearnerApp());
-      
+
       // Wait for the daily reward check (500ms delay in HomeScreen)
       await tester.pump(const Duration(milliseconds: 600));
       await tester.pumpAndSettle();
@@ -43,7 +43,7 @@ void main() {
       // Arrange - Last reward was yesterday
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
       final yesterdayDate = DateTime(yesterday.year, yesterday.month, yesterday.day);
-      
+
       SharedPreferences.setMockInitialValues({
         'last_reward_claim_date': yesterdayDate.toIso8601String(),
         'streak': 1,
@@ -51,7 +51,7 @@ void main() {
       });
 
       await tester.pumpWidget(const app.MojiLearnerApp());
-      
+
       // Wait for daily reward check
       await tester.pump(const Duration(milliseconds: 600));
       await tester.pumpAndSettle();
@@ -63,14 +63,14 @@ void main() {
       // Get provider to check initial state
       final userProvider = readProvider<UserProvider>(tester);
       final initialCoins = userProvider.coins;
-      final initialStreak = userProvider.streak;
+      final initialStreak = userProvider.loginStreak;
 
       expect(initialStreak, 1);
 
       // Act - Claim reward
       await tester.tap(find.text('CLAIM REWARD'));
       await tester.pump();
-      
+
       // Wait for claim animation and auto-close (1500ms)
       await tester.pump(const Duration(milliseconds: 1600));
       await tester.pumpAndSettle();
@@ -78,24 +78,30 @@ void main() {
       // Assert - Dialog closed
       expect(find.byType(DailyRewardsDialog), findsNothing);
 
-      // Verify streak incremented to 2
-      expect(userProvider.streak, 2);
+      // Verify both counters advanced: a second claim, on a second day running
+      expect(userProvider.rewardClaims, 2);
+      expect(userProvider.loginStreak, 2);
 
       // Verify coins increased (Day 2 reward = 75 coins)
       expect(userProvider.coins, greaterThan(initialCoins));
-      
+
       // Verify success message
       expect(find.text('Reward claimed! 🎉'), findsOneWidget);
     });
 
-    testWidgets('should reset streak when day is missed', (tester) async {
-      // Arrange - Last reward was 3 days ago
+    // A missed day breaks the run of days and nothing else. The reward cycle
+    // carries on from where it stopped, which is the whole point of keeping
+    // the two counters apart.
+    testWidgets('should break the run of days but not the reward cycle',
+        (tester) async {
+      // Arrange - Last reward was 3 days ago, five rewards in
       final threeDaysAgo = DateTime.now().subtract(const Duration(days: 3));
       final threeDaysAgoDate = DateTime(threeDaysAgo.year, threeDaysAgo.month, threeDaysAgo.day);
-      
+
       SharedPreferences.setMockInitialValues({
         'last_reward_claim_date': threeDaysAgoDate.toIso8601String(),
-        'streak': 5, // Old streak that should reset
+        'streak': 5,
+        'login_streak': 5,
         'coins': 100,
       });
 
@@ -103,14 +109,13 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
       await tester.pumpAndSettle();
 
-      // Assert - Dialog appears with reset message
+      // Assert - the pill shows the run starting again at one...
       expect(find.byType(DailyRewardsDialog), findsOneWidget);
-      expect(find.textContaining('Day 1'), findsOneWidget); // Reset to day 1
-      
-      // Should show "Welcome back!" or "Starting fresh" message
-      final welcomeBackText = find.textContaining('Welcome back');
-      final startingFreshText = find.textContaining('Starting fresh');
-      expect(welcomeBackText.evaluate().isNotEmpty || startingFreshText.evaluate().isNotEmpty, true);
+      expect(find.textContaining('Day 1'), findsOneWidget);
+
+      // ...and nothing apologises for the gap.
+      expect(find.textContaining('Welcome back'), findsNothing);
+      expect(find.textContaining('Starting fresh'), findsNothing);
 
       final userProvider = readProvider<UserProvider>(tester);
       final initialCoins = userProvider.coins;
@@ -120,18 +125,19 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1600));
       await tester.pumpAndSettle();
 
-      // Assert - Streak reset to 1
-      expect(userProvider.streak, 1);
-      
-      // Verify Day 1 reward granted (50 coins)
-      expect(userProvider.coins, greaterThan(initialCoins));
+      // Assert - the run restarts, the cycle does not
+      expect(userProvider.loginStreak, 1);
+      expect(userProvider.rewardClaims, 6);
+
+      // The sixth reward is an item rather than coins, so the balance holds.
+      expect(userProvider.coins, initialCoins);
     });
 
     testWidgets('should NOT show dialog if already claimed today', (tester) async {
       // Arrange - Already claimed today
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-      
+
       SharedPreferences.setMockInitialValues({
         'last_reward_claim_date': today.toIso8601String(),
         'streak': 3,

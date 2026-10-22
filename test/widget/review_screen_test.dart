@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mojilearner_flutter/constants/bond.dart';
 import 'package:mojilearner_flutter/constants/gold.dart';
 import 'package:mojilearner_flutter/models/models.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
@@ -26,7 +25,6 @@ void main() {
     mockLanguage = MockLanguageProvider();
     mockSettings = MockSettingsProvider();
 
-    when(() => mockUser.addXp(any())).thenAnswer((_) async {});
     when(() => mockCharacter.scaleReward(any())).thenReturn(3);
     when(() => mockCharacter.rewardChat()).thenReturn(null);
     when(() => mockLanguage.targetLanguage).thenReturn(
@@ -127,7 +125,11 @@ void main() {
     expect(vocab.items.first.repetitions, equals(1));
   });
 
-  testWidgets('grading awards XP through the sickness scaling',
+  // Coins go through the sickness scaling; XP deliberately does not. XP is
+  // what the pet's bond stage is projected from, and a sick pet slowing its
+  // own closeness would make the relationship something the player buys back
+  // with food rather than earns with the language.
+  testWidgets('grading pays XP unscaled by the pet being sick',
       (tester) async {
     final vocab = buildVocab();
 
@@ -137,9 +139,9 @@ void main() {
     await tester.tap(find.text('Again'));
     await tester.pumpAndSettle();
 
-    // Both payouts go through the sickness scaling: XP and coins.
-    verify(() => mockCharacter.scaleReward(any())).called(2);
-    verify(() => mockUser.addXp(3)).called(1);
+    // Once, for the coins.
+    verify(() => mockCharacter.scaleReward(any())).called(1);
+    expect(mockUser.addedXp, [3]);
   });
 
   // Reviewing paid no coins at all before, which put the app's most valuable
@@ -162,10 +164,10 @@ void main() {
     expect(mockUser.goldFrom(GoldSource.review), greaterThan(0));
   });
 
-  // Bond, unlike XP, is not scaled by sickness and cannot be bought. Grading
-  // a card is the event this app most wants to reward, so it pays per card
-  // rather than once per session.
-  testWidgets('grading credits the bond as a correction', (tester) async {
+  // Grading a card is the event this app most wants to reward, so it counts
+  // per card rather than once per session.
+  testWidgets('grading tells the pet it was studied with, per card',
+      (tester) async {
     final vocab = buildVocab(itemCount: 2);
 
     await pumpReview(tester, vocab);
@@ -174,17 +176,14 @@ void main() {
     await tester.tap(find.text('Again'));
     await tester.pumpAndSettle();
 
-    expect(mockCharacter.recordedLearning, [BondSource.correction]);
+    expect(mockCharacter.learningMoments, 1);
 
     await tester.tap(find.text('Show answer'));
     await tester.pump();
     await tester.tap(find.text('Good'));
     await tester.pumpAndSettle();
 
-    expect(
-      mockCharacter.recordedLearning,
-      [BondSource.correction, BondSource.correction],
-    );
+    expect(mockCharacter.learningMoments, 2);
   });
 
   testWidgets('finishing the last card shows the session summary',

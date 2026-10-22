@@ -30,7 +30,7 @@ void main() {
     test('createSession hands out an unavailable session whose messages '
         'return the sentinel', () async {
       final sessionId = await AiService.instance.createSession(
-        spec: AiPromptSpec.pet(targetCode: 'es'),
+        spec: AiPromptSpec.assessment(targetCode: 'es', selfLevel: 'beginner'),
         source: 'test',
       );
       final reply = await AiService.instance.sendSessionMessage(
@@ -191,7 +191,7 @@ AI_PROXY_TOKEN=secret-token
         () => http.runWithClient(
           () => AiService.instance
               .createSession(
-                  spec: AiPromptSpec.pet(targetCode: 'es'), source: 'test'),
+                  spec: AiPromptSpec.assessment(targetCode: 'es', selfLevel: 'beginner'), source: 'test'),
           () => client,
         ),
         throwsA(isA<StateError>()),

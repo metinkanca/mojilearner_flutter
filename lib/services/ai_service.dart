@@ -115,6 +115,46 @@ class AiService {
     return '$_unavailableSessionPrefix$micros';
   }
 
+  /// Supplies the caller's Firebase ID token, or null when there is no
+  /// account layer running.
+  ///
+  /// Set once at startup rather than read from Firebase here, so this service
+  /// keeps working — and keeps being testable — on a build where cloud sync
+  /// could not start. See `main.dart`.
+  Future<String?> Function()? idTokenResolver;
+
+  /// The headers every proxy request carries.
+  ///
+  /// Two tokens, doing different jobs. `Authorization` is the shared
+  /// `AI_PROXY_TOKEN`, which says *an install of this app* is calling and is
+  /// the same string inside every APK. `X-Id-Token` says *which account*, and
+  /// is the only one of the two the server can meter a person against — see
+  /// `server/src/quotas.js`.
+  ///
+  /// A missing or failed ID token is not an error: the server falls back to a
+  /// shared bucket, which is tighter rather than looser.
+  Future<Map<String, String>> _proxyHeaders() async {
+    final headers = <String, String>{'Content-Type': 'application/json'};
+
+    final authToken = _getConfigValue('AI_PROXY_TOKEN')?.trim();
+    if (authToken != null && authToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $authToken';
+    }
+
+    try {
+      final idToken = await idTokenResolver?.call();
+      if (idToken != null && idToken.isNotEmpty) {
+        headers['X-Id-Token'] = idToken;
+      }
+    } catch (_) {
+      // A token refresh needs the network, and this request is about to try
+      // the network anyway. Let the request go and be metered anonymously
+      // rather than failing here.
+    }
+
+    return headers;
+  }
+
   String? _getConfigValue(String key) {
     if (key == 'AI_PROXY_BASE_URL') {
       final value = AppRuntimeConfig.aiProxyBaseUrl.trim();
@@ -284,15 +324,9 @@ class AiService {
     if (baseUrl == null || baseUrl.isEmpty) {
       throw StateError('AI backend base URL is not configured.');
     }
-    final authToken = _getConfigValue('AI_PROXY_TOKEN')?.trim();
 
     final uri = Uri.parse('$baseUrl/v1/ai/generate');
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
-    if (authToken != null && authToken.isNotEmpty) {
-      headers['Authorization'] = 'Bearer $authToken';
-    }
+    final headers = await _proxyHeaders();
 
     final response = await http.post(
       uri,
@@ -366,15 +400,9 @@ class AiService {
     if (baseUrl == null || baseUrl.isEmpty) {
       throw StateError('AI backend base URL is not configured.');
     }
-    final authToken = _getConfigValue('AI_PROXY_TOKEN')?.trim();
 
     final uri = Uri.parse('$baseUrl/v1/ai/chat/start');
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
-    if (authToken != null && authToken.isNotEmpty) {
-      headers['Authorization'] = 'Bearer $authToken';
-    }
+    final headers = await _proxyHeaders();
 
     final response = await http.post(
       uri,
@@ -414,15 +442,9 @@ class AiService {
     if (baseUrl == null || baseUrl.isEmpty) {
       throw StateError('AI backend base URL is not configured.');
     }
-    final authToken = _getConfigValue('AI_PROXY_TOKEN')?.trim();
 
     final uri = Uri.parse('$baseUrl/v1/ai/chat/send');
-    final headers = <String, String>{
-      'Content-Type': 'application/json',
-    };
-    if (authToken != null && authToken.isNotEmpty) {
-      headers['Authorization'] = 'Bearer $authToken';
-    }
+    final headers = await _proxyHeaders();
 
     final response = await http.post(
       uri,

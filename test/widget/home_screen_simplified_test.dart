@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:mojilearner_flutter/components/home_action_bar.dart';
+import 'package:mojilearner_flutter/components/play/toy_chest.dart';
 import 'package:mojilearner_flutter/screens/home_screen.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import '../helpers/pump_app.dart';
@@ -50,7 +52,6 @@ void main() {
         TestFixtures.buildCustomization(),
       );
       when(() => mockCharacter.isSleeping).thenReturn(false);
-      when(() => mockCharacter.isAiIssueSleepMode).thenReturn(false);
       when(() => mockCharacter.isTemporarilyAwake).thenReturn(false);
       when(() => mockCharacter.isSleepingForNight).thenReturn(false);
       when(() => mockCharacter.awakeUntil).thenReturn(null);
@@ -111,9 +112,50 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
 
-      // Home screen should have interactive actions (settings + send)
+      // Home screen should have interactive actions (settings, study, feed)
       expect(find.byType(IconButton), findsWidgets);
-      expect(find.byType(TextField), findsOneWidget);
+    });
+
+    testWidgets('a toy chest to play with sits on the action bar',
+        (tester) async {
+      await pumpApp(
+        tester,
+        const HomeScreen(),
+        userProvider: mockUser,
+        dailyRewardProvider: mockDailyReward,
+        characterProvider: mockCharacter,
+        languageProvider: mockLanguage,
+        settingsProvider: mockSettings,
+      );
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.byType(ToyChest), findsOneWidget);
+      expect(find.bySemanticsLabel('Toy chest'), findsOneWidget);
+      expect(find.byKey(HomeActionBar.mistakesKey), findsOneWidget);
+      // The climb is a debug-build switch, so a normal run has no button.
+      expect(find.byKey(HomeActionBar.climbKey), findsNothing);
+    });
+
+    testWidgets('the toy chest stays but will not open while the pet sleeps',
+        (tester) async {
+      when(() => mockCharacter.isSleeping).thenReturn(true);
+      when(() => mockCharacter.isSleepingForNight).thenReturn(true);
+
+      await pumpApp(
+        tester,
+        const HomeScreen(),
+        userProvider: mockUser,
+        dailyRewardProvider: mockDailyReward,
+        characterProvider: mockCharacter,
+        languageProvider: mockLanguage,
+        settingsProvider: mockSettings,
+      );
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.byType(ToyChest), findsOneWidget);
+      await tester.tap(find.byKey(HomeActionBar.toysKey));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.byType(ToyChestPicker), findsNothing);
     });
 
     testWidgets('should show chat input field', (tester) async {
@@ -128,16 +170,15 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
 
-      // Should have text input
-      expect(find.text('TYPE HERE...'), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
+      // Talking to the pet happens on the Chat tab, not here.
+      expect(find.byType(TextField), findsNothing);
     });
 
     testWidgets('should display daily reward dialog when available', (tester) async {
       // Setup reward available
       final rewardInfo = TestFixtures.createTestReward(
         dayNumber: 3,
-        currentStreak: 3,
+        claimCount: 3,
       );
       when(() => mockDailyReward.checkDailyReward())
           .thenAnswer((_) async => rewardInfo);

@@ -28,6 +28,9 @@ class MockVocabProvider extends Mock implements VocabProvider {}
 /// The wording the chips used to carry now lives in the semantic label, which
 /// is asserted here too — dropping it would leave the badges meaningless to a
 /// screen reader.
+/// The count on the study button's corner.
+final Finder _studyCount = find.byKey(const ValueKey('study-due'));
+
 void main() {
   const handset = Size(400, 844);
 
@@ -73,7 +76,6 @@ void main() {
     when(() => mockCharacter.customization)
         .thenReturn(TestFixtures.buildCustomization());
     when(() => mockCharacter.isSleeping).thenReturn(false);
-    when(() => mockCharacter.isAiIssueSleepMode).thenReturn(false);
     when(() => mockCharacter.isTemporarilyAwake).thenReturn(false);
     when(() => mockCharacter.isSleepingForNight).thenReturn(false);
     when(() => mockCharacter.awakeUntil).thenReturn(null);
@@ -105,7 +107,11 @@ void main() {
 
   /// The badges carry their wording in the semantic label now that the visible
   /// content is a glyph. Fails if that label is missing.
-  void expectBadge(WidgetTester tester, String semanticLabel, String glyph) {
+  ///
+  /// The study button's count is a chip in the badge's corner, so its square
+  /// is found from the chip rather than from the number in it.
+  void expectBadge(WidgetTester tester, String semanticLabel, String glyph,
+      {Finder? square}) {
     expect(
       find.bySemanticsLabel(semanticLabel),
       findsOneWidget,
@@ -119,7 +125,7 @@ void main() {
     // A fixed square is the whole reason the label can no longer overflow.
     expect(
       tester.getSize(find.ancestor(
-        of: find.text(glyph),
+        of: square ?? find.text(glyph),
         matching: find.byType(Container),
       ).first),
       const Size(40, 40),
@@ -146,7 +152,7 @@ void main() {
     await pumpHome(tester);
 
     expectBadge(tester, 'Moji is feeling low', '!');
-    expectBadge(tester, '12 due', '12');
+    expectBadge(tester, '12 due', '12', square: _studyCount);
     semantics.dispose();
   });
 
@@ -162,7 +168,7 @@ void main() {
     await pumpHome(tester, locale: const Locale('el'));
 
     expectBadge(tester, 'Ο Moji έχει πέσει ψυχολογικά', '!');
-    expectBadge(tester, '12 για επανάληψη', '12');
+    expectBadge(tester, '12 για επανάληψη', '12', square: _studyCount);
     semantics.dispose();
   });
 

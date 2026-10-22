@@ -70,7 +70,7 @@ void main() {
 
       await pumpApp(
         tester,
-        const ShopScreen(),
+        const ShopItemsBody(),
         characterProvider: character,
         settingsProvider: mockSettings,
         userProvider: user ?? mockUser,

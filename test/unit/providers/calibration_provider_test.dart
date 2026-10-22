@@ -25,6 +25,27 @@ void main() {
       expect(provider.isLoading, isFalse);
     });
 
+    // The pet's fluency gate reads this list. A self-assessment is a guess,
+    // not a result, so an uncalibrated language must not hand out a tier.
+    test('calibratedProficiencies lists only assessed languages', () async {
+      final provider = CalibrationProvider();
+      await provider.loadFuture;
+
+      await provider.updateSelfAssessment('ja', 'advanced');
+      await provider.completeCalibration(
+        languageCode: 'es',
+        finalLevel: 'intermediate',
+        conversation: const [],
+        quizScore: 4,
+        totalQuestions: 5,
+      );
+
+      expect(
+        provider.calibratedProficiencies.map((p) => p.languageCode),
+        ['es'],
+      );
+    });
+
     test('save and reload round-trips proficiency with conversation', () async {
       final provider = CalibrationProvider();
       await provider.loadFuture;

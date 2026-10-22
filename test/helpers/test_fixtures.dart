@@ -34,8 +34,8 @@ class TestFixtures {
   static const int testHealth = 100;
   
   // Sample inventory
-  static const List<String> testInventory = ['apple', 'coffee', 'croissant'];
-  static const Set<String> testUnlockedItems = {'apple', 'coffee', 'croissant'};
+  static const List<String> testInventory = ['apple', 'coffee', 'donut'];
+  static const Set<String> testUnlockedItems = {'apple', 'coffee', 'donut'};
   
   // Time constants
   static DateTime testNow = DateTime(2026, 2, 11, 12, 0, 0);
@@ -46,17 +46,19 @@ class TestFixtures {
   /// Creates a sample DailyRewardInfo for testing
   static DailyRewardInfo createTestReward({
     int dayNumber = 2,
-    bool streakReset = false,
-    int? currentStreak,
+    int? claimCount,
+    int? loginStreak,
   }) {
-    final streak = currentStreak ?? dayNumber;
-    final rewardIndex = (streak - 1) % dailyRewards.length;
-    
+    final claims = claimCount ?? dayNumber;
+    final rewardIndex = (claims - 1) % dailyRewards.length;
+
     return DailyRewardInfo(
       dayNumber: dayNumber,
       reward: dailyRewards[rewardIndex],
-      streakReset: streakReset,
-      currentStreak: streak,
+      claimCount: claims,
+      // Defaults to the claim count, which is what an unbroken run looks
+      // like: every claim so far has been the next day.
+      loginStreak: loginStreak ?? claims,
     );
   }
   
@@ -86,13 +88,11 @@ class TestFixtures {
     String? openFace,
     String? closedFace,
     String? color,
-    String? backgroundColor,
   }) {
     return CharacterCustomization(
       openFace: openFace ?? '(•_•)',
       closedFace: closedFace ?? '(-_-)',
       color: color ?? '#FFFFFF',
-      backgroundColor: backgroundColor ?? '#60A5FA',
     );
   }
   

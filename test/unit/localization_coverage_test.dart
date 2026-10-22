@@ -66,6 +66,76 @@ void main() {
     });
   });
 
+  group('character encoding', () {
+    /// Bytes that are valid UTF-8 but were written by something that read the
+    /// file as cp1252 first. The result is the "Ã©" family of garbage, and it
+    /// has shipped to users twice: 215 strings in one round of repairs, 28
+    /// more that survived it.
+    ///
+    /// The check is mechanical rather than a blocklist of bad glyphs. A
+    /// mangled string round-trips back to bytes and decodes as *valid, and
+    /// different*, UTF-8. Healthy text cannot: it either holds a character
+    /// the byte map has no slot for, or the decode fails.
+    List<int>? toBytes(String s) {
+      final out = <int>[];
+      for (final rune in s.runes) {
+        if (rune <= 0xFF) {
+          out.add(rune);
+          continue;
+        }
+        final slot = _cp1252High[rune];
+        if (slot == null) return null; // Not representable: text is fine.
+        out.add(slot);
+      }
+      return out;
+    }
+
+    bool looksMangled(String value) {
+      final bytes = toBytes(value);
+      if (bytes == null) return false;
+
+      final String decoded;
+      try {
+        decoded = utf8.decode(bytes);
+      } on FormatException {
+        return false;
+      }
+      if (decoded == value) return false;
+
+      // The round trip alone is not proof. Czech "JAK HODNOTIS" with its
+      // real diacritics is I-acute followed by S-caron, which happens to be
+      // a valid two-byte sequence and decodes to a combining mark -- healthy
+      // text that the arithmetic cannot tell from garbage.
+      //
+      // What separates them is the *result*. Un-mangling real mojibake gives
+      // back ordinary composed letters; a coincidence like the Czech one
+      // gives back a bare combining mark, a control character, or U+FFFD,
+      // none of which any translation is written with.
+      return !decoded.runes.any((r) =>
+          (r >= 0x0300 && r <= 0x036F) || // combining diacritics
+          (r < 0x20 && r != 0x0A) || // C0 controls
+          (r >= 0x7F && r <= 0x9F) || // DEL and C1 controls
+          r == 0xFFFD); // replacement character
+    }
+
+    test('no locale ships mis-encoded text', () {
+      final broken = <String>[];
+
+      for (final locale in [...locales, 'en']) {
+        final arb = readArb(locale);
+        for (final key in messageKeys(arb)) {
+          final value = arb[key];
+          if (value is String && looksMangled(value)) {
+            broken.add('$locale/$key: $value');
+          }
+        }
+      }
+
+      expect(broken, isEmpty,
+          reason: 'these strings were written UTF-8 and read back as cp1252');
+    });
+  });
+
   group('placeholder integrity', () {
     /// Placeholders are `{name}` — a translation that drops or renames one
     /// produces a literal brace on screen or a build failure.
@@ -160,3 +230,15 @@ void main() {
     });
   });
 }
+
+/// The characters cp1252 puts in 0x80..0x9F, which is the whole reason a
+/// mangled string can carry a curly quote where a raw byte belongs. Latin-1
+/// covers everything below 0x100, so only these need naming.
+const Map<int, int> _cp1252High = {
+  0x20AC: 0x80, 0x201A: 0x82, 0x0192: 0x83, 0x201E: 0x84, 0x2026: 0x85,
+  0x2020: 0x86, 0x2021: 0x87, 0x02C6: 0x88, 0x2030: 0x89, 0x0160: 0x8A,
+  0x2039: 0x8B, 0x0152: 0x8C, 0x017D: 0x8E, 0x2018: 0x91, 0x2019: 0x92,
+  0x201C: 0x93, 0x201D: 0x94, 0x2022: 0x95, 0x2013: 0x96, 0x2014: 0x97,
+  0x02DC: 0x98, 0x2122: 0x99, 0x0161: 0x9A, 0x203A: 0x9B, 0x0153: 0x9C,
+  0x017E: 0x9E, 0x0178: 0x9F,
+};

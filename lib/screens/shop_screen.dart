@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../components/free_coins_tile.dart';
+import '../components/tutorial/retro_showcase.dart';
+import '../components/tutorial/tutorial_offer_host.dart';
+import '../constants/tutorials.dart';
+import '../components/shop_item_icon.dart';
 import '../constants/theme.dart';
 import '../constants/shop.dart';
 import '../providers/user_provider.dart';
@@ -11,30 +15,30 @@ import '../l10n/app_localizations.dart';
 import '../utils/fonts.dart';
 import '../utils/shop_item_localizer.dart';
 import '../utils/rtl_locale.dart';
+import 'coin_shop_screen.dart' show kCoinAsset;
 
-class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+/// The shop tour's steps, in the order it visits them.
+final GlobalKey shopCoinsShowcaseKey = GlobalKey();
+final GlobalKey shopTabsShowcaseKey = GlobalKey();
+final GlobalKey shopFreeCoinsShowcaseKey = GlobalKey();
+final GlobalKey shopGridShowcaseKey = GlobalKey();
+
+/// The item shelves: food, worlds and things to wear, bought with coins.
+///
+/// Carries no chrome of its own — no Scaffold, no app bar, no back arrow —
+/// because it is one section of the shop's slider rather than a page. The
+/// coin balance and the title above it belong to [ShopHubScreen], which is
+/// also where this section's first tour step is anchored.
+class ShopItemsBody extends StatefulWidget {
+  const ShopItemsBody({super.key});
 
   @override
-  State<ShopScreen> createState() => _ShopScreenState();
+  State<ShopItemsBody> createState() => _ShopItemsBodyState();
 }
 
-class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _ShopItemsBodyState extends State<ShopItemsBody> {
   String _selectedCategory = 'all';
   bool _hideOwnedCosmetics = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
 
   List<ShopItem> _getFilteredItems() {
     final characterProvider = Provider.of<CharacterProvider>(context, listen: false);
@@ -67,110 +71,44 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
 
     final filteredItems = _getFilteredItems();
 
-    return Scaffold(
-      backgroundColor: AppTheme.retroSky,
-      appBar: AppBar(
-        title: Text(
-          l10n.shopTitle.toUpperCase(),
-          textDirection: textDirection,
-          textAlign: TextAlign.center,
-          style: fontFunction(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.retroDark,
-            letterSpacing: 1.5,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: AppTheme.retroDark, width: 3),
-            boxShadow: const [
-              BoxShadow(
-                color: AppTheme.retroDark,
-                offset: Offset(2, 2),
-                blurRadius: 0,
-              )
-            ],
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppTheme.retroDark, size: 20),
-            onPressed: () {
-              if (Navigator.of(context).canPop()) {
-                context.pop();
-              } else {
-                context.go('/');
-              }
-            },
-            padding: EdgeInsets.zero,
-            // No round ink ripple inside the square retro frame.
-            style: const ButtonStyle(
-              overlayColor: WidgetStatePropertyAll(Colors.transparent),
-            ),
-          ),
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppTheme.retroAccent,
-              border: Border.all(color: AppTheme.retroDark, width: 3),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppTheme.retroDark,
-                  offset: Offset(2, 2),
-                  blurRadius: 0,
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.monetization_on, color: AppTheme.retroDark, size: 16),
-                const SizedBox(width: 4),
-                Text(
-                  '${userProvider.coins}',
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.left,
-                  style: fontFunction(
-                    fontSize: 10,
-                    color: AppTheme.retroDark,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      body: Column(
+    return TutorialOfferHost(
+      id: TutorialId.shop,
+      // The free-coins tile is absent until a rewarded ad has actually
+      // loaded, and the sequence skips it when it is.
+      steps: () => [
+        shopCoinsShowcaseKey,
+        shopTabsShowcaseKey,
+        shopFreeCoinsShowcaseKey,
+        shopGridShowcaseKey,
+      ],
+      child: Column(
         children: [
           // Category Tabs
-          Container(
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: AppTheme.retroDark, width: 4),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppTheme.retroDark,
-                  offset: Offset(4, 4),
-                  blurRadius: 0,
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                _buildCategoryTab(l10n.categoryAll, 'all', fontFunction),
-                _buildCategoryTab(l10n.categoryFood, 'food', fontFunction),
-                _buildCategoryTab(l10n.categoryDecor, 'background', fontFunction),
-                _buildCategoryTab(l10n.categoryStyle, 'accessory', fontFunction,
-                    isLast: true),
-              ],
+          RetroShowcase(
+            showcaseKey: shopTabsShowcaseKey,
+            description: l10n.tutorialShopTabs,
+            child: Container(
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppTheme.retroDark, width: 4),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppTheme.retroDark,
+                    offset: Offset(4, 4),
+                    blurRadius: 0,
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  _buildCategoryTab(l10n.categoryAll, 'all', fontFunction),
+                  _buildCategoryTab(l10n.categoryFood, 'food', fontFunction),
+                  _buildCategoryTab(l10n.categoryDecor, 'background', fontFunction),
+                  _buildCategoryTab(l10n.categoryStyle, 'accessory', fontFunction,
+                      isLast: true),
+                ],
+              ),
             ),
           ),
 
@@ -225,128 +163,170 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
           // The offer sits above the shelves on purpose: this is the screen
           // where a player is already looking at something they cannot
           // afford. It hides itself when the day's ads are used up.
-          FreeCoinsTile(usePixelFont: settingsProvider.usePixelFont),
+          FreeCoinsTile(
+            usePixelFont: settingsProvider.usePixelFont,
+            showcaseKey: shopFreeCoinsShowcaseKey,
+            showcaseDescription: l10n.tutorialShopFreeCoins,
+          ),
 
           // Items Grid
           Expanded(
-            child: filteredItems.isEmpty
-                ? Center(
-                    child: Text(
-                      l10n.noItems.toUpperCase(),
-                      textDirection: textDirection,
-                      textAlign: TextAlign.center,
-                      style: fontFunction(
-                        fontSize: 12,
-                        color: AppTheme.retroDark,
+            // Inside the Expanded rather than around it: Expanded has to stay
+            // a direct child of the Column. Around the whole shelf rather
+            // than one card, too — the grid is lazy and its cards are
+            // re-identified whenever the category or the owned filter moves.
+            child: RetroShowcase(
+              showcaseKey: shopGridShowcaseKey,
+              description: l10n.tutorialShopGrid,
+              isLast: true,
+              targetPadding: EdgeInsets.zero,
+              child: filteredItems.isEmpty
+                  ? Center(
+                      child: Text(
+                        l10n.noItems.toUpperCase(),
+                        textDirection: textDirection,
+                        textAlign: TextAlign.center,
+                        style: fontFunction(
+                          fontSize: 12,
+                          color: AppTheme.retroDark,
+                        ),
                       ),
-                    ),
-                  )
-                : GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 0.85,
-                    ),
-                    itemCount: filteredItems.length,
-                    itemBuilder: (context, index) {
-                      final item = filteredItems[index];
-                      final isOwned = item.type != 'food' && characterProvider.unlockedItems.contains(item.id);
-                      final canAfford = userProvider.coins >= item.price;
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.85,
+                      ),
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final item = filteredItems[index];
+                        final isOwned = item.type != 'food' && characterProvider.unlockedItems.contains(item.id);
+                        final canAfford = userProvider.coins >= item.price;
+                        // Only one world shows at a time, so a bought scene has
+                        // a state past "owned": the one the pet is actually
+                        // living in.
+                        final isInUse = item.type == 'background' &&
+                            characterProvider.sceneId == item.id;
 
-                      return GestureDetector(
-                        onTap: () => _showPurchaseDialog(
-                          context,
-                          item,
-                          isOwned,
-                          canAfford,
-                          fontFunction,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: isOwned
-                                ? Colors.grey[300]
-                                : (canAfford ? Colors.white : Colors.grey[200]),
-                            border: Border.all(
-                              color: AppTheme.retroDark,
-                              width: 4,
-                            ),
-                            boxShadow: const [
-                              BoxShadow(
+                        return GestureDetector(
+                          onTap: () => _showPurchaseDialog(
+                            context,
+                            item,
+                            isOwned,
+                            canAfford,
+                            fontFunction,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isOwned
+                                  ? Colors.grey[300]
+                                  : (canAfford ? Colors.white : Colors.grey[200]),
+                              border: Border.all(
                                 color: AppTheme.retroDark,
-                                offset: Offset(4, 4),
-                                blurRadius: 0,
-                              )
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Icon
-                              Text(
-                                item.icon,
-                                style: const TextStyle(fontSize: 48),
+                                width: 4,
                               ),
-                              const SizedBox(height: 12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: AppTheme.retroDark,
+                                  offset: Offset(4, 4),
+                                  blurRadius: 0,
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Icon
+                                ShopItemIcon(item: item, size: 48),
+                                const SizedBox(height: 12),
                               
-                              // Name
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  ShopItemLocalizer.localizedName(l10n, item)
-                                      .toUpperCase(),
-                                  textDirection: textDirection,
-                                  textAlign: TextAlign.center,
-                                  style: fontFunction(
-                                    fontSize: 10,
-                                    color: AppTheme.retroDark,
-                                    fontWeight: FontWeight.bold,
+                                // Name
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    ShopItemLocalizer.localizedName(l10n, item)
+                                        .toUpperCase(),
+                                    textDirection: textDirection,
+                                    textAlign: TextAlign.center,
+                                    style: fontFunction(
+                                      fontSize: 10,
+                                      color: AppTheme.retroDark,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              const SizedBox(height: 8),
+                                const SizedBox(height: 8),
                               
-                              // Price or Status
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isOwned
-                                      ? AppTheme.retroGreen
-                                      : (canAfford
-                                          ? AppTheme.retroAccent
-                                          : AppTheme.retroPrimary),
-                                  border: Border.all(
-                                    color: AppTheme.retroDark,
-                                    width: 2,
+                                // Price or Status
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isInUse
+                                        ? AppTheme.retroAccent
+                                        : isOwned
+                                            ? AppTheme.retroGreen
+                                            : (canAfford
+                                                ? AppTheme.retroAccent
+                                                : AppTheme.retroPrimary),
+                                    border: Border.all(
+                                      color: AppTheme.retroDark,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  // A price is the number plus the coin
+                                  // itself, rather than the number plus a 🪙
+                                  // emoji: the emoji is whatever the device's
+                                  // font makes of it, which is a different
+                                  // coin on every platform and no coin at all
+                                  // where the glyph is missing.
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        isInUse
+                                            ? l10n.sceneInUse.toUpperCase()
+                                            : isOwned
+                                                ? l10n.owned.toUpperCase()
+                                                : '${item.price}',
+                                        textDirection: isOwned
+                                            ? textDirection
+                                            : TextDirection.ltr,
+                                        textAlign:
+                                            isOwned ? textAlign : TextAlign.left,
+                                        style: fontFunction(
+                                          fontSize: 8,
+                                          color: isOwned && !isInUse
+                                              ? Colors.white
+                                              : AppTheme.retroDark,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      if (!isOwned && !isInUse) ...[
+                                        const SizedBox(width: 4),
+                                        SvgPicture.asset(
+                                          kCoinAsset,
+                                          width: 11,
+                                          height: 11,
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
-                                child: Text(
-                                  isOwned
-                                      ? l10n.owned.toUpperCase()
-                                      : '${item.price} 🪙',
-                                  textDirection: isOwned
-                                      ? textDirection
-                                      : TextDirection.ltr,
-                                  textAlign: isOwned ? textAlign : TextAlign.left,
-                                  style: fontFunction(
-                                    fontSize: 8,
-                                    color: isOwned ? Colors.white : AppTheme.retroDark,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
+              ),
           ),
         ],
       ),
@@ -415,6 +395,16 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             .clamp(0, 100)
             .toInt();
     
+    if (isOwned && item.type == 'background') {
+      // Tapping a scene you own moves the pet into it. "You already own this"
+      // is a dead end on the one item type where owning several and wearing
+      // one is the whole point — and the card's badge flipping to IN USE is
+      // the confirmation.
+      Provider.of<CharacterProvider>(context, listen: false)
+          .equipScene(item.id);
+      return;
+    }
+
     if (isOwned && item.type != 'food') {
       _showInfoDialog(context, l10n.alreadyOwned, l10n.alreadyOwnedMessage, fontFunction);
       return;
@@ -440,10 +430,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
             mainAxisSize: MainAxisSize.min,
             children: [
               // Item Icon
-              Text(
-                item.icon,
-                style: const TextStyle(fontSize: 64),
-              ),
+              ShopItemIcon(item: item, size: 64),
               const SizedBox(height: 16),
               
               // Item Name
@@ -684,10 +671,7 @@ class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateM
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Item Icon
-                  Text(
-                    item.icon,
-                    style: const TextStyle(fontSize: 64),
-                  ),
+                  ShopItemIcon(item: item, size: 64),
                   const SizedBox(height: 16),
                   
                   // Item Name

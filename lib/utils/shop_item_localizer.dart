@@ -6,8 +6,8 @@ class ShopItemLocalizer {
     switch (item.id) {
       case 'apple':
         return l10n.shopItemAppleName;
-      case 'croissant':
-        return l10n.shopItemCroissantName;
+      case 'donut':
+        return l10n.shopItemDonutName;
       case 'pizza':
         return l10n.shopItemPizzaName;
       case 'sushi':
@@ -67,8 +67,8 @@ class ShopItemLocalizer {
     switch (item.id) {
       case 'apple':
         return l10n.shopItemAppleDescription;
-      case 'croissant':
-        return l10n.shopItemCroissantDescription;
+      case 'donut':
+        return l10n.shopItemDonutDescription;
       case 'pizza':
         return l10n.shopItemPizzaDescription;
       case 'sushi':

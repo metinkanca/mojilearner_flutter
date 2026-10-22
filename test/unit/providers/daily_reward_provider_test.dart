@@ -64,28 +64,106 @@ void main() {
       final reward = await provider.checkDailyReward();
 
       expect(reward, isNotNull);
-      expect(reward!.currentStreak, equals(4));
-      expect(reward.streakReset, isFalse);
+      expect(reward!.claimCount, equals(4));
+      expect(reward.loginStreak, equals(4));
     });
 
-    test('should reset streak to 1 when day is missed', () async {
-      final today = DateTime.now();
-      final threeDaysAgo = today.subtract(const Duration(days: 3));
-      final threeDaysAgoStr =
-          DateTime(threeDaysAgo.year, threeDaysAgo.month, threeDaysAgo.day)
-              .toIso8601String();
+    /// The cycle is a queue of seven rewards to work through, not a test to
+    /// fail.
+    ///
+    /// Sending a broken run back to day one looked like a small punishment
+    /// and was not: `dailyRewards` is the pet's food and it is back-loaded,
+    /// so a player who reset often claimed day one's 12 coins forever and
+    /// never ate — then paid again, because a hungry pet gets sick and a sick
+    /// pet earns half. These pin that it cannot come back by accident.
+    group('a missed day costs the cycle nothing', () {
+      /// A player who last claimed [days] ago, five rewards in.
+      Future<DailyRewardProvider> lastClaimed(int days) async {
+        final then = DateTime.now().subtract(Duration(days: days));
+        SharedPreferences.setMockInitialValues({
+          'last_reward_claim_date':
+              DateTime(then.year, then.month, then.day).toIso8601String(),
+          'streak': 5,
+        });
+        return buildProvider();
+      }
 
-      SharedPreferences.setMockInitialValues({
-        'last_reward_claim_date': threeDaysAgoStr,
-        'streak': 5,
+      test('one missed day picks up where it left off', () async {
+        final reward = await (await lastClaimed(2)).checkDailyReward();
+
+        expect(reward!.claimCount, 6);
+        expect(reward.dayNumber, 6);
       });
-      final provider = await buildProvider();
 
-      final reward = await provider.checkDailyReward();
+      test('so does a fortnight away', () async {
+        final reward = await (await lastClaimed(14)).checkDailyReward();
 
-      expect(reward, isNotNull);
-      expect(reward!.currentStreak, equals(1));
-      expect(reward.streakReset, isTrue);
+        expect(reward!.claimCount, 6);
+        expect(reward.dayNumber, 6);
+      });
+
+      // The week's two biggest food drops are days 6 and 7, which is exactly
+      // what a reset used to take away from the players who most needed them.
+      test('the back-loaded end of the week stays reachable', () async {
+        final reward = await (await lastClaimed(30)).checkDailyReward();
+
+        expect(reward!.reward.itemId, 'sushi');
+      });
+
+      test('a consecutive day is still worth exactly one step', () async {
+        final reward = await (await lastClaimed(1)).checkDailyReward();
+
+        expect(reward!.claimCount, 6);
+      });
+    });
+
+    /// The run of days, which is shown and does nothing else.
+    ///
+    /// It is the one counter here a gap still breaks — safely, because no
+    /// reward reads it. The tests above are the other half of the same claim:
+    /// what the player loses by missing a day is the number, not the sushi.
+    group('the run of days', () {
+      /// A player [days] since their last claim, mid-run and mid-cycle.
+      Future<DailyRewardProvider> lastClaimed(int days) async {
+        final then = DateTime.now().subtract(Duration(days: days));
+        SharedPreferences.setMockInitialValues({
+          'last_reward_claim_date':
+              DateTime(then.year, then.month, then.day).toIso8601String(),
+          'streak': 12,
+          'login_streak': 9,
+        });
+        return buildProvider();
+      }
+
+      test('grows by one for a day claimed back to back', () async {
+        final reward = await (await lastClaimed(1)).checkDailyReward();
+
+        expect(reward!.loginStreak, 10);
+      });
+
+      test('starts again at one after a missed day', () async {
+        final reward = await (await lastClaimed(2)).checkDailyReward();
+
+        expect(reward!.loginStreak, 1);
+      });
+
+      // The whole point of separating the two counters.
+      test('breaking it leaves the reward cycle exactly where it was',
+          () async {
+        final reward = await (await lastClaimed(30)).checkDailyReward();
+
+        expect(reward!.loginStreak, 1);
+        expect(reward.claimCount, 13);
+        expect(reward.dayNumber, 6);
+      });
+
+      test('claiming persists both counters', () async {
+        final provider = await lastClaimed(1);
+        await provider.claimDailyReward();
+
+        expect(provider.loginStreak, 10);
+        expect(provider.dailyRewardClaimCount, 13);
+      });
     });
 
     test('should grant coins and update dates when claimDailyReward called',
@@ -112,14 +190,15 @@ void main() {
       await provider.claimDailyReward();
       await Future.delayed(const Duration(milliseconds: 50));
 
-      // Day 1 pays coins; streak advanced on UserProvider. Read the amount
-      // from the schedule rather than restating it, so retuning the cycle
-      // does not mean editing this assertion.
+      // Day 1 pays coins; both counters advanced on UserProvider. Read the
+      // amount from the schedule rather than restating it, so retuning the
+      // cycle does not mean editing this assertion.
       expect(
         userProvider.coins,
         equals(initialCoins + dailyRewards.first.value),
       );
-      expect(userProvider.streak, equals(1));
+      expect(userProvider.rewardClaims, equals(1));
+      expect(userProvider.loginStreak, equals(1));
       expect(provider.dailyRewardClaimCount, equals(1));
 
       // Verify dates updated
@@ -127,7 +206,7 @@ void main() {
       expect(prefs.getString('last_reward_claim_date'), isNotNull);
     });
 
-    test('cycle getters reflect the streak from UserProvider', () async {
+    test('cycle getters reflect the claim count from UserProvider', () async {
       SharedPreferences.setMockInitialValues({'streak': 3});
       final provider = await buildProvider();
 

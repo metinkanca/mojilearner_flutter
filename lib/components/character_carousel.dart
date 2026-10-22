@@ -3,6 +3,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import '../constants/theme.dart';
 import 'character_sprite.dart';
+import 'purchase_dialogs.dart';
 
 /// The shared subset of the two retro font helpers (pixel / mono), so a chosen
 /// font can be passed down to the carousel.
@@ -86,6 +87,12 @@ class CharacterCarousel extends StatefulWidget {
   /// Called with the pet that settled under the centre — on swipe or on tap.
   final ValueChanged<String> onSelected;
 
+  /// What [type] still costs, or null when it is the player's to pick. A pet
+  /// with a price wears a tag on its card; the carousel still reports it
+  /// through [onSelected] when it settles, and leaves adopting it — or not —
+  /// to the screen.
+  final int? Function(String type)? priceForType;
+
   const CharacterCarousel({
     super.key,
     required this.types,
@@ -99,6 +106,7 @@ class CharacterCarousel extends StatefulWidget {
     this.looping = false,
     this.emphasis = 1.0,
     this.viewportFraction = defaultViewportFraction,
+    this.priceForType,
   });
 
   /// The height a carousel needs so the centre tile is not clipped at its
@@ -196,27 +204,65 @@ class _CharacterCarouselState extends State<CharacterCarousel> {
     );
   }
 
+  /// How many markers the row will ever draw.
+  ///
+  /// A dot per pet worked while there were six. There are thirty, and thirty
+  /// dots is both 480 logical pixels — wider than a handset — and unreadable
+  /// as a position: nobody counts to nineteen. Past this many the row becomes
+  /// a window that slides along the rank instead, which is a fixed width
+  /// whatever the roster grows to.
+  static const int _maxMarkers = 9;
+
   /// Where in the rank the player is, so the carousel reads as one of several
   /// rather than as all there is. Square, like everything else on the screen.
+  ///
+  /// Which pet is centred, not which virtual page: when looping, page 1501 and
+  /// page 4 are both the cat.
   Widget _buildMarkers() {
+    final count = widget.types.length;
+    final active = _page.round() % _typeCount;
+
+    // The window is pinned at either end, so the active dot travels through it
+    // for the first and last few pets and sits centred through the middle.
+    // Without that the dot never moves and the row says nothing.
+    final windowed = count > _maxMarkers;
+    final span = windowed ? _maxMarkers : count;
+    final start = windowed
+        ? (active - span ~/ 2).clamp(0, count - span)
+        : 0;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (var i = 0; i < widget.types.length; i++)
+        for (var i = start; i < start + span; i++)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                // Which pet is centred, not which virtual page: when looping,
-              // page 1501 and page 4 are both the cat.
-              color: _page.round() % _typeCount == i
-                  ? AppTheme.retroDark
-                  : Colors.white,
-                border: Border.all(color: AppTheme.retroDark, width: 2),
-              ),
-            ),
+            // The dots at a windowed edge are drawn small when the rank keeps
+            // going past them — the only thing distinguishing "the end of the
+            // list" from "the end of the window".
+            child: Builder(builder: (context) {
+              final shrunk = windowed &&
+                  ((i == start && start > 0) ||
+                      (i == start + span - 1 && start + span < count));
+              final size = shrunk ? 4.0 : 8.0;
+              return SizedBox(
+                width: 8,
+                height: 8,
+                child: Center(
+                  child: Container(
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      color: i == active ? AppTheme.retroDark : Colors.white,
+                      border: Border.all(
+                        color: AppTheme.retroDark,
+                        width: shrunk ? 1 : 2,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
           ),
       ],
     );
@@ -258,6 +304,7 @@ class _CharacterCarouselState extends State<CharacterCarousel> {
                 width: widget.tileWidth,
                 dim: dim,
                 framed: widget.framed,
+                price: widget.priceForType?.call(type),
                 fontFunction: widget.fontFunction,
                 textDirection: widget.textDirection,
               ),
@@ -283,6 +330,10 @@ class CharacterTile extends StatelessWidget {
   final CarouselFontFn fontFunction;
   final TextDirection textDirection;
 
+  /// What the pet costs, shown as a tag on the card, or null when it is the
+  /// player's already. Framed tiles only: the bare opening never sells.
+  final int? price;
+
   const CharacterTile({
     super.key,
     required this.type,
@@ -292,6 +343,7 @@ class CharacterTile extends StatelessWidget {
     required this.fontFunction,
     required this.textDirection,
     this.framed = true,
+    this.price,
   });
 
   @override
@@ -320,7 +372,7 @@ class CharacterTile extends StatelessWidget {
 
     if (!framed) return sprite;
 
-    return Container(
+    final card = Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -362,6 +414,39 @@ class CharacterTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    final cost = price;
+    if (cost == null) return card;
+
+    // A price tag pinned over the top corner, in the purse's own yellow, so
+    // an unbought pet reads as for sale at a glance without hiding what it
+    // looks like — its look is what is being sold.
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        card,
+        PositionedDirectional(
+          top: -10,
+          end: -10,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            decoration: BoxDecoration(
+              color: Color.lerp(AppTheme.retroAccent, Colors.black, dim * 0.6),
+              border: Border.all(color: AppTheme.retroDark, width: 2),
+            ),
+            child: Text(
+              '${AccessoryTileIcons.coin} $cost',
+              textDirection: textDirection,
+              style: fontFunction(
+                fontSize: 8,
+                color: AppTheme.retroDark,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
