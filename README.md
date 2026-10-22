@@ -144,7 +144,9 @@ open ios/Runner.xcworkspace
 - [IOS_BUILD_GUIDE.md](IOS_BUILD_GUIDE.md) - Detailed iOS/Mac instructions with TestFlight setup
 - [QUICK_BUILD.md](QUICK_BUILD.md) - Quick reference commands
 - [OFFLINE_MODE.md](OFFLINE_MODE.md) - How offline mode works and how to extend it
-- [ADS.md](ADS.md) - Rewarded/interstitial ads, the membership seam, and the pre-release AdMob checklist
+- [ADS.md](ADS.md) - Rewarded/interstitial ads and the pre-release AdMob checklist
+- [MONETISATION.md](MONETISATION.md) - Mimikin Plus, the daily AI allowance, and the season pass
+- [BOND.md](BOND.md) - How close the pet grows, and what gates it
 
 **For Testers:**
 - [TESTER_GUIDE.md](TESTER_GUIDE.md) - Comprehensive testing checklist

@@ -1,7 +1,8 @@
 # Ads & membership
 
-Two ad formats, governed by different rules, plus the `isPremium` seam a
-membership purchase will eventually drive.
+Two ad formats, governed by different rules. The membership that suppresses
+one of them is Mimikin Plus — see `MONETISATION.md` for what it sells and what
+it deliberately does not.
 
 | | Rewarded video | Interstitial |
 |---|---|---|
@@ -9,7 +10,7 @@ membership purchase will eventually drive.
 | Pays | 5 / 8 / 10 / 12 / 15 coins, in that order | Nothing |
 | Limit | 5 a day | One an hour |
 | Removed by membership | **No** | **Yes** |
-| Where | Shop screen tile; wardrobe's "not enough coins" dialog | End of a quiz or a scenario run |
+| Where | The shop's item shelves (`/shop/items`); wardrobe's "not enough coins" dialog | End of a quiz or a scenario run |
 
 Membership deliberately does *not* remove rewarded ads. Taking them away
 would remove a coin source and leave a paying player worse off than a free
@@ -108,10 +109,22 @@ verified without a Mac build.
 
 ## Membership
 
-`UserProvider.isPremium` is real and persisted, and `setPremium` is the seam a
-purchase will drive. Nothing calls it yet: store products, receipt validation
-and restore-purchases are their own piece of work. The ad system needed the
-flag to exist so it had something to gate interstitials on.
+`UserProvider.isPremium` is written by `PremiumProvider` from the store's own
+purchase stream (`lib/services/purchase_service.dart`). It suppresses
+interstitials and raises the daily AI allowance, and deliberately does nothing
+to the rewarded path.
 
-To check the paid behaviour before then, call `setPremium(true)` from a debug
-build — interstitials should stop, and the rewarded offer should not.
+Store products are not configured yet, so on a build without
+`--dart-define=IAP_PLUS_MONTHLY=…` the paywall says so rather than drawing a
+price it cannot charge. To check the paid behaviour before then, call
+`setPremium(true)` from a debug build — interstitials should stop, and the
+rewarded offer should not.
+
+## Rewarded ads now pay twice
+
+`watchRewarded` grants the coins *and* one extra AI quiz
+(`EntitlementConstants.quizzesPerRewardedAd`). That is the free player's route
+past the daily allowance wall, and it is granted wherever the ad was watched:
+the scarce thing is the slot, not the screen. A full day of ads lands a free
+player at 8 quizzes, deliberately short of a member's ten. See
+`MONETISATION.md`.
