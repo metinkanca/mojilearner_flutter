@@ -939,6 +939,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get playFetchWords => 'Hozd a szavakat';
 
   @override
+  String get playNeedsWords => 'Tanulj még néhány szót a játékhoz';
+
+  @override
   String get careClose => 'Bezárás';
 
   @override

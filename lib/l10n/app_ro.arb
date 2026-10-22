@@ -293,6 +293,7 @@
   "playPounce": "Prinde cârtița",
   "playPondHop": "Sărituri pe iaz",
   "playFetchWords": "Adu cuvintele",
+  "playNeedsWords": "Învață câteva cuvinte în plus ca să joci",
   "careClose": "Închide",
   "careFedItem": "Moji a mâncat {item}.",
   "careCurrentFullness": "Sațietate acum: {value}%",

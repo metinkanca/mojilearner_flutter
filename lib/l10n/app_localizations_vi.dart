@@ -938,6 +938,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get playFetchWords => 'Nhặt chữ về';
 
   @override
+  String get playNeedsWords => 'Học thêm vài từ để chơi';
+
+  @override
   String get careClose => 'Đóng';
 
   @override

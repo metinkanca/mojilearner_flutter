@@ -293,6 +293,7 @@
   "playPounce": "Chyť krtka",
   "playPondHop": "Skákání po leknínech",
   "playFetchWords": "Aportuj slova",
+  "playNeedsWords": "Nauč se ještě pár slov, abys mohl hrát",
   "careClose": "Zavřít",
   "careFedItem": "Moji snědl {item}.",
   "careCurrentFullness": "Sytost teď: {value} %",

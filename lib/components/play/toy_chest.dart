@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../constants/theme.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/language_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/vocab_provider.dart';
 import '../../utils/fonts.dart';
 import '../../utils/play_games.dart';
 import '../../utils/rtl_locale.dart';
@@ -146,6 +148,16 @@ class ToyChestPicker extends StatelessWidget {
     final font = AppFonts.getFont(settings.usePixelFont);
     final textDirection =
         textDirectionForLocale(Localizations.localeOf(context));
+    // What the player has learned decides which toys open. Watched, so a word
+    // learned while the chest is up opens one.
+    final items = context.watch<VocabProvider>().items;
+    final languages = context.watch<LanguageProvider>();
+    bool playable(PlayGame game) => canPlay(
+          game,
+          items: items,
+          targetCode: languages.targetLanguage?.code,
+          nativeCode: languages.nativeLanguage.code,
+        );
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -176,6 +188,7 @@ class ToyChestPicker extends StatelessWidget {
                 _ToyTile(
                   toy: toy,
                   label: toy.label(l10n),
+                  hint: playable(toy.game) ? null : l10n.playNeedsWords,
                   style: font(
                     fontSize: 10,
                     height: 1.4,
@@ -207,53 +220,79 @@ class _ToyTile extends StatelessWidget {
     required this.label,
     required this.style,
     required this.textDirection,
+    this.hint,
   });
 
   final ChestToy toy;
   final String label;
+
+  /// Why the toy is shut, or null when it opens.
+  final String? hint;
   final TextStyle style;
   final TextDirection textDirection;
 
   @override
   Widget build(BuildContext context) {
+    final shut = hint != null;
     return Semantics(
       button: true,
-      label: label,
+      enabled: !shut,
+      label: shut ? '$label. $hint' : label,
       excludeSemantics: true,
       child: GestureDetector(
-        onTap: () {
-          final router = GoRouter.of(context);
-          Navigator.of(context).pop();
-          router.pushNamed(toy.routeName);
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: AppTheme.retroLight,
-            border: Border.all(color: AppTheme.retroDark, width: 3),
-          ),
-          child: Row(
-            textDirection: textDirection,
-            children: [
-              SizedBox(
-                width: 40,
-                height: 36,
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: toy.aspect,
-                    child: CustomPaint(painter: toy.painter),
+        onTap: shut
+            ? null
+            : () {
+                final router = GoRouter.of(context);
+                Navigator.of(context).pop();
+                router.pushNamed(toy.routeName);
+              },
+        child: Opacity(
+          opacity: shut ? 0.45 : 1,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppTheme.retroLight,
+              border: Border.all(color: AppTheme.retroDark, width: 3),
+            ),
+            child: Row(
+              textDirection: textDirection,
+              children: [
+                SizedBox(
+                  width: 40,
+                  height: 36,
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: toy.aspect,
+                      child: CustomPaint(painter: toy.painter),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  label,
-                  textDirection: textDirection,
-                  style: style,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        textDirection: textDirection,
+                        style: style,
+                      ),
+                      if (hint != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          hint!,
+                          textDirection: textDirection,
+                          style: style.copyWith(
+                            fontSize: (style.fontSize ?? 10) * 0.75,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

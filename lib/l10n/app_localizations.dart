@@ -1906,6 +1906,12 @@ abstract class AppLocalizations {
   /// **'Fetch the words'**
   String get playFetchWords;
 
+  /// No description provided for @playNeedsWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn a few more words to play'**
+  String get playNeedsWords;
+
   /// No description provided for @careClose.
   ///
   /// In en, this message translates to:

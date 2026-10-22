@@ -293,6 +293,7 @@
   "playPounce": "두더지 덮치기",
   "playPondHop": "연못 건너기",
   "playFetchWords": "단어 물어오기",
+  "playNeedsWords": "놀려면 단어를 조금 더 배워요",
   "careClose": "닫기",
   "careFedItem": "모지가 {item}을(를) 먹었어요.",
   "careCurrentFullness": "현재 포만감: {value}%",

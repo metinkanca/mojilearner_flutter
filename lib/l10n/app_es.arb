@@ -293,6 +293,7 @@
   "playPounce": "Caza topos",
   "playPondHop": "Saltos en el estanque",
   "playFetchWords": "Trae las palabras",
+  "playNeedsWords": "Aprende unas palabras más para jugar",
   "careClose": "Cerrar",
   "careFedItem": "Moji se comió {item}.",
   "careCurrentFullness": "Saciedad ahora: {value} %",

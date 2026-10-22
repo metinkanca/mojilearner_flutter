@@ -293,6 +293,7 @@
   "playPounce": "Поймай крота",
   "playPondHop": "Прыжки по пруду",
   "playFetchWords": "Принеси слова",
+  "playNeedsWords": "Выучи ещё несколько слов, чтобы играть",
   "careClose": "Закрыть",
   "careFedItem": "Моджи съел: {item}.",
   "careCurrentFullness": "Сытость сейчас: {value}%",

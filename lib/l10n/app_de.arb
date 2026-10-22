@@ -293,6 +293,7 @@
   "playPounce": "Maulwurfjagd",
   "playPondHop": "Teichhüpfen",
   "playFetchWords": "Wörter apportieren",
+  "playNeedsWords": "Lerne ein paar Wörter mehr, um zu spielen",
   "careClose": "Schließen",
   "careFedItem": "Moji hat {item} gegessen.",
   "careCurrentFullness": "Sättigung jetzt: {value} %",

@@ -1,5 +1,10 @@
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kDebugMode, TargetPlatform;
+    show
+        defaultTargetPlatform,
+        kDebugMode,
+        kReleaseMode,
+        TargetPlatform,
+        visibleForTesting;
 
 import 'coin_packs.dart';
 import 'season_pass.dart';
@@ -243,6 +248,27 @@ class AppRuntimeConfig {
         'SKIP_ONBOARDING',
         defaultValue: false,
       );
+
+  /// Whether the stock words and sentences (`boss_trial_words.dart`,
+  /// `boss_trial_sentences.dart`) may top up what a game or a fight is played
+  /// with.
+  ///
+  /// On while the app is being built and tested, so every screen has something
+  /// to play with from the first run. **Off in a release build**: the stock is
+  /// twelve everyday nouns and six sentences, a testing placeholder, and a game
+  /// that falls back to them is practising words the player never learned. In a
+  /// release the games use the player's own words and nothing else, and one
+  /// that cannot be filled stays shut until it can.
+  ///
+  ///     flutter build apk --dart-define=STOCK_CONTENT=true   // to keep them
+  static bool get stockContent =>
+      debugStockContent ??
+      (!kReleaseMode ||
+          const bool.fromEnvironment('STOCK_CONTENT', defaultValue: false));
+
+  /// Pins [stockContent] in a test, to see a release build's behaviour.
+  @visibleForTesting
+  static bool? debugStockContent;
 
   /// Show the boss-trial badge on the home screen, the only way into the
   /// trial prototype while it is being tuned. It opens the climb up through

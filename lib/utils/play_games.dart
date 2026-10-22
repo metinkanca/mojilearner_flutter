@@ -190,7 +190,8 @@ class FetchRules {
 /// needs to know which it got: a Japanese word drawn in a Latin font is a row
 /// of boxes.
 class PlayWords {
-  const PlayWords(this.pool, {required this.targetCode, required this.nativeCode});
+  const PlayWords(this.pool,
+      {required this.targetCode, required this.nativeCode});
 
   final List<TrialWord> pool;
   final String? targetCode;
@@ -210,8 +211,10 @@ PlayWords playWords({
   required String? nativeCode,
   bool Function(List<TrialWord> pool) playable = TrialWordPool.isPlayable,
 }) {
-  var last = PlayWords(const [], targetCode: targetCode, nativeCode: nativeCode);
-  for (final (target, native) in bossTrialFallbackPairs(targetCode, nativeCode)) {
+  var last =
+      PlayWords(const [], targetCode: targetCode, nativeCode: nativeCode);
+  for (final (target, native)
+      in bossTrialFallbackPairs(targetCode, nativeCode)) {
     final pool = TrialWordPool.build(
       items: items,
       languageCode: target ?? '',
@@ -222,6 +225,43 @@ PlayWords playWords({
   }
   return last;
 }
+
+/// Whether [game] can be played with what the player has.
+///
+/// Always true while the stock tops a game up (see
+/// `AppRuntimeConfig.stockContent`). In a release it is the player's own words
+/// and nothing else, so a game they have too few for stays shut until they have
+/// learned enough — the toy chest says so rather than opening a game that
+/// closes again. Fetch the Words needs sentences, which only the stock has
+/// until they can be written for the player, so it stays shut in a release.
+bool canPlay(
+  PlayGame game, {
+  required List<ReviewItem> items,
+  required String? targetCode,
+  required String? nativeCode,
+}) =>
+    switch (game) {
+      PlayGame.catchBall ||
+      PlayGame.pounce ||
+      PlayGame.pondHop =>
+        TrialWordPool.isPlayable(playWords(
+          items: items,
+          targetCode: targetCode,
+          nativeCode: nativeCode,
+        ).pool),
+      PlayGame.bubbleBath => () {
+          final pool = bubbleBathWords(
+            items: items,
+            targetCode: targetCode,
+            nativeCode: nativeCode,
+          ).pool;
+          return TrialWordPool.isPlayable(pool) && BubbleWave.isPlayable(pool);
+        }(),
+      PlayGame.fetchWords => TrialSentencePool.isPlayable(playSentences(
+          targetCode: targetCode,
+          nativeCode: nativeCode,
+        ).pool),
+    };
 
 /// Words Bubble Bath can spell: enough of them short enough for the water,
 /// and without spaces.
@@ -256,7 +296,8 @@ PlaySentences playSentences({
 }) {
   var last =
       PlaySentences(const [], targetCode: targetCode, nativeCode: nativeCode);
-  for (final (target, native) in bossTrialFallbackPairs(targetCode, nativeCode)) {
+  for (final (target, native)
+      in bossTrialFallbackPairs(targetCode, nativeCode)) {
     final pool = TrialSentencePool.build(
       bossTrialStockSentences(targetCode: target, nativeCode: native),
     );
@@ -269,7 +310,8 @@ PlaySentences playSentences({
 /// Something not got right in a game, for the results: what it says, how it
 /// is read when the script is not Latin, and what it means.
 class PlayPractice {
-  const PlayPractice({required this.target, required this.meaning, this.reading});
+  const PlayPractice(
+      {required this.target, required this.meaning, this.reading});
 
   PlayPractice.word(TrialWord word)
       : target = word.target,
@@ -287,7 +329,9 @@ class PlayPractice {
 
   @override
   bool operator ==(Object other) =>
-      other is PlayPractice && other.target == target && other.meaning == meaning;
+      other is PlayPractice &&
+      other.target == target &&
+      other.meaning == meaning;
 
   @override
   int get hashCode => Object.hash(target, meaning);

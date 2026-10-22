@@ -14,6 +14,7 @@
 library;
 
 import '../utils/boss_trial.dart';
+import 'app_runtime_config.dart';
 
 /// One column per concept, in this order in every row:
 /// apple, dog, cat, water, book, house, bread, night, friend, milk, door, star.
@@ -99,14 +100,18 @@ Iterable<String> get bossTrialStockLanguages => _words.keys;
 List<(String?, String?)> bossTrialFallbackPairs(
   String? targetCode,
   String? nativeCode,
-) =>
-    [
-      (targetCode, nativeCode),
-      (targetCode, 'en'),
-      (targetCode, 'es'),
-      ('es', nativeCode),
-      ('es', 'en'),
-    ];
+) {
+  // Without stock there is nothing for another pair to be filled with, and
+  // trying Spanish for someone learning French would only play Spanish.
+  if (!AppRuntimeConfig.stockContent) return [(targetCode, nativeCode)];
+  return [
+    (targetCode, nativeCode),
+    (targetCode, 'en'),
+    (targetCode, 'es'),
+    ('es', nativeCode),
+    ('es', 'en'),
+  ];
+}
 
 /// Stock words for learning [targetCode], with meanings in [nativeCode].
 ///
@@ -118,6 +123,7 @@ List<TrialWord> bossTrialStockWords({
   required String? targetCode,
   required String? nativeCode,
 }) {
+  if (!AppRuntimeConfig.stockContent) return const [];
   final targets = _words[targetCode];
   if (targets == null) return const [];
   final meaningCode = _words.containsKey(nativeCode) ? nativeCode! : 'en';

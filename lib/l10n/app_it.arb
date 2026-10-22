@@ -293,6 +293,7 @@
   "playPounce": "Acchiappa la talpa",
   "playPondHop": "Salti nello stagno",
   "playFetchWords": "Riporta le parole",
+  "playNeedsWords": "Impara qualche parola in più per giocare",
   "careClose": "Chiudi",
   "careFedItem": "Moji ha mangiato {item}.",
   "careCurrentFullness": "Sazietà attuale: {value}%",

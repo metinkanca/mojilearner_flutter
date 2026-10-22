@@ -941,6 +941,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get playFetchWords => 'Hae sanat';
 
   @override
+  String get playNeedsWords => 'Opi muutama sana lisää pelataksesi';
+
+  @override
   String get careClose => 'Sulje';
 
   @override

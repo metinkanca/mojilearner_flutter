@@ -293,6 +293,7 @@
   "playPounce": "もぐらにとびつけ",
   "playPondHop": "いけでぴょんぴょん",
   "playFetchWords": "ことばをとってこい",
+  "playNeedsWords": "あそぶには、もう少し言葉をおぼえよう",
   "careClose": "閉じる",
   "careFedItem": "モジは{item}を食べました。",
   "careCurrentFullness": "現在の満腹度：{value}%",

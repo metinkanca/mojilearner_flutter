@@ -293,6 +293,7 @@
   "playPounce": "Mullvadsjakt",
   "playPondHop": "Dammhopp",
   "playFetchWords": "Hämta orden",
+  "playNeedsWords": "Lär dig några ord till för att spela",
   "careClose": "Stäng",
   "careFedItem": "Moji åt upp {item}.",
   "careCurrentFullness": "Mättnad nu: {value} %",

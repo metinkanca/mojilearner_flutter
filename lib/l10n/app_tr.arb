@@ -293,6 +293,7 @@
   "playPounce": "Köstebek avı",
   "playPondHop": "Gölette zıpla",
   "playFetchWords": "Kelimeleri getir",
+  "playNeedsWords": "Oynamak için birkaç kelime daha öğren",
   "careClose": "Kapat",
   "careFedItem": "Moji {item} yedi.",
   "careCurrentFullness": "Şu anki tokluk: %{value}",

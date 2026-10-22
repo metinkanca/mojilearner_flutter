@@ -56,15 +56,26 @@ looking exactly like success.
 - [ ] Real AdMob app and unit ids (checklist in `ADS.md`, "Before release")
 - [ ] Proxy hosted, with `FIREBASE_PROJECT_ID` set so per-account quotas turn on
 - [ ] Margin check before the regional prices are final: cost of a Plus member
-      at the full daily allowance (10 quizzes, 200 messages) against what the
+      at the full daily allowance (10 quizzes, 300 messages) against what the
       owner nets in each price tier (after the store's cut, and tax where the
       price includes it), using real token counts from the proxy's spend ledger.
       Rough figures, not measured: chat on the primary model is about $0.00018 a
-      turn (from the proxy's own eval), so 200 messages a day for 30 days is
-      about $1.05. Quiz generation cost is not recorded anywhere I found. On the
-      3.1 backup everything costs about 3x. If a tier's net doesn't comfortably
-      clear the backup-model ceiling, lower the 200-message cap before lowering
+      turn (from the proxy's own eval), so 300 messages a day for 30 days is
+      about $1.60, and a free player's 80 a day is about $0.43 a month. Quiz
+      generation cost is not recorded anywhere I found. On the 3.1 backup
+      everything costs about 3x, which puts a Plus member who maxes every day
+      at about $4.90 a month: roughly the whole of the net revenue, so it only
+      works while the primary model serves. If a tier's net doesn't comfortably
+      clear the backup-model ceiling, lower the 300-message cap before lowering
       the price further
+
+- [x] Free AI messages raised from 30 to 80 a day (Plus 300), because a daily
+      player doing a few town scenarios could meet the wall on a first day.
+      Re-check with real scenario runs in the live test
+- [x] Release builds drop the stock words and sentences, so the toy chest is
+      played with the player's own words; a game they have too few for stays
+      shut and says so. Needs the generated daily pack before Fetch the Words
+      and the "related words" can open (see `BOSS_PLAN.md`)
 
 ### AI model plan
 

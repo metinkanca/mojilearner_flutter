@@ -941,6 +941,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get playFetchWords => 'Busque as palavras';
 
   @override
+  String get playNeedsWords => 'Aprenda mais algumas palavras para jogar';
+
+  @override
   String get careClose => 'Fechar';
 
   @override

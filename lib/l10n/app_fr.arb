@@ -293,6 +293,7 @@
   "playPounce": "Chasse aux taupes",
   "playPondHop": "Sauts sur l'étang",
   "playFetchWords": "Rapporte les mots",
+  "playNeedsWords": "Apprends quelques mots de plus pour jouer",
   "careClose": "Fermer",
   "careFedItem": "Moji a mangé {item}.",
   "careCurrentFullness": "Satiété actuelle : {value} %",

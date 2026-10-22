@@ -939,6 +939,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get playFetchWords => 'Hämta orden';
 
   @override
+  String get playNeedsWords => 'Lär dig några ord till för att spela';
+
+  @override
   String get careClose => 'Stäng';
 
   @override

@@ -920,6 +920,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playFetchWords => '叼回词语';
 
   @override
+  String get playNeedsWords => '再学几个词就能玩了';
+
+  @override
   String get careClose => '关闭';
 
   @override

@@ -293,6 +293,7 @@
   "playPounce": "छछूंदर पर झपट्टा",
   "playPondHop": "तालाब में छलांग",
   "playFetchWords": "शब्द लाओ",
+  "playNeedsWords": "खेलने के लिए कुछ और शब्द सीखें",
   "careClose": "बंद करें",
   "careFedItem": "मोजी ने {item} खाया।",
   "careCurrentFullness": "अभी पेट भरा: {value}%",

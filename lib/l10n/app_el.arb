@@ -293,6 +293,7 @@
   "playPounce": "Κυνήγι τυφλοπόντικα",
   "playPondHop": "Πηδήματα στη λιμνούλα",
   "playFetchWords": "Φέρε τις λέξεις",
+  "playNeedsWords": "Μάθε μερικές λέξεις ακόμα για να παίξεις",
   "careClose": "Κλείσιμο",
   "careFedItem": "Ο Moji έφαγε {item}.",
   "careCurrentFullness": "Χορτασμός τώρα: {value}%",

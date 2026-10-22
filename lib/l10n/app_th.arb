@@ -293,6 +293,7 @@
   "playPounce": "ตะครุบตัวตุ่น",
   "playPondHop": "กระโดดข้ามบ่อ",
   "playFetchWords": "คาบคำมาให้",
+  "playNeedsWords": "เรียนรู้คำศัพท์เพิ่มอีกนิดเพื่อเล่น",
   "careClose": "ปิด",
   "careFedItem": "โมจิกิน {item} แล้ว",
   "careCurrentFullness": "ความอิ่มตอนนี้: {value}%",

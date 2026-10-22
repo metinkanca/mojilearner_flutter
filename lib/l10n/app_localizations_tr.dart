@@ -943,6 +943,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get playFetchWords => 'Kelimeleri getir';
 
   @override
+  String get playNeedsWords => 'Oynamak için birkaç kelime daha öğren';
+
+  @override
   String get careClose => 'Kapat';
 
   @override

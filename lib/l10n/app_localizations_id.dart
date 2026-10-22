@@ -937,6 +937,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get playFetchWords => 'Ambil kata-katanya';
 
   @override
+  String get playNeedsWords => 'Pelajari beberapa kata lagi untuk bermain';
+
+  @override
   String get careClose => 'Tutup';
 
   @override

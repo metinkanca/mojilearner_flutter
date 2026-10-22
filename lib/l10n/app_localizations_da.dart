@@ -939,6 +939,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get playFetchWords => 'Hent ordene';
 
   @override
+  String get playNeedsWords => 'Lær nogle flere ord for at spille';
+
+  @override
   String get careClose => 'Luk';
 
   @override

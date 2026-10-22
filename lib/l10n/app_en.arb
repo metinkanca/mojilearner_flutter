@@ -368,6 +368,7 @@
   "playPounce": "Pounce",
   "playPondHop": "Pond hop",
   "playFetchWords": "Fetch the words",
+  "playNeedsWords": "Learn a few more words to play",
   "careClose": "Close",
   "careFedItem": "Moji ate the {item}.",
   "@careFedItem": {

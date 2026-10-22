@@ -293,6 +293,7 @@
   "playPounce": "Fang muldvarpen",
   "playPondHop": "Hop over dammen",
   "playFetchWords": "Hent ordene",
+  "playNeedsWords": "Lær nogle flere ord for at spille",
   "careClose": "Luk",
   "careFedItem": "Moji spiste {item}.",
   "careCurrentFullness": "Mæthed nu: {value} %",

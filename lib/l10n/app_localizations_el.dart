@@ -942,6 +942,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get playFetchWords => 'Φέρε τις λέξεις';
 
   @override
+  String get playNeedsWords => 'Μάθε μερικές λέξεις ακόμα για να παίξεις';
+
+  @override
   String get careClose => 'Κλείσιμο';
 
   @override

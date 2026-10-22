@@ -293,6 +293,7 @@
   "playPounce": "Vakondvadászat",
   "playPondHop": "Tavi ugrálás",
   "playFetchWords": "Hozd a szavakat",
+  "playNeedsWords": "Tanulj még néhány szót a játékhoz",
   "careClose": "Bezárás",
   "careFedItem": "Moji megette: {item}.",
   "careCurrentFullness": "Jóllakottság most: {value}%",

@@ -942,6 +942,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get playFetchWords => 'Aportuj słowa';
 
   @override
+  String get playNeedsWords => 'Naucz się kilku słów więcej, aby grać';
+
+  @override
   String get careClose => 'Zamknij';
 
   @override

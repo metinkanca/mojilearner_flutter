@@ -22,6 +22,7 @@
 library;
 
 import '../utils/boss_trial.dart';
+import 'app_runtime_config.dart';
 
 const Map<String, List<List<String>>> _sentences = {
   'en': [
@@ -365,6 +366,7 @@ List<TrialSentence> bossTrialStockSentences({
   required String? targetCode,
   required String? nativeCode,
 }) {
+  if (!AppRuntimeConfig.stockContent) return const [];
   final targets = _sentences[targetCode];
   if (targets == null) return const [];
   final meaningCode = _sentences.containsKey(nativeCode) ? nativeCode! : 'en';

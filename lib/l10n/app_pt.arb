@@ -293,6 +293,7 @@
   "playPounce": "Pega-toupeira",
   "playPondHop": "Pulos no lago",
   "playFetchWords": "Busque as palavras",
+  "playNeedsWords": "Aprenda mais algumas palavras para jogar",
   "careClose": "Fechar",
   "careFedItem": "Moji comeu {item}.",
   "careCurrentFullness": "Saciedade agora: {value}%",

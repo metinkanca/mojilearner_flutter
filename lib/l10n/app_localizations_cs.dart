@@ -937,6 +937,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get playFetchWords => 'Aportuj slova';
 
   @override
+  String get playNeedsWords => 'Nauč se ještě pár slov, abys mohl hrát';
+
+  @override
   String get careClose => 'Zavřít';
 
   @override

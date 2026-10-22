@@ -293,6 +293,7 @@
   "playPounce": "Злови крота",
   "playPondHop": "Стрибки ставком",
   "playFetchWords": "Принеси слова",
+  "playNeedsWords": "Вивчи ще кілька слів, щоб грати",
   "careClose": "Закрити",
   "careFedItem": "Моджі зʼїв: {item}.",
   "careCurrentFullness": "Ситість зараз: {value}%",

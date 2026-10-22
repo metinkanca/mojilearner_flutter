@@ -923,6 +923,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playFetchWords => 'ことばをとってこい';
 
   @override
+  String get playNeedsWords => 'あそぶには、もう少し言葉をおぼえよう';
+
+  @override
   String get careClose => '閉じる';
 
   @override

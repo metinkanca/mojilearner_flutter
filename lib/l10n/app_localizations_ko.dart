@@ -923,6 +923,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get playFetchWords => '단어 물어오기';
 
   @override
+  String get playNeedsWords => '놀려면 단어를 조금 더 배워요';
+
+  @override
   String get careClose => '닫기';
 
   @override

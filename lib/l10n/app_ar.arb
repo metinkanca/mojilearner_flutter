@@ -293,6 +293,7 @@
   "playPounce": "انقضاض على الخُلد",
   "playPondHop": "القفز في البركة",
   "playFetchWords": "أحضر الكلمات",
+  "playNeedsWords": "تعلّم بعض الكلمات الإضافية لتلعب",
   "careClose": "إغلاق",
   "careFedItem": "أكل موجي {item}.",
   "careCurrentFullness": "الشبع الآن: {value}٪",

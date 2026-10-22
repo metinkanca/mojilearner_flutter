@@ -293,6 +293,7 @@
   "playPounce": "Łapanie kretów",
   "playPondHop": "Skoki po stawie",
   "playFetchWords": "Aportuj słowa",
+  "playNeedsWords": "Naucz się kilku słów więcej, aby grać",
   "careClose": "Zamknij",
   "careFedItem": "Moji zjadł: {item}.",
   "careCurrentFullness": "Sytość teraz: {value}%",

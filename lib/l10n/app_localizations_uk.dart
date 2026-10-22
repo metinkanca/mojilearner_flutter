@@ -940,6 +940,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get playFetchWords => 'Принеси слова';
 
   @override
+  String get playNeedsWords => 'Вивчи ще кілька слів, щоб грати';
+
+  @override
   String get careClose => 'Закрити';
 
   @override

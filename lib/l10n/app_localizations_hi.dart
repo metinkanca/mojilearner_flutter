@@ -936,6 +936,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get playFetchWords => 'शब्द लाओ';
 
   @override
+  String get playNeedsWords => 'खेलने के लिए कुछ और शब्द सीखें';
+
+  @override
   String get careClose => 'बंद करें';
 
   @override

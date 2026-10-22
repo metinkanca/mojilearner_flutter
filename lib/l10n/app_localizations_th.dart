@@ -929,6 +929,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get playFetchWords => 'คาบคำมาให้';
 
   @override
+  String get playNeedsWords => 'เรียนรู้คำศัพท์เพิ่มอีกนิดเพื่อเล่น';
+
+  @override
   String get careClose => 'ปิด';
 
   @override

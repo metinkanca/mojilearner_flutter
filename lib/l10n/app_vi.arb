@@ -293,6 +293,7 @@
   "playPounce": "Vồ chuột chũi",
   "playPondHop": "Nhảy qua ao",
   "playFetchWords": "Nhặt chữ về",
+  "playNeedsWords": "Học thêm vài từ để chơi",
   "careClose": "Đóng",
   "careFedItem": "Moji đã ăn {item}.",
   "careCurrentFullness": "Độ no hiện tại: {value}%",

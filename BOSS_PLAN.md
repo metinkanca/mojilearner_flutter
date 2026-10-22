@@ -59,7 +59,24 @@ economy test counts them.
   attempt. It uses a slot of the five rewarded ads a day and pays no coins or
   quiz. Members still see it.
 
-**Next:** the generated content, per-attempt layout shuffling, the toy chest.
+**Built 2026-10-23, fourth pass (toy chest and limits):**
+- **No stock words in a release.** `AppRuntimeConfig.stockContent` is on in debug
+  and test builds and off in a release (override with `--dart-define=STOCK_CONTENT=true`).
+  With it off the games are played with the player's own words and nothing else,
+  and a game they have too few words for stays shut: the chest greys the toy and
+  says "Learn a few more words to play" (`playNeedsWords`, 27 locales). Four
+  distinct meanings fill a throw. Fetch the Words stays shut in a release,
+  because its sentences only exist as stock until the AI can write them.
+- **Same words as the fights.** Games and boss trials already build their pools
+  from the same player vocabulary (`TrialWordPool`); the daily content pack will
+  feed both, so practising in the toy chest practises what the boss will throw.
+  "Words related to the player's" needs the generated pack and is not built.
+- **AI messages raised: 80 a day free, 300 for Plus** (were 30 and 200), shared
+  by chat and every town scenario. The old free number was a wall a daily
+  player could meet on day one. A fight's content will have its own small
+  allowance, not touching these.
+
+**Next:** the generated content, with its own allowance; the toy chest's art.
 
 ## Decided 2026-10-22 (the owner's answers to the questions below)
 

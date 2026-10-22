@@ -293,6 +293,7 @@
   "playPounce": "扑地鼠",
   "playPondHop": "跳荷叶",
   "playFetchWords": "叼回词语",
+  "playNeedsWords": "再学几个词就能玩了",
   "careClose": "关闭",
   "careFedItem": "Moji 吃掉了{item}。",
   "careCurrentFullness": "当前饱食度：{value}%",

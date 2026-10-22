@@ -940,6 +940,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get playFetchWords => 'Принеси слова';
 
   @override
+  String get playNeedsWords => 'Выучи ещё несколько слов, чтобы играть';
+
+  @override
   String get careClose => 'Закрыть';
 
   @override

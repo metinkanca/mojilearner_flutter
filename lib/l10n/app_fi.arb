@@ -293,6 +293,7 @@
   "playPounce": "Myyräjahti",
   "playPondHop": "Lammikkohyppely",
   "playFetchWords": "Hae sanat",
+  "playNeedsWords": "Opi muutama sana lisää pelataksesi",
   "careClose": "Sulje",
   "careFedItem": "Moji söi: {item}.",
   "careCurrentFullness": "Kylläisyys nyt: {value} %",

@@ -938,6 +938,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get playFetchWords => 'Adu cuvintele';
 
   @override
+  String get playNeedsWords => 'Învață câteva cuvinte în plus ca să joci';
+
+  @override
   String get careClose => 'Închide';
 
   @override

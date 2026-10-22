@@ -939,6 +939,9 @@ class AppLocalizationsNo extends AppLocalizations {
   String get playFetchWords => 'Hent ordene';
 
   @override
+  String get playNeedsWords => 'Lær noen flere ord for å spille';
+
+  @override
   String get careClose => 'Lukk';
 
   @override
