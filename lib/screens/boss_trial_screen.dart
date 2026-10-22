@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -28,8 +29,11 @@ import '../constants/boss_trial_en_tr.dart';
 import '../constants/boss_trial_sentences.dart';
 import '../constants/boss_trial_words.dart';
 import '../constants/theme.dart';
+import '../constants/progression.dart' show RewardDef, RewardType;
+import '../providers/boss_progress_provider.dart';
 import '../providers/character_provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/user_provider.dart';
 import '../providers/vocab_provider.dart';
 import '../utils/boss_trial.dart';
 import '../utils/boss_trial_angler.dart';
@@ -1410,6 +1414,7 @@ class _BossTrialScreenState extends State<BossTrialScreen>
       _startRound = round;
       _round = round;
       _run = _plan.start(round: round);
+      _firstClear = const [];
       _fleeTime = null;
       _wave = null;
       _lastPrompt = null;
@@ -3078,6 +3083,26 @@ class _BossTrialScreenState extends State<BossTrialScreen>
       _stage = _Stage.gap;
       _phase = _Phase.over;
     });
+    if (_run.won) unawaited(_claimFirstClear());
+  }
+
+  /// What this clear paid, when it was the level's first. Empty for a repeat.
+  List<RewardDef> _firstClear = const [];
+
+  /// Records the clear and pays it out, once: the progress provider remembers
+  /// which levels have paid, so a repeat or a run that ends twice pays nothing.
+  Future<void> _claimFirstClear() async {
+    final progress = context.read<BossProgressProvider>();
+    final user = context.read<UserProvider>();
+    final paid = await progress.recordClear(
+      bossId: _boss.id,
+      step: _step,
+      level: _levelNumber,
+      finale: _plan.isFinale,
+      user: user,
+    );
+    if (!mounted || paid.isEmpty) return;
+    setState(() => _firstClear = paid);
   }
 
   void _leave() {
@@ -4524,6 +4549,15 @@ class _BossTrialScreenState extends State<BossTrialScreen>
               Text(grade, style: _pixel(26, AppTheme.retroOrange)),
             ],
           ),
+          if (_firstClear.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text('FIRST CLEAR', style: _pixel(8, AppTheme.retroOrange)),
+            const SizedBox(height: 6),
+            Text(
+              _firstClear.map((r) => r.type == RewardType.coins ? '+${r.value} coins' : r.description).join(' · '),
+              style: _pixel(8, _ink),
+            ),
+          ],
           if (!finale) ...[
             const SizedBox(height: 10),
             _body('Level $_levelNumber done. ${_boss.name} will be back, and '

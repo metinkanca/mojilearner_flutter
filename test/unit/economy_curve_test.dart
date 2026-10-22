@@ -1,3 +1,6 @@
+import 'package:mojilearner_flutter/components/boss_trial/trial_boss.dart';
+import 'package:mojilearner_flutter/constants/boss_rewards.dart';
+import 'package:mojilearner_flutter/utils/boss_trial.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/constants/accessories.dart';
 import 'package:mojilearner_flutter/constants/ads.dart';
@@ -39,6 +42,12 @@ void main() {
     kFancyEyeSwatches.fold(0, (s, w) => s + w.price!),
     plannedBoughtPets * kPetPrice,
   ].fold(0, (a, b) => a + b);
+
+  /// What the boss levels pay, once each, by level (`BossRewards`).
+  final bossCoins = BossRewards.coinsByLevel(
+    levelsPerBoss: BossTrialRules.levelsPerBoss,
+    bosses: TrialBosses.all.length,
+  );
 
   const hungerPerDay = 2 * 24; // CharacterProvider's decay rate
   const cheapestFoodHungerPerCoin = 2; // apple: 10 hunger for 5 coins
@@ -227,6 +236,9 @@ void main() {
           }
         }
         if (level == 20) coins += 1000; // UserProvider's level-20 bonus
+        // The boss at this level, cleared the first time: 15 an opening, 100
+        // a finale. A player who has reached a level is assumed to clear it.
+        if (level <= bossCoins.length) coins += bossCoins[level - 1];
       }
 
       if (p.scenarios > 0 && firstClears > 0) firstClears--;
@@ -455,6 +467,14 @@ void main() {
     });
   });
 
+  group('the boss payouts', () {
+    test('are a small share of the catalogue, never a way round it', () {
+      final bossTotal = bossCoins.fold(0, (a, b) => a + b);
+      expect(bossTotal, 960);
+      expect(bossTotal / catalogueTotal, lessThan(0.08),
+          reason: 'first clears are a bonus on the way, not an income');
+    });
+  });
 }
 
 /// The source the current payout belongs to.

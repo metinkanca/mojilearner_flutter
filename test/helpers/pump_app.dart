@@ -13,6 +13,7 @@ import 'package:mojilearner_flutter/providers/settings_provider.dart';
 import 'package:mojilearner_flutter/constants/tutorials.dart';
 import 'package:mojilearner_flutter/providers/tutorial_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
+import 'package:mojilearner_flutter/providers/boss_progress_provider.dart';
 import 'package:mojilearner_flutter/providers/scenario_provider.dart';
 import 'package:mojilearner_flutter/providers/calibration_provider.dart';
 import 'package:mojilearner_flutter/providers/premium_provider.dart';
@@ -58,6 +59,7 @@ Future<void> pumpApp(
   TutorialProvider? tutorialProvider,
   VocabProvider? vocabProvider,
   ScenarioProvider? scenarioProvider,
+  BossProgressProvider? bossProgressProvider,
   CalibrationProvider? calibrationProvider,
   PremiumProvider? premiumProvider,
   AdsProvider? adsProvider,
@@ -122,6 +124,10 @@ Future<void> pumpApp(
         ChangeNotifierProvider<ScenarioProvider>.value(
           value: scenarioProvider ?? ScenarioProvider(),
         ),
+        // Real and empty: no level cleared, so a first clear pays.
+        ChangeNotifierProvider<BossProgressProvider>.value(
+          value: bossProgressProvider ?? BossProgressProvider(),
+        ),
         ChangeNotifierProvider<CalibrationProvider>.value(
           value: calibrationProvider ?? MockCalibrationProvider(),
         ),
@@ -181,6 +187,7 @@ Future<void> pumpAppWithRouter(
   TutorialProvider? tutorialProvider,
   VocabProvider? vocabProvider,
   ScenarioProvider? scenarioProvider,
+  BossProgressProvider? bossProgressProvider,
   CalibrationProvider? calibrationProvider,
   AdsProvider? adsProvider,
   /// Stands in for AdMob. Defaults to one that reports nothing loaded, so a
@@ -240,6 +247,10 @@ Future<void> pumpAppWithRouter(
         // stub.
         ChangeNotifierProvider<ScenarioProvider>.value(
           value: scenarioProvider ?? ScenarioProvider(),
+        ),
+        // Real and empty: no level cleared, so a first clear pays.
+        ChangeNotifierProvider<BossProgressProvider>.value(
+          value: bossProgressProvider ?? BossProgressProvider(),
         ),
         ChangeNotifierProvider<CalibrationProvider>.value(
           value: calibrationProvider ?? MockCalibrationProvider(),

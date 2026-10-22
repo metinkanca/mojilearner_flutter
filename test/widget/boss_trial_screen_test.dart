@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/components/character_sprite.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_words.dart';
+import 'package:mojilearner_flutter/constants/progression.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
 import 'package:mojilearner_flutter/screens/boss_trial_screen.dart';
@@ -16,6 +17,7 @@ import '../helpers/pump_app.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  late MockUserProvider mockUser;
   late MockCharacterProvider mockCharacter;
   late MockLanguageProvider mockLanguage;
   late List<TrialWord> stock;
@@ -28,7 +30,14 @@ void main() {
     stock = bossTrialStockWords(targetCode: target, nativeCode: native);
   }
 
+  setUpAll(() {
+    registerFallbackValue(const RewardDef(
+        level: 1, type: RewardType.coins, value: 1, description: ''));
+  });
+
   setUp(() {
+    mockUser = MockUserProvider();
+    when(() => mockUser.grantReward(any())).thenAnswer((_) async {});
     mockCharacter = MockCharacterProvider();
     mockLanguage = MockLanguageProvider();
     when(() => mockCharacter.currentCharacterType).thenReturn('cat');
@@ -41,6 +50,7 @@ void main() {
     await pumpApp(
       tester,
       const BossTrialScreen(),
+      userProvider: mockUser,
       characterProvider: mockCharacter,
       languageProvider: mockLanguage,
       vocabProvider: VocabProvider(),
@@ -329,6 +339,55 @@ void main() {
         reason: 'a level is its one opening, no Spells round');
     expect(find.textContaining('at level 5 it is beaten for good'),
         findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  /// Catches the shouted word until the level is won and the results show.
+  Future<void> winTheLevel(WidgetTester tester) async {
+    for (var hits = 0; hits < 60; hits++) {
+      if (find.text('IT GOT AWAY!').evaluate().isNotEmpty) break;
+      await waitForRubble(tester);
+      await tester.tap(find.text(shouted().single.meaning));
+      await tester.pump();
+      for (var i = 0; i < 320; i++) {
+        await tester.pump(const Duration(milliseconds: 16));
+        if (find.text('IT GOT AWAY!').evaluate().isNotEmpty) break;
+      }
+    }
+    expect(find.text('IT GOT AWAY!'), findsOneWidget);
+    // The payout is a few microtasks behind the results screen.
+    await tester.pump();
+    await tester.pump();
+  }
+
+  testWidgets('the first clear of a level pays, and says so', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    await winTheLevel(tester);
+
+    expect(find.text('FIRST CLEAR'), findsOneWidget);
+    expect(find.text('+15 coins · Apple'), findsOneWidget);
+    final paid = verify(() => mockUser.grantReward(captureAny())).captured;
+    expect(paid.map((r) => (r as RewardDef).type),
+        [RewardType.coins, RewardType.item]);
+    expect((paid.first as RewardDef).value, 15);
+    expect((paid.last as RewardDef).itemId, 'apple');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('clearing the same level again pays nothing', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    await winTheLevel(tester);
+    expect(find.text('FIRST CLEAR'), findsOneWidget);
+
+    await tester.tap(find.text('RUN IT AGAIN'));
+    await tester.pump();
+    await winTheLevel(tester);
+
+    expect(find.text('FIRST CLEAR'), findsNothing);
+    // Two rewards for the first clear, and none for the second.
+    verify(() => mockUser.grantReward(any())).called(2);
     expect(tester.takeException(), isNull);
   });
 

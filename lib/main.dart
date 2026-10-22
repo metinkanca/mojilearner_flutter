@@ -12,6 +12,7 @@ import 'providers/daily_reward_provider.dart';
 import 'providers/language_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/chat_provider.dart';
+import 'providers/boss_progress_provider.dart';
 import 'providers/premium_provider.dart';
 import 'providers/quiz_provider.dart';
 import 'providers/mistakes_provider.dart';
@@ -109,6 +110,8 @@ Future<void> main() async {
         },
       ),
       ChangeNotifierProvider(create: (_) => ScenarioProvider()..load()),
+      // Which boss levels have been cleared, so each pays once.
+      ChangeNotifierProvider(create: (_) => BossProgressProvider()..load()),
       ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
       // Which per-page tours have already been offered. Eager, like
       // settings: the first screen asks about its tour on the first

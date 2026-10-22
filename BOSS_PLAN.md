@@ -38,8 +38,15 @@ what the code says today, and the decisions still open. It supersedes the
   scratchpad. **None of the boss code is in git** (it is all untracked), so
   committing it is the only real undo.
 
-**Next:** first-clear rewards, resume-on-close, revive ad, the generated
-content, per-attempt layout shuffling, the toy chest.
+**Built 2026-10-22, second pass:** first-clear rewards. The first clear of a
+level pays and a repeat pays nothing: 15 coins and one care item for an
+opening, 100 coins plus medicine and a pizza slice for a finale
+(`BossRewards`, `BossProgressProvider`, results screen). The clears are stored
+under `boss_cleared`, which cloud sync carries with the rest of the prefs. The
+economy test counts them.
+
+**Next:** resume-on-close, revive ad, the generated content, per-attempt
+layout shuffling, the toy chest.
 
 ## Decided 2026-10-22 (the owner's answers to the questions below)
 
@@ -97,9 +104,10 @@ A 100-coin finale is about five days of casual earning and a third of a pet.
 Decided (owner, 2026-10-22):
 - **First clear of a stage pays; repeat clears pay nothing.** Openings 15
   coins and one food or medicine item; each finale 100 coins and a few items.
-  All six bosses once: about 960 coins across the 30 levels, one-off. Roughly
-  3% of the purchasable catalogue and about $9 of coin-pack value spread over
-  months, so it is bounded.
+  All six bosses once: 960 coins across the 30 levels, one-off. About 6.5% of
+  the catalogue the economy model counts (it was first guessed at 3%; the test
+  holds it under 8%) and about $9 of coin-pack value spread over months, so
+  it is bounded.
 - **Pay on a clear, not on the grade.** A grade bonus would reward proficiency,
   which the economy deliberately doesn't (`MONETISATION.md`, "reward activity,
   not proficiency"); difficulty already adapts to the player, so a clear means
