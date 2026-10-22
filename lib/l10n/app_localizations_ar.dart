@@ -36,17 +36,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get designMojiBtn => 'صمم موجي الخاص بك';
 
   @override
-  String get quizMode => 'اختبار';
-
-  @override
   String get quizDesc => 'اختبر معرفتك باختبارات استرجاع نشطة.';
 
   @override
-  String get scenarios => 'السيناريوهات';
+  String get scenarios => 'المدينة';
 
   @override
   String get scenariosDesc =>
       'تدرّب على محادثات واقعية مثل طلب القهوة أو مقابلات العمل.';
+
+  @override
+  String get townSchool => 'المدرسة';
+
+  @override
+  String get townTab => 'المدينة';
 
   @override
   String get profile => 'الملف الشخصي';
@@ -116,22 +119,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get startNewConversation => 'ابدأ محادثة جديدة';
-
-  @override
-  String get blankChat => 'محادثة فارغة';
-
-  @override
-  String get blankChatDesc => 'ابدأ محادثة جديدة بدون سياق';
-
-  @override
-  String get roleplayScenario => 'سيناريو تقمّص أدوار';
-
-  @override
-  String get roleplayScenarioDesc =>
-      'تدرّب على مواقف محددة مثل طلب القهوة أو مقابلة عمل';
-
-  @override
-  String get chooseChatType => 'اختر نوع المحادثة';
 
   @override
   String get cancel => 'إلغاء';
@@ -214,9 +201,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get drills => 'الأخطاء';
 
   @override
-  String get typeHere => 'اكتب هنا...';
-
-  @override
   String get shopTitle => 'المتجر';
 
   @override
@@ -280,9 +264,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get come_back_tomorrow => 'Come back tomorrow!';
-
-  @override
-  String get streak_broken => 'Welcome back! Starting fresh';
 
   @override
   String get keep_going => 'Keep it going!';
@@ -373,10 +354,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shopItemAppleDescription => 'وجبة خفيفة صحية.';
 
   @override
-  String get shopItemCroissantName => 'كرواسون';
+  String get shopItemDonutName => 'دونات';
 
   @override
-  String get shopItemCroissantDescription => 'لذة زبدية.';
+  String get shopItemDonutDescription => 'حلوة ولزجة.';
 
   @override
   String get shopItemPizzaName => 'شريحة بيتزا';
@@ -455,6 +436,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reviewVocabularyPrompt => 'ما معنى هذا؟';
 
   @override
+  String get sceneryTitle => 'المناظر';
+
+  @override
+  String get shopItemBgMeadowName => 'المرج';
+
+  @override
+  String get sceneInUse => 'قيد الاستخدام';
+
+  @override
   String get shopItemBgBlueName => 'أزرق المحيط';
 
   @override
@@ -489,21 +479,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'أنت';
-
-  @override
-  String get mojiSleepReconnect =>
-      'ززز... موجي يغفو بينما يعيد رابط اللغة الاتصال. حاول مرة أخرى قريبًا.';
-
-  @override
   String get mojiSleepNight => 'ششش... موجي نائم. اضغط على موجي لإيقاظه.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'موجي يغفو... جارٍ إعادة اتصال رابط اللغة';
-
-  @override
-  String get mojiSleepHintNight => 'موجي نائم... اضغط للإيقاظ';
 
   @override
   String get mojiWakeSuccess => 'تثاؤب... موجي مستيقظ الآن! هيا نتدرّب!';
@@ -512,13 +488,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'مستيقظ لمدة $minutes د';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'موجي يغفو بينما يعيد رابط اللغة الاتصال.';
-
-  @override
-  String get mojiSleepReasonNight => 'موجي نائم. اضغط للإيقاظ';
 
   @override
   String get levelsScreenTitle => 'المستويات';
@@ -587,17 +556,89 @@ class AppLocalizationsAr extends AppLocalizations {
   String get characterBird => 'طائر';
 
   @override
+  String get characterRabbit => 'أرنب';
+
+  @override
+  String get characterHamster => 'هامستر';
+
+  @override
+  String get characterParrot => 'ببغاء';
+
+  @override
+  String get characterFox => 'ثعلب';
+
+  @override
+  String get characterRaccoon => 'راكون';
+
+  @override
+  String get characterRedPanda => 'باندا حمراء';
+
+  @override
+  String get characterSkunk => 'ظربان';
+
+  @override
+  String get characterOtter => 'قضاعة';
+
+  @override
+  String get characterBeaver => 'قندس';
+
+  @override
+  String get characterSquirrel => 'سنجاب';
+
+  @override
+  String get characterChinchilla => 'شينشيلا';
+
+  @override
+  String get characterMouse => 'فأر';
+
+  @override
+  String get characterHedgehog => 'قنفذ';
+
+  @override
+  String get characterBat => 'خفاش';
+
+  @override
+  String get characterFennec => 'فنك';
+
+  @override
+  String get characterKoala => 'كوالا';
+
+  @override
+  String get characterWombat => 'ومبت';
+
+  @override
+  String get characterPanda => 'باندا';
+
+  @override
+  String get characterSloth => 'كسلان';
+
+  @override
+  String get characterCapybara => 'كابيبارا';
+
+  @override
+  String get characterPiglet => 'خنزير صغير';
+
+  @override
+  String get characterSeal => 'فقمة';
+
+  @override
+  String get characterPenguin => 'بطريق';
+
+  @override
+  String get characterFrog => 'ضفدع';
+
+  @override
+  String get characterAxolotl => 'أكسولوتل';
+
+  @override
+  String get characterGecko => 'أبو بريص';
+
+  @override
+  String get characterChameleon => 'حرباء';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... موجي يغفو ريثما يُعاد الاتصال اللغوي. حاول مرة أخرى قريبًا.';
-
-  @override
-  String get mojiDozingReconnect => 'موجي يغفو ريثما يُعاد الاتصال اللغوي.';
-
-  @override
-  String get mojiSleepingTapWake => 'موجي نائم. اضغط لإيقاظه.';
-
-  @override
-  String get mojiAwakeReady => 'موجي مستيقظ وجاهز!';
 
   @override
   String get wardrobeTitle => 'خزانة الملابس';
@@ -616,6 +657,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get eyeColor => 'لون العينين';
+
+  @override
+  String get beakColor => 'لون المنقار';
 
   @override
   String get eyeStyleSolid => 'موحّد';
@@ -872,6 +916,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get carePlayCooldown => 'اكتفى موجي من الملاطفة الآن.';
 
   @override
+  String get playCatch => 'العب بالكرة';
+
+  @override
+  String get playCatchAgain => 'العب مرة أخرى';
+
+  @override
+  String get playToyChest => 'صندوق الألعاب';
+
+  @override
+  String get playBubbleBath => 'حمّام الفقاعات';
+
+  @override
+  String get playPounce => 'انقضاض على الخُلد';
+
+  @override
+  String get playPondHop => 'القفز في البركة';
+
+  @override
+  String get playFetchWords => 'أحضر الكلمات';
+
+  @override
   String get careClose => 'إغلاق';
 
   @override
@@ -891,9 +956,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get careDragToFeed => 'اسحبه إلى موجي لإطعامه';
 
   @override
-  String get bondLabel => 'الرابط';
-
-  @override
   String get bondStageCurious => 'فضولي';
 
   @override
@@ -909,18 +971,91 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bondStageInseparable => 'لا ينفصلان';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points حتى $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'واصل التعلّم لتقتربا أكثر';
-
-  @override
   String get bondMissesYou => 'موجي يفتقدك';
 
   @override
   String get bondLonely => 'موجي ينتظرك منذ فترة';
+
+  @override
+  String get aiLimitQuizTitle => 'انتهت اختبارات اليوم بالذكاء الاصطناعي';
+
+  @override
+  String get aiLimitMessageTitle => 'انتهت رسائل اليوم بالذكاء الاصطناعي';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '$used من $total مستخدم اليوم';
+  }
+
+  @override
+  String get aiLimitResets => 'يعود رصيدك غدًا.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'المراجعة لا تحتاج إلى المعلم — بطاقاتك المستحقة موجودة دائمًا.';
+
+  @override
+  String get aiLimitQuizOpen => 'الاختبارات المبنية على كلماتك ما زالت متاحة.';
+
+  @override
+  String get aiLimitWatchAd => 'شاهد إعلانًا للحصول على واحد إضافي';
+
+  @override
+  String get aiLimitGoPlus => 'احصل على Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'مجاني';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'اختبارات ذكاء اصطناعي يوميًا';
+
+  @override
+  String get premiumRowMessages => 'رسائل ذكاء اصطناعي يوميًا';
+
+  @override
+  String get premiumRowAds => 'الإعلانات البينية';
+
+  @override
+  String get premiumValueShown => 'تظهر';
+
+  @override
+  String get premiumValueNone => 'لا شيء';
+
+  @override
+  String get premiumRowRollover => 'الاختبارات غير المستخدمة';
+
+  @override
+  String get premiumValueExpire => 'تنتهي';
+
+  @override
+  String get premiumValueRollOver => 'تُرَحَّل';
+
+  @override
+  String get premiumRowPetStats => 'حالة الحيوان';
+
+  @override
+  String get premiumValueDecay => 'تتراجع';
+
+  @override
+  String get premiumValueDecaySlower => 'تتراجع ببطء';
+
+  @override
+  String get premiumComingSoon => 'الاشتراكات ليست متاحة بعد.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus مُفعّل.';
+
+  @override
+  String get premiumRestore => 'استعادة عملية شراء';
+
+  @override
+  String get premiumRestoreDone => 'لا يوجد ما يمكن استعادته على هذا الحساب.';
+
+  @override
+  String get premiumPurchasePending => 'جارٍ الإنهاء مع المتجر…';
 
   @override
   String get categoryStyle => 'الأناقة';
@@ -1078,18 +1213,340 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'في أي عام وُلدت؟';
-
-  @override
-  String get onboardingBirthYearHint => 'السنة';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'يُستخدم هذا فقط لتحديد الإعلانات المناسبة لك.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'يرجى إدخال سنة صحيحة';
-
-  @override
   String get privacyRedactedNotice => 'تم إخفاء البيانات الشخصية قبل الإرسال.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'السؤال $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'جارٍ التحضير...';
+
+  @override
+  String get quizPickAnswer => 'اختر الإجابة الصحيحة';
+
+  @override
+  String get quizWellDone => 'أحسنت!';
+
+  @override
+  String get quizEncouragement => 'أنت تستطيع!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'سعيد بلقائك يا $name! هيا نتعلم معًا.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'جولة سريعة؟';
+
+  @override
+  String get tutorialWatch => 'أرِني';
+
+  @override
+  String get tutorialSkip => 'تخطٍّ';
+
+  @override
+  String get tutorialNext => 'التالي';
+
+  @override
+  String get tutorialBack => 'رجوع';
+
+  @override
+  String get tutorialDone => 'تم';
+
+  @override
+  String get tutorialReplay => 'إعادة عرض الجولات';
+
+  @override
+  String get tutorialOfferHome => 'هل تريد جولة سريعة في الشاشة الرئيسية؟';
+
+  @override
+  String get tutorialOfferQuiz => 'أول اختبار لك. جولة سريعة؟';
+
+  @override
+  String get tutorialOfferChat => 'أول محادثة لك. جولة سريعة؟';
+
+  @override
+  String get tutorialOfferShop => 'أول زيارة لك للمتجر. جولة سريعة؟';
+
+  @override
+  String get tutorialOfferProfile => 'هل تريد جولة سريعة في ملفك الشخصي؟';
+
+  @override
+  String get tutorialOfferReview => 'أول جلسة مراجعة لك. جولة سريعة؟';
+
+  @override
+  String get tutorialHomePet =>
+      'هذا موجي. المسه، أو مرِّر إصبعك على رأسه لتربت عليه.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'مستواك ونقاط خبرتك. المس لترى ما تفتحه المستويات التالية.';
+
+  @override
+  String get tutorialHomeFeed => 'طعامك. اختر وجبة خفيفة ثم اسحبها إلى موجي.';
+
+  @override
+  String get tutorialHomeCare =>
+      'يظهر حين يحتاج موجي إلى شيء. المس لتطمئن عليه.';
+
+  @override
+  String get tutorialHomeReview =>
+      'الدراسة: راجع الكلمات المستحقة وتأمّل في أخطائك.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'الإعدادات: خط البكسل، التذكيرات، وإعادة عرض هذه الجولات.';
+
+  @override
+  String get tutorialNavTown =>
+      'المدينة: ادخل أي مبنى لتتدرّب على محادثة، أو زُر المدرسة لإجراء اختبار.';
+
+  @override
+  String get tutorialNavChat =>
+      'المحادثات: أحاديث أطول وسيناريوهات تمثيل أدوار.';
+
+  @override
+  String get tutorialNavShop =>
+      'المتجر: أنفق العملات على الطعام والأزياء وعوالم جديدة.';
+
+  @override
+  String get tutorialNavProfile => 'الملف الشخصي: إحصاءاتك ولغاتك وحسابك.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'مستواك، وزر الإيقاف المؤقت إن احتجت أن تتوقف.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'السؤال. الشارة أعلاه تقول ما الذي يُختبر.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'اختر إجابة. تُحفظ الإجابات الخاطئة لتراجعها لاحقًا.';
+
+  @override
+  String get tutorialQuizContinue => 'تابع بعد أن تجيب.';
+
+  @override
+  String get tutorialChatMenu =>
+      'محادثاتك السابقة وسيناريوهات الأدوار خلف هذا الزر.';
+
+  @override
+  String get tutorialChatMessages =>
+      'محادثتكما. تُصحَّح الأخطاء برفق أثناء الحديث.';
+
+  @override
+  String get tutorialChatInput => 'اكتب هنا. لا تقلق بشأن الكمال.';
+
+  @override
+  String get tutorialShopCoins => 'عملاتك. تكسبها بالتدرب وبالعناية بموجي.';
+
+  @override
+  String get tutorialShopTabs => 'صفِّ حسب ما تبحث عنه: طعام أو زينة أو أزياء.';
+
+  @override
+  String get tutorialShopGrid =>
+      'المس أي شيء لشرائه. الطعام يُستهلك، وما عداه يبقى لك.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'نفدت العملات؟ شاهد مقطعًا قصيرًا لتعبئتها.';
+
+  @override
+  String get tutorialProfileAvatar => 'المس موجي لتغيير مظهره وخزانة ملابسه.';
+
+  @override
+  String get tutorialProfileStats => 'مستواك، وكم بقي على المستوى التالي.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'عُد كل يوم لتنال مكافأة. السلاسل الأطول تعطي أكثر.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'ما تتحدث به وما تتعلمه. يمكنك تغيير أي منهما في أي وقت.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'اربط حسابًا كي يبقى موجي معك على هاتف جديد.';
+
+  @override
+  String get tutorialReviewCard => 'حاول تذكر الإجابة، ثم المس البطاقة للتحقق.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'أظهر الإجابة ثم قل كيف كان أداؤك. البطاقات الصعبة تعود أسرع.';
+
+  @override
+  String get tutorialReviewCount => 'كم بطاقة بقيت في هذه الجلسة.';
+
+  @override
+  String get seasonPassNotOnSale => 'هذا التذكرة غير متاحة للشراء بعد.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'شراء $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'استلام ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'جارٍ الاستلام…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'تم الاستلام: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'المستوى $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count قطع · $xp خبرة';
+  }
+
+  @override
+  String get seasonPassComplete => 'اكتمل المسار.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp خبرة حتى القطعة التالية';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp خبرة';
+  }
+
+  @override
+  String get seasonPassReady => 'جاهز';
+
+  @override
+  String get seasonPassTierClaimed => 'تم الاستلام';
+
+  @override
+  String get seasonPassTryOn => 'جرّبها';
+
+  @override
+  String get sceneAirfieldName => 'المغادرات';
+
+  @override
+  String get sceneCozyRoomName => 'الغرفة الدافئة';
+
+  @override
+  String get sceneEnchantedMeadowName => 'المرج المسحور';
+
+  @override
+  String get sceneMushroomGladeName => 'فسحة الفطر';
+
+  @override
+  String get scenePumpkinPatchName => 'حقل القرع';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'ملكُك. غَيِّر العالم متى شئت من خزانة الملابس.';
+
+  @override
+  String get seasonPassPreviewOwned => 'لك. ارتدها من الخزانة.';
+
+  @override
+  String get seasonPassPreviewLocked => 'ليست لك بعد — هذه مجرد نظرة.';
+
+  @override
+  String get seasonPassPromise =>
+      'تُحسب المستويات بالخبرة التي تكسبها بعد شراء التذكرة، لذا لا يكلفك الشراء المتأخر شيئًا. لا شيء هنا ينتهي: المستوى الذي بلغته يبقى لك، والذي لم تبلغه يبقى في انتظارك.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'بانتظار الاستلام: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'تُكتسب بالدراسة';
+
+  @override
+  String get accessoryBandanaName => 'بندانة الشروق';
+
+  @override
+  String get accessoryBandanaCloudName => 'بندانة السحاب';
+
+  @override
+  String get accessoryScarfDuskName => 'وشاح الغسق';
+
+  @override
+  String get accessoryGogglesName => 'نظارات الطيران';
+
+  @override
+  String get accessoryGogglesBrassName => 'نظارات نحاسية';
+
+  @override
+  String get accessoryBeanieDuskName => 'قبعة الغسق';
+
+  @override
+  String get accessoryFlightCapName => 'قبعة الطيران';
+
+  @override
+  String get accessoryFlightCapCloudName => 'قبعة طيران سحابية';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'قبعة رعاة البقر الفحمية';
+
+  @override
+  String get accessoryFlightScarfName => 'وشاح الريح';
+
+  @override
+  String get accessoryPumpkinWitchName => 'قبعة ساحرة بالقرع';
+
+  @override
+  String get accessoryDevilBandName => 'عصابة رأس بقرون الشيطان';
+
+  @override
+  String get accessoryGhostBandanaName => 'بندانة الشبح';
+
+  @override
+  String get accessoryBatChokerName => 'طوق الخفاش';
+
+  @override
+  String get shopSectionTopUp => 'شحن';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'تذكرة الموسم';
+
+  @override
+  String get shopSectionItems => 'العناصر';
+
+  @override
+  String get topUpTitle => 'شحن';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins عملة';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% عملات';
+  }
+
+  @override
+  String get topUpBestValue => 'أفضل قيمة';
+
+  @override
+  String get topUpNotOpen => 'حزم العملات ليست متاحة بعد.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'تمت إضافة $coins عملة.';
+  }
 }

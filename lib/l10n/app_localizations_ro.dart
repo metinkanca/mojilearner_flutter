@@ -15,7 +15,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get iSpeak => 'Vorbesc';
 
   @override
-  String get imLearning => 'ÃnvÄƒÈ›';
+  String get imLearning => 'Învăț';
 
   @override
   String get currentSelection => 'Selecția curentă:';
@@ -36,16 +36,19 @@ class AppLocalizationsRo extends AppLocalizations {
   String get designMojiBtn => 'Creează Moji';
 
   @override
-  String get quizMode => 'Quiz';
-
-  @override
   String get quizDesc => 'Testează-ți cunoștințele.';
 
   @override
-  String get scenarios => 'Scenarii';
+  String get scenarios => 'Oraș';
 
   @override
   String get scenariosDesc => 'Exersează conversații reale.';
+
+  @override
+  String get townSchool => 'Școală';
+
+  @override
+  String get townTab => 'Oraș';
 
   @override
   String get profile => 'Profil';
@@ -90,7 +93,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get jobInterview => 'Interviu de angajare';
 
   @override
-  String get askingDirections => 'ÃntreabÄƒ direcÈ›ii';
+  String get askingDirections => 'Întreabă direcții';
 
   @override
   String get atTheDoctor => 'La doctor';
@@ -114,22 +117,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get noChats => 'Niciun chat încă';
 
   @override
-  String get startNewConversation => 'Ãncepe o conversaÈ›ie nouÄƒ';
-
-  @override
-  String get blankChat => 'Chat gol';
-
-  @override
-  String get blankChatDesc => 'Ãncepe fÄƒrÄƒ context';
-
-  @override
-  String get roleplayScenario => 'Scenariu de rol';
-
-  @override
-  String get roleplayScenarioDesc => 'Exersează situații specifice';
-
-  @override
-  String get chooseChatType => 'Alege tipul chatului';
+  String get startNewConversation => 'Începe o conversație nouă';
 
   @override
   String get cancel => 'Anulează';
@@ -173,7 +161,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get yourMistakes => 'Greșelile tale';
 
   @override
-  String get learnFromWrong => 'ÃnvaÈ›Äƒ din greÈ™eli';
+  String get learnFromWrong => 'Învață din greșeli';
 
   @override
   String get all => 'Toate';
@@ -210,9 +198,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get drills => 'Greșeli';
-
-  @override
-  String get typeHere => 'Tastați aici...';
 
   @override
   String get shopTitle => 'Magazin';
@@ -278,9 +263,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get come_back_tomorrow => 'Revino mâine!';
-
-  @override
-  String get streak_broken => 'Bine ai revenit! O luăm de la capăt';
 
   @override
   String get keep_going => 'Continuă tot așa!';
@@ -373,10 +355,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get shopItemAppleDescription => 'O gustare sănătoasă.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Gogoașă';
 
   @override
-  String get shopItemCroissantDescription => 'Bunătate unturoasă.';
+  String get shopItemDonutDescription => 'Dulce și lipicioasă.';
 
   @override
   String get shopItemPizzaName => 'Felie de pizza';
@@ -455,6 +437,15 @@ class AppLocalizationsRo extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Ce înseamnă asta?';
 
   @override
+  String get sceneryTitle => 'Decor';
+
+  @override
+  String get shopItemBgMeadowName => 'Pajiște';
+
+  @override
+  String get sceneInUse => 'În uz';
+
+  @override
   String get shopItemBgBlueName => 'Albastru Ocean';
 
   @override
@@ -489,22 +480,8 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Tu';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji moțăie în timp ce legătura de limbă se reconectează. Încearcă din nou în curând.';
-
-  @override
   String get mojiSleepNight =>
       'Șșș... Moji doarme. Atinge-l pe Moji ca să-l trezești.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI MOȚĂIE... LEGĂTURA DE LIMBĂ SE RECONECTEAZĂ';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI DOARME... ATINGE PENTRU TREZIRE';
 
   @override
   String get mojiWakeSuccess => 'Căscat... Moji este treaz acum! Să exersăm!';
@@ -513,13 +490,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Treaz încă $minutes min';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji moțăie în timp ce legătura de limbă se reconectează.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji doarme. Atinge pentru trezire.';
 
   @override
   String get levelsScreenTitle => 'Niveluri';
@@ -588,18 +558,89 @@ class AppLocalizationsRo extends AppLocalizations {
   String get characterBird => 'Pasăre';
 
   @override
+  String get characterRabbit => 'Iepure';
+
+  @override
+  String get characterHamster => 'Hamster';
+
+  @override
+  String get characterParrot => 'Papagal';
+
+  @override
+  String get characterFox => 'Vulpe';
+
+  @override
+  String get characterRaccoon => 'Raton';
+
+  @override
+  String get characterRedPanda => 'Panda roșu';
+
+  @override
+  String get characterSkunk => 'Sconcs';
+
+  @override
+  String get characterOtter => 'Vidră';
+
+  @override
+  String get characterBeaver => 'Castor';
+
+  @override
+  String get characterSquirrel => 'Veveriță';
+
+  @override
+  String get characterChinchilla => 'Cincilă';
+
+  @override
+  String get characterMouse => 'Șoarece';
+
+  @override
+  String get characterHedgehog => 'Arici';
+
+  @override
+  String get characterBat => 'Liliac';
+
+  @override
+  String get characterFennec => 'Fenec';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Vombat';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Leneș';
+
+  @override
+  String get characterCapybara => 'Capibara';
+
+  @override
+  String get characterPiglet => 'Purceluș';
+
+  @override
+  String get characterSeal => 'Focă';
+
+  @override
+  String get characterPenguin => 'Pinguin';
+
+  @override
+  String get characterFrog => 'Broască';
+
+  @override
+  String get characterAxolotl => 'Axolotl';
+
+  @override
+  String get characterGecko => 'Gecko';
+
+  @override
+  String get characterChameleon => 'Cameleon';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji ațipește cât timp conexiunea lingvistică se restabilește. Încearcă din nou în curând.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji ațipește cât timp conexiunea lingvistică se restabilește.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji doarme. Atinge pentru a-l trezi.';
-
-  @override
-  String get mojiAwakeReady => 'Moji este treaz și pregătit!';
 
   @override
   String get wardrobeTitle => 'Șifonier';
@@ -618,6 +659,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get eyeColor => 'Culoarea ochilor';
+
+  @override
+  String get beakColor => 'Culoarea ciocului';
 
   @override
   String get eyeStyleSolid => 'Uniformă';
@@ -873,6 +917,27 @@ class AppLocalizationsRo extends AppLocalizations {
   String get carePlayCooldown => 'Moji a primit destule alintări deocamdată.';
 
   @override
+  String get playCatch => 'Joacă-te cu mingea';
+
+  @override
+  String get playCatchAgain => 'Joacă din nou';
+
+  @override
+  String get playToyChest => 'Cufărul cu jucării';
+
+  @override
+  String get playBubbleBath => 'Baie cu spumă';
+
+  @override
+  String get playPounce => 'Prinde cârtița';
+
+  @override
+  String get playPondHop => 'Sărituri pe iaz';
+
+  @override
+  String get playFetchWords => 'Adu cuvintele';
+
+  @override
   String get careClose => 'Închide';
 
   @override
@@ -892,9 +957,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get careDragToFeed => 'Trage peste Moji ca să-l hrănești';
 
   @override
-  String get bondLabel => 'LEGĂTURĂ';
-
-  @override
   String get bondStageCurious => 'Curios';
 
   @override
@@ -910,18 +972,93 @@ class AppLocalizationsRo extends AppLocalizations {
   String get bondStageInseparable => 'Nedespărțiți';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points până la $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Continuă să înveți ca să vă apropiați';
-
-  @override
   String get bondMissesYou => 'Lui Moji îi este dor de tine';
 
   @override
   String get bondLonely => 'Moji te așteaptă de mult';
+
+  @override
+  String get aiLimitQuizTitle => 'Testele AI de azi s-au terminat';
+
+  @override
+  String get aiLimitMessageTitle => 'Mesajele AI de azi s-au terminat';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '$used din $total folosite azi';
+  }
+
+  @override
+  String get aiLimitResets => 'Limita ta revine mâine.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Recapitularea nu are nevoie de tutore — cartonașele tale sunt mereu acolo.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Testele construite din propriile tale cuvinte sunt încă acolo.';
+
+  @override
+  String get aiLimitWatchAd => 'Vezi o reclamă pentru încă unul';
+
+  @override
+  String get aiLimitGoPlus => 'Obține Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Gratuit';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'Teste AI pe zi';
+
+  @override
+  String get premiumRowMessages => 'Mesaje AI pe zi';
+
+  @override
+  String get premiumRowAds => 'Reclame interstițiale';
+
+  @override
+  String get premiumValueShown => 'Afișate';
+
+  @override
+  String get premiumValueNone => 'Niciuna';
+
+  @override
+  String get premiumRowRollover => 'Chestionare nefolosite';
+
+  @override
+  String get premiumValueExpire => 'Expiră';
+
+  @override
+  String get premiumValueRollOver => 'Se reportează';
+
+  @override
+  String get premiumRowPetStats => 'Starea animăluțului';
+
+  @override
+  String get premiumValueDecay => 'Scade';
+
+  @override
+  String get premiumValueDecaySlower => 'Scade mai lent';
+
+  @override
+  String get premiumComingSoon => 'Abonamentele nu sunt încă disponibile.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus este activ.';
+
+  @override
+  String get premiumRestore => 'Restaurează o achiziție';
+
+  @override
+  String get premiumRestoreDone =>
+      'Nu există nimic de restaurat pe acest cont.';
+
+  @override
+  String get premiumPurchasePending => 'Se finalizează în magazin…';
 
   @override
   String get categoryStyle => 'Stil';
@@ -1082,19 +1219,351 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'În ce an te-ai născut?';
-
-  @override
-  String get onboardingBirthYearHint => 'An';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Este folosit doar pentru a alege reclame potrivite.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Introdu un an valid';
-
-  @override
   String get privacyRedactedNotice =>
       'Datele personale au fost ascunse înainte de trimitere.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'ÎNTREBAREA $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'SE PREGĂTEȘTE...';
+
+  @override
+  String get quizPickAnswer => 'Alege răspunsul corect';
+
+  @override
+  String get quizWellDone => 'Bravo!';
+
+  @override
+  String get quizEncouragement => 'Poți reuși!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Mă bucur să te cunosc, $name! Hai să învățăm împreună.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'UN TUR?';
+
+  @override
+  String get tutorialWatch => 'ARATĂ-MI';
+
+  @override
+  String get tutorialSkip => 'SARI PESTE';
+
+  @override
+  String get tutorialNext => 'ÎNAINTE';
+
+  @override
+  String get tutorialBack => 'ÎNAPOI';
+
+  @override
+  String get tutorialDone => 'GATA';
+
+  @override
+  String get tutorialReplay => 'Reia ghidurile';
+
+  @override
+  String get tutorialOfferHome => 'Vrei un tur rapid al ecranului principal?';
+
+  @override
+  String get tutorialOfferQuiz => 'Primul tău test. Un tur rapid?';
+
+  @override
+  String get tutorialOfferChat => 'Prima ta conversație. Un tur rapid?';
+
+  @override
+  String get tutorialOfferShop => 'Prima ta vizită în magazin. Un tur rapid?';
+
+  @override
+  String get tutorialOfferProfile => 'Vrei un tur rapid al profilului tău?';
+
+  @override
+  String get tutorialOfferReview => 'Prima ta recapitulare. Un tur rapid?';
+
+  @override
+  String get tutorialHomePet =>
+      'El este Moji. Atinge-l sau trage cu degetul peste capul lui ca să-l mângâi.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Nivelul și XP-ul tău. Atinge ca să vezi ce deblochează nivelurile următoare.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Mâncarea ta. Alege o gustare și trage-o peste Moji.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Apare când Moji are nevoie de ceva. Atinge ca să vezi ce e.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Studiu: repetă cuvintele scadente și uită-te din nou la greșelile tale.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Setări: scriere cu pixeli, memento-uri și reluarea acestor ghiduri.';
+
+  @override
+  String get tutorialNavTown =>
+      'Oraș: intră într-o clădire ca să exersezi o conversație sau treci pe la școală pentru un test.';
+
+  @override
+  String get tutorialNavChat =>
+      'Conversații: discuții mai lungi și scenarii de rol.';
+
+  @override
+  String get tutorialNavShop =>
+      'Magazin: cheltuie monede pe mâncare, stiluri și lumi noi.';
+
+  @override
+  String get tutorialNavProfile =>
+      'Profil: statisticile, limbile și contul tău.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Nivelul tău și butonul de pauză, dacă trebuie să te oprești.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Întrebarea. Eticheta de deasupra spune ce se testează.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Alege un răspuns. Cele greșite se salvează ca să le reiei mai târziu.';
+
+  @override
+  String get tutorialQuizContinue => 'Mergi mai departe după ce ai răspuns.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Conversațiile anterioare și scenariile de rol sunt în spatele acestui buton.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Conversația voastră. Greșelile sunt corectate blând pe parcurs.';
+
+  @override
+  String get tutorialChatInput =>
+      'Scrie aici. Nu-ți face griji să iasă perfect.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Monedele tale. Le câștigi exersând și având grijă de Moji.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Filtrează după ce cauți: mâncare, decor sau stil.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Atinge orice ca să cumperi. Mâncarea se consumă, restul rămâne al tău.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Nu mai ai monede? Vezi un clip scurt ca să te alimentezi.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Atinge-l pe Moji ca să-i schimbi înfățișarea și garderoba.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Nivelul tău și cât mai ai până la următorul.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Revino în fiecare zi pentru o recompensă. Seriile lungi plătesc mai bine.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Ce vorbești și ce înveți. Poți schimba oricare oricând.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Leagă un cont ca Moji să supraviețuiască unui telefon nou.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Încearcă să-ți amintești răspunsul, apoi atinge cartonașul ca să verifici.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Arată răspunsul și spune cum a mers. Cartonașele grele revin mai devreme.';
+
+  @override
+  String get tutorialReviewCount =>
+      'Câte cartonașe au mai rămas în această sesiune.';
+
+  @override
+  String get seasonPassNotOnSale => 'Acest pas nu este încă la vânzare.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Cumpără $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Revendică ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Se revendică…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Revendicate: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Nivel $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count piese · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Traseu finalizat.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP până la piesa următoare';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Gata';
+
+  @override
+  String get seasonPassTierClaimed => 'Revendicat';
+
+  @override
+  String get seasonPassTryOn => 'Probează-l';
+
+  @override
+  String get sceneAirfieldName => 'Plecări';
+
+  @override
+  String get sceneCozyRoomName => 'Cameră primitoare';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Pajiște fermecată';
+
+  @override
+  String get sceneMushroomGladeName => 'Poiana ciupercilor';
+
+  @override
+  String get scenePumpkinPatchName => 'Lanul de dovleci';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'E al tău. Schimbă lumea oricând din garderobă.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Este al tău. Pune-l în garderobă.';
+
+  @override
+  String get seasonPassPreviewLocked =>
+      'Încă nu e al tău — este doar o privire.';
+
+  @override
+  String get seasonPassPromise =>
+      'Nivelurile numără XP-ul câștigat după cumpărarea pasului, așa că nu pierzi nimic dacă îl cumperi târziu. Aici nimic nu expiră: un nivel atins rămâne atins, iar unul neatins te așteaptă.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'De revendicat: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Se câștigă învățând';
+
+  @override
+  String get accessoryBandanaName => 'Bandană de răsărit';
+
+  @override
+  String get accessoryBandanaCloudName => 'Bandană de nor';
+
+  @override
+  String get accessoryScarfDuskName => 'Fular de amurg';
+
+  @override
+  String get accessoryGogglesName => 'Ochelari de zbor';
+
+  @override
+  String get accessoryGogglesBrassName => 'Ochelari de alamă';
+
+  @override
+  String get accessoryBeanieDuskName => 'Căciulă de amurg';
+
+  @override
+  String get accessoryFlightCapName => 'Cască de aviator';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Cască de aviator nor';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Pălărie de cowboy antracit';
+
+  @override
+  String get accessoryFlightScarfName => 'Fular în vânt';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Pălărie de vrăjitoare cu dovleac';
+
+  @override
+  String get accessoryDevilBandName => 'Bentiță cu coarne de drac';
+
+  @override
+  String get accessoryGhostBandanaName => 'Bandană fantomă';
+
+  @override
+  String get accessoryBatChokerName => 'Choker de liliac';
+
+  @override
+  String get shopSectionTopUp => 'Reîncărcare';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Pas de sezon';
+
+  @override
+  String get shopSectionItems => 'Obiecte';
+
+  @override
+  String get topUpTitle => 'Reîncărcare';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins monede';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% monede';
+  }
+
+  @override
+  String get topUpBestValue => 'Cea mai bună ofertă';
+
+  @override
+  String get topUpNotOpen => 'Pachetele de monede nu sunt încă disponibile.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'S-au adăugat $coins monede.';
+  }
 }

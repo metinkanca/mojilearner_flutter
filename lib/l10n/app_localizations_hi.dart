@@ -36,16 +36,19 @@ class AppLocalizationsHi extends AppLocalizations {
   String get designMojiBtn => 'मोजी डिज़ाइन करें';
 
   @override
-  String get quizMode => 'क्विज़';
-
-  @override
   String get quizDesc => 'अपने ज्ञान का परीक्षण करें।';
 
   @override
-  String get scenarios => 'परिदृश्य';
+  String get scenarios => 'शहर';
 
   @override
   String get scenariosDesc => 'वास्तविक जीवन की बातचीत का अभ्यास करें।';
+
+  @override
+  String get townSchool => 'स्कूल';
+
+  @override
+  String get townTab => 'शहर';
 
   @override
   String get profile => 'प्रोफ़ाइल';
@@ -115,21 +118,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get startNewConversation => 'नई बातचीत शुरू करें';
-
-  @override
-  String get blankChat => 'खाली चैट';
-
-  @override
-  String get blankChatDesc => 'बिना संदर्भ के शुरू करें';
-
-  @override
-  String get roleplayScenario => 'रोलप्ले परिदृश्य';
-
-  @override
-  String get roleplayScenarioDesc => 'विशिष्ट स्थितियों का अभ्यास करें';
-
-  @override
-  String get chooseChatType => 'चैट प्रकार चुनें';
 
   @override
   String get cancel => 'रद्द करें';
@@ -212,9 +200,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get drills => 'गलतियाँ';
 
   @override
-  String get typeHere => 'यहाँ टाइप करें...';
-
-  @override
   String get shopTitle => 'दुकान';
 
   @override
@@ -280,9 +265,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get come_back_tomorrow => 'Come back tomorrow!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
-
-  @override
   String get keep_going => 'Keep it going!';
 
   @override
@@ -303,10 +285,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get continueBtn => 'जारी रखें';
 
   @override
-  String get howWouldYouRate => 'आप अपने स्तर की';
+  String get howWouldYouRate => 'अपने स्तर को';
 
   @override
-  String get yourLevel => 'रेटिंग कैसे देंगे?';
+  String get yourLevel => 'कैसे आँकेंगे?';
 
   @override
   String get beginner => 'शुरुआती';
@@ -330,10 +312,10 @@ class AppLocalizationsHi extends AppLocalizations {
       'मैं धाराप्रवाह या लगभग धाराप्रवाह हूँ। मैं जटिल विषयों पर चर्चा कर सकता हूँ।';
 
   @override
-  String get whichLanguage => 'कौन सी भाषा';
+  String get whichLanguage => 'आप कौन सी भाषा';
 
   @override
-  String get doYouWantToLearn => 'आप सीखना चाहते हैं?';
+  String get doYouWantToLearn => 'सीखना चाहते हैं?';
 
   @override
   String get changeAnytime => 'आप इसे कभी भी सेटिंग्स में बदल सकते हैं';
@@ -374,10 +356,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get shopItemAppleDescription => 'A healthy snack.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'डोनट';
 
   @override
-  String get shopItemCroissantDescription => 'Buttery goodness.';
+  String get shopItemDonutDescription => 'मीठा और चिपचिपा।';
 
   @override
   String get shopItemPizzaName => 'Pizza Slice';
@@ -456,6 +438,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reviewVocabularyPrompt => 'इसका क्या मतलब है?';
 
   @override
+  String get sceneryTitle => 'दृश्य';
+
+  @override
+  String get shopItemBgMeadowName => 'घास का मैदान';
+
+  @override
+  String get sceneInUse => 'उपयोग में';
+
+  @override
   String get shopItemBgBlueName => 'महासागर नीला';
 
   @override
@@ -490,20 +481,7 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'आप';
-
-  @override
-  String get mojiSleepReconnect =>
-      'जज... मज ऊघ रह ह जबक भष लक फर स जड रह ह कपय थड दर म फर कशश कर';
-
-  @override
   String get mojiSleepNight => 'शश... मज स रह ह मज क जगन क लए टप कर';
-
-  @override
-  String get mojiSleepHintReconnect => 'MOJI ऊघ रह ह... भष लक फर स जड रह ह';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI स रह ह... जगन क लए टप कर';
 
   @override
   String get mojiWakeSuccess => 'जभई... मज अब जग गय ह! चल अभयस कर!';
@@ -512,12 +490,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return '$minutes मिनट तक जागा';
   }
-
-  @override
-  String get mojiSleepReasonReconnect => 'मज ऊघ रह ह जबक भष लक फर स जड रह ह';
-
-  @override
-  String get mojiSleepReasonNight => 'मज स रह ह जगन क लए टप कर';
 
   @override
   String get levelsScreenTitle => 'स्तर';
@@ -586,18 +558,89 @@ class AppLocalizationsHi extends AppLocalizations {
   String get characterBird => 'पक्षी';
 
   @override
+  String get characterRabbit => 'खरगोश';
+
+  @override
+  String get characterHamster => 'हैम्स्टर';
+
+  @override
+  String get characterParrot => 'तोता';
+
+  @override
+  String get characterFox => 'लोमड़ी';
+
+  @override
+  String get characterRaccoon => 'रैकून';
+
+  @override
+  String get characterRedPanda => 'लाल पांडा';
+
+  @override
+  String get characterSkunk => 'स्कंक';
+
+  @override
+  String get characterOtter => 'ऊदबिलाव';
+
+  @override
+  String get characterBeaver => 'बीवर';
+
+  @override
+  String get characterSquirrel => 'गिलहरी';
+
+  @override
+  String get characterChinchilla => 'चिनचिला';
+
+  @override
+  String get characterMouse => 'चूहा';
+
+  @override
+  String get characterHedgehog => 'साही';
+
+  @override
+  String get characterBat => 'चमगादड़';
+
+  @override
+  String get characterFennec => 'फेनेक';
+
+  @override
+  String get characterKoala => 'कोआला';
+
+  @override
+  String get characterWombat => 'वॉम्बैट';
+
+  @override
+  String get characterPanda => 'पांडा';
+
+  @override
+  String get characterSloth => 'स्लॉथ';
+
+  @override
+  String get characterCapybara => 'कैपिबारा';
+
+  @override
+  String get characterPiglet => 'सुअर का बच्चा';
+
+  @override
+  String get characterSeal => 'सील';
+
+  @override
+  String get characterPenguin => 'पेंगुइन';
+
+  @override
+  String get characterFrog => 'मेंढक';
+
+  @override
+  String get characterAxolotl => 'एक्सोलोटल';
+
+  @override
+  String get characterGecko => 'छिपकली';
+
+  @override
+  String get characterChameleon => 'गिरगिट';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... भाषा कनेक्शन फिर से जुड़ने तक Moji ऊँघ रहा है। जल्द ही फिर कोशिश करें।';
-
-  @override
-  String get mojiDozingReconnect =>
-      'भाषा कनेक्शन फिर से जुड़ने तक Moji ऊँघ रहा है।';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji सो रहा है। जगाने के लिए टैप करें।';
-
-  @override
-  String get mojiAwakeReady => 'Moji जाग गया है और तैयार है!';
 
   @override
   String get wardrobeTitle => 'अलमारी';
@@ -616,6 +659,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get eyeColor => 'आंखों का रंग';
+
+  @override
+  String get beakColor => 'चोंच का रंग';
 
   @override
   String get eyeStyleSolid => 'एक रंग';
@@ -869,6 +915,27 @@ class AppLocalizationsHi extends AppLocalizations {
   String get carePlayCooldown => 'मोजी को अभी काफी दुलार मिल चुका है।';
 
   @override
+  String get playCatch => 'गेंद पकड़ो खेलें';
+
+  @override
+  String get playCatchAgain => 'फिर से खेलें';
+
+  @override
+  String get playToyChest => 'खिलौनों का संदूक';
+
+  @override
+  String get playBubbleBath => 'बुलबुलों वाला स्नान';
+
+  @override
+  String get playPounce => 'छछूंदर पर झपट्टा';
+
+  @override
+  String get playPondHop => 'तालाब में छलांग';
+
+  @override
+  String get playFetchWords => 'शब्द लाओ';
+
+  @override
   String get careClose => 'बंद करें';
 
   @override
@@ -888,9 +955,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get careDragToFeed => 'खिलाने के लिए मोजी पर खींचें';
 
   @override
-  String get bondLabel => 'बंधन';
-
-  @override
   String get bondStageCurious => 'जिज्ञासु';
 
   @override
@@ -906,18 +970,93 @@ class AppLocalizationsHi extends AppLocalizations {
   String get bondStageInseparable => 'अभिन्न';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$stage तक $points';
-  }
-
-  @override
-  String get bondKeepLearning => 'सीखते रहें, और करीब आएँ';
-
-  @override
   String get bondMissesYou => 'मोजी को आपकी याद आ रही है';
 
   @override
   String get bondLonely => 'मोजी काफ़ी समय से आपका इंतज़ार कर रहा है';
+
+  @override
+  String get aiLimitQuizTitle => 'आज के AI क्विज़ खत्म हो गए';
+
+  @override
+  String get aiLimitMessageTitle => 'आज के AI संदेश खत्म हो गए';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return 'आज $total में से $used उपयोग किए';
+  }
+
+  @override
+  String get aiLimitResets => 'आपकी सीमा कल वापस आएगी।';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'दोहराने के लिए ट्यूटर की ज़रूरत नहीं — आपके कार्ड हमेशा मौजूद हैं।';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'आपके अपने शब्दों से बने क्विज़ अब भी मौजूद हैं।';
+
+  @override
+  String get aiLimitWatchAd => 'एक और के लिए विज्ञापन देखें';
+
+  @override
+  String get aiLimitGoPlus => 'Mimikin Plus लें';
+
+  @override
+  String get premiumColumnFree => 'मुफ़्त';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'प्रतिदिन AI क्विज़';
+
+  @override
+  String get premiumRowMessages => 'प्रतिदिन AI संदेश';
+
+  @override
+  String get premiumRowAds => 'इंटरस्टीशियल विज्ञापन';
+
+  @override
+  String get premiumValueShown => 'दिखते हैं';
+
+  @override
+  String get premiumValueNone => 'कोई नहीं';
+
+  @override
+  String get premiumRowRollover => 'अप्रयुक्त क्विज़';
+
+  @override
+  String get premiumValueExpire => 'समाप्त हो जाते हैं';
+
+  @override
+  String get premiumValueRollOver => 'आगे बढ़ जाते हैं';
+
+  @override
+  String get premiumRowPetStats => 'पेट की स्थिति';
+
+  @override
+  String get premiumValueDecay => 'घटती है';
+
+  @override
+  String get premiumValueDecaySlower => 'धीरे घटती है';
+
+  @override
+  String get premiumComingSoon => 'सदस्यताएँ अभी उपलब्ध नहीं हैं।';
+
+  @override
+  String get premiumActive => 'Mimikin Plus सक्रिय है।';
+
+  @override
+  String get premiumRestore => 'खरीद पुनर्स्थापित करें';
+
+  @override
+  String get premiumRestoreDone =>
+      'इस खाते पर पुनर्स्थापित करने के लिए कुछ नहीं है।';
+
+  @override
+  String get premiumPurchasePending => 'स्टोर के साथ पूरा किया जा रहा है…';
 
   @override
   String get categoryStyle => 'स्टाइल';
@@ -1075,18 +1214,347 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'आपका जन्म किस वर्ष हुआ?';
-
-  @override
-  String get onboardingBirthYearHint => 'वर्ष';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'इसका उपयोग केवल आपके लिए उपयुक्त विज्ञापन चुनने में होता है।';
-
-  @override
-  String get onboardingBirthYearInvalid => 'कृपया एक मान्य वर्ष दर्ज करें';
-
-  @override
   String get privacyRedactedNotice => 'भेजने से पहले निजी जानकारी छिपा दी गई।';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'प्रश्न $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'तैयारी हो रही है...';
+
+  @override
+  String get quizPickAnswer => 'सही उत्तर चुनें';
+
+  @override
+  String get quizWellDone => 'बहुत बढ़िया!';
+
+  @override
+  String get quizEncouragement => 'आप कर सकते हैं!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'आपसे मिलकर अच्छा लगा, $name! चलो साथ में सीखते हैं।';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'एक झलक दिखाऊँ?';
+
+  @override
+  String get tutorialWatch => 'दिखाइए';
+
+  @override
+  String get tutorialSkip => 'छोड़ें';
+
+  @override
+  String get tutorialNext => 'आगे';
+
+  @override
+  String get tutorialBack => 'पीछे';
+
+  @override
+  String get tutorialDone => 'हो गया';
+
+  @override
+  String get tutorialReplay => 'ट्यूटोरियल फिर से देखें';
+
+  @override
+  String get tutorialOfferHome =>
+      'क्या आपको होम स्क्रीन की एक झटपट झलक दिखाऊँ?';
+
+  @override
+  String get tutorialOfferQuiz => 'आपकी पहली क्विज़। एक झटपट झलक दिखाऊँ?';
+
+  @override
+  String get tutorialOfferChat => 'आपकी पहली बातचीत। एक झटपट झलक दिखाऊँ?';
+
+  @override
+  String get tutorialOfferShop => 'दुकान पर आपकी पहली बार। एक झटपट झलक दिखाऊँ?';
+
+  @override
+  String get tutorialOfferProfile =>
+      'क्या आपको प्रोफ़ाइल की एक झटपट झलक दिखाऊँ?';
+
+  @override
+  String get tutorialOfferReview => 'आपका पहला दोहराव। एक झटपट झलक दिखाऊँ?';
+
+  @override
+  String get tutorialHomePet =>
+      'यह है मोजी। इसे टैप करें, या इसके सिर पर उँगली फेरकर सहलाएँ।';
+
+  @override
+  String get tutorialHomeLevel =>
+      'आपका स्तर और XP। टैप करके देखें कि अगले स्तर क्या खोलते हैं।';
+
+  @override
+  String get tutorialHomeFeed =>
+      'आपका खाना। कोई नाश्ता चुनें और उसे मोजी पर खींचें।';
+
+  @override
+  String get tutorialHomeCare =>
+      'जब मोजी को कुछ चाहिए होता है तब यह दिखता है। टैप करके देखें।';
+
+  @override
+  String get tutorialHomeReview =>
+      'अध्ययन: बाकी शब्दों को दोहराएँ और अपनी गलतियाँ दोबारा देखें।';
+
+  @override
+  String get tutorialHomeSettings =>
+      'सेटिंग्स: पिक्सेल अक्षर, याद दिलाना, और ये झलकें दोबारा देखना।';
+
+  @override
+  String get tutorialNavTown =>
+      'शहर: किसी इमारत में जाकर बातचीत का अभ्यास करें, या क्विज़ के लिए स्कूल जाएँ।';
+
+  @override
+  String get tutorialNavChat =>
+      'बातचीत: लंबी बातें और भूमिका निभाने वाले हालात।';
+
+  @override
+  String get tutorialNavShop =>
+      'दुकान: सिक्के खर्च करें खाने, अंदाज़ और नई दुनियाओं पर।';
+
+  @override
+  String get tutorialNavProfile =>
+      'प्रोफ़ाइल: आपके आँकड़े, आपकी भाषाएँ और आपका खाता।';
+
+  @override
+  String get tutorialQuizHeader => 'आपका स्तर, और रुकना पड़े तो ठहराव का बटन।';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'सवाल। ऊपर का बैज बताता है कि क्या परखा जा रहा है।';
+
+  @override
+  String get tutorialQuizOptions =>
+      'एक जवाब चुनें। गलत जवाब सहेजे जाते हैं ताकि बाद में दोहरा सकें।';
+
+  @override
+  String get tutorialQuizContinue => 'जवाब देने के बाद आगे बढ़ें।';
+
+  @override
+  String get tutorialChatMenu =>
+      'आपकी पुरानी बातचीत और भूमिका वाले हालात इस बटन के पीछे हैं।';
+
+  @override
+  String get tutorialChatMessages =>
+      'आपकी बातचीत। गलतियाँ रास्ते में धीरे से सुधार दी जाती हैं।';
+
+  @override
+  String get tutorialChatInput => 'यहाँ लिखें। एकदम सही होने की चिंता न करें।';
+
+  @override
+  String get tutorialShopCoins =>
+      'आपके सिक्के। अभ्यास करके और मोजी की देखभाल करके कमाएँ।';
+
+  @override
+  String get tutorialShopTabs =>
+      'जो चाहिए उसके हिसाब से छाँटें: खाना, सजावट या अंदाज़।';
+
+  @override
+  String get tutorialShopGrid =>
+      'खरीदने के लिए किसी पर भी टैप करें। खाना खत्म हो जाता है, बाकी आपका ही रहता है।';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'सिक्के खत्म? एक छोटी क्लिप देखकर भर लें।';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'मोजी का रूप और अलमारी बदलने के लिए उस पर टैप करें।';
+
+  @override
+  String get tutorialProfileStats => 'आपका स्तर, और अगला कितनी दूर है।';
+
+  @override
+  String get tutorialProfileDaily =>
+      'हर दिन इनाम के लिए लौटें। लंबी लड़ी ज़्यादा देती है।';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'आप क्या बोलते हैं और क्या सीख रहे हैं। दोनों कभी भी बदल सकते हैं।';
+
+  @override
+  String get tutorialProfileAccount =>
+      'खाता जोड़ें ताकि नया फ़ोन लेने पर भी मोजी बना रहे।';
+
+  @override
+  String get tutorialReviewCard =>
+      'जवाब याद करने की कोशिश करें, फिर जाँचने के लिए कार्ड टैप करें।';
+
+  @override
+  String get tutorialReviewGrades =>
+      'जवाब दिखाएँ और बताएँ कैसा रहा। मुश्किल लगे कार्ड जल्दी लौटते हैं।';
+
+  @override
+  String get tutorialReviewCount => 'इस दौर में कितने कार्ड बाकी हैं।';
+
+  @override
+  String get seasonPassNotOnSale => 'यह पास अभी बिक्री के लिए उपलब्ध नहीं है।';
+
+  @override
+  String seasonPassBuy(String price) {
+    return '$price में खरीदें';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'प्राप्त करें ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'प्राप्त किया जा रहा है…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'प्राप्त: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'स्तर $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count वस्तुएँ · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'ट्रैक पूरा हुआ।';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return 'अगली वस्तु तक $xp XP';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'तैयार';
+
+  @override
+  String get seasonPassTierClaimed => 'प्राप्त';
+
+  @override
+  String get seasonPassTryOn => 'पहनकर देखें';
+
+  @override
+  String get sceneAirfieldName => 'प्रस्थान';
+
+  @override
+  String get sceneCozyRoomName => 'आरामदायक कमरा';
+
+  @override
+  String get sceneEnchantedMeadowName => 'जादुई घास का मैदान';
+
+  @override
+  String get sceneMushroomGladeName => 'मशरूम उपवन';
+
+  @override
+  String get scenePumpkinPatchName => 'कद्दू का खेत';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'आपका है। अलमारी में कभी भी दुनिया बदलें।';
+
+  @override
+  String get seasonPassPreviewOwned => 'यह आपका है। अलमारी में इसे पहनाएँ।';
+
+  @override
+  String get seasonPassPreviewLocked => 'अभी आपका नहीं — यह सिर्फ़ एक झलक है।';
+
+  @override
+  String get seasonPassPromise =>
+      'स्तर उस XP से गिने जाते हैं जो आप पास खरीदने के बाद कमाते हैं, इसलिए देर से खरीदने पर कुछ नहीं खोता। यहाँ कुछ भी समाप्त नहीं होता: पाया हुआ स्तर बना रहता है, और बाकी आपका इंतज़ार करता है।';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'प्राप्त करना बाकी: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'पढ़ाई से अर्जित';
+
+  @override
+  String get accessoryBandanaName => 'सूर्योदय बंडाना';
+
+  @override
+  String get accessoryBandanaCloudName => 'बादल बंडाना';
+
+  @override
+  String get accessoryScarfDuskName => 'सांझ स्कार्फ';
+
+  @override
+  String get accessoryGogglesName => 'फ्लाइट गॉगल्स';
+
+  @override
+  String get accessoryGogglesBrassName => 'पीतल गॉगल्स';
+
+  @override
+  String get accessoryBeanieDuskName => 'सांझ बीनी';
+
+  @override
+  String get accessoryFlightCapName => 'फ्लाइट कैप';
+
+  @override
+  String get accessoryFlightCapCloudName => 'बादल फ्लाइट कैप';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'चारकोल काउबॉय हैट';
+
+  @override
+  String get accessoryFlightScarfName => 'हवा में लहराता स्कार्फ';
+
+  @override
+  String get accessoryPumpkinWitchName => 'कद्दू वाली चुड़ैल टोपी';
+
+  @override
+  String get accessoryDevilBandName => 'शैतानी सींग हेयरबैंड';
+
+  @override
+  String get accessoryGhostBandanaName => 'भूत बंडाना';
+
+  @override
+  String get accessoryBatChokerName => 'चमगादड़ गले की पट्टी';
+
+  @override
+  String get shopSectionTopUp => 'टॉप अप';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'सीज़न पास';
+
+  @override
+  String get shopSectionItems => 'सामान';
+
+  @override
+  String get topUpTitle => 'टॉप अप';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins सिक्के';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% सिक्के';
+  }
+
+  @override
+  String get topUpBestValue => 'सबसे किफ़ायती';
+
+  @override
+  String get topUpNotOpen => 'सिक्कों के पैक अभी उपलब्ध नहीं हैं।';
+
+  @override
+  String topUpThanks(int coins) {
+    return '$coins सिक्के जोड़े गए।';
+  }
 }

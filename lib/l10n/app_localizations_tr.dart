@@ -36,16 +36,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get designMojiBtn => 'Moji Tasarla';
 
   @override
-  String get quizMode => 'Quiz';
-
-  @override
   String get quizDesc => 'Bilgilerini test et.';
 
   @override
-  String get scenarios => 'Senaryolar';
+  String get scenarios => 'Kasaba';
 
   @override
   String get scenariosDesc => 'Gerçek hayat konuşmalarını pratik yap.';
+
+  @override
+  String get townSchool => 'Okul';
+
+  @override
+  String get townTab => 'Kasaba';
 
   @override
   String get profile => 'Profil';
@@ -116,22 +119,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Yeni bir konuşma başlat';
-
-  @override
-  String get blankChat => 'Boş Sohbet';
-
-  @override
-  String get blankChatDesc => 'Bağlamsız yeni bir konuşma başlat';
-
-  @override
-  String get roleplayScenario => 'Rol Yapma Senaryosu';
-
-  @override
-  String get roleplayScenarioDesc =>
-      'Kahve siparişi gibi özel durumları pratik yap';
-
-  @override
-  String get chooseChatType => 'Sohbet Tipi Seç';
 
   @override
   String get cancel => 'İptal';
@@ -214,9 +201,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get drills => 'Hatalar';
 
   @override
-  String get typeHere => 'Buraya yazın...';
-
-  @override
   String get shopTitle => 'Mağaza';
 
   @override
@@ -282,9 +266,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get come_back_tomorrow => 'Yarın tekrar gel!';
 
   @override
-  String get streak_broken => 'Hoş geldin! Yeniden başlıyoruz';
-
-  @override
   String get keep_going => 'Devam et!';
 
   @override
@@ -331,7 +312,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Akıcıyım veya neredeyse akıcıyım. Karmaşık konuları tartışabilirim.';
 
   @override
-  String get whichLanguage => 'HANGİ DİL';
+  String get whichLanguage => 'HANGİ DİLİ';
 
   @override
   String get doYouWantToLearn => 'ÖĞRENMEK İSTİYORSUN?';
@@ -376,10 +357,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shopItemAppleDescription => 'Sağlıklı bir atıştırmalık.';
 
   @override
-  String get shopItemCroissantName => 'Kruvasan';
+  String get shopItemDonutName => 'Donut';
 
   @override
-  String get shopItemCroissantDescription => 'Yağlı lezzet.';
+  String get shopItemDonutDescription => 'Tatlı ve yapış yapış.';
 
   @override
   String get shopItemPizzaName => 'Pizza Dilimi';
@@ -459,6 +440,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Bu ne demek?';
 
   @override
+  String get sceneryTitle => 'Manzara';
+
+  @override
+  String get shopItemBgMeadowName => 'Çayır';
+
+  @override
+  String get sceneInUse => 'Kullanımda';
+
+  @override
   String get shopItemBgBlueName => 'Okyanus Mavisi';
 
   @override
@@ -493,22 +483,8 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Sen';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Dil bağlantısı yeniden bağlanırken Moji kestiriyor. Kısa süre sonra tekrar dene.';
-
-  @override
   String get mojiSleepNight =>
       'Şşş... Moji uyuyor. Uyandırmak için Moji\'ye dokun.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI KESTİRİYOR... DİL BAĞLANTISI YENİDEN BAĞLANIYOR';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI UYUYOR... UYANDIRMAK İÇİN DOKUN';
 
   @override
   String get mojiWakeSuccess =>
@@ -518,13 +494,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return '$minutes dk daha uyanık';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Dil bağlantısı yeniden bağlanırken Moji kestiriyor.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji uyuyor. Uyandırmak için dokun.';
 
   @override
   String get levelsScreenTitle => 'Seviyeler';
@@ -593,18 +562,89 @@ class AppLocalizationsTr extends AppLocalizations {
   String get characterBird => 'Kuş';
 
   @override
+  String get characterRabbit => 'Tavşan';
+
+  @override
+  String get characterHamster => 'Hamster';
+
+  @override
+  String get characterParrot => 'Papağan';
+
+  @override
+  String get characterFox => 'Tilki';
+
+  @override
+  String get characterRaccoon => 'Rakun';
+
+  @override
+  String get characterRedPanda => 'Kızıl Panda';
+
+  @override
+  String get characterSkunk => 'Kokarca';
+
+  @override
+  String get characterOtter => 'Su Samuru';
+
+  @override
+  String get characterBeaver => 'Kunduz';
+
+  @override
+  String get characterSquirrel => 'Sincap';
+
+  @override
+  String get characterChinchilla => 'Çinçilla';
+
+  @override
+  String get characterMouse => 'Fare';
+
+  @override
+  String get characterHedgehog => 'Kirpi';
+
+  @override
+  String get characterBat => 'Yarasa';
+
+  @override
+  String get characterFennec => 'Fennek';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Vombat';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Tembel Hayvan';
+
+  @override
+  String get characterCapybara => 'Kapibara';
+
+  @override
+  String get characterPiglet => 'Domuz Yavrusu';
+
+  @override
+  String get characterSeal => 'Fok';
+
+  @override
+  String get characterPenguin => 'Penguen';
+
+  @override
+  String get characterFrog => 'Kurbağa';
+
+  @override
+  String get characterAxolotl => 'Aksolotl';
+
+  @override
+  String get characterGecko => 'Geko';
+
+  @override
+  String get characterChameleon => 'Bukalemun';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Dil bağlantısı yeniden kurulurken Moji kestiriyor. Az sonra tekrar dene.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Dil bağlantısı yeniden kurulurken Moji kestiriyor.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji uyuyor. Uyandırmak için dokun.';
-
-  @override
-  String get mojiAwakeReady => 'Moji uyanık ve hazır!';
 
   @override
   String get wardrobeTitle => 'Gardırop';
@@ -623,6 +663,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get eyeColor => 'Göz rengi';
+
+  @override
+  String get beakColor => 'Gaga Rengi';
 
   @override
   String get eyeStyleSolid => 'Tek renk';
@@ -879,6 +922,27 @@ class AppLocalizationsTr extends AppLocalizations {
   String get carePlayCooldown => 'Moji şimdilik yeterince sevildi.';
 
   @override
+  String get playCatch => 'Top yakalamaca oyna';
+
+  @override
+  String get playCatchAgain => 'Tekrar oyna';
+
+  @override
+  String get playToyChest => 'Oyuncak sandığı';
+
+  @override
+  String get playBubbleBath => 'Köpük banyosu';
+
+  @override
+  String get playPounce => 'Köstebek avı';
+
+  @override
+  String get playPondHop => 'Gölette zıpla';
+
+  @override
+  String get playFetchWords => 'Kelimeleri getir';
+
+  @override
   String get careClose => 'Kapat';
 
   @override
@@ -898,9 +962,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get careDragToFeed => 'Beslemek için Moji’nin üstüne sürükle';
 
   @override
-  String get bondLabel => 'BAĞ';
-
-  @override
   String get bondStageCurious => 'Meraklı';
 
   @override
@@ -916,18 +977,92 @@ class AppLocalizationsTr extends AppLocalizations {
   String get bondStageInseparable => 'Ayrılmaz';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$stage için $points';
-  }
-
-  @override
-  String get bondKeepLearning => 'Yakınlaşmak için öğrenmeye devam et';
-
-  @override
   String get bondMissesYou => 'Moji seni özledi';
 
   @override
   String get bondLonely => 'Moji uzun zamandır seni bekliyor';
+
+  @override
+  String get aiLimitQuizTitle => 'Bugünkü yapay zekâ testleri bitti';
+
+  @override
+  String get aiLimitMessageTitle => 'Bugünkü yapay zekâ mesajları bitti';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return 'Bugün $total hakkın $used tanesi kullanıldı';
+  }
+
+  @override
+  String get aiLimitResets => 'Hakkın yarın yenilenecek.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Tekrar için öğretmene gerek yok — kartların her zaman burada.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Kendi kelimelerinden kurulan testler hâlâ burada.';
+
+  @override
+  String get aiLimitWatchAd => 'Bir tane daha için reklam izle';
+
+  @override
+  String get aiLimitGoPlus => 'Mimikin Plus al';
+
+  @override
+  String get premiumColumnFree => 'Ücretsiz';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'Günlük yapay zekâ testi';
+
+  @override
+  String get premiumRowMessages => 'Günlük yapay zekâ mesajı';
+
+  @override
+  String get premiumRowAds => 'Geçiş reklamları';
+
+  @override
+  String get premiumValueShown => 'Gösterilir';
+
+  @override
+  String get premiumValueNone => 'Yok';
+
+  @override
+  String get premiumRowRollover => 'Kullanılmayan testler';
+
+  @override
+  String get premiumValueExpire => 'Sona erer';
+
+  @override
+  String get premiumValueRollOver => 'Devreder';
+
+  @override
+  String get premiumRowPetStats => 'Dostunun durumu';
+
+  @override
+  String get premiumValueDecay => 'Azalır';
+
+  @override
+  String get premiumValueDecaySlower => 'Daha yavaş azalır';
+
+  @override
+  String get premiumComingSoon => 'Abonelikler henüz açık değil.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus etkin.';
+
+  @override
+  String get premiumRestore => 'Bir satın alımı geri yükle';
+
+  @override
+  String get premiumRestoreDone => 'Bu hesapta geri yüklenecek bir şey yok.';
+
+  @override
+  String get premiumPurchasePending => 'Mağazada tamamlanıyor…';
 
   @override
   String get categoryStyle => 'Stil';
@@ -1085,19 +1220,351 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Hangi yıl doğdun?';
-
-  @override
-  String get onboardingBirthYearHint => 'Yıl';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Bu yalnızca sana uygun reklamları seçmek için kullanılır.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Lütfen geçerli bir yıl gir';
-
-  @override
   String get privacyRedactedNotice =>
       'Kişisel bilgiler gönderilmeden önce gizlendi.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'SORU $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'HAZIRLANIYOR...';
+
+  @override
+  String get quizPickAnswer => 'Doğru cevabı seç';
+
+  @override
+  String get quizWellDone => 'Aferin!';
+
+  @override
+  String get quizEncouragement => 'Yaparsın sen!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Tanıştığımıza sevindim, $name! Hadi birlikte öğrenelim.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'TURA NE DERSİN?';
+
+  @override
+  String get tutorialWatch => 'GÖSTER';
+
+  @override
+  String get tutorialSkip => 'GEÇ';
+
+  @override
+  String get tutorialNext => 'İLERİ';
+
+  @override
+  String get tutorialBack => 'GERİ';
+
+  @override
+  String get tutorialDone => 'BİTTİ';
+
+  @override
+  String get tutorialReplay => 'Tanıtımları tekrar oynat';
+
+  @override
+  String get tutorialOfferHome => 'Ana ekranında kısa bir tur ister misin?';
+
+  @override
+  String get tutorialOfferQuiz => 'İlk testin. Kısa bir tur ister misin?';
+
+  @override
+  String get tutorialOfferChat => 'İlk sohbetin. Kısa bir tur ister misin?';
+
+  @override
+  String get tutorialOfferShop =>
+      'Dükkâna ilk gelişin. Kısa bir tur ister misin?';
+
+  @override
+  String get tutorialOfferProfile => 'Profilinde kısa bir tur ister misin?';
+
+  @override
+  String get tutorialOfferReview =>
+      'İlk tekrar turun. Kısa bir tur ister misin?';
+
+  @override
+  String get tutorialHomePet =>
+      'Bu Moji. Ona dokun ya da okşamak için parmağını kafasında gezdir.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Seviyen ve XP\'in. Sonraki seviyelerin neyi açtığını görmek için dokun.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Yiyeceklerin. Bir atıştırmalık seç ve Moji\'nin üstüne sürükle.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Moji\'nin bir şeye ihtiyacı olduğunda çıkar. Bakmak için dokun.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Çalışma: sırası gelen kelimeleri tekrar et ve hatalarına bir daha göz at.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Ayarlar: piksel yazı, hatırlatmalar ve bu turları yeniden oynatma.';
+
+  @override
+  String get tutorialNavTown =>
+      'Kasaba: bir konuşmayı denemek için binalardan birine gir ya da test için okula uğra.';
+
+  @override
+  String get tutorialNavChat =>
+      'Sohbetler: daha uzun konuşmalar ve rol yapma senaryoları.';
+
+  @override
+  String get tutorialNavShop =>
+      'Dükkân: altınlarını yiyeceğe, stillere ve yeni dünyalara harca.';
+
+  @override
+  String get tutorialNavProfile =>
+      'Profil: istatistiklerin, dillerin ve hesabın.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Seviyen ve durman gerekirse diye duraklat düğmesi.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Soru. Üstteki rozet neyin ölçüldüğünü söyler.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Bir cevap seç. Yanlışlar kaydedilir, sonra tekrar edebilirsin.';
+
+  @override
+  String get tutorialQuizContinue => 'Cevapladıktan sonra devam et.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Önceki sohbetlerin ve rol yapma senaryoların bu düğmenin arkasında.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Konuşmanız. Hatalar yol boyunca nazikçe düzeltilir.';
+
+  @override
+  String get tutorialChatInput => 'Buraya yaz. Kusursuz olmasına takılma.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Altınların. Çalışarak ve Moji\'ye bakarak kazanırsın.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Aradığına göre filtrele: yiyecek, süs ya da stil.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Almak için herhangi birine dokun. Yiyecek tükenir, gerisi sende kalır.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Altının mı bitti? Kısa bir video izleyip doldur.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Görünüşünü ve gardırobunu değiştirmek için Moji\'ye dokun.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Seviyen ve bir sonrakine ne kadar kaldığı.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Her gün ödül için geri gel. Uzun seriler daha çok kazandırır.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Konuştuğun dil ve öğrendiğin dil. İkisini de istediğin zaman değiştir.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Bir hesap bağla ki Moji yeni telefonda da yanında olsun.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Cevabı hatırlamaya çalış, sonra kontrol için karta dokun.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Cevabı göster ve nasıl gittiğini söyle. Zorlandığın kartlar daha erken döner.';
+
+  @override
+  String get tutorialReviewCount => 'Bu turda kaç kart kaldığı.';
+
+  @override
+  String get seasonPassNotOnSale => 'Bu geçiş henüz satışta değil.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return '$price satın al';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Al ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Alınıyor…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Alındı: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Kademe $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count parça · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Yol tamamlandı.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return 'Sonraki parçaya $xp XP';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Hazır';
+
+  @override
+  String get seasonPassTierClaimed => 'Alındı';
+
+  @override
+  String get seasonPassTryOn => 'Üzerinde dene';
+
+  @override
+  String get sceneAirfieldName => 'Gidişler';
+
+  @override
+  String get sceneCozyRoomName => 'Sıcacık Oda';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Büyülü Çayır';
+
+  @override
+  String get sceneMushroomGladeName => 'Mantar Açıklığı';
+
+  @override
+  String get scenePumpkinPatchName => 'Balkabağı Tarlası';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Senin. Dünyayı gardıropta istediğin zaman değiştir.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Senin. Gardıropta giydirebilirsin.';
+
+  @override
+  String get seasonPassPreviewLocked =>
+      'Henüz senin değil — bu yalnızca bir bakış.';
+
+  @override
+  String get seasonPassPromise =>
+      'Kademeler, geçişi aldıktan sonra kazandığın XP’yi sayar; bu yüzden geç almak sana hiçbir şeye mal olmaz. Burada hiçbir şey sona ermez: ulaştığın kademe kalır, ulaşmadığın seni bekler.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Alınmayı bekliyor: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Çalışarak kazanılır';
+
+  @override
+  String get accessoryBandanaName => 'Gündoğumu Bandanası';
+
+  @override
+  String get accessoryBandanaCloudName => 'Bulut Bandanası';
+
+  @override
+  String get accessoryScarfDuskName => 'Alacakaranlık Atkısı';
+
+  @override
+  String get accessoryGogglesName => 'Uçuş Gözlüğü';
+
+  @override
+  String get accessoryGogglesBrassName => 'Pirinç Gözlük';
+
+  @override
+  String get accessoryBeanieDuskName => 'Alacakaranlık Beresi';
+
+  @override
+  String get accessoryFlightCapName => 'Pilot Başlığı';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Bulut Pilot Başlığı';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Kömür Grisi Kovboy Şapkası';
+
+  @override
+  String get accessoryFlightScarfName => 'Rüzgârda Uçuşan Atkı';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Balkabaklı Cadı Şapkası';
+
+  @override
+  String get accessoryDevilBandName => 'Şeytan Boynuzlu Saç Bandı';
+
+  @override
+  String get accessoryGhostBandanaName => 'Hayalet Bandana';
+
+  @override
+  String get accessoryBatChokerName => 'Yarasa Gerdanlığı';
+
+  @override
+  String get shopSectionTopUp => 'Altın Yükle';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Sezon Bileti';
+
+  @override
+  String get shopSectionItems => 'Eşyalar';
+
+  @override
+  String get topUpTitle => 'Altın Yükle';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins altın';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+%$percent altın';
+  }
+
+  @override
+  String get topUpBestValue => 'En avantajlı';
+
+  @override
+  String get topUpNotOpen => 'Altın paketleri henüz açık değil.';
+
+  @override
+  String topUpThanks(int coins) {
+    return '$coins altın eklendi.';
+  }
 }

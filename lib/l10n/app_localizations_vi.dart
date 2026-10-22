@@ -18,7 +18,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get imLearning => 'Tôi học';
 
   @override
-  String get currentSelection => 'Lá»±a chá»n hiá»‡n táº¡i:';
+  String get currentSelection => 'Lựa chọn hiện tại:';
 
   @override
   String get level => 'Cấp độ';
@@ -36,16 +36,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get designMojiBtn => 'Thiết kế Moji';
 
   @override
-  String get quizMode => 'Câu đố';
-
-  @override
   String get quizDesc => 'Kiểm tra kiến thức của bạn.';
 
   @override
-  String get scenarios => 'Kịch bản';
+  String get scenarios => 'Thị trấn';
 
   @override
   String get scenariosDesc => 'Thực hành hội thoại thực tế.';
+
+  @override
+  String get townSchool => 'Trường học';
+
+  @override
+  String get townTab => 'Thị trấn';
 
   @override
   String get profile => 'Hồ sơ';
@@ -63,16 +66,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileDesc => 'Xem thống kê và cài đặt.';
 
   @override
-  String get voiceCall => 'Cuá»™c gá»i thoáº¡i';
+  String get voiceCall => 'Cuộc gọi thoại';
 
   @override
-  String get voiceCallDesc => 'Luyá»‡n nÃ³i thá»i gian thá»±c.';
+  String get voiceCallDesc => 'Luyện nói thời gian thực.';
 
   @override
-  String get practiceRealLife => 'Thá»±c hÃ nh Ä‘á»i thá»±c';
+  String get practiceRealLife => 'Thực hành đời thực';
 
   @override
-  String get chooseSituation => 'Chá»n tÃ¬nh huá»‘ng';
+  String get chooseSituation => 'Chọn tình huống';
 
   @override
   String get createYourOwn => 'Tự tạo';
@@ -87,10 +90,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get orderingCoffee => 'Gọi cà phê';
 
   @override
-  String get jobInterview => 'Phá»ng váº¥n xin viá»‡c';
+  String get jobInterview => 'Phỏng vấn xin việc';
 
   @override
-  String get askingDirections => 'Há»i Ä‘Æ°á»ng';
+  String get askingDirections => 'Hỏi đường';
 
   @override
   String get atTheDoctor => 'Tại bác sĩ';
@@ -115,21 +118,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Bắt đầu cuộc trò chuyện mới';
-
-  @override
-  String get blankChat => 'Trò chuyện trống';
-
-  @override
-  String get blankChatDesc => 'Bắt đầu không ngữ cảnh';
-
-  @override
-  String get roleplayScenario => 'Kịch bản nhập vai';
-
-  @override
-  String get roleplayScenarioDesc => 'Thực hành các tình huống cụ thể';
-
-  @override
-  String get chooseChatType => 'Chá»n loáº¡i trÃ² chuyá»‡n';
 
   @override
   String get cancel => 'Hủy';
@@ -166,7 +154,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String unlockMessage(Object level) {
-    return 'Äáº¡t cáº¥p $level Ä‘á»ƒ má»Ÿ khÃ³a!';
+    return 'Đạt cấp $level để mở khóa!';
   }
 
   @override
@@ -200,7 +188,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get yourAnswer => 'Câu trả lời của bạn';
 
   @override
-  String get correctAnswer => 'CÃ¢u tráº£ lá»i Ä‘Ãºng';
+  String get correctAnswer => 'Câu trả lời đúng';
 
   @override
   String get explanation => 'Giải thích';
@@ -210,9 +198,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get drills => 'Lỗi sai';
-
-  @override
-  String get typeHere => 'Nhập vào đây...';
 
   @override
   String get shopTitle => 'Cửa Hàng';
@@ -227,7 +212,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get categoryDecor => 'Trang Trí';
 
   @override
-  String get hideOwnedCosmetics => 'áº¨n Má»¹ Pháº©m ÄÃ£ Sá»Ÿ Há»¯u';
+  String get hideOwnedCosmetics => 'Ẩn Mỹ Phẩm Đã Sở Hữu';
 
   @override
   String get noItems => 'Không Có Mục';
@@ -236,7 +221,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get owned => 'Sở Hữu';
 
   @override
-  String get alreadyOwned => 'ÄÃ£ Sá»Ÿ Há»¯u';
+  String get alreadyOwned => 'Đã Sở Hữu';
 
   @override
   String get alreadyOwnedMessage => 'Bạn đã sở hữu mục này!';
@@ -280,9 +265,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get come_back_tomorrow => 'Come back tomorrow!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
-
-  @override
   String get keep_going => 'Keep it going!';
 
   @override
@@ -306,10 +288,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get howWouldYouRate => 'BẠN ĐÁNH GIÁ';
 
   @override
-  String get yourLevel => 'TRÃŒNH Äá»˜ Cá»¦A Báº N NHÆ¯ THáº¾ NÃ€O?';
+  String get yourLevel => 'TRÌNH ĐỘ CỦA BẠN NHƯ THẾ NÀO?';
 
   @override
-  String get beginner => 'Má»šI Báº®T Äáº¦U';
+  String get beginner => 'MỚI BẮT ĐẦU';
 
   @override
   String get intermediate => 'TRUNG CẤP';
@@ -326,21 +308,21 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get advancedDesc =>
-      'TÃ´i thÃ nh tháº¡o hoáº·c gáº§n thÃ nh tháº¡o. TÃ´i cÃ³ thá»ƒ tháº£o luáº­n cÃ¡c chá»§ Ä‘á» phá»©c táº¡p.';
+      'Tôi thành thạo hoặc gần thành thạo. Tôi có thể thảo luận các chủ đề phức tạp.';
 
   @override
   String get whichLanguage => 'NGÔN NGỮ NÀO';
 
   @override
-  String get doYouWantToLearn => 'Báº N MUá»N Há»ŒC?';
+  String get doYouWantToLearn => 'BẠN MUỐN HỌC?';
 
   @override
   String get changeAnytime =>
-      'Báº¡n cÃ³ thá»ƒ thay Ä‘á»•i Ä‘iá»u nÃ y báº¥t cá»© lÃºc nÃ o trong cÃ i Ä‘áº·t';
+      'Bạn có thể thay đổi điều này bất cứ lúc nào trong cài đặt';
 
   @override
   String get dontWorryVerify =>
-      'Äá»«ng lo, chÃºng tÃ´i sáº½ xÃ¡c minh Ä‘iá»u nÃ y báº±ng má»™t cuá»™c trÃ² chuyá»‡n nhanh!';
+      'Đừng lo, chúng tôi sẽ xác minh điều này bằng một cuộc trò chuyện nhanh!';
 
   @override
   String get startAssessment => 'BẮT ĐẦU ĐÁNH GIÁ';
@@ -362,10 +344,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get basedOnYourAnswers =>
-      'Dá»±a trÃªn cÃ¢u tráº£ lá»i cá»§a báº¡n, cáº¥p Ä‘á»™ báº¯t Ä‘áº§u Ä‘Æ°á»£c khuyáº¿n nghá»‹ lÃ :';
+      'Dựa trên câu trả lời của bạn, cấp độ bắt đầu được khuyến nghị là:';
 
   @override
-  String get proficiencyLevel => 'Má»©c Äá»™ ThÃ nh Tháº¡o';
+  String get proficiencyLevel => 'Mức Độ Thành Thạo';
 
   @override
   String get shopItemAppleName => 'Táo';
@@ -374,10 +356,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get shopItemAppleDescription => 'Một bữa ăn nhẹ lành mạnh.';
 
   @override
-  String get shopItemCroissantName => 'Bánh Croissant';
+  String get shopItemDonutName => 'Bánh donut';
 
   @override
-  String get shopItemCroissantDescription => 'Sự tốt lành của bơ.';
+  String get shopItemDonutDescription => 'Ngọt và dính.';
 
   @override
   String get shopItemPizzaName => 'Lát Pizza';
@@ -456,6 +438,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Cái này nghĩa là gì?';
 
   @override
+  String get sceneryTitle => 'Khung cảnh';
+
+  @override
+  String get shopItemBgMeadowName => 'Đồng cỏ';
+
+  @override
+  String get sceneInUse => 'Đang dùng';
+
+  @override
   String get shopItemBgBlueName => 'Xanh Đại Dương';
 
   @override
@@ -490,22 +481,8 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Bạn';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji đang lim dim khi kết nối ngôn ngữ đang kết nối lại. Hãy thử lại sớm nhé.';
-
-  @override
   String get mojiSleepNight =>
       'Suỵt... Moji đang ngủ. Chạm vào Moji để đánh thức.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI ĐANG LIM DIM... KẾT NỐI NGÔN NGỮ ĐANG KẾT NỐI LẠI';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI ĐANG NGỦ... CHẠM ĐỂ ĐÁNH THỨC';
 
   @override
   String get mojiWakeSuccess => 'Ngáp... Moji đã thức rồi! Cùng luyện tập nhé!';
@@ -514,13 +491,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Thức thêm $minutes phút';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji đang lim dim khi kết nối ngôn ngữ đang kết nối lại.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji đang ngủ. Chạm để đánh thức.';
 
   @override
   String get levelsScreenTitle => 'Cấp độ';
@@ -590,18 +560,89 @@ class AppLocalizationsVi extends AppLocalizations {
   String get characterBird => 'Chim';
 
   @override
+  String get characterRabbit => 'Thỏ';
+
+  @override
+  String get characterHamster => 'Chuột hamster';
+
+  @override
+  String get characterParrot => 'Vẹt';
+
+  @override
+  String get characterFox => 'Cáo';
+
+  @override
+  String get characterRaccoon => 'Gấu mèo';
+
+  @override
+  String get characterRedPanda => 'Gấu trúc đỏ';
+
+  @override
+  String get characterSkunk => 'Chồn hôi';
+
+  @override
+  String get characterOtter => 'Rái cá';
+
+  @override
+  String get characterBeaver => 'Hải ly';
+
+  @override
+  String get characterSquirrel => 'Sóc';
+
+  @override
+  String get characterChinchilla => 'Sóc chinchilla';
+
+  @override
+  String get characterMouse => 'Chuột';
+
+  @override
+  String get characterHedgehog => 'Nhím';
+
+  @override
+  String get characterBat => 'Dơi';
+
+  @override
+  String get characterFennec => 'Cáo Fennec';
+
+  @override
+  String get characterKoala => 'Gấu koala';
+
+  @override
+  String get characterWombat => 'Wombat';
+
+  @override
+  String get characterPanda => 'Gấu trúc';
+
+  @override
+  String get characterSloth => 'Lười';
+
+  @override
+  String get characterCapybara => 'Chuột lang nước';
+
+  @override
+  String get characterPiglet => 'Heo con';
+
+  @override
+  String get characterSeal => 'Hải cẩu';
+
+  @override
+  String get characterPenguin => 'Chim cánh cụt';
+
+  @override
+  String get characterFrog => 'Ếch';
+
+  @override
+  String get characterAxolotl => 'Kỳ giông';
+
+  @override
+  String get characterGecko => 'Tắc kè';
+
+  @override
+  String get characterChameleon => 'Tắc kè hoa';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji đang ngủ gật trong lúc kết nối ngôn ngữ được khôi phục. Hãy thử lại sau nhé.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji đang ngủ gật trong lúc kết nối ngôn ngữ được khôi phục.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji đang ngủ. Chạm để đánh thức.';
-
-  @override
-  String get mojiAwakeReady => 'Moji đã thức dậy và sẵn sàng!';
 
   @override
   String get wardrobeTitle => 'Tủ quần áo';
@@ -620,6 +661,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get eyeColor => 'Màu mắt';
+
+  @override
+  String get beakColor => 'Màu mỏ';
 
   @override
   String get eyeStyleSolid => 'Một màu';
@@ -873,6 +917,27 @@ class AppLocalizationsVi extends AppLocalizations {
   String get carePlayCooldown => 'Moji được cưng đủ rồi, nghỉ chút nhé.';
 
   @override
+  String get playCatch => 'Chơi bắt bóng';
+
+  @override
+  String get playCatchAgain => 'Chơi lại';
+
+  @override
+  String get playToyChest => 'Rương đồ chơi';
+
+  @override
+  String get playBubbleBath => 'Tắm bong bóng';
+
+  @override
+  String get playPounce => 'Vồ chuột chũi';
+
+  @override
+  String get playPondHop => 'Nhảy qua ao';
+
+  @override
+  String get playFetchWords => 'Nhặt chữ về';
+
+  @override
   String get careClose => 'Đóng';
 
   @override
@@ -892,9 +957,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get careDragToFeed => 'Kéo vào Moji để cho ăn';
 
   @override
-  String get bondLabel => 'GẮN KẾT';
-
-  @override
   String get bondStageCurious => 'Tò mò';
 
   @override
@@ -910,18 +972,93 @@ class AppLocalizationsVi extends AppLocalizations {
   String get bondStageInseparable => 'Không thể tách rời';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points nữa đến $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Tiếp tục học để gần nhau hơn';
-
-  @override
   String get bondMissesYou => 'Moji nhớ bạn';
 
   @override
   String get bondLonely => 'Moji đã đợi bạn từ lâu';
+
+  @override
+  String get aiLimitQuizTitle => 'Đã dùng hết bài kiểm tra AI hôm nay';
+
+  @override
+  String get aiLimitMessageTitle => 'Đã dùng hết tin nhắn AI hôm nay';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return 'Đã dùng $used trên $total hôm nay';
+  }
+
+  @override
+  String get aiLimitResets => 'Hạn mức của bạn sẽ trở lại vào ngày mai.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Ôn tập không bao giờ cần gia sư — thẻ của bạn luôn ở đó.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Bài kiểm tra từ chính từ vựng của bạn vẫn còn đó.';
+
+  @override
+  String get aiLimitWatchAd => 'Xem quảng cáo để có thêm một lượt';
+
+  @override
+  String get aiLimitGoPlus => 'Lấy Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Miễn phí';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'Bài kiểm tra AI mỗi ngày';
+
+  @override
+  String get premiumRowMessages => 'Tin nhắn AI mỗi ngày';
+
+  @override
+  String get premiumRowAds => 'Quảng cáo xen kẽ';
+
+  @override
+  String get premiumValueShown => 'Có hiện';
+
+  @override
+  String get premiumValueNone => 'Không có';
+
+  @override
+  String get premiumRowRollover => 'Câu đố chưa dùng';
+
+  @override
+  String get premiumValueExpire => 'Hết hạn';
+
+  @override
+  String get premiumValueRollOver => 'Được cộng dồn';
+
+  @override
+  String get premiumRowPetStats => 'Trạng thái thú cưng';
+
+  @override
+  String get premiumValueDecay => 'Giảm';
+
+  @override
+  String get premiumValueDecaySlower => 'Giảm chậm hơn';
+
+  @override
+  String get premiumComingSoon => 'Gói đăng ký chưa mở.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus đang hoạt động.';
+
+  @override
+  String get premiumRestore => 'Khôi phục giao dịch mua';
+
+  @override
+  String get premiumRestoreDone =>
+      'Không có gì để khôi phục trên tài khoản này.';
+
+  @override
+  String get premiumPurchasePending => 'Đang hoàn tất với cửa hàng…';
 
   @override
   String get categoryStyle => 'Phong cách';
@@ -1079,19 +1216,352 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Bạn sinh năm nào?';
-
-  @override
-  String get onboardingBirthYearHint => 'Năm';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Điều này chỉ dùng để chọn quảng cáo phù hợp với bạn.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Vui lòng nhập năm hợp lệ';
-
-  @override
   String get privacyRedactedNotice =>
       'Thông tin cá nhân đã được ẩn trước khi gửi.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'CÂU HỎI $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'ĐANG CHUẨN BỊ...';
+
+  @override
+  String get quizPickAnswer => 'Chọn câu trả lời đúng';
+
+  @override
+  String get quizWellDone => 'Làm tốt lắm!';
+
+  @override
+  String get quizEncouragement => 'Bạn làm được mà!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Rất vui được gặp bạn, $name! Cùng học nào.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'XEM HƯỚNG DẪN?';
+
+  @override
+  String get tutorialWatch => 'CHO XEM';
+
+  @override
+  String get tutorialSkip => 'BỎ QUA';
+
+  @override
+  String get tutorialNext => 'TIẾP';
+
+  @override
+  String get tutorialBack => 'QUAY LẠI';
+
+  @override
+  String get tutorialDone => 'XONG';
+
+  @override
+  String get tutorialReplay => 'Xem lại hướng dẫn';
+
+  @override
+  String get tutorialOfferHome => 'Bạn muốn xem nhanh màn hình chính không?';
+
+  @override
+  String get tutorialOfferQuiz =>
+      'Bài kiểm tra đầu tiên. Xem hướng dẫn nhanh nhé?';
+
+  @override
+  String get tutorialOfferChat =>
+      'Cuộc trò chuyện đầu tiên. Xem hướng dẫn nhanh nhé?';
+
+  @override
+  String get tutorialOfferShop =>
+      'Lần đầu ghé cửa hàng. Xem hướng dẫn nhanh nhé?';
+
+  @override
+  String get tutorialOfferProfile => 'Bạn muốn xem nhanh hồ sơ của mình không?';
+
+  @override
+  String get tutorialOfferReview =>
+      'Phiên ôn tập đầu tiên. Xem hướng dẫn nhanh nhé?';
+
+  @override
+  String get tutorialHomePet =>
+      'Đây là Moji. Chạm vào bé, hoặc vuốt ngang đầu để gãi.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Cấp độ và XP của bạn. Chạm để xem các cấp tiếp theo mở khoá gì.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Thức ăn của bạn. Chọn một món rồi kéo lên Moji.';
+
+  @override
+  String get tutorialHomeCare => 'Hiện ra khi Moji cần gì đó. Chạm để xem sao.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Ôn tập: xem lại những từ đến hạn và nhìn lại các lỗi của bạn.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Cài đặt: chữ pixel, lời nhắc, và xem lại các hướng dẫn này.';
+
+  @override
+  String get tutorialNavTown =>
+      'Thị trấn: bước vào một tòa nhà để luyện hội thoại, hoặc ghé trường học để làm bài kiểm tra.';
+
+  @override
+  String get tutorialNavChat =>
+      'Trò chuyện: những cuộc nói chuyện dài hơn và các tình huống nhập vai.';
+
+  @override
+  String get tutorialNavShop =>
+      'Cửa hàng: tiêu xu cho thức ăn, kiểu dáng và thế giới mới.';
+
+  @override
+  String get tutorialNavProfile =>
+      'Hồ sơ: thống kê, ngôn ngữ và tài khoản của bạn.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Cấp độ của bạn, và nút tạm dừng khi bạn cần nghỉ.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Câu hỏi. Nhãn phía trên cho biết nó đang kiểm tra điều gì.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Chọn một đáp án. Đáp án sai được lưu lại để bạn ôn sau.';
+
+  @override
+  String get tutorialQuizContinue => 'Trả lời xong thì đi tiếp.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Các cuộc trò chuyện cũ và tình huống nhập vai nằm sau nút này.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Cuộc trò chuyện của hai bạn. Lỗi sai được sửa nhẹ nhàng dọc đường.';
+
+  @override
+  String get tutorialChatInput => 'Viết ở đây. Đừng lo phải thật hoàn hảo.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Xu của bạn. Bạn kiếm được nhờ luyện tập và chăm sóc Moji.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Lọc theo thứ bạn tìm: thức ăn, trang trí hay kiểu dáng.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Chạm vào bất cứ thứ gì để mua. Thức ăn dùng hết, phần còn lại là của bạn.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Hết xu? Xem một đoạn phim ngắn để nạp thêm.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Chạm vào Moji để đổi vẻ ngoài và tủ đồ của bé.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Cấp độ của bạn, và còn bao xa tới cấp kế tiếp.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Quay lại mỗi ngày để nhận thưởng. Chuỗi càng dài thưởng càng nhiều.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Ngôn ngữ bạn nói và ngôn ngữ bạn học. Đổi cái nào cũng được, bất cứ lúc nào.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Liên kết tài khoản để Moji còn nguyên khi bạn đổi điện thoại.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Thử nhớ lại đáp án, rồi chạm vào thẻ để kiểm tra.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Hiện đáp án rồi cho biết bạn làm thế nào. Thẻ khó sẽ quay lại sớm hơn.';
+
+  @override
+  String get tutorialReviewCount => 'Còn bao nhiêu thẻ trong phiên này.';
+
+  @override
+  String get seasonPassNotOnSale => 'Vé này chưa được bán.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Mua $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Nhận ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Đang nhận…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Đã nhận: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Bậc $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count món · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Đã hoàn thành.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP đến món tiếp theo';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Sẵn sàng';
+
+  @override
+  String get seasonPassTierClaimed => 'Đã nhận';
+
+  @override
+  String get seasonPassTryOn => 'Thử lên';
+
+  @override
+  String get sceneAirfieldName => 'Khởi hành';
+
+  @override
+  String get sceneCozyRoomName => 'Căn phòng ấm cúng';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Đồng cỏ huyền bí';
+
+  @override
+  String get sceneMushroomGladeName => 'Bãi Nấm';
+
+  @override
+  String get scenePumpkinPatchName => 'Vườn bí ngô';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Của bạn. Đổi thế giới bất cứ lúc nào trong tủ đồ.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Của bạn rồi. Mặc vào trong tủ đồ.';
+
+  @override
+  String get seasonPassPreviewLocked =>
+      'Chưa phải của bạn — đây chỉ là xem trước.';
+
+  @override
+  String get seasonPassPromise =>
+      'Các bậc tính XP bạn kiếm được sau khi mua vé, nên mua muộn cũng không mất gì. Ở đây không có gì hết hạn: bậc bạn đã đạt vẫn giữ nguyên, bậc chưa đạt vẫn chờ bạn.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Chờ nhận: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Kiếm được nhờ học';
+
+  @override
+  String get accessoryBandanaName => 'Khăn Bình Minh';
+
+  @override
+  String get accessoryBandanaCloudName => 'Khăn Mây';
+
+  @override
+  String get accessoryScarfDuskName => 'Khăn Hoàng Hôn';
+
+  @override
+  String get accessoryGogglesName => 'Kính Phi Công';
+
+  @override
+  String get accessoryGogglesBrassName => 'Kính Đồng Thau';
+
+  @override
+  String get accessoryBeanieDuskName => 'Mũ Len Hoàng Hôn';
+
+  @override
+  String get accessoryFlightCapName => 'Mũ Phi Công';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Mũ Phi Công Mây';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Mũ Cao Bồi Than Chì';
+
+  @override
+  String get accessoryFlightScarfName => 'Khăn Tung Bay';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Mũ phù thủy bí ngô';
+
+  @override
+  String get accessoryDevilBandName => 'Băng đô sừng quỷ';
+
+  @override
+  String get accessoryGhostBandanaName => 'Khăn bandana ma';
+
+  @override
+  String get accessoryBatChokerName => 'Choker dơi';
+
+  @override
+  String get shopSectionTopUp => 'Nạp xu';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Vé mùa';
+
+  @override
+  String get shopSectionItems => 'Vật phẩm';
+
+  @override
+  String get topUpTitle => 'Nạp xu';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins xu';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% xu';
+  }
+
+  @override
+  String get topUpBestValue => 'Đáng tiền nhất';
+
+  @override
+  String get topUpNotOpen => 'Gói xu chưa mở bán.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'Đã thêm $coins xu.';
+  }
 }

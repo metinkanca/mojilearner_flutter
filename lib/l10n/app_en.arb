@@ -9,10 +9,17 @@
   "streak": "Day Streak",
   "audio": "Bot Voice",
   "designMojiBtn": "Design Your Moji",
-  "quizMode": "Quiz",
   "quizDesc": "Test your knowledge with active recall quizzes.",
-  "scenarios": "Scenarios",
+  "scenarios": "Town",
   "scenariosDesc": "Practice real-life conversations like ordering coffee or job interviews.",
+  "townSchool": "School",
+  "townTab": "Town",
+  "@townTab": {
+    "description": "Label of the bottom navigation tab that opens the town (the map of buildings, with the school where the quizzes are)."
+  },
+  "@townSchool": {
+    "description": "The school building in the town: where the quizzes are. Shown on its card and under it."
+  },
   "profile": "Profile",
   "shop": "Shop",
   "mistakes": "MISTAKES",
@@ -36,11 +43,6 @@
   "newChat": "New Chat",
   "noChats": "No chats yet",
   "startNewConversation": "Start a new conversation",
-  "blankChat": "Blank Chat",
-  "blankChatDesc": "Start a fresh conversation with no context",
-  "roleplayScenario": "Roleplay Scenario",
-  "roleplayScenarioDesc": "Practice specific situations like ordering coffee or a job interview",
-  "chooseChatType": "Choose a Chat Type",
   "cancel": "Cancel",
   "typeMessage": "Type your message...",
   "designMoji": "Design Moji",
@@ -67,7 +69,6 @@
   "explanation": "Explanation",
   "story": "Scenarios",
   "drills": "Errors",
-  "typeHere": "Type here...",
   "shopTitle": "Shop",
   "categoryAll": "All",
   "categoryFood": "Food",
@@ -89,7 +90,6 @@
   "claim_reward": "Claim Reward",
   "day_streak": "Day {X} Streak",
   "come_back_tomorrow": "Come back tomorrow!",
-  "streak_broken": "Welcome back! Starting fresh",
   "keep_going": "Keep it going!",
   "reward_claimed": "Reward Claimed!",
   "amazing_streak": "Amazing! Day {X} streak!",
@@ -118,8 +118,8 @@
   "proficiencyLevel": "Proficiency Level",
   "shopItemAppleName": "Apple",
   "shopItemAppleDescription": "A healthy snack.",
-  "shopItemCroissantName": "Croissant",
-  "shopItemCroissantDescription": "Buttery goodness.",
+  "shopItemDonutName": "Donut",
+  "shopItemDonutDescription": "Sweet and sticky.",
   "shopItemPizzaName": "Pizza Slice",
   "shopItemPizzaDescription": "Cheesy and filling.",
   "shopItemSushiName": "Sushi Set",
@@ -167,6 +167,9 @@
   "reviewDone": "Done",
   "reviewCorrectionPrompt": "What's the correction?",
   "reviewVocabularyPrompt": "What does this mean?",
+  "sceneryTitle": "Scenery",
+  "shopItemBgMeadowName": "Meadow",
+  "sceneInUse": "In use",
   "shopItemBgBlueName": "Ocean Blue",
   "shopItemBgBlueDescription": "Calming blue vibes.",
   "shopItemBgForestName": "Forest Green",
@@ -177,11 +180,7 @@
   "shopItemBgGalaxyDescription": "Out of this world.",
   "purchaseSuccessSingle": "Purchased {itemName}!",
   "purchaseSuccessMultiple": "Purchased {itemName} x{quantity}!",
-  "youLabel": "You",
-  "mojiSleepReconnect": "Zzz... Moji is dozing while the language link reconnects. Try again soon.",
   "mojiSleepNight": "Shhh... Moji is sleeping. Tap Moji to wake up.",
-  "mojiSleepHintReconnect": "MOJI IS DOZING... LANGUAGE LINK RECONNECTING",
-  "mojiSleepHintNight": "MOJI IS SLEEPING... TAP TO WAKE",
   "mojiWakeSuccess": "Yawn... Moji is awake now. Let's practice!",
   "mojiAwakeFor": "Awake for {minutes} min",
   "@mojiAwakeFor": {
@@ -191,8 +190,6 @@
       }
     }
   },
-  "mojiSleepReasonReconnect": "Moji is dozing while the language link reconnects.",
-  "mojiSleepReasonNight": "Moji is sleeping. Tap to wake up.",
   "levelsScreenTitle": "Levels",
   "levelStatusCurrent": "Current",
   "levelStatusCompleted": "Completed",
@@ -214,6 +211,33 @@
   "characterDog": "Dog",
   "characterCat": "Cat",
   "characterBird": "Bird",
+  "characterRabbit": "Rabbit",
+  "characterHamster": "Hamster",
+  "characterParrot": "Parrot",
+  "characterFox": "Fox",
+  "characterRaccoon": "Raccoon",
+  "characterRedPanda": "Red Panda",
+  "characterSkunk": "Skunk",
+  "characterOtter": "Otter",
+  "characterBeaver": "Beaver",
+  "characterSquirrel": "Squirrel",
+  "characterChinchilla": "Chinchilla",
+  "characterMouse": "Mouse",
+  "characterHedgehog": "Hedgehog",
+  "characterBat": "Bat",
+  "characterFennec": "Fennec",
+  "characterKoala": "Koala",
+  "characterWombat": "Wombat",
+  "characterPanda": "Panda",
+  "characterSloth": "Sloth",
+  "characterCapybara": "Capybara",
+  "characterPiglet": "Piglet",
+  "characterSeal": "Seal",
+  "characterPenguin": "Penguin",
+  "characterFrog": "Frog",
+  "characterAxolotl": "Axolotl",
+  "characterGecko": "Gecko",
+  "characterChameleon": "Chameleon",
   "@dayLabel": {
     "description": "Label for a day number in weekly rewards view",
     "placeholders": {
@@ -223,15 +247,13 @@
     }
   },
   "aiUnavailableMessage": "Zzz... Moji is dozing while the language link reconnects. Try again soon.",
-  "mojiDozingReconnect": "Moji is dozing while the language link reconnects.",
-  "mojiSleepingTapWake": "Moji is sleeping. Tap to wake up.",
-  "mojiAwakeReady": "Moji is awake and ready!",
   "wardrobeTitle": "Wardrobe",
   "slotHat": "Hat",
   "slotNeck": "Neck",
   "slotFace": "Face",
   "bodyTailColor": "Body & Tail Color",
   "eyeColor": "Eye Color",
+  "beakColor": "Beak Color",
   "eyeStyleSolid": "Solid",
   "eyeStyleOddEyed": "Odd-Eyed",
   "leftEye": "Left Eye",
@@ -339,6 +361,13 @@
   "careGoToShop": "Go to shop",
   "carePlay": "Pet Moji",
   "carePlayCooldown": "Moji has had enough fuss for now.",
+  "playCatch": "Play catch",
+  "playCatchAgain": "Play again",
+  "playToyChest": "Toy chest",
+  "playBubbleBath": "Bubble bath",
+  "playPounce": "Pounce",
+  "playPondHop": "Pond hop",
+  "playFetchWords": "Fetch the words",
   "careClose": "Close",
   "careFedItem": "Moji ate the {item}.",
   "@careFedItem": {
@@ -360,27 +389,49 @@
   },
   "scenarioSickPenalty": "Moji is sick — rewards halved",
   "careDragToFeed": "Drag onto Moji to feed",
-  "@bondToNextStage": {
-    "description": "Bond meter caption: how much bond is left before the next pet stage",
-    "placeholders": {
-      "points": {
-        "type": "int"
-      },
-      "stage": {
-        "type": "String"
-      }
-    }
-  },
-  "bondLabel": "BOND",
   "bondStageCurious": "Curious",
   "bondStageFriendly": "Friendly",
   "bondStageAttached": "Attached",
   "bondStageDevoted": "Devoted",
   "bondStageInseparable": "Inseparable",
-  "bondToNextStage": "{points} to {stage}",
-  "bondKeepLearning": "Keep learning to grow closer",
   "bondMissesYou": "Moji misses you",
   "bondLonely": "Moji has been waiting for you",
+  "aiLimitQuizTitle": "Today's AI quizzes are used up",
+  "aiLimitMessageTitle": "Today's AI messages are used up",
+  "aiLimitUsage": "{used} of {total} used today",
+  "@aiLimitUsage": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "aiLimitResets": "Your allowance comes back tomorrow.",
+  "aiLimitReviewOpen": "Review never needs the tutor — your due cards are always there.",
+  "aiLimitQuizOpen": "Quizzes built from your own words are still there.",
+  "aiLimitWatchAd": "Watch an ad for one more",
+  "aiLimitGoPlus": "Get Mimikin Plus",
+  "premiumColumnFree": "Free",
+  "premiumColumnPlus": "Plus",
+  "premiumRowQuizzes": "AI quizzes a day",
+  "premiumRowMessages": "AI messages a day",
+  "premiumRowAds": "Interstitial ads",
+  "premiumValueShown": "Shown",
+  "premiumValueNone": "None",
+  "premiumRowRollover": "Unused quizzes",
+  "premiumValueExpire": "Expire",
+  "premiumValueRollOver": "Roll over",
+  "premiumRowPetStats": "Pet stats",
+  "premiumValueDecay": "Decay",
+  "premiumValueDecaySlower": "Decay slower",
+  "premiumComingSoon": "Subscriptions are not open yet.",
+  "premiumActive": "Mimikin Plus is active.",
+  "premiumRestore": "Restore a purchase",
+  "premiumRestoreDone": "Nothing to restore on this account.",
+  "premiumPurchasePending": "Finishing with the store…",
   "@accessoryUnlocksAt": {
     "description": "Shown on a wardrobe tile that a bond stage has not unlocked yet",
     "placeholders": {
@@ -469,12 +520,245 @@
       }
     }
   },
-  "onboardingBirthYearTitle": "What year were you born?",
-  "onboardingBirthYearHint": "Year",
-  "onboardingBirthYearWhy": "This only decides which ads are suitable for you.",
-  "onboardingBirthYearInvalid": "Please enter a valid year",
   "privacyRedactedNotice": "Personal details were hidden before sending.",
   "@privacyRedactedNotice": {
     "description": "Shown when the app removed personal data from a message before sending it to the AI."
+  },
+  "quizQuestionCounter": "QUESTION {current}/{total}",
+  "@quizQuestionCounter": {
+    "description": "Badge over the quiz card: which question of how many",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPreparing": "PREPARING...",
+  "quizPickAnswer": "Pick the right answer",
+  "quizWellDone": "Great job!",
+  "quizEncouragement": "You got this!",
+  "petTutorialWelcome": "Nice to meet you, {name}! Let us learn together.",
+  "@petTutorialWelcome": {
+    "description": "What the pet says once the player has petted it for the first time",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tutorialOfferTitle": "NEED A TOUR?",
+  "@tutorialOfferTitle": {
+    "description": "Title of the dialog offering a guided tour of the current page"
+  },
+  "tutorialWatch": "SHOW ME",
+  "@tutorialWatch": {
+    "description": "Button that starts the guided tour"
+  },
+  "tutorialSkip": "SKIP",
+  "@tutorialSkip": {
+    "description": "Button that declines or leaves a guided tour"
+  },
+  "tutorialNext": "NEXT",
+  "@tutorialNext": {
+    "description": "Advances to the next step of a guided tour"
+  },
+  "tutorialBack": "BACK",
+  "@tutorialBack": {
+    "description": "Returns to the previous step of a guided tour"
+  },
+  "tutorialDone": "DONE",
+  "@tutorialDone": {
+    "description": "Finishes a guided tour, shown on its last step"
+  },
+  "tutorialReplay": "Replay tutorials",
+  "@tutorialReplay": {
+    "description": "Settings row that puts every guided tour back on offer"
+  },
+  "tutorialOfferHome": "Want a quick tour of your home screen?",
+  "tutorialOfferQuiz": "First quiz. Want a quick tour?",
+  "tutorialOfferChat": "First chat. Want a quick tour?",
+  "tutorialOfferShop": "First visit to the shop. Want a quick tour?",
+  "tutorialOfferProfile": "Want a quick tour of your profile?",
+  "tutorialOfferReview": "First review session. Want a quick tour?",
+  "tutorialHomePet": "This is Moji. Tap it, or drag across its head to scratch.",
+  "tutorialHomeLevel": "Your level and XP. Tap to see what the next levels unlock.",
+  "tutorialHomeFeed": "Your food. Pick a snack, then drag it onto Moji.",
+  "tutorialHomeCare": "This appears when Moji needs something. Tap to check on it.",
+  "tutorialHomeReview": "Study: review the words that are due, and look back at your mistakes.",
+  "tutorialHomeSettings": "Settings: pixel text, reminders, and replaying these tours.",
+  "tutorialNavTown": "Town: step into a building to practise a conversation, or visit the school for a quiz.",
+  "@tutorialNavTown": {
+    "description": "Home tour step pointing at the Town tab in the bottom bar."
+  },
+  "tutorialNavChat": "Chats: longer conversations, and roleplay scenarios.",
+  "tutorialNavShop": "Shop: spend coins on food, styles and new worlds.",
+  "tutorialNavProfile": "Profile: your stats, your languages and your account.",
+  "tutorialQuizHeader": "Your level, and the pause button for when you need to stop.",
+  "tutorialQuizQuestion": "The question. The badge above says what it is testing.",
+  "tutorialQuizOptions": "Pick an answer. Wrong ones are saved so you can review them later.",
+  "tutorialQuizContinue": "Move on once you have answered.",
+  "tutorialChatMenu": "Your past chats and roleplay scenarios live behind this button.",
+  "tutorialChatMessages": "Your conversation. Mistakes get gently corrected as you go.",
+  "tutorialChatInput": "Write here. Do not worry about getting it perfect.",
+  "tutorialShopCoins": "Your coins. Earn them by practising and caring for Moji.",
+  "tutorialShopTabs": "Filter by what you are after: food, decor or style.",
+  "tutorialShopGrid": "Tap anything to buy it. Food gets used up, the rest is yours to keep.",
+  "tutorialShopFreeCoins": "Out of coins? Watch a short clip to top up.",
+  "tutorialProfileAvatar": "Tap Moji to change its look and its wardrobe.",
+  "tutorialProfileStats": "Your level, and how far you are from the next one.",
+  "tutorialProfileDaily": "Come back each day for a reward. Longer streaks pay better.",
+  "tutorialProfileLanguages": "What you speak, and what you are learning. Change either any time.",
+  "tutorialProfileAccount": "Link an account so Moji survives a new phone.",
+  "tutorialReviewCard": "Try to recall the answer, then tap the card to check.",
+  "tutorialReviewGrades": "Reveal the answer, then say how it went. Cards you found hard come back sooner.",
+  "tutorialReviewCount": "How many cards are left in this session.",
+  "seasonPassNotOnSale": "This pass is not on sale yet.",
+  "seasonPassBuy": "Buy {price}",
+  "@seasonPassBuy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "seasonPassClaim": "Claim ({count})",
+  "@seasonPassClaim": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassClaiming": "Claiming…",
+  "seasonPassClaimedToast": "Claimed: {count}",
+  "@seasonPassClaimedToast": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassTierOf": "Tier {tier} / {total}",
+  "@seasonPassTierOf": {
+    "placeholders": {
+      "tier": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassTrackLength": "{count} pieces · {xp} XP",
+  "@seasonPassTrackLength": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassComplete": "Track complete.",
+  "seasonPassXpToNext": "{xp} XP to the next piece",
+  "@seasonPassXpToNext": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassTierCost": "{xp} XP",
+  "@seasonPassTierCost": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassReady": "Ready",
+  "seasonPassTierClaimed": "Claimed",
+  "seasonPassTryOn": "Try it on",
+  "sceneAirfieldName": "Departures",
+  "@sceneAirfieldName": {
+    "description": "Name of the airfield scene handed over by the last season pass tier. The airport-sign sense of the word."
+  },
+  "sceneCozyRoomName": "Cozy Room",
+  "@sceneCozyRoomName": {
+    "description": "Name of the cozy room scene: the room with a window, a shelf and a round rug that new players start in."
+  },
+  "sceneEnchantedMeadowName": "Enchanted Meadow",
+  "@sceneEnchantedMeadowName": {
+    "description": "Name of the enchanted meadow scene: a lavender-sky meadow with a wizard tower, giant mushrooms and a corner moon."
+  },
+  "sceneMushroomGladeName": "Mushroom Glade",
+  "@sceneMushroomGladeName": {
+    "description": "Name of the mushroom glade scene: a clearing of giant red toadstools on cool jade moss."
+  },
+  "scenePumpkinPatchName": "Pumpkin Patch",
+  "@scenePumpkinPatchName": {
+    "description": "Name of the pumpkin patch scene: a crooked witch's house, a cauldron and jack-o'-lanterns on green grass under a lavender sky. Season two pass content."
+  },
+  "seasonPassScenePreviewOwned": "Yours. Change worlds any time in the wardrobe.",
+  "seasonPassPreviewOwned": "Yours. Put it on in the wardrobe.",
+  "seasonPassPreviewLocked": "Not yours yet — this is only a look.",
+  "seasonPassPromise": "Tiers are owed XP you earn after buying the pass, so buying it late costs you nothing. Nothing here expires: a tier you have reached stays reached, and one you have not stays waiting.",
+  "seasonPassWaitingToClaim": "Waiting to claim: {count}",
+  "@seasonPassWaitingToClaim": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seasonPassEarnedByStudying": "Earned by studying",
+  "accessoryBandanaName": "Sunrise Bandana",
+  "accessoryBandanaCloudName": "Cloud Bandana",
+  "accessoryScarfDuskName": "Dusk Scarf",
+  "accessoryGogglesName": "Flight Goggles",
+  "accessoryGogglesBrassName": "Brass Goggles",
+  "accessoryBeanieDuskName": "Dusk Beanie",
+  "accessoryFlightCapName": "Flight Cap",
+  "accessoryFlightCapCloudName": "Cloud Flight Cap",
+  "accessoryCowboyHatCharcoalName": "Charcoal Cowboy Hat",
+  "accessoryFlightScarfName": "Windswept Scarf",
+  "accessoryPumpkinWitchName": "Pumpkin Witch Hat",
+  "accessoryDevilBandName": "Devil-Horn Headband",
+  "accessoryGhostBandanaName": "Ghost Bandana",
+  "accessoryBatChokerName": "Bat Choker",
+  "shopSectionTopUp": "Top Up",
+  "shopSectionPlus": "Plus",
+  "shopSectionPass": "Season Pass",
+  "shopSectionItems": "Items",
+  "topUpTitle": "Top Up",
+  "topUpCoins": "{coins} coins",
+  "@topUpCoins": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
+  },
+  "topUpBonus": "+{percent}% coins",
+  "@topUpBonus": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "topUpBestValue": "Best value",
+  "topUpNotOpen": "Coin packs are not open yet.",
+  "topUpThanks": "Added {coins} coins.",
+  "@topUpThanks": {
+    "placeholders": {
+      "coins": {
+        "type": "int"
+      }
+    }
   }
 }

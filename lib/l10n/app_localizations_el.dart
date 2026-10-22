@@ -36,16 +36,19 @@ class AppLocalizationsEl extends AppLocalizations {
   String get designMojiBtn => 'Σχεδίασε Moji';
 
   @override
-  String get quizMode => 'Κουίζ';
-
-  @override
   String get quizDesc => 'Δοκίμασε τις γνώσεις σου.';
 
   @override
-  String get scenarios => 'Σενάρια';
+  String get scenarios => 'Πόλη';
 
   @override
   String get scenariosDesc => 'Εξάσκηση πραγματικών συνομιλιών.';
+
+  @override
+  String get townSchool => 'Σχολείο';
+
+  @override
+  String get townTab => 'Πόλη';
 
   @override
   String get profile => 'Προφίλ';
@@ -115,21 +118,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Ξεκίνα μια νέα συζήτηση';
-
-  @override
-  String get blankChat => 'Κενή Συνομιλία';
-
-  @override
-  String get blankChatDesc => 'Ξεκίνα χωρίς πλαίσιο';
-
-  @override
-  String get roleplayScenario => 'Σενάριο Ρόλων';
-
-  @override
-  String get roleplayScenarioDesc => 'Εξάσκηση συγκεκριμένων καταστάσεων';
-
-  @override
-  String get chooseChatType => 'Επίλεξε τύπο συνομιλίας';
 
   @override
   String get cancel => 'Ακύρωση';
@@ -212,9 +200,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get drills => 'Λάθη';
 
   @override
-  String get typeHere => 'Πληκτρολογήστε εδώ...';
-
-  @override
   String get shopTitle => 'Κατάστημα';
 
   @override
@@ -280,9 +265,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get come_back_tomorrow => 'Come back tomorrow!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
-
-  @override
   String get keep_going => 'Keep it going!';
 
   @override
@@ -303,10 +285,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get continueBtn => 'ΣΥΝΕΧΕΙΑ';
 
   @override
-  String get howWouldYouRate => 'ΠΩΣ ΘΑ ΑΞΙΟΛΟΓΟΥΣΕΤΕ';
+  String get howWouldYouRate => 'ΠΩΣ ΘΑ ΑΞΙΟΛΟΓΟΥΣΕΣ';
 
   @override
-  String get yourLevel => 'ΤΟ ΕΠΙΠΕΔΟ ΣΑΣ;';
+  String get yourLevel => 'ΤΟ ΕΠΙΠΕΔΟ ΣΟΥ;';
 
   @override
   String get beginner => 'ΑΡΧΑΡΙΟΣ';
@@ -374,10 +356,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get shopItemAppleDescription => 'Ένα υγιεινό σνακ.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Ντόνατ';
 
   @override
-  String get shopItemCroissantDescription => 'Buttery goodness.';
+  String get shopItemDonutDescription => 'Γλυκό και κολλώδες.';
 
   @override
   String get shopItemPizzaName => 'Κομμάτι πίτσας';
@@ -457,6 +439,15 @@ class AppLocalizationsEl extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Τι σημαίνει αυτό;';
 
   @override
+  String get sceneryTitle => 'Σκηνικό';
+
+  @override
+  String get shopItemBgMeadowName => 'Λιβάδι';
+
+  @override
+  String get sceneInUse => 'Σε χρήση';
+
+  @override
   String get shopItemBgBlueName => 'Ωκεάνιο μπλε';
 
   @override
@@ -491,22 +482,8 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Εσύ';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Ζζζ... Ο Moji νυστάζει όσο επανασυνδέεται ο σύνδεσμος γλώσσας. Δοκίμασε ξανά σύντομα.';
-
-  @override
   String get mojiSleepNight =>
       'Σσσ... Ο Moji κοιμάται. Πάτησε τον Moji για να ξυπνήσει.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'Ο MOJI ΝΥΣΤΑΖΕΙ... ΕΠΑΝΑΣΥΝΔΕΣΗ ΣΥΝΔΕΣΜΟΥ ΓΛΩΣΣΑΣ';
-
-  @override
-  String get mojiSleepHintNight => 'Ο MOJI ΚΟΙΜΑΤΑΙ... ΠΑΤΗΣΕ ΓΙΑ ΞΥΠΝΗΜΑ';
 
   @override
   String get mojiWakeSuccess => 'Χασμουρητό... Ο Moji ξύπνησε! Ας εξασκηθούμε!';
@@ -515,13 +492,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Ξύπνιος για $minutes λεπτά';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Ο Moji νυστάζει όσο επανασυνδέεται ο σύνδεσμος γλώσσας.';
-
-  @override
-  String get mojiSleepReasonNight => 'Ο Moji κοιμάται. Πάτησε για ξύπνημα.';
 
   @override
   String get levelsScreenTitle => 'Επίπεδα';
@@ -590,19 +560,89 @@ class AppLocalizationsEl extends AppLocalizations {
   String get characterBird => 'Πουλί';
 
   @override
+  String get characterRabbit => 'Κουνέλι';
+
+  @override
+  String get characterHamster => 'Χάμστερ';
+
+  @override
+  String get characterParrot => 'Παπαγάλος';
+
+  @override
+  String get characterFox => 'Αλεπού';
+
+  @override
+  String get characterRaccoon => 'Ρακούν';
+
+  @override
+  String get characterRedPanda => 'Κόκκινο πάντα';
+
+  @override
+  String get characterSkunk => 'Μεφίτις';
+
+  @override
+  String get characterOtter => 'Βίδρα';
+
+  @override
+  String get characterBeaver => 'Κάστορας';
+
+  @override
+  String get characterSquirrel => 'Σκίουρος';
+
+  @override
+  String get characterChinchilla => 'Τσιντσιλά';
+
+  @override
+  String get characterMouse => 'Ποντίκι';
+
+  @override
+  String get characterHedgehog => 'Σκαντζόχοιρος';
+
+  @override
+  String get characterBat => 'Νυχτερίδα';
+
+  @override
+  String get characterFennec => 'Φενέκ';
+
+  @override
+  String get characterKoala => 'Κοάλα';
+
+  @override
+  String get characterWombat => 'Γουόμπατ';
+
+  @override
+  String get characterPanda => 'Πάντα';
+
+  @override
+  String get characterSloth => 'Βραδύπους';
+
+  @override
+  String get characterCapybara => 'Καπιμπάρα';
+
+  @override
+  String get characterPiglet => 'Γουρουνάκι';
+
+  @override
+  String get characterSeal => 'Φώκια';
+
+  @override
+  String get characterPenguin => 'Πιγκουίνος';
+
+  @override
+  String get characterFrog => 'Βάτραχος';
+
+  @override
+  String get characterAxolotl => 'Αξολότλ';
+
+  @override
+  String get characterGecko => 'Γκέκο';
+
+  @override
+  String get characterChameleon => 'Χαμαιλέοντας';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Ο Moji λαγοκοιμάται όσο επανασυνδέεται η γλωσσική σύνδεση. Δοκίμασε ξανά σύντομα.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Ο Moji λαγοκοιμάται όσο επανασυνδέεται η γλωσσική σύνδεση.';
-
-  @override
-  String get mojiSleepingTapWake =>
-      'Ο Moji κοιμάται. Πάτησε για να τον ξυπνήσεις.';
-
-  @override
-  String get mojiAwakeReady => 'Ο Moji είναι ξύπνιος και έτοιμος!';
 
   @override
   String get wardrobeTitle => 'Ντουλάπα';
@@ -621,6 +661,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get eyeColor => 'Χρώμα ματιών';
+
+  @override
+  String get beakColor => 'Χρώμα ράμφους';
 
   @override
   String get eyeStyleSolid => 'Μονόχρωμα';
@@ -878,6 +921,27 @@ class AppLocalizationsEl extends AppLocalizations {
   String get carePlayCooldown => 'Ο Moji χόρτασε χάδια προς το παρόν.';
 
   @override
+  String get playCatch => 'Παίξε μπάλα';
+
+  @override
+  String get playCatchAgain => 'Παίξε ξανά';
+
+  @override
+  String get playToyChest => 'Μπαούλο παιχνιδιών';
+
+  @override
+  String get playBubbleBath => 'Αφρόλουτρο';
+
+  @override
+  String get playPounce => 'Κυνήγι τυφλοπόντικα';
+
+  @override
+  String get playPondHop => 'Πηδήματα στη λιμνούλα';
+
+  @override
+  String get playFetchWords => 'Φέρε τις λέξεις';
+
+  @override
   String get careClose => 'Κλείσιμο';
 
   @override
@@ -897,9 +961,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get careDragToFeed => 'Σύρε πάνω στον Moji για να τον ταΐσεις';
 
   @override
-  String get bondLabel => 'ΔΕΣΜΟΣ';
-
-  @override
   String get bondStageCurious => 'Περίεργος';
 
   @override
@@ -915,19 +976,93 @@ class AppLocalizationsEl extends AppLocalizations {
   String get bondStageInseparable => 'Αχώριστοι';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points για $stage';
-  }
-
-  @override
-  String get bondKeepLearning =>
-      'Συνέχισε να μαθαίνεις για να έρθετε πιο κοντά';
-
-  @override
   String get bondMissesYou => 'Λείπεις στον Moji';
 
   @override
   String get bondLonely => 'Ο Moji σε περιμένει καιρό';
+
+  @override
+  String get aiLimitQuizTitle => 'Τα σημερινά AI κουίζ εξαντλήθηκαν';
+
+  @override
+  String get aiLimitMessageTitle => 'Τα σημερινά AI μηνύματα εξαντλήθηκαν';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '$used από $total σήμερα';
+  }
+
+  @override
+  String get aiLimitResets => 'Το όριό σου επιστρέφει αύριο.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Η επανάληψη δεν χρειάζεται τον δάσκαλο — οι κάρτες σου είναι πάντα εκεί.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Τα κουίζ από τις δικές σου λέξεις υπάρχουν ακόμα.';
+
+  @override
+  String get aiLimitWatchAd => 'Δες μια διαφήμιση για ένα ακόμα';
+
+  @override
+  String get aiLimitGoPlus => 'Απόκτησε Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Δωρεάν';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'AI κουίζ την ημέρα';
+
+  @override
+  String get premiumRowMessages => 'AI μηνύματα την ημέρα';
+
+  @override
+  String get premiumRowAds => 'Ενδιάμεσες διαφημίσεις';
+
+  @override
+  String get premiumValueShown => 'Εμφανίζονται';
+
+  @override
+  String get premiumValueNone => 'Καμία';
+
+  @override
+  String get premiumRowRollover => 'Αχρησιμοποίητα κουίζ';
+
+  @override
+  String get premiumValueExpire => 'Λήγουν';
+
+  @override
+  String get premiumValueRollOver => 'Μεταφέρονται';
+
+  @override
+  String get premiumRowPetStats => 'Στατιστικά κατοικιδίου';
+
+  @override
+  String get premiumValueDecay => 'Πέφτουν';
+
+  @override
+  String get premiumValueDecaySlower => 'Πέφτουν πιο αργά';
+
+  @override
+  String get premiumComingSoon => 'Οι συνδρομές δεν είναι ακόμα διαθέσιμες.';
+
+  @override
+  String get premiumActive => 'Το Mimikin Plus είναι ενεργό.';
+
+  @override
+  String get premiumRestore => 'Επαναφορά αγοράς';
+
+  @override
+  String get premiumRestoreDone =>
+      'Δεν υπάρχει τίποτα προς επαναφορά σε αυτόν τον λογαριασμό.';
+
+  @override
+  String get premiumPurchasePending => 'Ολοκλήρωση στο κατάστημα…';
 
   @override
   String get categoryStyle => 'Στιλ';
@@ -1087,19 +1222,356 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Ποια χρονιά γεννήθηκες;';
-
-  @override
-  String get onboardingBirthYearHint => 'Έτος';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Χρησιμοποιείται μόνο για να επιλέγουμε κατάλληλες διαφημίσεις.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Δώσε ένα έγκυρο έτος';
-
-  @override
   String get privacyRedactedNotice =>
       'Τα προσωπικά στοιχεία αποκρύφτηκαν πριν την αποστολή.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'ΕΡΩΤΗΣΗ $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'ΠΡΟΕΤΟΙΜΑΣΙΑ...';
+
+  @override
+  String get quizPickAnswer => 'Διάλεξε τη σωστή απάντηση';
+
+  @override
+  String get quizWellDone => 'Μπράβο!';
+
+  @override
+  String get quizEncouragement => 'Θα τα καταφέρεις!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Χαίρομαι που σε γνωρίζω, $name! Ας μάθουμε μαζί.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'ΜΙΑ ΞΕΝΑΓΗΣΗ;';
+
+  @override
+  String get tutorialWatch => 'ΔΕΙΞΕ ΜΟΥ';
+
+  @override
+  String get tutorialSkip => 'ΠΑΡΑΛΕΙΨΗ';
+
+  @override
+  String get tutorialNext => 'ΕΠΟΜΕΝΟ';
+
+  @override
+  String get tutorialBack => 'ΠΙΣΩ';
+
+  @override
+  String get tutorialDone => 'ΤΕΛΟΣ';
+
+  @override
+  String get tutorialReplay => 'Επανάληψη ξεναγήσεων';
+
+  @override
+  String get tutorialOfferHome =>
+      'Θέλεις μια γρήγορη ξενάγηση στην αρχική οθόνη;';
+
+  @override
+  String get tutorialOfferQuiz => 'Το πρώτο σου κουίζ. Μια γρήγορη ξενάγηση;';
+
+  @override
+  String get tutorialOfferChat =>
+      'Η πρώτη σου συνομιλία. Μια γρήγορη ξενάγηση;';
+
+  @override
+  String get tutorialOfferShop =>
+      'Η πρώτη σου επίσκεψη στο κατάστημα. Μια γρήγορη ξενάγηση;';
+
+  @override
+  String get tutorialOfferProfile =>
+      'Θέλεις μια γρήγορη ξενάγηση στο προφίλ σου;';
+
+  @override
+  String get tutorialOfferReview =>
+      'Η πρώτη σου επανάληψη. Μια γρήγορη ξενάγηση;';
+
+  @override
+  String get tutorialHomePet =>
+      'Αυτός είναι ο Moji. Πάτησέ τον ή σύρε το δάχτυλο στο κεφάλι του για χάδι.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Το επίπεδο και οι πόντοι σου. Πάτα για να δεις τι ξεκλειδώνουν τα επόμενα επίπεδα.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Το φαγητό σου. Διάλεξε ένα σνακ και σύρ\' το πάνω στον Moji.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Εμφανίζεται όταν ο Moji χρειάζεται κάτι. Πάτα για να δεις.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Μελέτη: επανέλαβε τις λέξεις που περιμένουν και ξαναδές τα λάθη σου.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Ρυθμίσεις: γραμματοσειρά pixel, υπενθυμίσεις και επανάληψη αυτών των ξεναγήσεων.';
+
+  @override
+  String get tutorialNavTown =>
+      'Πόλη: μπες σε ένα κτίριο για να εξασκηθείς σε μια συζήτηση ή πήγαινε στο σχολείο για κουίζ.';
+
+  @override
+  String get tutorialNavChat =>
+      'Συνομιλίες: μεγαλύτερες κουβέντες και σενάρια ρόλων.';
+
+  @override
+  String get tutorialNavShop =>
+      'Κατάστημα: ξόδεψε νομίσματα σε φαγητό, στιλ και νέους κόσμους.';
+
+  @override
+  String get tutorialNavProfile =>
+      'Προφίλ: τα στατιστικά, οι γλώσσες και ο λογαριασμός σου.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Το επίπεδό σου και το κουμπί παύσης, αν χρειαστεί να σταματήσεις.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Η ερώτηση. Η ένδειξη από πάνω λέει τι εξετάζεται.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Διάλεξε απάντηση. Οι λάθος αποθηκεύονται για να τις δεις ξανά αργότερα.';
+
+  @override
+  String get tutorialQuizContinue => 'Προχώρα μόλις απαντήσεις.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Οι παλιές συνομιλίες και τα σενάρια ρόλων είναι πίσω από αυτό το κουμπί.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Η κουβέντα σας. Τα λάθη διορθώνονται ήπια στην πορεία.';
+
+  @override
+  String get tutorialChatInput => 'Γράψε εδώ. Μην αγχώνεσαι να βγει τέλειο.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Τα νομίσματά σου. Τα κερδίζεις εξασκούμενος και φροντίζοντας τον Moji.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Φιλτράρισε με βάση αυτό που ψάχνεις: φαγητό, διακόσμηση ή στιλ.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Πάτα οτιδήποτε για να το αγοράσεις. Το φαγητό ξοδεύεται, τα υπόλοιπα μένουν δικά σου.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Ξέμεινες από νομίσματα; Δες ένα σύντομο βίντεο για ανεφοδιασμό.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Πάτα τον Moji για να αλλάξεις την εμφάνιση και τη γκαρνταρόμπα του.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Το επίπεδό σου και πόσο απέχεις από το επόμενο.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Γύρνα κάθε μέρα για ανταμοιβή. Τα μεγάλα σερί πληρώνουν καλύτερα.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Τι μιλάς και τι μαθαίνεις. Και τα δύο αλλάζουν όποτε θέλεις.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Σύνδεσε έναν λογαριασμό ώστε ο Moji να επιβιώσει σε νέο τηλέφωνο.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Προσπάθησε να θυμηθείς την απάντηση και μετά πάτα την κάρτα.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Δείξε την απάντηση και πες πώς πήγε. Οι δύσκολες κάρτες επιστρέφουν νωρίτερα.';
+
+  @override
+  String get tutorialReviewCount =>
+      'Πόσες κάρτες απομένουν σε αυτή τη συνεδρία.';
+
+  @override
+  String get seasonPassNotOnSale => 'Αυτό το πάσο δεν πωλείται ακόμη.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Αγορά $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Παραλαβή ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Παραλαβή…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Παρελήφθησαν: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Βαθμίδα $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count κομμάτια · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Η διαδρομή ολοκληρώθηκε.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP για το επόμενο κομμάτι';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Έτοιμο';
+
+  @override
+  String get seasonPassTierClaimed => 'Παραλήφθηκε';
+
+  @override
+  String get seasonPassTryOn => 'Δοκίμασέ το';
+
+  @override
+  String get sceneAirfieldName => 'Αναχωρήσεις';
+
+  @override
+  String get sceneCozyRoomName => 'Ζεστό δωμάτιο';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Μαγεμένο λιβάδι';
+
+  @override
+  String get sceneMushroomGladeName => 'Ξέφωτο μανιταριών';
+
+  @override
+  String get scenePumpkinPatchName => 'Χωράφι με κολοκύθες';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Δικός σου. Αλλάξτε κόσμο οποτεδήποτε από την ντουλάπα.';
+
+  @override
+  String get seasonPassPreviewOwned =>
+      'Είναι δικό σου. Φόρεσέ το στην ντουλάπα.';
+
+  @override
+  String get seasonPassPreviewLocked =>
+      'Δεν είναι ακόμα δικό σου — μόνο μια ματιά.';
+
+  @override
+  String get seasonPassPromise =>
+      'Οι βαθμίδες μετρούν τους πόντους που κερδίζεις μετά την αγορά, οπότε η καθυστερημένη αγορά δεν σου κοστίζει τίποτα. Τίποτα δεν λήγει: μια βαθμίδα που έφτασες μένει, και όποια δεν έφτασες περιμένει.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Αναμένουν παραλαβή: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Κερδίζονται με μελέτη';
+
+  @override
+  String get accessoryBandanaName => 'Μπαντάνα Ανατολής';
+
+  @override
+  String get accessoryBandanaCloudName => 'Μπαντάνα Σύννεφου';
+
+  @override
+  String get accessoryScarfDuskName => 'Κασκόλ Σούρουπου';
+
+  @override
+  String get accessoryGogglesName => 'Γυαλιά Πτήσης';
+
+  @override
+  String get accessoryGogglesBrassName => 'Ορειχάλκινα Γυαλιά';
+
+  @override
+  String get accessoryBeanieDuskName => 'Σκούφος Σούρουπου';
+
+  @override
+  String get accessoryFlightCapName => 'Κράνος Πτήσης';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Κράνος Πτήσης Σύννεφου';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Ανθρακί Καπέλο Καουμπόη';
+
+  @override
+  String get accessoryFlightScarfName => 'Κασκόλ στον Άνεμο';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Καπέλο μάγισσας με κολοκύθα';
+
+  @override
+  String get accessoryDevilBandName => 'Στέκα με διαβολικά κέρατα';
+
+  @override
+  String get accessoryGhostBandanaName => 'Μπαντάνα φάντασμα';
+
+  @override
+  String get accessoryBatChokerName => 'Τσόκερ νυχτερίδας';
+
+  @override
+  String get shopSectionTopUp => 'Αγορά νομισμάτων';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Σεζόν πας';
+
+  @override
+  String get shopSectionItems => 'Αντικείμενα';
+
+  @override
+  String get topUpTitle => 'Αγορά νομισμάτων';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins νομίσματα';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% νομίσματα';
+  }
+
+  @override
+  String get topUpBestValue => 'Καλύτερη αξία';
+
+  @override
+  String get topUpNotOpen => 'Τα πακέτα νομισμάτων δεν είναι ακόμα διαθέσιμα.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'Προστέθηκαν $coins νομίσματα.';
+  }
 }

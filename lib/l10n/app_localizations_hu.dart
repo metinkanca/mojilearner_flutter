@@ -36,16 +36,19 @@ class AppLocalizationsHu extends AppLocalizations {
   String get designMojiBtn => 'Moji tervezés';
 
   @override
-  String get quizMode => 'Kvíz';
-
-  @override
   String get quizDesc => 'Teszteld a tudásod.';
 
   @override
-  String get scenarios => 'Szerepek';
+  String get scenarios => 'Város';
 
   @override
   String get scenariosDesc => 'Gyakorolj valós párbeszédeket.';
+
+  @override
+  String get townSchool => 'Iskola';
+
+  @override
+  String get townTab => 'Város';
 
   @override
   String get profile => 'Profil';
@@ -115,21 +118,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Kezdj új beszélgetést';
-
-  @override
-  String get blankChat => 'Üres beszélgetés';
-
-  @override
-  String get blankChatDesc => 'Kezdés kontextus nélkül';
-
-  @override
-  String get roleplayScenario => 'Szerepjáték forgatókönyv';
-
-  @override
-  String get roleplayScenarioDesc => 'Gyakorolj konkrét helyzeteket';
-
-  @override
-  String get chooseChatType => 'Válassz csevegési típust';
 
   @override
   String get cancel => 'Mégse';
@@ -212,9 +200,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get drills => 'Hibák';
 
   @override
-  String get typeHere => 'Írjon ide...';
-
-  @override
   String get shopTitle => 'Bolt';
 
   @override
@@ -278,9 +263,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get come_back_tomorrow => 'Gyere vissza holnap!';
-
-  @override
-  String get streak_broken => 'Üdv újra! Kezdjük elölről';
 
   @override
   String get keep_going => 'Csak így tovább!';
@@ -373,10 +355,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get shopItemAppleDescription => 'Egy egészséges snack.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Fánk';
 
   @override
-  String get shopItemCroissantDescription => 'Vajas jóság.';
+  String get shopItemDonutDescription => 'Édes és ragacsos.';
 
   @override
   String get shopItemPizzaName => 'Pizza szelet';
@@ -455,6 +437,15 @@ class AppLocalizationsHu extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Mit jelent ez?';
 
   @override
+  String get sceneryTitle => 'Táj';
+
+  @override
+  String get shopItemBgMeadowName => 'Rét';
+
+  @override
+  String get sceneInUse => 'Használatban';
+
+  @override
   String get shopItemBgBlueName => 'Óceán kék';
 
   @override
@@ -489,22 +480,8 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Te';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji szundikál, miközben a nyelvi kapcsolat újracsatlakozik. Próbáld újra hamarosan.';
-
-  @override
   String get mojiSleepNight =>
       'Psszt... Moji alszik. Koppints Mojira az ébresztéshez.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI SZUNDIKÁL... A NYELVI KAPCSOLAT ÚJRACSATLAKOZIK';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI ALSZIK... KOPPINTS AZ ÉBRESZTÉSHEZ';
 
   @override
   String get mojiWakeSuccess =>
@@ -514,13 +491,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Még $minutes percig ébren';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji szundikál, miközben a nyelvi kapcsolat újracsatlakozik.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji alszik. Koppints az ébresztéshez.';
 
   @override
   String get levelsScreenTitle => 'Szintek';
@@ -589,18 +559,89 @@ class AppLocalizationsHu extends AppLocalizations {
   String get characterBird => 'Madár';
 
   @override
+  String get characterRabbit => 'Nyúl';
+
+  @override
+  String get characterHamster => 'Hörcsög';
+
+  @override
+  String get characterParrot => 'Papagáj';
+
+  @override
+  String get characterFox => 'Róka';
+
+  @override
+  String get characterRaccoon => 'Mosómedve';
+
+  @override
+  String get characterRedPanda => 'Vörös panda';
+
+  @override
+  String get characterSkunk => 'Bűzös borz';
+
+  @override
+  String get characterOtter => 'Vidra';
+
+  @override
+  String get characterBeaver => 'Hód';
+
+  @override
+  String get characterSquirrel => 'Mókus';
+
+  @override
+  String get characterChinchilla => 'Csincsilla';
+
+  @override
+  String get characterMouse => 'Egér';
+
+  @override
+  String get characterHedgehog => 'Sün';
+
+  @override
+  String get characterBat => 'Denevér';
+
+  @override
+  String get characterFennec => 'Fenek';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Vombat';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Lajhár';
+
+  @override
+  String get characterCapybara => 'Kapibara';
+
+  @override
+  String get characterPiglet => 'Malac';
+
+  @override
+  String get characterSeal => 'Fóka';
+
+  @override
+  String get characterPenguin => 'Pingvin';
+
+  @override
+  String get characterFrog => 'Béka';
+
+  @override
+  String get characterAxolotl => 'Axolotl';
+
+  @override
+  String get characterGecko => 'Gekkó';
+
+  @override
+  String get characterChameleon => 'Kaméleon';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji szundikál, amíg a nyelvi kapcsolat helyreáll. Próbáld újra hamarosan!';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji szundikál, amíg a nyelvi kapcsolat helyreáll.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji alszik. Koppints, hogy felébreszd!';
-
-  @override
-  String get mojiAwakeReady => 'Moji ébren van és készen áll!';
 
   @override
   String get wardrobeTitle => 'Ruhásszekrény';
@@ -619,6 +660,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get eyeColor => 'Szemszín';
+
+  @override
+  String get beakColor => 'Csőr színe';
 
   @override
   String get eyeStyleSolid => 'Egyszínű';
@@ -874,6 +918,27 @@ class AppLocalizationsHu extends AppLocalizations {
       'Moji egyelőre eleget kapott a kényeztetésből.';
 
   @override
+  String get playCatch => 'Labdázás';
+
+  @override
+  String get playCatchAgain => 'Újra';
+
+  @override
+  String get playToyChest => 'Játékosláda';
+
+  @override
+  String get playBubbleBath => 'Habfürdő';
+
+  @override
+  String get playPounce => 'Vakondvadászat';
+
+  @override
+  String get playPondHop => 'Tavi ugrálás';
+
+  @override
+  String get playFetchWords => 'Hozd a szavakat';
+
+  @override
   String get careClose => 'Bezárás';
 
   @override
@@ -893,9 +958,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get careDragToFeed => 'Húzd Mojira az etetéshez';
 
   @override
-  String get bondLabel => 'KÖTELÉK';
-
-  @override
   String get bondStageCurious => 'Kíváncsi';
 
   @override
@@ -911,18 +973,92 @@ class AppLocalizationsHu extends AppLocalizations {
   String get bondStageInseparable => 'Elválaszthatatlan';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points eddig: $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Tanulj tovább, hogy közelebb kerüljetek';
-
-  @override
   String get bondMissesYou => 'Moji hiányol téged';
 
   @override
   String get bondLonely => 'Moji régóta vár rád';
+
+  @override
+  String get aiLimitQuizTitle => 'A mai AI-kvízek elfogytak';
+
+  @override
+  String get aiLimitMessageTitle => 'A mai AI-üzenetek elfogytak';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return 'Ma $total-ból $used felhasználva';
+  }
+
+  @override
+  String get aiLimitResets => 'A kereted holnap visszatér.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Az ismétléshez sosem kell a tanár — a kártyáid mindig ott vannak.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'A saját szavaidból épült kvízek továbbra is elérhetők.';
+
+  @override
+  String get aiLimitWatchAd => 'Nézz meg egy hirdetést még egyért';
+
+  @override
+  String get aiLimitGoPlus => 'Mimikin Plus beszerzése';
+
+  @override
+  String get premiumColumnFree => 'Ingyenes';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'AI-kvíz naponta';
+
+  @override
+  String get premiumRowMessages => 'AI-üzenet naponta';
+
+  @override
+  String get premiumRowAds => 'Teljes képernyős hirdetések';
+
+  @override
+  String get premiumValueShown => 'Megjelennek';
+
+  @override
+  String get premiumValueNone => 'Nincs';
+
+  @override
+  String get premiumRowRollover => 'Fel nem használt kvízek';
+
+  @override
+  String get premiumValueExpire => 'Lejárnak';
+
+  @override
+  String get premiumValueRollOver => 'Átvihetők';
+
+  @override
+  String get premiumRowPetStats => 'A kedvenc állapota';
+
+  @override
+  String get premiumValueDecay => 'Romlik';
+
+  @override
+  String get premiumValueDecaySlower => 'Lassabban romlik';
+
+  @override
+  String get premiumComingSoon => 'Az előfizetések még nem érhetők el.';
+
+  @override
+  String get premiumActive => 'A Mimikin Plus aktív.';
+
+  @override
+  String get premiumRestore => 'Vásárlás visszaállítása';
+
+  @override
+  String get premiumRestoreDone => 'Ezen a fiókon nincs mit visszaállítani.';
+
+  @override
+  String get premiumPurchasePending => 'Befejezés az áruházban…';
 
   @override
   String get categoryStyle => 'Stílus';
@@ -1082,19 +1218,355 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Melyik évben születtél?';
-
-  @override
-  String get onboardingBirthYearHint => 'Év';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Csak azt dönti el, milyen hirdetések valók neked.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Adj meg egy érvényes évet';
-
-  @override
   String get privacyRedactedNotice =>
       'A személyes adatokat elrejtettük küldés előtt.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'KÉRDÉS $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'ELŐKÉSZÍTÉS...';
+
+  @override
+  String get quizPickAnswer => 'Válaszd ki a helyes választ';
+
+  @override
+  String get quizWellDone => 'Szép munka!';
+
+  @override
+  String get quizEncouragement => 'Menni fog!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Örülök, hogy megismertelek, $name! Tanuljunk együtt.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'KÖRBEVEZESSELEK?';
+
+  @override
+  String get tutorialWatch => 'MUTASD MEG';
+
+  @override
+  String get tutorialSkip => 'KIHAGYOM';
+
+  @override
+  String get tutorialNext => 'TOVÁBB';
+
+  @override
+  String get tutorialBack => 'VISSZA';
+
+  @override
+  String get tutorialDone => 'KÉSZ';
+
+  @override
+  String get tutorialReplay => 'Bemutatók újrajátszása';
+
+  @override
+  String get tutorialOfferHome =>
+      'Kérsz egy gyors körvezetést a kezdőképernyőn?';
+
+  @override
+  String get tutorialOfferQuiz =>
+      'Az első kvízed. Kérsz egy gyors körvezetést?';
+
+  @override
+  String get tutorialOfferChat =>
+      'Az első beszélgetésed. Kérsz egy gyors körvezetést?';
+
+  @override
+  String get tutorialOfferShop =>
+      'Első látogatásod a boltban. Kérsz egy gyors körvezetést?';
+
+  @override
+  String get tutorialOfferProfile =>
+      'Kérsz egy gyors körvezetést a profilodon?';
+
+  @override
+  String get tutorialOfferReview =>
+      'Az első ismétlésed. Kérsz egy gyors körvezetést?';
+
+  @override
+  String get tutorialHomePet =>
+      'Ő Moji. Koppints rá, vagy húzd végig az ujjad a fején, hogy megvakargasd.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'A szinted és az XP-d. Koppints, hogy lásd, mit nyitnak a következő szintek.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'A kajád. Válassz egy falatot, és húzd rá Mojira.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Akkor jelenik meg, ha Mojinak kell valami. Koppints, és nézd meg.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Tanulás: ismételd át az esedékes szavakat, és nézd át a hibáidat.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Beállítások: pixelbetű, emlékeztetők és ezek a bemutatók újra.';
+
+  @override
+  String get tutorialNavTown =>
+      'Város: lépj be egy épületbe, hogy beszélgetést gyakorolj, vagy látogass el az iskolába egy kvízért.';
+
+  @override
+  String get tutorialNavChat =>
+      'Beszélgetések: hosszabb csevegés és szerepjátékos helyzetek.';
+
+  @override
+  String get tutorialNavShop =>
+      'Bolt: költs érmét kajára, ruhákra és új világokra.';
+
+  @override
+  String get tutorialNavProfile =>
+      'Profil: a statisztikáid, a nyelveid és a fiókod.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'A szinted, és a szünet gomb, ha abba kell hagynod.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'A kérdés. A fenti címke megmondja, mit mér.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Válassz választ. A rosszakat elmentjük, hogy később átnézhesd őket.';
+
+  @override
+  String get tutorialQuizContinue => 'Ha válaszoltál, lépj tovább.';
+
+  @override
+  String get tutorialChatMenu =>
+      'A korábbi beszélgetéseid és a szerepjátékok e mögött a gomb mögött vannak.';
+
+  @override
+  String get tutorialChatMessages =>
+      'A beszélgetésetek. A hibákat menet közben finoman javítjuk.';
+
+  @override
+  String get tutorialChatInput => 'Ide írj. Ne izgulj, hogy tökéletes legyen.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Az érméid. Gyakorlással és Moji gondozásával szerzed őket.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Szűrj arra, amit keresel: kaja, dekor vagy stílus.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Koppints bármire, hogy megvedd. A kaja elfogy, a többi a tiéd marad.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Elfogytak az érmék? Nézz meg egy rövid videót, és tölts fel.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Koppints Mojira, hogy megváltoztasd a külsejét és a ruhatárát.';
+
+  @override
+  String get tutorialProfileStats =>
+      'A szinted, és mennyi van hátra a következőig.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Gyere vissza minden nap a jutalmadért. A hosszabb sorozat többet fizet.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Amit beszélsz, és amit tanulsz. Bármelyiket bármikor megváltoztathatod.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Köss hozzá egy fiókot, hogy Moji túléljen egy új telefont.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Próbáld felidézni a választ, aztán koppints a kártyára.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Mutasd meg a választ, és mondd el, hogy ment. A nehéz kártyák hamarabb visszatérnek.';
+
+  @override
+  String get tutorialReviewCount => 'Hány kártya van még hátra ebben a körben.';
+
+  @override
+  String get seasonPassNotOnSale => 'Ez a bérlet még nem kapható.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Megveszem $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Átvétel ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Átvétel…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Átvéve: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Szint $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count darab · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'A sáv teljesítve.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP a következő darabig';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Kész';
+
+  @override
+  String get seasonPassTierClaimed => 'Átvéve';
+
+  @override
+  String get seasonPassTryOn => 'Próbáld fel';
+
+  @override
+  String get sceneAirfieldName => 'Indulások';
+
+  @override
+  String get sceneCozyRoomName => 'Hangulatos szoba';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Elvarázsolt rét';
+
+  @override
+  String get sceneMushroomGladeName => 'Gombás tisztás';
+
+  @override
+  String get scenePumpkinPatchName => 'Tökföld';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'A tiéd. A világokat bármikor cserélheted a ruhatárban.';
+
+  @override
+  String get seasonPassPreviewOwned => 'A tiéd. Vedd fel a szekrényben.';
+
+  @override
+  String get seasonPassPreviewLocked =>
+      'Még nem a tiéd – ez csak egy pillantás.';
+
+  @override
+  String get seasonPassPromise =>
+      'A szintek a bérlet megvétele után szerzett XP-t számolják, így semmit sem veszítesz, ha később veszed meg. Itt semmi nem jár le: az elért szint elért marad, a többi pedig megvár.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Átvételre vár: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Tanulással szerezhető';
+
+  @override
+  String get accessoryBandanaName => 'Napkelte kendő';
+
+  @override
+  String get accessoryBandanaCloudName => 'Felhő kendő';
+
+  @override
+  String get accessoryScarfDuskName => 'Alkonyi sál';
+
+  @override
+  String get accessoryGogglesName => 'Pilótaszemüveg';
+
+  @override
+  String get accessoryGogglesBrassName => 'Sárgaréz szemüveg';
+
+  @override
+  String get accessoryBeanieDuskName => 'Alkonyi sapka';
+
+  @override
+  String get accessoryFlightCapName => 'Pilótasapka';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Felhő pilótasapka';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Szénszürke cowboykalap';
+
+  @override
+  String get accessoryFlightScarfName => 'Szélfútta sál';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Tökös boszorkánykalap';
+
+  @override
+  String get accessoryDevilBandName => 'Ördögszarv fejpánt';
+
+  @override
+  String get accessoryGhostBandanaName => 'Szellemkendő';
+
+  @override
+  String get accessoryBatChokerName => 'Denevér nyakpánt';
+
+  @override
+  String get shopSectionTopUp => 'Feltöltés';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Szezonbérlet';
+
+  @override
+  String get shopSectionItems => 'Tárgyak';
+
+  @override
+  String get topUpTitle => 'Feltöltés';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins érme';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% érme';
+  }
+
+  @override
+  String get topUpBestValue => 'A legjobb ajánlat';
+
+  @override
+  String get topUpNotOpen => 'Az érmecsomagok még nem érhetők el.';
+
+  @override
+  String topUpThanks(int coins) {
+    return '$coins érme hozzáadva.';
+  }
 }

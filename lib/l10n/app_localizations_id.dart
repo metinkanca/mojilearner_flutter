@@ -36,16 +36,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get designMojiBtn => 'Desain Moji';
 
   @override
-  String get quizMode => 'Kuis';
-
-  @override
   String get quizDesc => 'Uji pengetahuan Anda.';
 
   @override
-  String get scenarios => 'Skenario';
+  String get scenarios => 'Kota';
 
   @override
   String get scenariosDesc => 'Latih percakapan nyata.';
+
+  @override
+  String get townSchool => 'Sekolah';
+
+  @override
+  String get townTab => 'Kota';
 
   @override
   String get profile => 'Profil';
@@ -115,21 +118,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Mulai percakapan baru';
-
-  @override
-  String get blankChat => 'Obrolan Kosong';
-
-  @override
-  String get blankChatDesc => 'Mulai tanpa konteks';
-
-  @override
-  String get roleplayScenario => 'Skenario Peran';
-
-  @override
-  String get roleplayScenarioDesc => 'Latih situasi tertentu';
-
-  @override
-  String get chooseChatType => 'Pilih tipe obrolan';
 
   @override
   String get cancel => 'Batal';
@@ -212,9 +200,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get drills => 'Kesalahan';
 
   @override
-  String get typeHere => 'Ketik di sini...';
-
-  @override
   String get shopTitle => 'Toko';
 
   @override
@@ -280,9 +265,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get come_back_tomorrow => 'Come back tomorrow!';
 
   @override
-  String get streak_broken => 'Welcome back! Starting fresh';
-
-  @override
   String get keep_going => 'Keep it going!';
 
   @override
@@ -303,10 +285,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get continueBtn => 'LANJUTKAN';
 
   @override
-  String get howWouldYouRate => 'BAGAIMANA ANDA MENILAI';
+  String get howWouldYouRate => 'BAGAIMANA KAMU MENILAI';
 
   @override
-  String get yourLevel => 'TINGKAT ANDA?';
+  String get yourLevel => 'TINGKATMU?';
 
   @override
   String get beginner => 'PEMULA';
@@ -335,8 +317,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get doYouWantToLearn => 'YANG INGIN KAMU PELAJARI?';
 
   @override
-  String get changeAnytime =>
-      'Anda dapat mengubah ini kapan saja di pengaturan';
+  String get changeAnytime => 'Kamu bisa mengubah ini kapan saja di pengaturan';
 
   @override
   String get dontWorryVerify =>
@@ -374,10 +355,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get shopItemAppleDescription => 'Makanan ringan yang sehat.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Donat';
 
   @override
-  String get shopItemCroissantDescription => 'Kelezatan mentega.';
+  String get shopItemDonutDescription => 'Manis dan lengket.';
 
   @override
   String get shopItemPizzaName => 'Irisan pizza';
@@ -456,6 +437,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Apa artinya ini?';
 
   @override
+  String get sceneryTitle => 'Pemandangan';
+
+  @override
+  String get shopItemBgMeadowName => 'Padang Rumput';
+
+  @override
+  String get sceneInUse => 'Digunakan';
+
+  @override
   String get shopItemBgBlueName => 'Biru samudera';
 
   @override
@@ -490,22 +480,8 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Kamu';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji sedang mengantuk saat tautan bahasa tersambung kembali. Coba lagi sebentar lagi.';
-
-  @override
   String get mojiSleepNight =>
       'Sst... Moji sedang tidur. Ketuk Moji untuk membangunkannya.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI MENGANTUK... TAUTAN BAHASA TERSAMBUNG KEMBALI';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI TIDUR... KETUK UNTUK MEMBANGUNKAN';
 
   @override
   String get mojiWakeSuccess => 'Huaa... Moji sudah bangun! Ayo berlatih!';
@@ -514,14 +490,6 @@ class AppLocalizationsId extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Bangun $minutes mnt lagi';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji sedang mengantuk saat tautan bahasa tersambung kembali.';
-
-  @override
-  String get mojiSleepReasonNight =>
-      'Moji sedang tidur. Ketuk untuk membangunkan.';
 
   @override
   String get levelsScreenTitle => 'Level';
@@ -590,19 +558,89 @@ class AppLocalizationsId extends AppLocalizations {
   String get characterBird => 'Burung';
 
   @override
+  String get characterRabbit => 'Kelinci';
+
+  @override
+  String get characterHamster => 'Hamster';
+
+  @override
+  String get characterParrot => 'Burung Beo';
+
+  @override
+  String get characterFox => 'Rubah';
+
+  @override
+  String get characterRaccoon => 'Rakun';
+
+  @override
+  String get characterRedPanda => 'Panda Merah';
+
+  @override
+  String get characterSkunk => 'Sigung';
+
+  @override
+  String get characterOtter => 'Berang-berang';
+
+  @override
+  String get characterBeaver => 'Berang-berang Kanada';
+
+  @override
+  String get characterSquirrel => 'Tupai';
+
+  @override
+  String get characterChinchilla => 'Chinchilla';
+
+  @override
+  String get characterMouse => 'Tikus';
+
+  @override
+  String get characterHedgehog => 'Landak';
+
+  @override
+  String get characterBat => 'Kelelawar';
+
+  @override
+  String get characterFennec => 'Fennec';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Wombat';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Kungkang';
+
+  @override
+  String get characterCapybara => 'Kapibara';
+
+  @override
+  String get characterPiglet => 'Anak Babi';
+
+  @override
+  String get characterSeal => 'Anjing Laut';
+
+  @override
+  String get characterPenguin => 'Penguin';
+
+  @override
+  String get characterFrog => 'Katak';
+
+  @override
+  String get characterAxolotl => 'Axolotl';
+
+  @override
+  String get characterGecko => 'Tokek';
+
+  @override
+  String get characterChameleon => 'Bunglon';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji tertidur sementara koneksi bahasa tersambung kembali. Coba lagi nanti.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji tertidur sementara koneksi bahasa tersambung kembali.';
-
-  @override
-  String get mojiSleepingTapWake =>
-      'Moji sedang tidur. Ketuk untuk membangunkannya.';
-
-  @override
-  String get mojiAwakeReady => 'Moji sudah bangun dan siap!';
 
   @override
   String get wardrobeTitle => 'Lemari';
@@ -621,6 +659,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get eyeColor => 'Warna mata';
+
+  @override
+  String get beakColor => 'Warna Paruh';
 
   @override
   String get eyeStyleSolid => 'Polos';
@@ -875,6 +916,27 @@ class AppLocalizationsId extends AppLocalizations {
   String get carePlayCooldown => 'Moji sudah cukup dimanja untuk sekarang.';
 
   @override
+  String get playCatch => 'Main tangkap bola';
+
+  @override
+  String get playCatchAgain => 'Main lagi';
+
+  @override
+  String get playToyChest => 'Peti mainan';
+
+  @override
+  String get playBubbleBath => 'Mandi busa';
+
+  @override
+  String get playPounce => 'Terkam tikus tanah';
+
+  @override
+  String get playPondHop => 'Lompat kolam';
+
+  @override
+  String get playFetchWords => 'Ambil kata-katanya';
+
+  @override
   String get careClose => 'Tutup';
 
   @override
@@ -894,9 +956,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get careDragToFeed => 'Seret ke Moji untuk memberi makan';
 
   @override
-  String get bondLabel => 'IKATAN';
-
-  @override
   String get bondStageCurious => 'Penasaran';
 
   @override
@@ -912,18 +971,92 @@ class AppLocalizationsId extends AppLocalizations {
   String get bondStageInseparable => 'Tak Terpisahkan';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points lagi ke $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Terus belajar agar makin dekat';
-
-  @override
   String get bondMissesYou => 'Moji merindukanmu';
 
   @override
   String get bondLonely => 'Moji sudah lama menunggumu';
+
+  @override
+  String get aiLimitQuizTitle => 'Kuis AI hari ini sudah habis';
+
+  @override
+  String get aiLimitMessageTitle => 'Pesan AI hari ini sudah habis';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '$used dari $total terpakai hari ini';
+  }
+
+  @override
+  String get aiLimitResets => 'Jatahmu kembali besok.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Ulasan tidak pernah butuh tutor — kartumu selalu ada.';
+
+  @override
+  String get aiLimitQuizOpen => 'Kuis dari kata-katamu sendiri masih tersedia.';
+
+  @override
+  String get aiLimitWatchAd => 'Tonton iklan untuk satu lagi';
+
+  @override
+  String get aiLimitGoPlus => 'Dapatkan Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Gratis';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'Kuis AI per hari';
+
+  @override
+  String get premiumRowMessages => 'Pesan AI per hari';
+
+  @override
+  String get premiumRowAds => 'Iklan sisipan';
+
+  @override
+  String get premiumValueShown => 'Ditampilkan';
+
+  @override
+  String get premiumValueNone => 'Tidak ada';
+
+  @override
+  String get premiumRowRollover => 'Kuis yang tidak terpakai';
+
+  @override
+  String get premiumValueExpire => 'Hangus';
+
+  @override
+  String get premiumValueRollOver => 'Dialihkan';
+
+  @override
+  String get premiumRowPetStats => 'Kondisi peliharaan';
+
+  @override
+  String get premiumValueDecay => 'Menurun';
+
+  @override
+  String get premiumValueDecaySlower => 'Menurun lebih lambat';
+
+  @override
+  String get premiumComingSoon => 'Langganan belum dibuka.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus aktif.';
+
+  @override
+  String get premiumRestore => 'Pulihkan pembelian';
+
+  @override
+  String get premiumRestoreDone =>
+      'Tidak ada yang bisa dipulihkan di akun ini.';
+
+  @override
+  String get premiumPurchasePending => 'Menyelesaikan dengan toko…';
 
   @override
   String get categoryStyle => 'Gaya';
@@ -1082,19 +1215,349 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Tahun berapa kamu lahir?';
-
-  @override
-  String get onboardingBirthYearHint => 'Tahun';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Ini hanya menentukan iklan yang cocok untukmu.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Masukkan tahun yang valid';
-
-  @override
   String get privacyRedactedNotice =>
       'Data pribadi disembunyikan sebelum dikirim.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'PERTANYAAN $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'MENYIAPKAN...';
+
+  @override
+  String get quizPickAnswer => 'Pilih jawaban yang benar';
+
+  @override
+  String get quizWellDone => 'Kerja bagus!';
+
+  @override
+  String get quizEncouragement => 'Kamu pasti bisa!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Senang bertemu denganmu, $name! Ayo belajar bersama.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'MAU DIPANDU?';
+
+  @override
+  String get tutorialWatch => 'TUNJUKKAN';
+
+  @override
+  String get tutorialSkip => 'LEWATI';
+
+  @override
+  String get tutorialNext => 'LANJUT';
+
+  @override
+  String get tutorialBack => 'KEMBALI';
+
+  @override
+  String get tutorialDone => 'SELESAI';
+
+  @override
+  String get tutorialReplay => 'Putar ulang panduan';
+
+  @override
+  String get tutorialOfferHome => 'Mau panduan singkat layar utamamu?';
+
+  @override
+  String get tutorialOfferQuiz => 'Kuis pertamamu. Mau panduan singkat?';
+
+  @override
+  String get tutorialOfferChat => 'Obrolan pertamamu. Mau panduan singkat?';
+
+  @override
+  String get tutorialOfferShop =>
+      'Kunjungan pertamamu ke toko. Mau panduan singkat?';
+
+  @override
+  String get tutorialOfferProfile => 'Mau panduan singkat profilmu?';
+
+  @override
+  String get tutorialOfferReview =>
+      'Sesi ulasan pertamamu. Mau panduan singkat?';
+
+  @override
+  String get tutorialHomePet =>
+      'Ini Moji. Ketuk dia, atau geser jarimu di kepalanya untuk mengelus.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Level dan XP-mu. Ketuk untuk melihat apa yang dibuka level berikutnya.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Makananmu. Pilih camilan, lalu seret ke Moji.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Muncul saat Moji butuh sesuatu. Ketuk untuk mengeceknya.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Belajar: ulangi kata-kata yang sudah waktunya dan tinjau kesalahanmu.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Pengaturan: teks piksel, pengingat, dan memutar ulang panduan ini.';
+
+  @override
+  String get tutorialNavTown =>
+      'Kota: masuk ke sebuah bangunan untuk berlatih percakapan, atau kunjungi sekolah untuk kuis.';
+
+  @override
+  String get tutorialNavChat =>
+      'Obrolan: percakapan lebih panjang dan skenario bermain peran.';
+
+  @override
+  String get tutorialNavShop =>
+      'Toko: belanjakan koin untuk makanan, gaya, dan dunia baru.';
+
+  @override
+  String get tutorialNavProfile => 'Profil: statistik, bahasa, dan akunmu.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Levelmu, dan tombol jeda kalau kamu harus berhenti.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Pertanyaannya. Label di atas menyebut apa yang diuji.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Pilih satu jawaban. Yang salah disimpan supaya bisa kamu ulang nanti.';
+
+  @override
+  String get tutorialQuizContinue => 'Lanjut setelah kamu menjawab.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Obrolan lamamu dan skenario bermain peran ada di balik tombol ini.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Percakapan kalian. Kesalahan dikoreksi dengan halus sambil jalan.';
+
+  @override
+  String get tutorialChatInput => 'Tulis di sini. Tak perlu sempurna.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Koinmu. Kamu mendapatkannya dengan berlatih dan merawat Moji.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Saring sesuai yang kamu cari: makanan, dekorasi, atau gaya.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Ketuk apa saja untuk membelinya. Makanan habis terpakai, sisanya jadi milikmu.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Kehabisan koin? Tonton klip singkat untuk mengisi ulang.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Ketuk Moji untuk mengubah penampilan dan lemari pakaiannya.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Levelmu, dan seberapa jauh dari level berikutnya.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Datang tiap hari untuk hadiah. Rentetan yang lebih panjang membayar lebih.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Bahasa yang kamu pakai dan yang kamu pelajari. Keduanya bisa diubah kapan saja.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Tautkan akun supaya Moji selamat saat kamu ganti ponsel.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Coba ingat jawabannya, lalu ketuk kartunya untuk memeriksa.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Tampilkan jawabannya, lalu katakan bagaimana hasilnya. Kartu yang sulit kembali lebih cepat.';
+
+  @override
+  String get tutorialReviewCount => 'Berapa kartu yang tersisa di sesi ini.';
+
+  @override
+  String get seasonPassNotOnSale => 'Pas ini belum dijual.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Beli $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Ambil ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Mengambil…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Diambil: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Tingkat $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count item · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Jalur selesai.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP menuju item berikutnya';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Siap';
+
+  @override
+  String get seasonPassTierClaimed => 'Diklaim';
+
+  @override
+  String get seasonPassTryOn => 'Coba pakai';
+
+  @override
+  String get sceneAirfieldName => 'Keberangkatan';
+
+  @override
+  String get sceneCozyRoomName => 'Kamar Nyaman';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Padang Rumput Ajaib';
+
+  @override
+  String get sceneMushroomGladeName => 'Padang Jamur';
+
+  @override
+  String get scenePumpkinPatchName => 'Kebun Labu';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Milikmu. Ganti dunia kapan saja di lemari.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Milikmu. Pakai di lemari.';
+
+  @override
+  String get seasonPassPreviewLocked => 'Belum milikmu — ini hanya pratinjau.';
+
+  @override
+  String get seasonPassPromise =>
+      'Tingkat dihitung dari XP yang kamu dapat setelah membeli pas, jadi membeli terlambat tidak merugikanmu. Tidak ada yang kedaluwarsa di sini: tingkat yang sudah dicapai tetap, yang belum tetap menunggu.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Menunggu diambil: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Didapat dengan belajar';
+
+  @override
+  String get accessoryBandanaName => 'Bandana Fajar';
+
+  @override
+  String get accessoryBandanaCloudName => 'Bandana Awan';
+
+  @override
+  String get accessoryScarfDuskName => 'Syal Senja';
+
+  @override
+  String get accessoryGogglesName => 'Kacamata Terbang';
+
+  @override
+  String get accessoryGogglesBrassName => 'Kacamata Kuningan';
+
+  @override
+  String get accessoryBeanieDuskName => 'Kupluk Senja';
+
+  @override
+  String get accessoryFlightCapName => 'Topi Penerbang';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Topi Penerbang Awan';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Topi Koboi Arang';
+
+  @override
+  String get accessoryFlightScarfName => 'Syal Tertiup Angin';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Topi Penyihir Labu';
+
+  @override
+  String get accessoryDevilBandName => 'Bando Tanduk Iblis';
+
+  @override
+  String get accessoryGhostBandanaName => 'Bandana Hantu';
+
+  @override
+  String get accessoryBatChokerName => 'Choker Kelelawar';
+
+  @override
+  String get shopSectionTopUp => 'Isi Ulang';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Tiket Musim';
+
+  @override
+  String get shopSectionItems => 'Barang';
+
+  @override
+  String get topUpTitle => 'Isi Ulang';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins koin';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent% koin';
+  }
+
+  @override
+  String get topUpBestValue => 'Paling menguntungkan';
+
+  @override
+  String get topUpNotOpen => 'Paket koin belum dibuka.';
+
+  @override
+  String topUpThanks(int coins) {
+    return '$coins koin ditambahkan.';
+  }
 }

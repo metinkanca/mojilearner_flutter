@@ -36,16 +36,19 @@ class AppLocalizationsDa extends AppLocalizations {
   String get designMojiBtn => 'Design Moji';
 
   @override
-  String get quizMode => 'Quiz';
-
-  @override
   String get quizDesc => 'Test din viden.';
 
   @override
-  String get scenarios => 'Scenarier';
+  String get scenarios => 'By';
 
   @override
   String get scenariosDesc => 'Øv virkelige samtaler.';
+
+  @override
+  String get townSchool => 'Skole';
+
+  @override
+  String get townTab => 'By';
 
   @override
   String get profile => 'Profil';
@@ -115,21 +118,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Start en ny samtale';
-
-  @override
-  String get blankChat => 'Tom Chat';
-
-  @override
-  String get blankChatDesc => 'Start uden kontekst';
-
-  @override
-  String get roleplayScenario => 'Rollespilscenarie';
-
-  @override
-  String get roleplayScenarioDesc => 'Øv specifikke situationer';
-
-  @override
-  String get chooseChatType => 'Vælg chat-type';
 
   @override
   String get cancel => 'Annuller';
@@ -212,9 +200,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get drills => 'Fejl';
 
   @override
-  String get typeHere => 'Skriv her...';
-
-  @override
   String get shopTitle => 'Butik';
 
   @override
@@ -278,9 +263,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get come_back_tomorrow => 'Kom tilbage i morgen!';
-
-  @override
-  String get streak_broken => 'Velkommen tilbage! Vi starter forfra';
 
   @override
   String get keep_going => 'Fortsæt sådan!';
@@ -374,10 +356,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get shopItemAppleDescription => 'Et sundt mellemmåltid.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Donut';
 
   @override
-  String get shopItemCroissantDescription => 'Smørglasur.';
+  String get shopItemDonutDescription => 'Sød og klistret.';
 
   @override
   String get shopItemPizzaName => 'Pizzaskive';
@@ -456,6 +438,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Hvad betyder det?';
 
   @override
+  String get sceneryTitle => 'Kulisse';
+
+  @override
+  String get shopItemBgMeadowName => 'Eng';
+
+  @override
+  String get sceneInUse => 'I brug';
+
+  @override
   String get shopItemBgBlueName => 'Oceanblå';
 
   @override
@@ -490,22 +481,8 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Dig';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji døser, mens sprogforbindelsen genoprettes. Prøv igen snart.';
-
-  @override
   String get mojiSleepNight =>
       'Shhh... Moji sover. Tryk på Moji for at vække ham.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI DØSER... SPROGFORBINDELSEN GENOPRETTES';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI SOVER... TRYK FOR AT VÆKKE';
 
   @override
   String get mojiWakeSuccess => 'Gaaab... Moji er vågen nu! Lad os øve!';
@@ -514,13 +491,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Vågen i $minutes min';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji døser, mens sprogforbindelsen genoprettes.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji sover. Tryk for at vække.';
 
   @override
   String get levelsScreenTitle => 'Niveauer';
@@ -589,18 +559,89 @@ class AppLocalizationsDa extends AppLocalizations {
   String get characterBird => 'Fugl';
 
   @override
+  String get characterRabbit => 'Kanin';
+
+  @override
+  String get characterHamster => 'Hamster';
+
+  @override
+  String get characterParrot => 'Papegøje';
+
+  @override
+  String get characterFox => 'Ræv';
+
+  @override
+  String get characterRaccoon => 'Vaskebjørn';
+
+  @override
+  String get characterRedPanda => 'Rød panda';
+
+  @override
+  String get characterSkunk => 'Stinkdyr';
+
+  @override
+  String get characterOtter => 'Odder';
+
+  @override
+  String get characterBeaver => 'Bæver';
+
+  @override
+  String get characterSquirrel => 'Egern';
+
+  @override
+  String get characterChinchilla => 'Chinchilla';
+
+  @override
+  String get characterMouse => 'Mus';
+
+  @override
+  String get characterHedgehog => 'Pindsvin';
+
+  @override
+  String get characterBat => 'Flagermus';
+
+  @override
+  String get characterFennec => 'Ørkenræv';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Vombat';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Dovendyr';
+
+  @override
+  String get characterCapybara => 'Kapybara';
+
+  @override
+  String get characterPiglet => 'Pattegris';
+
+  @override
+  String get characterSeal => 'Sæl';
+
+  @override
+  String get characterPenguin => 'Pingvin';
+
+  @override
+  String get characterFrog => 'Frø';
+
+  @override
+  String get characterAxolotl => 'Axolotl';
+
+  @override
+  String get characterGecko => 'Gekko';
+
+  @override
+  String get characterChameleon => 'Kamæleon';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji døser, mens sprogforbindelsen genoprettes. Prøv igen snart.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji døser, mens sprogforbindelsen genoprettes.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji sover. Tryk for at vække den.';
-
-  @override
-  String get mojiAwakeReady => 'Moji er vågen og klar!';
 
   @override
   String get wardrobeTitle => 'Garderobe';
@@ -619,6 +660,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get eyeColor => 'Øjenfarve';
+
+  @override
+  String get beakColor => 'Næbfarve';
 
   @override
   String get eyeStyleSolid => 'Ensfarvet';
@@ -874,6 +918,27 @@ class AppLocalizationsDa extends AppLocalizations {
   String get carePlayCooldown => 'Moji har fået kæl nok for nu.';
 
   @override
+  String get playCatch => 'Leg med bolden';
+
+  @override
+  String get playCatchAgain => 'Spil igen';
+
+  @override
+  String get playToyChest => 'Legetøjskiste';
+
+  @override
+  String get playBubbleBath => 'Skumbad';
+
+  @override
+  String get playPounce => 'Fang muldvarpen';
+
+  @override
+  String get playPondHop => 'Hop over dammen';
+
+  @override
+  String get playFetchWords => 'Hent ordene';
+
+  @override
   String get careClose => 'Luk';
 
   @override
@@ -893,9 +958,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get careDragToFeed => 'Træk over på Moji for at fodre';
 
   @override
-  String get bondLabel => 'BÅND';
-
-  @override
   String get bondStageCurious => 'Nysgerrig';
 
   @override
@@ -911,18 +973,92 @@ class AppLocalizationsDa extends AppLocalizations {
   String get bondStageInseparable => 'Uadskillelige';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points til $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Bliv ved med at lære for at komme tættere på';
-
-  @override
   String get bondMissesYou => 'Moji savner dig';
 
   @override
   String get bondLonely => 'Moji har ventet på dig';
+
+  @override
+  String get aiLimitQuizTitle => 'Dagens AI-quizzer er brugt op';
+
+  @override
+  String get aiLimitMessageTitle => 'Dagens AI-beskeder er brugt op';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '$used af $total brugt i dag';
+  }
+
+  @override
+  String get aiLimitResets => 'Din kvote kommer tilbage i morgen.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Repetition kræver aldrig læreren — dine kort er der altid.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Quizzer bygget på dine egne ord er der stadig.';
+
+  @override
+  String get aiLimitWatchAd => 'Se en reklame for én mere';
+
+  @override
+  String get aiLimitGoPlus => 'Få Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Gratis';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'AI-quizzer om dagen';
+
+  @override
+  String get premiumRowMessages => 'AI-beskeder om dagen';
+
+  @override
+  String get premiumRowAds => 'Mellemreklamer';
+
+  @override
+  String get premiumValueShown => 'Vises';
+
+  @override
+  String get premiumValueNone => 'Ingen';
+
+  @override
+  String get premiumRowRollover => 'Ubrugte quizzer';
+
+  @override
+  String get premiumValueExpire => 'Udløber';
+
+  @override
+  String get premiumValueRollOver => 'Overføres';
+
+  @override
+  String get premiumRowPetStats => 'Kæledyrets stats';
+
+  @override
+  String get premiumValueDecay => 'Falder';
+
+  @override
+  String get premiumValueDecaySlower => 'Falder langsommere';
+
+  @override
+  String get premiumComingSoon => 'Abonnementer er ikke åbne endnu.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus er aktivt.';
+
+  @override
+  String get premiumRestore => 'Gendan et køb';
+
+  @override
+  String get premiumRestoreDone => 'Der er intet at gendanne på denne konto.';
+
+  @override
+  String get premiumPurchasePending => 'Afslutter med butikken…';
 
   @override
   String get categoryStyle => 'Stil';
@@ -1081,19 +1217,353 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Hvilket år er du født?';
-
-  @override
-  String get onboardingBirthYearHint => 'År';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Det bruges kun til at vælge passende reklamer.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Indtast venligst et gyldigt år';
-
-  @override
   String get privacyRedactedNotice =>
       'Personlige oplysninger blev skjult før afsendelse.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'SPØRGSMÅL $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'FORBEREDER...';
+
+  @override
+  String get quizPickAnswer => 'Vælg det rigtige svar';
+
+  @override
+  String get quizWellDone => 'Godt klaret!';
+
+  @override
+  String get quizEncouragement => 'Du klarer det!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Rart at møde dig, $name! Lad os lære sammen.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'EN RUNDVISNING?';
+
+  @override
+  String get tutorialWatch => 'VIS MIG';
+
+  @override
+  String get tutorialSkip => 'SPRING OVER';
+
+  @override
+  String get tutorialNext => 'NÆSTE';
+
+  @override
+  String get tutorialBack => 'TILBAGE';
+
+  @override
+  String get tutorialDone => 'FÆRDIG';
+
+  @override
+  String get tutorialReplay => 'Vis rundvisninger igen';
+
+  @override
+  String get tutorialOfferHome =>
+      'Vil du have en hurtig rundvisning på din startskærm?';
+
+  @override
+  String get tutorialOfferQuiz => 'Din første quiz. Hurtig rundvisning?';
+
+  @override
+  String get tutorialOfferChat => 'Din første chat. Hurtig rundvisning?';
+
+  @override
+  String get tutorialOfferShop =>
+      'Dit første besøg i butikken. Hurtig rundvisning?';
+
+  @override
+  String get tutorialOfferProfile =>
+      'Vil du have en hurtig rundvisning i din profil?';
+
+  @override
+  String get tutorialOfferReview =>
+      'Din første repetition. Hurtig rundvisning?';
+
+  @override
+  String get tutorialHomePet =>
+      'Det her er Moji. Tryk på den, eller stryg hen over hovedet for at ae.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Dit niveau og din XP. Tryk for at se, hvad de næste niveauer låser op.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Din mad. Vælg en snack, og træk den over på Moji.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Dukker op, når Moji mangler noget. Tryk for at se efter.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Studér: gentag de ord, der venter, og se tilbage på dine fejl.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Indstillinger: pixelskrift, påmindelser og disse rundvisninger.';
+
+  @override
+  String get tutorialNavTown =>
+      'By: gå ind i en bygning for at øve en samtale, eller besøg skolen for en quiz.';
+
+  @override
+  String get tutorialNavChat =>
+      'Chats: længere samtaler og rollespilsscenarier.';
+
+  @override
+  String get tutorialNavShop =>
+      'Butik: brug mønter på mad, stilarter og nye verdener.';
+
+  @override
+  String get tutorialNavProfile =>
+      'Profil: din statistik, dine sprog og din konto.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Dit niveau og pauseknappen, hvis du bliver nødt til at stoppe.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Spørgsmålet. Mærket ovenover fortæller, hvad der testes.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Vælg et svar. De forkerte gemmes, så du kan repetere dem senere.';
+
+  @override
+  String get tutorialQuizContinue => 'Gå videre, når du har svaret.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Dine tidligere chats og rollespil ligger bag denne knap.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Jeres samtale. Fejl bliver rettet nænsomt undervejs.';
+
+  @override
+  String get tutorialChatInput => 'Skriv her. Det behøver ikke være perfekt.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Dine mønter. Du tjener dem ved at øve dig og passe Moji.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Filtrer efter det, du leder efter: mad, pynt eller stil.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Tryk på noget for at købe det. Mad bliver brugt op, resten beholder du.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Løbet tør for mønter? Se en kort video for at fylde op.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Tryk på Moji for at ændre udseende og garderobe.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Dit niveau, og hvor langt der er til det næste.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Kom tilbage hver dag for en belønning. Længere striber giver mere.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Hvad du taler, og hvad du lærer. Begge kan ændres når som helst.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Tilknyt en konto, så Moji overlever en ny telefon.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Prøv at huske svaret, og tryk så på kortet for at se det.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Vis svaret, og sig hvordan det gik. Svære kort kommer hurtigere igen.';
+
+  @override
+  String get tutorialReviewCount =>
+      'Hvor mange kort der er tilbage i denne runde.';
+
+  @override
+  String get seasonPassNotOnSale => 'Dette pas er ikke til salg endnu.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Køb $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Hent ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Henter…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Hentet: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Niveau $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count dele · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Banen er fuldført.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP til næste del';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Klar';
+
+  @override
+  String get seasonPassTierClaimed => 'Hentet';
+
+  @override
+  String get seasonPassTryOn => 'Prøv den';
+
+  @override
+  String get sceneAirfieldName => 'Afgange';
+
+  @override
+  String get sceneCozyRoomName => 'Hyggeligt værelse';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Fortryllet eng';
+
+  @override
+  String get sceneMushroomGladeName => 'Svampelysning';
+
+  @override
+  String get scenePumpkinPatchName => 'Græskarmarken';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Den er din. Skift verden når som helst i garderoben.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Den er din. Tag den på i garderoben.';
+
+  @override
+  String get seasonPassPreviewLocked => 'Ikke din endnu – det er kun et kig.';
+
+  @override
+  String get seasonPassPromise =>
+      'Niveauer måles i XP, du tjener efter købet, så det koster intet at købe sent. Intet udløber her: et niveau, du har nået, forbliver nået, og et, du ikke har, venter på dig.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Venter på afhentning: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Optjenes ved at studere';
+
+  @override
+  String get accessoryBandanaName => 'Solopgangs-bandana';
+
+  @override
+  String get accessoryBandanaCloudName => 'Sky-bandana';
+
+  @override
+  String get accessoryScarfDuskName => 'Skumringstørklæde';
+
+  @override
+  String get accessoryGogglesName => 'Flyverbriller';
+
+  @override
+  String get accessoryGogglesBrassName => 'Messingbriller';
+
+  @override
+  String get accessoryBeanieDuskName => 'Skumringshue';
+
+  @override
+  String get accessoryFlightCapName => 'Flyverhue';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Sky-flyverhue';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Kulsort cowboyhat';
+
+  @override
+  String get accessoryFlightScarfName => 'Vindblæst tørklæde';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Heksehat med græskar';
+
+  @override
+  String get accessoryDevilBandName => 'Hårbånd med djævlehorn';
+
+  @override
+  String get accessoryGhostBandanaName => 'Spøgelsesbandana';
+
+  @override
+  String get accessoryBatChokerName => 'Flagermus-choker';
+
+  @override
+  String get shopSectionTopUp => 'Køb mønter';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Sæsonpas';
+
+  @override
+  String get shopSectionItems => 'Ting';
+
+  @override
+  String get topUpTitle => 'Køb mønter';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins mønter';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent % mønter';
+  }
+
+  @override
+  String get topUpBestValue => 'Bedste værdi';
+
+  @override
+  String get topUpNotOpen => 'Møntpakker er ikke åbne endnu.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'Tilføjede $coins mønter.';
+  }
 }

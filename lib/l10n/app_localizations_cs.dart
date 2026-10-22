@@ -36,16 +36,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get designMojiBtn => 'Navrhni Moji';
 
   @override
-  String get quizMode => 'Kvíz';
-
-  @override
   String get quizDesc => 'Otestuj své znalosti.';
 
   @override
-  String get scenarios => 'Scénáře';
+  String get scenarios => 'Město';
 
   @override
   String get scenariosDesc => 'Procvičuj reálné konverzace.';
+
+  @override
+  String get townSchool => 'Škola';
+
+  @override
+  String get townTab => 'Město';
 
   @override
   String get profile => 'Profil';
@@ -115,21 +118,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Začni novou konverzaci';
-
-  @override
-  String get blankChat => 'Prázdný chat';
-
-  @override
-  String get blankChatDesc => 'Začni bez kontextu';
-
-  @override
-  String get roleplayScenario => 'Scénář hraní rolí';
-
-  @override
-  String get roleplayScenarioDesc => 'Procvičuj konkrétní situace';
-
-  @override
-  String get chooseChatType => 'Vyber typ chatu';
 
   @override
   String get cancel => 'Zrušit';
@@ -212,9 +200,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get drills => 'Chyby';
 
   @override
-  String get typeHere => 'Pište zde...';
-
-  @override
   String get shopTitle => 'Obchod';
 
   @override
@@ -280,9 +265,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get come_back_tomorrow => 'Vrať se zítra!';
 
   @override
-  String get streak_broken => 'Vítej zpět! Začínáme znovu';
-
-  @override
   String get keep_going => 'Jen tak dál!';
 
   @override
@@ -303,7 +285,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get continueBtn => 'POKRAČOVAT';
 
   @override
-  String get howWouldYouRate => 'JAK BYSTE HODNOTIL';
+  String get howWouldYouRate => 'JAK HODNOTÍŠ';
 
   @override
   String get yourLevel => 'SVOU ÚROVEŇ?';
@@ -372,10 +354,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get shopItemAppleDescription => 'Zdravá svačinka.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Kobliha';
 
   @override
-  String get shopItemCroissantDescription => 'Máslová dobrota.';
+  String get shopItemDonutDescription => 'Sladká a lepkavá.';
 
   @override
   String get shopItemPizzaName => 'Kousek pizzy';
@@ -454,6 +436,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Co to znamená?';
 
   @override
+  String get sceneryTitle => 'Prostředí';
+
+  @override
+  String get shopItemBgMeadowName => 'Louka';
+
+  @override
+  String get sceneInUse => 'Používá se';
+
+  @override
   String get shopItemBgBlueName => 'Oceánská modř';
 
   @override
@@ -488,21 +479,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Ty';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji podřimuje, zatímco se znovu připojuje jazykové spojení. Zkus to brzy znovu.';
-
-  @override
   String get mojiSleepNight => 'Pšš... Moji spí. Klepni na Mojiho a probuď ho.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI PODŘIMUJE... JAZYKOVÉ SPOJENÍ SE OBNOVUJE';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI SPÍ... KLEPNI PRO PROBUZENÍ';
 
   @override
   String get mojiWakeSuccess => 'Zív... Moji je teď vzhůru! Pojďme trénovat!';
@@ -511,13 +488,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Vzhůru ještě $minutes min';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji podřimuje, zatímco se jazykové spojení obnovuje.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji spí. Klepni pro probuzení.';
 
   @override
   String get levelsScreenTitle => 'Úrovně';
@@ -586,18 +556,89 @@ class AppLocalizationsCs extends AppLocalizations {
   String get characterBird => 'Pták';
 
   @override
+  String get characterRabbit => 'Králík';
+
+  @override
+  String get characterHamster => 'Křeček';
+
+  @override
+  String get characterParrot => 'Papoušek';
+
+  @override
+  String get characterFox => 'Liška';
+
+  @override
+  String get characterRaccoon => 'Mýval';
+
+  @override
+  String get characterRedPanda => 'Panda červená';
+
+  @override
+  String get characterSkunk => 'Skunk';
+
+  @override
+  String get characterOtter => 'Vydra';
+
+  @override
+  String get characterBeaver => 'Bobr';
+
+  @override
+  String get characterSquirrel => 'Veverka';
+
+  @override
+  String get characterChinchilla => 'Činčila';
+
+  @override
+  String get characterMouse => 'Myš';
+
+  @override
+  String get characterHedgehog => 'Ježek';
+
+  @override
+  String get characterBat => 'Netopýr';
+
+  @override
+  String get characterFennec => 'Fenek';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Vombat';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Lenochod';
+
+  @override
+  String get characterCapybara => 'Kapybara';
+
+  @override
+  String get characterPiglet => 'Sele';
+
+  @override
+  String get characterSeal => 'Tuleň';
+
+  @override
+  String get characterPenguin => 'Tučňák';
+
+  @override
+  String get characterFrog => 'Žába';
+
+  @override
+  String get characterAxolotl => 'Axolotl';
+
+  @override
+  String get characterGecko => 'Gekon';
+
+  @override
+  String get characterChameleon => 'Chameleon';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji podřimuje, dokud se jazykové spojení neobnoví. Zkus to brzy znovu.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji podřimuje, dokud se jazykové spojení neobnoví.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji spí. Klepnutím ho probudíš.';
-
-  @override
-  String get mojiAwakeReady => 'Moji je vzhůru a připraven!';
 
   @override
   String get wardrobeTitle => 'Šatník';
@@ -616,6 +657,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get eyeColor => 'Barva očí';
+
+  @override
+  String get beakColor => 'Barva zobáku';
 
   @override
   String get eyeStyleSolid => 'Jednobarevné';
@@ -872,6 +916,27 @@ class AppLocalizationsCs extends AppLocalizations {
   String get carePlayCooldown => 'Moji už má mazlení pro tuto chvíli dost.';
 
   @override
+  String get playCatch => 'Hrát s míčem';
+
+  @override
+  String get playCatchAgain => 'Hrát znovu';
+
+  @override
+  String get playToyChest => 'Truhla s hračkami';
+
+  @override
+  String get playBubbleBath => 'Bublinková koupel';
+
+  @override
+  String get playPounce => 'Chyť krtka';
+
+  @override
+  String get playPondHop => 'Skákání po leknínech';
+
+  @override
+  String get playFetchWords => 'Aportuj slova';
+
+  @override
   String get careClose => 'Zavřít';
 
   @override
@@ -891,9 +956,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get careDragToFeed => 'Přetáhni na Mojiho a nakrm ho';
 
   @override
-  String get bondLabel => 'POUTO';
-
-  @override
   String get bondStageCurious => 'Zvědavý';
 
   @override
@@ -909,18 +971,92 @@ class AppLocalizationsCs extends AppLocalizations {
   String get bondStageInseparable => 'Nerozluční';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points do $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Uč se dál, ať se sblížíte';
-
-  @override
   String get bondMissesYou => 'Mojimu chybíš';
 
   @override
   String get bondLonely => 'Moji na tebe už dlouho čeká';
+
+  @override
+  String get aiLimitQuizTitle => 'Dnešní AI kvízy jsou vyčerpány';
+
+  @override
+  String get aiLimitMessageTitle => 'Dnešní AI zprávy jsou vyčerpány';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return 'Dnes využito $used z $total';
+  }
+
+  @override
+  String get aiLimitResets => 'Tvůj limit se vrátí zítra.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Opakování lektora nepotřebuje — tvoje kartčky jsou tu vždy.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Kvízy sestavené z tvých vlastních slov jsou stále k dispozici.';
+
+  @override
+  String get aiLimitWatchAd => 'Zhlédni reklamu za jeden navíc';
+
+  @override
+  String get aiLimitGoPlus => 'Získat Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Zdarma';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'AI kvízů denně';
+
+  @override
+  String get premiumRowMessages => 'AI zpráv denně';
+
+  @override
+  String get premiumRowAds => 'Vsuvkové reklamy';
+
+  @override
+  String get premiumValueShown => 'Zobrazují se';
+
+  @override
+  String get premiumValueNone => 'Žádné';
+
+  @override
+  String get premiumRowRollover => 'Nevyužité kvízy';
+
+  @override
+  String get premiumValueExpire => 'Propadnou';
+
+  @override
+  String get premiumValueRollOver => 'Převedou se';
+
+  @override
+  String get premiumRowPetStats => 'Stav mazlíčka';
+
+  @override
+  String get premiumValueDecay => 'Klesá';
+
+  @override
+  String get premiumValueDecaySlower => 'Klesá pomaleji';
+
+  @override
+  String get premiumComingSoon => 'Předplatné zatím není otevřené.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus je aktivní.';
+
+  @override
+  String get premiumRestore => 'Obnovit nákup';
+
+  @override
+  String get premiumRestoreDone => 'Na tomto účtu není co obnovit.';
+
+  @override
+  String get premiumPurchasePending => 'Dokončuje se v obchodě…';
 
   @override
   String get categoryStyle => 'Styl';
@@ -1079,18 +1215,347 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'V kterém roce ses narodil(a)?';
-
-  @override
-  String get onboardingBirthYearHint => 'Rok';
-
-  @override
-  String get onboardingBirthYearWhy => 'Slouží jen k výběru vhodných reklam.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Zadej prosím platný rok';
-
-  @override
   String get privacyRedactedNotice =>
       'Osobní údaje byly před odesláním skryty.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'OTÁZKA $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'PŘIPRAVUJI...';
+
+  @override
+  String get quizPickAnswer => 'Vyber správnou odpověď';
+
+  @override
+  String get quizWellDone => 'Výborně!';
+
+  @override
+  String get quizEncouragement => 'Zvládneš to!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Těší mě, $name! Pojďme se učit spolu.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'PROHLÍDKA?';
+
+  @override
+  String get tutorialWatch => 'UKAŽ MI TO';
+
+  @override
+  String get tutorialSkip => 'PŘESKOČIT';
+
+  @override
+  String get tutorialNext => 'DALŠÍ';
+
+  @override
+  String get tutorialBack => 'ZPĚT';
+
+  @override
+  String get tutorialDone => 'HOTOVO';
+
+  @override
+  String get tutorialReplay => 'Přehrát prohlídky znovu';
+
+  @override
+  String get tutorialOfferHome => 'Chceš rychlou prohlídku domovské obrazovky?';
+
+  @override
+  String get tutorialOfferQuiz => 'Tvůj první kvíz. Rychlá prohlídka?';
+
+  @override
+  String get tutorialOfferChat => 'Tvůj první chat. Rychlá prohlídka?';
+
+  @override
+  String get tutorialOfferShop =>
+      'Tvoje první návštěva obchodu. Rychlá prohlídka?';
+
+  @override
+  String get tutorialOfferProfile => 'Chceš rychlou prohlídku svého profilu?';
+
+  @override
+  String get tutorialOfferReview => 'Tvoje první opakování. Rychlá prohlídka?';
+
+  @override
+  String get tutorialHomePet =>
+      'Tohle je Moji. Klepni na něj nebo přejeď prstem po hlavě a podrbej ho.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Tvoje úroveň a XP. Klepni a uvidíš, co odemykají další úrovně.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Tvoje jídlo. Vyber pamlsek a přetáhni ho na Mojiho.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Objeví se, když Moji něco potřebuje. Klepni a podívej se.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Studium: zopakuj si slovíčka, na která došla řada, a projdi si své chyby.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Nastavení: pixelové písmo, připomínky a opakování těchto prohlídek.';
+
+  @override
+  String get tutorialNavTown =>
+      'Město: vstup do budovy a procvič si rozhovor, nebo zajdi do školy na kvíz.';
+
+  @override
+  String get tutorialNavChat =>
+      'Chaty: delší rozhovory a scénáře na hraní rolí.';
+
+  @override
+  String get tutorialNavShop =>
+      'Obchod: utrať mince za jídlo, styly a nové světy.';
+
+  @override
+  String get tutorialNavProfile => 'Profil: tvoje statistiky, jazyky a účet.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Tvoje úroveň a tlačítko pauzy, kdybys musel skončit.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Otázka. Odznak nad ní říká, co se zkouší.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Vyber odpověď. Ty špatné se uloží, aby sis je mohl později zopakovat.';
+
+  @override
+  String get tutorialQuizContinue => 'Až odpovíš, pokračuj dál.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Předchozí chaty a hraní rolí jsou za tímhle tlačítkem.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Váš rozhovor. Chyby se cestou šetrně opravují.';
+
+  @override
+  String get tutorialChatInput => 'Piš sem. Nemusí to být dokonalé.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Tvoje mince. Vyděláš si je cvičením a péčí o Mojiho.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Filtruj podle toho, co hledáš: jídlo, výzdobu nebo styl.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Klepnutím cokoli koupíš. Jídlo se spotřebuje, ostatní ti zůstane.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Došly ti mince? Podívej se na krátké video a doplň je.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Klepni na Mojiho a změň mu vzhled i šatník.';
+
+  @override
+  String get tutorialProfileStats => 'Tvoje úroveň a jak daleko je ta další.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Vracej se každý den pro odměnu. Delší série vynášejí víc.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Čím mluvíš a co se učíš. Obojí můžeš kdykoli změnit.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Připoj účet, aby Moji přežil i nový telefon.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Zkus si odpověď vybavit a pak klepni na kartu.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Ukaž odpověď a řekni, jak to šlo. Těžké karty se vrátí dřív.';
+
+  @override
+  String get tutorialReviewCount => 'Kolik karet v tomhle kole ještě zbývá.';
+
+  @override
+  String get seasonPassNotOnSale => 'Tato propustka zatím není v prodeji.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Koupit $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Vyzvednout ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Vyzvedávání…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Vyzvednuto: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Stupeň $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count kusů · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Dráha dokončena.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP do dalšího kusu';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Připraveno';
+
+  @override
+  String get seasonPassTierClaimed => 'Získáno';
+
+  @override
+  String get seasonPassTryOn => 'Vyzkoušet';
+
+  @override
+  String get sceneAirfieldName => 'Odlety';
+
+  @override
+  String get sceneCozyRoomName => 'Útulný pokoj';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Začarovaná louka';
+
+  @override
+  String get sceneMushroomGladeName => 'Houbová mýtina';
+
+  @override
+  String get scenePumpkinPatchName => 'Dýňové pole';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Je tvůj. Světy můžeš měnit kdykoli v šatníku.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Je tvoje. Nasaď si ji v šatníku.';
+
+  @override
+  String get seasonPassPreviewLocked => 'Zatím není tvoje — jen náhled.';
+
+  @override
+  String get seasonPassPromise =>
+      'Stupně se počítají z XP, které získáš po koupi propustky, takže pozdní nákup tě nic nestojí. Nic tu nevyprší: dosažený stupeň zůstává dosažený a nedosažený na tebe počká.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Čeká na vyzvednutí: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Získáš učením';
+
+  @override
+  String get accessoryBandanaName => 'Šátek úsvitu';
+
+  @override
+  String get accessoryBandanaCloudName => 'Oblačný šátek';
+
+  @override
+  String get accessoryScarfDuskName => 'Soumraková šála';
+
+  @override
+  String get accessoryGogglesName => 'Letecké brýle';
+
+  @override
+  String get accessoryGogglesBrassName => 'Mosazné brýle';
+
+  @override
+  String get accessoryBeanieDuskName => 'Soumraková čepice';
+
+  @override
+  String get accessoryFlightCapName => 'Letecká čapka';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Oblačná letecká čapka';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Uhlový kovbojský klobouk';
+
+  @override
+  String get accessoryFlightScarfName => 'Šála ve větru';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Čarodějnický klobouk s dýní';
+
+  @override
+  String get accessoryDevilBandName => 'Čelenka s ďábelskými rohy';
+
+  @override
+  String get accessoryGhostBandanaName => 'Šátek s duchem';
+
+  @override
+  String get accessoryBatChokerName => 'Netopýří choker';
+
+  @override
+  String get shopSectionTopUp => 'Dobití';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Sezónní pas';
+
+  @override
+  String get shopSectionItems => 'Předměty';
+
+  @override
+  String get topUpTitle => 'Dobití';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins mincí';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent % mincí';
+  }
+
+  @override
+  String get topUpBestValue => 'Nejvýhodnější';
+
+  @override
+  String get topUpNotOpen => 'Balíčky mincí zatím nejsou dostupné.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'Přidáno $coins mincí.';
+  }
 }

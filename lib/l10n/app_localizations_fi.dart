@@ -36,16 +36,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get designMojiBtn => 'Suunnittele Moji';
 
   @override
-  String get quizMode => 'Visa';
-
-  @override
   String get quizDesc => 'Testaa tietosi.';
 
   @override
-  String get scenarios => 'Skenaariot';
+  String get scenarios => 'Kaupunki';
 
   @override
   String get scenariosDesc => 'Harjoittele oikeita keskusteluja.';
+
+  @override
+  String get townSchool => 'Koulu';
+
+  @override
+  String get townTab => 'Kaupunki';
 
   @override
   String get profile => 'Profiili';
@@ -115,21 +118,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get startNewConversation => 'Aloita uusi keskustelu';
-
-  @override
-  String get blankChat => 'Tyhjä Chat';
-
-  @override
-  String get blankChatDesc => 'Aloita ilman kontekstia';
-
-  @override
-  String get roleplayScenario => 'Roolipeliskenaario';
-
-  @override
-  String get roleplayScenarioDesc => 'Harjoittele tiettyjä tilanteita';
-
-  @override
-  String get chooseChatType => 'Valitse chat-tyyppi';
 
   @override
   String get cancel => 'Peruuta';
@@ -212,9 +200,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get drills => 'Virheet';
 
   @override
-  String get typeHere => 'Kirjoita tähän...';
-
-  @override
   String get shopTitle => 'Kauppa';
 
   @override
@@ -280,9 +265,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get come_back_tomorrow => 'Tule takaisin huomenna!';
 
   @override
-  String get streak_broken => 'Tervetuloa takaisin! Aloitetaan alusta';
-
-  @override
   String get keep_going => 'Jatka samaan malliin!';
 
   @override
@@ -330,7 +312,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Olen sujuva tai lähes sujuva. Voin keskustella monimutkaisista aiheista.';
 
   @override
-  String get whichLanguage => 'MIKÄ KIELI';
+  String get whichLanguage => 'MINKÄ KIELEN';
 
   @override
   String get doYouWantToLearn => 'HALUAT OPPIA?';
@@ -340,7 +322,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get dontWorryVerify =>
-      'Älä huoli, vahvistamme tämän nopealla chatillä!';
+      'Älä huoli, vahvistamme tämän nopealla chatilla!';
 
   @override
   String get startAssessment => 'ALOITA ARVIOINTI';
@@ -374,10 +356,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get shopItemAppleDescription => 'Terveellinen välipalat.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => 'Donitsi';
 
   @override
-  String get shopItemCroissantDescription => 'Tervallisuutta.';
+  String get shopItemDonutDescription => 'Makea ja tahmea.';
 
   @override
   String get shopItemPizzaName => 'Pizzapala';
@@ -456,6 +438,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get reviewVocabularyPrompt => 'Mitä tämä tarkoittaa?';
 
   @override
+  String get sceneryTitle => 'Maisema';
+
+  @override
+  String get shopItemBgMeadowName => 'Niitty';
+
+  @override
+  String get sceneInUse => 'Käytössä';
+
+  @override
   String get shopItemBgBlueName => 'Valtameren sininen';
 
   @override
@@ -490,22 +481,8 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get youLabel => 'Sinä';
-
-  @override
-  String get mojiSleepReconnect =>
-      'Zzz... Moji torkkuu, kun kieliyhteys muodostetaan uudelleen. Yritä pian uudelleen.';
-
-  @override
   String get mojiSleepNight =>
       'Shhh... Moji nukkuu. Napauta Mojia herättääksesi hänet.';
-
-  @override
-  String get mojiSleepHintReconnect =>
-      'MOJI TORKKUU... KIELIYHTEYS MUODOSTETAAN UUDELLEEN';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI NUKKUU... NAPAUTA HERÄTTÄÄKSESI';
 
   @override
   String get mojiWakeSuccess =>
@@ -515,13 +492,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return 'Hereillä $minutes min';
   }
-
-  @override
-  String get mojiSleepReasonReconnect =>
-      'Moji torkkuu, kun kieliyhteys muodostetaan uudelleen.';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji nukkuu. Napauta herättääksesi.';
 
   @override
   String get levelsScreenTitle => 'Tasot';
@@ -590,18 +560,89 @@ class AppLocalizationsFi extends AppLocalizations {
   String get characterBird => 'Lintu';
 
   @override
+  String get characterRabbit => 'Kani';
+
+  @override
+  String get characterHamster => 'Hamsteri';
+
+  @override
+  String get characterParrot => 'Papukaija';
+
+  @override
+  String get characterFox => 'Kettu';
+
+  @override
+  String get characterRaccoon => 'Pesukarhu';
+
+  @override
+  String get characterRedPanda => 'Punapanda';
+
+  @override
+  String get characterSkunk => 'Haisunäätä';
+
+  @override
+  String get characterOtter => 'Saukko';
+
+  @override
+  String get characterBeaver => 'Majava';
+
+  @override
+  String get characterSquirrel => 'Orava';
+
+  @override
+  String get characterChinchilla => 'Chinchilla';
+
+  @override
+  String get characterMouse => 'Hiiri';
+
+  @override
+  String get characterHedgehog => 'Siili';
+
+  @override
+  String get characterBat => 'Lepakko';
+
+  @override
+  String get characterFennec => 'Aavikkokettu';
+
+  @override
+  String get characterKoala => 'Koala';
+
+  @override
+  String get characterWombat => 'Vompatti';
+
+  @override
+  String get characterPanda => 'Panda';
+
+  @override
+  String get characterSloth => 'Laiskiainen';
+
+  @override
+  String get characterCapybara => 'Kapybara';
+
+  @override
+  String get characterPiglet => 'Porsas';
+
+  @override
+  String get characterSeal => 'Hylje';
+
+  @override
+  String get characterPenguin => 'Pingviini';
+
+  @override
+  String get characterFrog => 'Sammakko';
+
+  @override
+  String get characterAxolotl => 'Aksolotli';
+
+  @override
+  String get characterGecko => 'Gekko';
+
+  @override
+  String get characterChameleon => 'Kameleontti';
+
+  @override
   String get aiUnavailableMessage =>
       'Zzz... Moji torkkuu, kunnes kieliyhteys palautuu. Yritä pian uudelleen.';
-
-  @override
-  String get mojiDozingReconnect =>
-      'Moji torkkuu, kunnes kieliyhteys palautuu.';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji nukkuu. Herätä napauttamalla.';
-
-  @override
-  String get mojiAwakeReady => 'Moji on hereillä ja valmiina!';
 
   @override
   String get wardrobeTitle => 'Vaatekaappi';
@@ -620,6 +661,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get eyeColor => 'Silmien väri';
+
+  @override
+  String get beakColor => 'Nokan väri';
 
   @override
   String get eyeStyleSolid => 'Yksivärinen';
@@ -876,6 +920,27 @@ class AppLocalizationsFi extends AppLocalizations {
   String get carePlayCooldown => 'Moji on saanut tarpeekseen rapsutuksista.';
 
   @override
+  String get playCatch => 'Leiki pallolla';
+
+  @override
+  String get playCatchAgain => 'Pelaa uudelleen';
+
+  @override
+  String get playToyChest => 'Lelulaatikko';
+
+  @override
+  String get playBubbleBath => 'Kuplakylpy';
+
+  @override
+  String get playPounce => 'Myyräjahti';
+
+  @override
+  String get playPondHop => 'Lammikkohyppely';
+
+  @override
+  String get playFetchWords => 'Hae sanat';
+
+  @override
   String get careClose => 'Sulje';
 
   @override
@@ -895,9 +960,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get careDragToFeed => 'Vedä Mojin päälle ruokkiaksesi';
 
   @override
-  String get bondLabel => 'SIDE';
-
-  @override
   String get bondStageCurious => 'Utelias';
 
   @override
@@ -913,18 +975,92 @@ class AppLocalizationsFi extends AppLocalizations {
   String get bondStageInseparable => 'Erottamattomat';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '$points tasoon $stage';
-  }
-
-  @override
-  String get bondKeepLearning => 'Jatka oppimista, niin lähennytte';
-
-  @override
   String get bondMissesYou => 'Moji kaipaa sinua';
 
   @override
   String get bondLonely => 'Moji on odottanut sinua';
+
+  @override
+  String get aiLimitQuizTitle => 'Päivän tekoälytietovisat on käytetty';
+
+  @override
+  String get aiLimitMessageTitle => 'Päivän tekoälyviestit on käytetty';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '$used/$total käytetty tänään';
+  }
+
+  @override
+  String get aiLimitResets => 'Kiintiösi palaa huomenna.';
+
+  @override
+  String get aiLimitReviewOpen =>
+      'Kertaus ei tarvitse opettajaa — korttisi ovat aina siellä.';
+
+  @override
+  String get aiLimitQuizOpen =>
+      'Omista sanoistasi tehdyt visat ovat yhä käytettävissä.';
+
+  @override
+  String get aiLimitWatchAd => 'Katso mainos ja saat yhden lisää';
+
+  @override
+  String get aiLimitGoPlus => 'Hanki Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => 'Ilmainen';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => 'Tekoälyvisoja päivässä';
+
+  @override
+  String get premiumRowMessages => 'Tekoälyviestejä päivässä';
+
+  @override
+  String get premiumRowAds => 'Välimainokset';
+
+  @override
+  String get premiumValueShown => 'Näytetään';
+
+  @override
+  String get premiumValueNone => 'Ei lainkaan';
+
+  @override
+  String get premiumRowRollover => 'Käyttämättömät visat';
+
+  @override
+  String get premiumValueExpire => 'Vanhenevat';
+
+  @override
+  String get premiumValueRollOver => 'Siirtyvät';
+
+  @override
+  String get premiumRowPetStats => 'Lemmikin tila';
+
+  @override
+  String get premiumValueDecay => 'Laskee';
+
+  @override
+  String get premiumValueDecaySlower => 'Laskee hitaammin';
+
+  @override
+  String get premiumComingSoon => 'Tilaukset eivät ole vielä auki.';
+
+  @override
+  String get premiumActive => 'Mimikin Plus on käytössä.';
+
+  @override
+  String get premiumRestore => 'Palauta osto';
+
+  @override
+  String get premiumRestoreDone => 'Tällä tilillä ei ole mitään palautettavaa.';
+
+  @override
+  String get premiumPurchasePending => 'Viimeistellään kaupassa…';
 
   @override
   String get categoryStyle => 'Tyyli';
@@ -1083,19 +1219,350 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => 'Minä vuonna synnyit?';
-
-  @override
-  String get onboardingBirthYearHint => 'Vuosi';
-
-  @override
-  String get onboardingBirthYearWhy =>
-      'Tätä käytetään vain sopivien mainosten valintaan.';
-
-  @override
-  String get onboardingBirthYearInvalid => 'Anna kelvollinen vuosi';
-
-  @override
   String get privacyRedactedNotice =>
       'Henkilötiedot piilotettiin ennen lähettämistä.';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'KYSYMYS $current/$total';
+  }
+
+  @override
+  String get quizPreparing => 'VALMISTELLAAN...';
+
+  @override
+  String get quizPickAnswer => 'Valitse oikea vastaus';
+
+  @override
+  String get quizWellDone => 'Hienoa työtä!';
+
+  @override
+  String get quizEncouragement => 'Sinä pystyt tähän!';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return 'Hauska tavata, $name! Opitaan yhdessä.';
+  }
+
+  @override
+  String get tutorialOfferTitle => 'PIKAOPASTUS?';
+
+  @override
+  String get tutorialWatch => 'NÄYTÄ';
+
+  @override
+  String get tutorialSkip => 'OHITA';
+
+  @override
+  String get tutorialNext => 'SEURAAVA';
+
+  @override
+  String get tutorialBack => 'TAKAISIN';
+
+  @override
+  String get tutorialDone => 'VALMIS';
+
+  @override
+  String get tutorialReplay => 'Näytä opastukset uudelleen';
+
+  @override
+  String get tutorialOfferHome => 'Haluatko pikaopastuksen aloitusnäyttöön?';
+
+  @override
+  String get tutorialOfferQuiz => 'Ensimmäinen visasi. Pikaopastus?';
+
+  @override
+  String get tutorialOfferChat => 'Ensimmäinen keskustelusi. Pikaopastus?';
+
+  @override
+  String get tutorialOfferShop => 'Ensimmäinen käyntisi kaupassa. Pikaopastus?';
+
+  @override
+  String get tutorialOfferProfile => 'Haluatko pikaopastuksen profiiliisi?';
+
+  @override
+  String get tutorialOfferReview => 'Ensimmäinen kertauksesi. Pikaopastus?';
+
+  @override
+  String get tutorialHomePet =>
+      'Tämä on Moji. Napauta sitä tai vedä sormella pään yli silittääksesi.';
+
+  @override
+  String get tutorialHomeLevel =>
+      'Tasosi ja kokemuspisteesi. Napauta nähdäksesi, mitä seuraavat tasot avaavat.';
+
+  @override
+  String get tutorialHomeFeed =>
+      'Ruokasi. Valitse herkku ja vedä se Mojin päälle.';
+
+  @override
+  String get tutorialHomeCare =>
+      'Ilmestyy, kun Moji tarvitsee jotain. Napauta ja katso.';
+
+  @override
+  String get tutorialHomeReview =>
+      'Opiskelu: kertaa odottavat sanat ja katso virheesi uudelleen.';
+
+  @override
+  String get tutorialHomeSettings =>
+      'Asetukset: pikselifontti, muistutukset ja näiden opastusten uusiminen.';
+
+  @override
+  String get tutorialNavTown =>
+      'Kaupunki: astu rakennukseen harjoitellaksesi keskustelua tai käy koulussa tietovisassa.';
+
+  @override
+  String get tutorialNavChat =>
+      'Keskustelut: pidempiä juttutuokioita ja roolipelitilanteita.';
+
+  @override
+  String get tutorialNavShop =>
+      'Kauppa: käytä kolikoita ruokaan, tyyleihin ja uusiin maailmoihin.';
+
+  @override
+  String get tutorialNavProfile => 'Profiili: tilastosi, kielesi ja tilisi.';
+
+  @override
+  String get tutorialQuizHeader =>
+      'Tasosi ja taukopainike siltä varalta, että sinun on lopetettava.';
+
+  @override
+  String get tutorialQuizQuestion =>
+      'Kysymys. Yläpuolinen merkki kertoo, mitä testataan.';
+
+  @override
+  String get tutorialQuizOptions =>
+      'Valitse vastaus. Väärät tallennetaan, jotta voit kerrata ne myöhemmin.';
+
+  @override
+  String get tutorialQuizContinue => 'Jatka, kun olet vastannut.';
+
+  @override
+  String get tutorialChatMenu =>
+      'Aiemmat keskustelut ja roolipelit ovat tämän painikkeen takana.';
+
+  @override
+  String get tutorialChatMessages =>
+      'Keskustelunne. Virheet korjataan lempeästi matkan varrella.';
+
+  @override
+  String get tutorialChatInput =>
+      'Kirjoita tähän. Sen ei tarvitse olla täydellistä.';
+
+  @override
+  String get tutorialShopCoins =>
+      'Kolikkosi. Ansaitset niitä harjoittelemalla ja huolehtimalla Mojista.';
+
+  @override
+  String get tutorialShopTabs =>
+      'Suodata sen mukaan, mitä etsit: ruokaa, koristeita vai tyyliä.';
+
+  @override
+  String get tutorialShopGrid =>
+      'Napauta mitä tahansa ostaaksesi sen. Ruoka kuluu, muu jää sinulle.';
+
+  @override
+  String get tutorialShopFreeCoins =>
+      'Kolikot lopussa? Katso lyhyt video ja täydennä.';
+
+  @override
+  String get tutorialProfileAvatar =>
+      'Napauta Mojia vaihtaaksesi sen ulkonäköä ja vaatteita.';
+
+  @override
+  String get tutorialProfileStats =>
+      'Tasosi ja se, kuinka kaukana seuraava on.';
+
+  @override
+  String get tutorialProfileDaily =>
+      'Palaa joka päivä palkinnon vuoksi. Pidemmät putket tuottavat enemmän.';
+
+  @override
+  String get tutorialProfileLanguages =>
+      'Mitä puhut ja mitä opiskelet. Kumpaakin voi vaihtaa milloin vain.';
+
+  @override
+  String get tutorialProfileAccount =>
+      'Liitä tili, niin Moji säilyy myös uudessa puhelimessa.';
+
+  @override
+  String get tutorialReviewCard =>
+      'Yritä muistaa vastaus ja napauta sitten korttia tarkistaaksesi.';
+
+  @override
+  String get tutorialReviewGrades =>
+      'Näytä vastaus ja kerro, miten meni. Vaikeat kortit palaavat aiemmin.';
+
+  @override
+  String get tutorialReviewCount =>
+      'Kuinka monta korttia tässä istunnossa on jäljellä.';
+
+  @override
+  String get seasonPassNotOnSale => 'Tämä passi ei ole vielä myynnissä.';
+
+  @override
+  String seasonPassBuy(String price) {
+    return 'Osta $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return 'Lunasta ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => 'Lunastetaan…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return 'Lunastettu: $count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return 'Taso $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count osaa · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => 'Rata suoritettu.';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '$xp XP seuraavaan osaan';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => 'Valmis';
+
+  @override
+  String get seasonPassTierClaimed => 'Lunastettu';
+
+  @override
+  String get seasonPassTryOn => 'Sovita';
+
+  @override
+  String get sceneAirfieldName => 'Lähdöt';
+
+  @override
+  String get sceneCozyRoomName => 'Viihtyisä huone';
+
+  @override
+  String get sceneEnchantedMeadowName => 'Lumottu niitty';
+
+  @override
+  String get sceneMushroomGladeName => 'Sienien metsäaukio';
+
+  @override
+  String get scenePumpkinPatchName => 'Kurpitsapelto';
+
+  @override
+  String get seasonPassScenePreviewOwned =>
+      'Sinun. Vaihda maailmaa milloin vain vaatekaapissa.';
+
+  @override
+  String get seasonPassPreviewOwned => 'Sinun. Pue se päälle vaatekaapissa.';
+
+  @override
+  String get seasonPassPreviewLocked =>
+      'Ei vielä sinun — tämä on vain katsaus.';
+
+  @override
+  String get seasonPassPromise =>
+      'Tasot lasketaan passin oston jälkeen ansaitusta XP:stä, joten myöhään ostaminen ei maksa sinulle mitään. Mikään ei vanhene: saavutettu taso pysyy, ja saavuttamaton odottaa sinua.';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return 'Odottaa lunastusta: $count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => 'Ansaitaan opiskelemalla';
+
+  @override
+  String get accessoryBandanaName => 'Auringonnousuhuivi';
+
+  @override
+  String get accessoryBandanaCloudName => 'Pilvihuivi';
+
+  @override
+  String get accessoryScarfDuskName => 'Hämärähuivi';
+
+  @override
+  String get accessoryGogglesName => 'Lentolasit';
+
+  @override
+  String get accessoryGogglesBrassName => 'Messinkilasit';
+
+  @override
+  String get accessoryBeanieDuskName => 'Hämäräpipo';
+
+  @override
+  String get accessoryFlightCapName => 'Lentäjänlakki';
+
+  @override
+  String get accessoryFlightCapCloudName => 'Pilvilentäjänlakki';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => 'Hiilenharmaa cowboyhattu';
+
+  @override
+  String get accessoryFlightScarfName => 'Tuulenpuuska-huivi';
+
+  @override
+  String get accessoryPumpkinWitchName => 'Kurpitsa-noidanhattu';
+
+  @override
+  String get accessoryDevilBandName => 'Paholaisen sarvipanta';
+
+  @override
+  String get accessoryGhostBandanaName => 'Aavehuivi';
+
+  @override
+  String get accessoryBatChokerName => 'Lepakkokaulanauha';
+
+  @override
+  String get shopSectionTopUp => 'Lataa kolikoita';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => 'Kausipassi';
+
+  @override
+  String get shopSectionItems => 'Tavarat';
+
+  @override
+  String get topUpTitle => 'Lataa kolikoita';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins kolikkoa';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '+$percent % kolikoita';
+  }
+
+  @override
+  String get topUpBestValue => 'Paras tarjous';
+
+  @override
+  String get topUpNotOpen => 'Kolikkopaketit eivät ole vielä auki.';
+
+  @override
+  String topUpThanks(int coins) {
+    return 'Lisättiin $coins kolikkoa.';
+  }
 }

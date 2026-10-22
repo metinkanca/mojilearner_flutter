@@ -202,12 +202,6 @@ abstract class AppLocalizations {
   /// **'Design Your Moji'**
   String get designMojiBtn;
 
-  /// No description provided for @quizMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Quiz'**
-  String get quizMode;
-
   /// No description provided for @quizDesc.
   ///
   /// In en, this message translates to:
@@ -217,7 +211,7 @@ abstract class AppLocalizations {
   /// No description provided for @scenarios.
   ///
   /// In en, this message translates to:
-  /// **'Scenarios'**
+  /// **'Town'**
   String get scenarios;
 
   /// No description provided for @scenariosDesc.
@@ -225,6 +219,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Practice real-life conversations like ordering coffee or job interviews.'**
   String get scenariosDesc;
+
+  /// The school building in the town: where the quizzes are. Shown on its card and under it.
+  ///
+  /// In en, this message translates to:
+  /// **'School'**
+  String get townSchool;
+
+  /// Label of the bottom navigation tab that opens the town (the map of buildings, with the school where the quizzes are).
+  ///
+  /// In en, this message translates to:
+  /// **'Town'**
+  String get townTab;
 
   /// No description provided for @profile.
   ///
@@ -363,36 +369,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start a new conversation'**
   String get startNewConversation;
-
-  /// No description provided for @blankChat.
-  ///
-  /// In en, this message translates to:
-  /// **'Blank Chat'**
-  String get blankChat;
-
-  /// No description provided for @blankChatDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Start a fresh conversation with no context'**
-  String get blankChatDesc;
-
-  /// No description provided for @roleplayScenario.
-  ///
-  /// In en, this message translates to:
-  /// **'Roleplay Scenario'**
-  String get roleplayScenario;
-
-  /// No description provided for @roleplayScenarioDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Practice specific situations like ordering coffee or a job interview'**
-  String get roleplayScenarioDesc;
-
-  /// No description provided for @chooseChatType.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a Chat Type'**
-  String get chooseChatType;
 
   /// No description provided for @cancel.
   ///
@@ -550,12 +526,6 @@ abstract class AppLocalizations {
   /// **'Errors'**
   String get drills;
 
-  /// No description provided for @typeHere.
-  ///
-  /// In en, this message translates to:
-  /// **'Type here...'**
-  String get typeHere;
-
   /// No description provided for @shopTitle.
   ///
   /// In en, this message translates to:
@@ -681,12 +651,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Come back tomorrow!'**
   String get come_back_tomorrow;
-
-  /// No description provided for @streak_broken.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome back! Starting fresh'**
-  String get streak_broken;
 
   /// No description provided for @keep_going.
   ///
@@ -856,17 +820,17 @@ abstract class AppLocalizations {
   /// **'A healthy snack.'**
   String get shopItemAppleDescription;
 
-  /// No description provided for @shopItemCroissantName.
+  /// No description provided for @shopItemDonutName.
   ///
   /// In en, this message translates to:
-  /// **'Croissant'**
-  String get shopItemCroissantName;
+  /// **'Donut'**
+  String get shopItemDonutName;
 
-  /// No description provided for @shopItemCroissantDescription.
+  /// No description provided for @shopItemDonutDescription.
   ///
   /// In en, this message translates to:
-  /// **'Buttery goodness.'**
-  String get shopItemCroissantDescription;
+  /// **'Sweet and sticky.'**
+  String get shopItemDonutDescription;
 
   /// No description provided for @shopItemPizzaName.
   ///
@@ -1006,6 +970,24 @@ abstract class AppLocalizations {
   /// **'What does this mean?'**
   String get reviewVocabularyPrompt;
 
+  /// No description provided for @sceneryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenery'**
+  String get sceneryTitle;
+
+  /// No description provided for @shopItemBgMeadowName.
+  ///
+  /// In en, this message translates to:
+  /// **'Meadow'**
+  String get shopItemBgMeadowName;
+
+  /// No description provided for @sceneInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'In use'**
+  String get sceneInUse;
+
   /// No description provided for @shopItemBgBlueName.
   ///
   /// In en, this message translates to:
@@ -1066,35 +1048,11 @@ abstract class AppLocalizations {
   /// **'Purchased {itemName} x{quantity}!'**
   String purchaseSuccessMultiple(Object itemName, Object quantity);
 
-  /// No description provided for @youLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'You'**
-  String get youLabel;
-
-  /// No description provided for @mojiSleepReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Zzz... Moji is dozing while the language link reconnects. Try again soon.'**
-  String get mojiSleepReconnect;
-
   /// No description provided for @mojiSleepNight.
   ///
   /// In en, this message translates to:
   /// **'Shhh... Moji is sleeping. Tap Moji to wake up.'**
   String get mojiSleepNight;
-
-  /// No description provided for @mojiSleepHintReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'MOJI IS DOZING... LANGUAGE LINK RECONNECTING'**
-  String get mojiSleepHintReconnect;
-
-  /// No description provided for @mojiSleepHintNight.
-  ///
-  /// In en, this message translates to:
-  /// **'MOJI IS SLEEPING... TAP TO WAKE'**
-  String get mojiSleepHintNight;
 
   /// No description provided for @mojiWakeSuccess.
   ///
@@ -1107,18 +1065,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Awake for {minutes} min'**
   String mojiAwakeFor(int minutes);
-
-  /// No description provided for @mojiSleepReasonReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Moji is dozing while the language link reconnects.'**
-  String get mojiSleepReasonReconnect;
-
-  /// No description provided for @mojiSleepReasonNight.
-  ///
-  /// In en, this message translates to:
-  /// **'Moji is sleeping. Tap to wake up.'**
-  String get mojiSleepReasonNight;
 
   /// No description provided for @levelsScreenTitle.
   ///
@@ -1246,29 +1192,173 @@ abstract class AppLocalizations {
   /// **'Bird'**
   String get characterBird;
 
+  /// No description provided for @characterRabbit.
+  ///
+  /// In en, this message translates to:
+  /// **'Rabbit'**
+  String get characterRabbit;
+
+  /// No description provided for @characterHamster.
+  ///
+  /// In en, this message translates to:
+  /// **'Hamster'**
+  String get characterHamster;
+
+  /// No description provided for @characterParrot.
+  ///
+  /// In en, this message translates to:
+  /// **'Parrot'**
+  String get characterParrot;
+
+  /// No description provided for @characterFox.
+  ///
+  /// In en, this message translates to:
+  /// **'Fox'**
+  String get characterFox;
+
+  /// No description provided for @characterRaccoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Raccoon'**
+  String get characterRaccoon;
+
+  /// No description provided for @characterRedPanda.
+  ///
+  /// In en, this message translates to:
+  /// **'Red Panda'**
+  String get characterRedPanda;
+
+  /// No description provided for @characterSkunk.
+  ///
+  /// In en, this message translates to:
+  /// **'Skunk'**
+  String get characterSkunk;
+
+  /// No description provided for @characterOtter.
+  ///
+  /// In en, this message translates to:
+  /// **'Otter'**
+  String get characterOtter;
+
+  /// No description provided for @characterBeaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Beaver'**
+  String get characterBeaver;
+
+  /// No description provided for @characterSquirrel.
+  ///
+  /// In en, this message translates to:
+  /// **'Squirrel'**
+  String get characterSquirrel;
+
+  /// No description provided for @characterChinchilla.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinchilla'**
+  String get characterChinchilla;
+
+  /// No description provided for @characterMouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Mouse'**
+  String get characterMouse;
+
+  /// No description provided for @characterHedgehog.
+  ///
+  /// In en, this message translates to:
+  /// **'Hedgehog'**
+  String get characterHedgehog;
+
+  /// No description provided for @characterBat.
+  ///
+  /// In en, this message translates to:
+  /// **'Bat'**
+  String get characterBat;
+
+  /// No description provided for @characterFennec.
+  ///
+  /// In en, this message translates to:
+  /// **'Fennec'**
+  String get characterFennec;
+
+  /// No description provided for @characterKoala.
+  ///
+  /// In en, this message translates to:
+  /// **'Koala'**
+  String get characterKoala;
+
+  /// No description provided for @characterWombat.
+  ///
+  /// In en, this message translates to:
+  /// **'Wombat'**
+  String get characterWombat;
+
+  /// No description provided for @characterPanda.
+  ///
+  /// In en, this message translates to:
+  /// **'Panda'**
+  String get characterPanda;
+
+  /// No description provided for @characterSloth.
+  ///
+  /// In en, this message translates to:
+  /// **'Sloth'**
+  String get characterSloth;
+
+  /// No description provided for @characterCapybara.
+  ///
+  /// In en, this message translates to:
+  /// **'Capybara'**
+  String get characterCapybara;
+
+  /// No description provided for @characterPiglet.
+  ///
+  /// In en, this message translates to:
+  /// **'Piglet'**
+  String get characterPiglet;
+
+  /// No description provided for @characterSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Seal'**
+  String get characterSeal;
+
+  /// No description provided for @characterPenguin.
+  ///
+  /// In en, this message translates to:
+  /// **'Penguin'**
+  String get characterPenguin;
+
+  /// No description provided for @characterFrog.
+  ///
+  /// In en, this message translates to:
+  /// **'Frog'**
+  String get characterFrog;
+
+  /// No description provided for @characterAxolotl.
+  ///
+  /// In en, this message translates to:
+  /// **'Axolotl'**
+  String get characterAxolotl;
+
+  /// No description provided for @characterGecko.
+  ///
+  /// In en, this message translates to:
+  /// **'Gecko'**
+  String get characterGecko;
+
+  /// No description provided for @characterChameleon.
+  ///
+  /// In en, this message translates to:
+  /// **'Chameleon'**
+  String get characterChameleon;
+
   /// No description provided for @aiUnavailableMessage.
   ///
   /// In en, this message translates to:
   /// **'Zzz... Moji is dozing while the language link reconnects. Try again soon.'**
   String get aiUnavailableMessage;
-
-  /// No description provided for @mojiDozingReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'Moji is dozing while the language link reconnects.'**
-  String get mojiDozingReconnect;
-
-  /// No description provided for @mojiSleepingTapWake.
-  ///
-  /// In en, this message translates to:
-  /// **'Moji is sleeping. Tap to wake up.'**
-  String get mojiSleepingTapWake;
-
-  /// No description provided for @mojiAwakeReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Moji is awake and ready!'**
-  String get mojiAwakeReady;
 
   /// No description provided for @wardrobeTitle.
   ///
@@ -1305,6 +1395,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Eye Color'**
   String get eyeColor;
+
+  /// No description provided for @beakColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Beak Color'**
+  String get beakColor;
 
   /// No description provided for @eyeStyleSolid.
   ///
@@ -1768,6 +1864,48 @@ abstract class AppLocalizations {
   /// **'Moji has had enough fuss for now.'**
   String get carePlayCooldown;
 
+  /// No description provided for @playCatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Play catch'**
+  String get playCatch;
+
+  /// No description provided for @playCatchAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play again'**
+  String get playCatchAgain;
+
+  /// No description provided for @playToyChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Toy chest'**
+  String get playToyChest;
+
+  /// No description provided for @playBubbleBath.
+  ///
+  /// In en, this message translates to:
+  /// **'Bubble bath'**
+  String get playBubbleBath;
+
+  /// No description provided for @playPounce.
+  ///
+  /// In en, this message translates to:
+  /// **'Pounce'**
+  String get playPounce;
+
+  /// No description provided for @playPondHop.
+  ///
+  /// In en, this message translates to:
+  /// **'Pond hop'**
+  String get playPondHop;
+
+  /// No description provided for @playFetchWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch the words'**
+  String get playFetchWords;
+
   /// No description provided for @careClose.
   ///
   /// In en, this message translates to:
@@ -1797,12 +1935,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drag onto Moji to feed'**
   String get careDragToFeed;
-
-  /// No description provided for @bondLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'BOND'**
-  String get bondLabel;
 
   /// No description provided for @bondStageCurious.
   ///
@@ -1834,18 +1966,6 @@ abstract class AppLocalizations {
   /// **'Inseparable'**
   String get bondStageInseparable;
 
-  /// Bond meter caption: how much bond is left before the next pet stage
-  ///
-  /// In en, this message translates to:
-  /// **'{points} to {stage}'**
-  String bondToNextStage(int points, String stage);
-
-  /// No description provided for @bondKeepLearning.
-  ///
-  /// In en, this message translates to:
-  /// **'Keep learning to grow closer'**
-  String get bondKeepLearning;
-
   /// No description provided for @bondMissesYou.
   ///
   /// In en, this message translates to:
@@ -1857,6 +1977,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Moji has been waiting for you'**
   String get bondLonely;
+
+  /// No description provided for @aiLimitQuizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s AI quizzes are used up'**
+  String get aiLimitQuizTitle;
+
+  /// No description provided for @aiLimitMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s AI messages are used up'**
+  String get aiLimitMessageTitle;
+
+  /// No description provided for @aiLimitUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {total} used today'**
+  String aiLimitUsage(int used, int total);
+
+  /// No description provided for @aiLimitResets.
+  ///
+  /// In en, this message translates to:
+  /// **'Your allowance comes back tomorrow.'**
+  String get aiLimitResets;
+
+  /// No description provided for @aiLimitReviewOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Review never needs the tutor — your due cards are always there.'**
+  String get aiLimitReviewOpen;
+
+  /// No description provided for @aiLimitQuizOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Quizzes built from your own words are still there.'**
+  String get aiLimitQuizOpen;
+
+  /// No description provided for @aiLimitWatchAd.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an ad for one more'**
+  String get aiLimitWatchAd;
+
+  /// No description provided for @aiLimitGoPlus.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Mimikin Plus'**
+  String get aiLimitGoPlus;
+
+  /// No description provided for @premiumColumnFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get premiumColumnFree;
+
+  /// No description provided for @premiumColumnPlus.
+  ///
+  /// In en, this message translates to:
+  /// **'Plus'**
+  String get premiumColumnPlus;
+
+  /// No description provided for @premiumRowQuizzes.
+  ///
+  /// In en, this message translates to:
+  /// **'AI quizzes a day'**
+  String get premiumRowQuizzes;
+
+  /// No description provided for @premiumRowMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'AI messages a day'**
+  String get premiumRowMessages;
+
+  /// No description provided for @premiumRowAds.
+  ///
+  /// In en, this message translates to:
+  /// **'Interstitial ads'**
+  String get premiumRowAds;
+
+  /// No description provided for @premiumValueShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown'**
+  String get premiumValueShown;
+
+  /// No description provided for @premiumValueNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get premiumValueNone;
+
+  /// No description provided for @premiumRowRollover.
+  ///
+  /// In en, this message translates to:
+  /// **'Unused quizzes'**
+  String get premiumRowRollover;
+
+  /// No description provided for @premiumValueExpire.
+  ///
+  /// In en, this message translates to:
+  /// **'Expire'**
+  String get premiumValueExpire;
+
+  /// No description provided for @premiumValueRollOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll over'**
+  String get premiumValueRollOver;
+
+  /// No description provided for @premiumRowPetStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet stats'**
+  String get premiumRowPetStats;
+
+  /// No description provided for @premiumValueDecay.
+  ///
+  /// In en, this message translates to:
+  /// **'Decay'**
+  String get premiumValueDecay;
+
+  /// No description provided for @premiumValueDecaySlower.
+  ///
+  /// In en, this message translates to:
+  /// **'Decay slower'**
+  String get premiumValueDecaySlower;
+
+  /// No description provided for @premiumComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions are not open yet.'**
+  String get premiumComingSoon;
+
+  /// No description provided for @premiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Mimikin Plus is active.'**
+  String get premiumActive;
+
+  /// No description provided for @premiumRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore a purchase'**
+  String get premiumRestore;
+
+  /// No description provided for @premiumRestoreDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to restore on this account.'**
+  String get premiumRestoreDone;
+
+  /// No description provided for @premiumPurchasePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Finishing with the store…'**
+  String get premiumPurchasePending;
 
   /// No description provided for @categoryStyle.
   ///
@@ -2146,35 +2422,587 @@ abstract class AppLocalizations {
   /// **'+{coins} coins!'**
   String adsEarnedCoins(int coins);
 
-  /// No description provided for @onboardingBirthYearTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'What year were you born?'**
-  String get onboardingBirthYearTitle;
-
-  /// No description provided for @onboardingBirthYearHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Year'**
-  String get onboardingBirthYearHint;
-
-  /// No description provided for @onboardingBirthYearWhy.
-  ///
-  /// In en, this message translates to:
-  /// **'This only decides which ads are suitable for you.'**
-  String get onboardingBirthYearWhy;
-
-  /// No description provided for @onboardingBirthYearInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid year'**
-  String get onboardingBirthYearInvalid;
-
   /// Shown when the app removed personal data from a message before sending it to the AI.
   ///
   /// In en, this message translates to:
   /// **'Personal details were hidden before sending.'**
   String get privacyRedactedNotice;
+
+  /// Badge over the quiz card: which question of how many
+  ///
+  /// In en, this message translates to:
+  /// **'QUESTION {current}/{total}'**
+  String quizQuestionCounter(int current, int total);
+
+  /// No description provided for @quizPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'PREPARING...'**
+  String get quizPreparing;
+
+  /// No description provided for @quizPickAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the right answer'**
+  String get quizPickAnswer;
+
+  /// No description provided for @quizWellDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job!'**
+  String get quizWellDone;
+
+  /// No description provided for @quizEncouragement.
+  ///
+  /// In en, this message translates to:
+  /// **'You got this!'**
+  String get quizEncouragement;
+
+  /// What the pet says once the player has petted it for the first time
+  ///
+  /// In en, this message translates to:
+  /// **'Nice to meet you, {name}! Let us learn together.'**
+  String petTutorialWelcome(String name);
+
+  /// Title of the dialog offering a guided tour of the current page
+  ///
+  /// In en, this message translates to:
+  /// **'NEED A TOUR?'**
+  String get tutorialOfferTitle;
+
+  /// Button that starts the guided tour
+  ///
+  /// In en, this message translates to:
+  /// **'SHOW ME'**
+  String get tutorialWatch;
+
+  /// Button that declines or leaves a guided tour
+  ///
+  /// In en, this message translates to:
+  /// **'SKIP'**
+  String get tutorialSkip;
+
+  /// Advances to the next step of a guided tour
+  ///
+  /// In en, this message translates to:
+  /// **'NEXT'**
+  String get tutorialNext;
+
+  /// Returns to the previous step of a guided tour
+  ///
+  /// In en, this message translates to:
+  /// **'BACK'**
+  String get tutorialBack;
+
+  /// Finishes a guided tour, shown on its last step
+  ///
+  /// In en, this message translates to:
+  /// **'DONE'**
+  String get tutorialDone;
+
+  /// Settings row that puts every guided tour back on offer
+  ///
+  /// In en, this message translates to:
+  /// **'Replay tutorials'**
+  String get tutorialReplay;
+
+  /// No description provided for @tutorialOfferHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Want a quick tour of your home screen?'**
+  String get tutorialOfferHome;
+
+  /// No description provided for @tutorialOfferQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'First quiz. Want a quick tour?'**
+  String get tutorialOfferQuiz;
+
+  /// No description provided for @tutorialOfferChat.
+  ///
+  /// In en, this message translates to:
+  /// **'First chat. Want a quick tour?'**
+  String get tutorialOfferChat;
+
+  /// No description provided for @tutorialOfferShop.
+  ///
+  /// In en, this message translates to:
+  /// **'First visit to the shop. Want a quick tour?'**
+  String get tutorialOfferShop;
+
+  /// No description provided for @tutorialOfferProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Want a quick tour of your profile?'**
+  String get tutorialOfferProfile;
+
+  /// No description provided for @tutorialOfferReview.
+  ///
+  /// In en, this message translates to:
+  /// **'First review session. Want a quick tour?'**
+  String get tutorialOfferReview;
+
+  /// No description provided for @tutorialHomePet.
+  ///
+  /// In en, this message translates to:
+  /// **'This is Moji. Tap it, or drag across its head to scratch.'**
+  String get tutorialHomePet;
+
+  /// No description provided for @tutorialHomeLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your level and XP. Tap to see what the next levels unlock.'**
+  String get tutorialHomeLevel;
+
+  /// No description provided for @tutorialHomeFeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your food. Pick a snack, then drag it onto Moji.'**
+  String get tutorialHomeFeed;
+
+  /// No description provided for @tutorialHomeCare.
+  ///
+  /// In en, this message translates to:
+  /// **'This appears when Moji needs something. Tap to check on it.'**
+  String get tutorialHomeCare;
+
+  /// No description provided for @tutorialHomeReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Study: review the words that are due, and look back at your mistakes.'**
+  String get tutorialHomeReview;
+
+  /// No description provided for @tutorialHomeSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings: pixel text, reminders, and replaying these tours.'**
+  String get tutorialHomeSettings;
+
+  /// Home tour step pointing at the Town tab in the bottom bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Town: step into a building to practise a conversation, or visit the school for a quiz.'**
+  String get tutorialNavTown;
+
+  /// No description provided for @tutorialNavChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats: longer conversations, and roleplay scenarios.'**
+  String get tutorialNavChat;
+
+  /// No description provided for @tutorialNavShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop: spend coins on food, styles and new worlds.'**
+  String get tutorialNavShop;
+
+  /// No description provided for @tutorialNavProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile: your stats, your languages and your account.'**
+  String get tutorialNavProfile;
+
+  /// No description provided for @tutorialQuizHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Your level, and the pause button for when you need to stop.'**
+  String get tutorialQuizHeader;
+
+  /// No description provided for @tutorialQuizQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'The question. The badge above says what it is testing.'**
+  String get tutorialQuizQuestion;
+
+  /// No description provided for @tutorialQuizOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an answer. Wrong ones are saved so you can review them later.'**
+  String get tutorialQuizOptions;
+
+  /// No description provided for @tutorialQuizContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Move on once you have answered.'**
+  String get tutorialQuizContinue;
+
+  /// No description provided for @tutorialChatMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Your past chats and roleplay scenarios live behind this button.'**
+  String get tutorialChatMenu;
+
+  /// No description provided for @tutorialChatMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Your conversation. Mistakes get gently corrected as you go.'**
+  String get tutorialChatMessages;
+
+  /// No description provided for @tutorialChatInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Write here. Do not worry about getting it perfect.'**
+  String get tutorialChatInput;
+
+  /// No description provided for @tutorialShopCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Your coins. Earn them by practising and caring for Moji.'**
+  String get tutorialShopCoins;
+
+  /// No description provided for @tutorialShopTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by what you are after: food, decor or style.'**
+  String get tutorialShopTabs;
+
+  /// No description provided for @tutorialShopGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap anything to buy it. Food gets used up, the rest is yours to keep.'**
+  String get tutorialShopGrid;
+
+  /// No description provided for @tutorialShopFreeCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of coins? Watch a short clip to top up.'**
+  String get tutorialShopFreeCoins;
+
+  /// No description provided for @tutorialProfileAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Moji to change its look and its wardrobe.'**
+  String get tutorialProfileAvatar;
+
+  /// No description provided for @tutorialProfileStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Your level, and how far you are from the next one.'**
+  String get tutorialProfileStats;
+
+  /// No description provided for @tutorialProfileDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Come back each day for a reward. Longer streaks pay better.'**
+  String get tutorialProfileDaily;
+
+  /// No description provided for @tutorialProfileLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'What you speak, and what you are learning. Change either any time.'**
+  String get tutorialProfileLanguages;
+
+  /// No description provided for @tutorialProfileAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Link an account so Moji survives a new phone.'**
+  String get tutorialProfileAccount;
+
+  /// No description provided for @tutorialReviewCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Try to recall the answer, then tap the card to check.'**
+  String get tutorialReviewCard;
+
+  /// No description provided for @tutorialReviewGrades.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal the answer, then say how it went. Cards you found hard come back sooner.'**
+  String get tutorialReviewGrades;
+
+  /// No description provided for @tutorialReviewCount.
+  ///
+  /// In en, this message translates to:
+  /// **'How many cards are left in this session.'**
+  String get tutorialReviewCount;
+
+  /// No description provided for @seasonPassNotOnSale.
+  ///
+  /// In en, this message translates to:
+  /// **'This pass is not on sale yet.'**
+  String get seasonPassNotOnSale;
+
+  /// No description provided for @seasonPassBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy {price}'**
+  String seasonPassBuy(String price);
+
+  /// No description provided for @seasonPassClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim ({count})'**
+  String seasonPassClaim(int count);
+
+  /// No description provided for @seasonPassClaiming.
+  ///
+  /// In en, this message translates to:
+  /// **'Claiming…'**
+  String get seasonPassClaiming;
+
+  /// No description provided for @seasonPassClaimedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Claimed: {count}'**
+  String seasonPassClaimedToast(int count);
+
+  /// No description provided for @seasonPassTierOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Tier {tier} / {total}'**
+  String seasonPassTierOf(int tier, int total);
+
+  /// No description provided for @seasonPassTrackLength.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} pieces · {xp} XP'**
+  String seasonPassTrackLength(int count, int xp);
+
+  /// No description provided for @seasonPassComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Track complete.'**
+  String get seasonPassComplete;
+
+  /// No description provided for @seasonPassXpToNext.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP to the next piece'**
+  String seasonPassXpToNext(int xp);
+
+  /// No description provided for @seasonPassTierCost.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP'**
+  String seasonPassTierCost(int xp);
+
+  /// No description provided for @seasonPassReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get seasonPassReady;
+
+  /// No description provided for @seasonPassTierClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'Claimed'**
+  String get seasonPassTierClaimed;
+
+  /// No description provided for @seasonPassTryOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Try it on'**
+  String get seasonPassTryOn;
+
+  /// Name of the airfield scene handed over by the last season pass tier. The airport-sign sense of the word.
+  ///
+  /// In en, this message translates to:
+  /// **'Departures'**
+  String get sceneAirfieldName;
+
+  /// Name of the cozy room scene: the room with a window, a shelf and a round rug that new players start in.
+  ///
+  /// In en, this message translates to:
+  /// **'Cozy Room'**
+  String get sceneCozyRoomName;
+
+  /// Name of the enchanted meadow scene: a lavender-sky meadow with a wizard tower, giant mushrooms and a corner moon.
+  ///
+  /// In en, this message translates to:
+  /// **'Enchanted Meadow'**
+  String get sceneEnchantedMeadowName;
+
+  /// Name of the mushroom glade scene: a clearing of giant red toadstools on cool jade moss.
+  ///
+  /// In en, this message translates to:
+  /// **'Mushroom Glade'**
+  String get sceneMushroomGladeName;
+
+  /// Name of the pumpkin patch scene: a crooked witch's house, a cauldron and jack-o'-lanterns on green grass under a lavender sky. Season two pass content.
+  ///
+  /// In en, this message translates to:
+  /// **'Pumpkin Patch'**
+  String get scenePumpkinPatchName;
+
+  /// No description provided for @seasonPassScenePreviewOwned.
+  ///
+  /// In en, this message translates to:
+  /// **'Yours. Change worlds any time in the wardrobe.'**
+  String get seasonPassScenePreviewOwned;
+
+  /// No description provided for @seasonPassPreviewOwned.
+  ///
+  /// In en, this message translates to:
+  /// **'Yours. Put it on in the wardrobe.'**
+  String get seasonPassPreviewOwned;
+
+  /// No description provided for @seasonPassPreviewLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yours yet — this is only a look.'**
+  String get seasonPassPreviewLocked;
+
+  /// No description provided for @seasonPassPromise.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiers are owed XP you earn after buying the pass, so buying it late costs you nothing. Nothing here expires: a tier you have reached stays reached, and one you have not stays waiting.'**
+  String get seasonPassPromise;
+
+  /// No description provided for @seasonPassWaitingToClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting to claim: {count}'**
+  String seasonPassWaitingToClaim(int count);
+
+  /// No description provided for @seasonPassEarnedByStudying.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned by studying'**
+  String get seasonPassEarnedByStudying;
+
+  /// No description provided for @accessoryBandanaName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunrise Bandana'**
+  String get accessoryBandanaName;
+
+  /// No description provided for @accessoryBandanaCloudName.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Bandana'**
+  String get accessoryBandanaCloudName;
+
+  /// No description provided for @accessoryScarfDuskName.
+  ///
+  /// In en, this message translates to:
+  /// **'Dusk Scarf'**
+  String get accessoryScarfDuskName;
+
+  /// No description provided for @accessoryGogglesName.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Goggles'**
+  String get accessoryGogglesName;
+
+  /// No description provided for @accessoryGogglesBrassName.
+  ///
+  /// In en, this message translates to:
+  /// **'Brass Goggles'**
+  String get accessoryGogglesBrassName;
+
+  /// No description provided for @accessoryBeanieDuskName.
+  ///
+  /// In en, this message translates to:
+  /// **'Dusk Beanie'**
+  String get accessoryBeanieDuskName;
+
+  /// No description provided for @accessoryFlightCapName.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Cap'**
+  String get accessoryFlightCapName;
+
+  /// No description provided for @accessoryFlightCapCloudName.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Flight Cap'**
+  String get accessoryFlightCapCloudName;
+
+  /// No description provided for @accessoryCowboyHatCharcoalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Charcoal Cowboy Hat'**
+  String get accessoryCowboyHatCharcoalName;
+
+  /// No description provided for @accessoryFlightScarfName.
+  ///
+  /// In en, this message translates to:
+  /// **'Windswept Scarf'**
+  String get accessoryFlightScarfName;
+
+  /// No description provided for @accessoryPumpkinWitchName.
+  ///
+  /// In en, this message translates to:
+  /// **'Pumpkin Witch Hat'**
+  String get accessoryPumpkinWitchName;
+
+  /// No description provided for @accessoryDevilBandName.
+  ///
+  /// In en, this message translates to:
+  /// **'Devil-Horn Headband'**
+  String get accessoryDevilBandName;
+
+  /// No description provided for @accessoryGhostBandanaName.
+  ///
+  /// In en, this message translates to:
+  /// **'Ghost Bandana'**
+  String get accessoryGhostBandanaName;
+
+  /// No description provided for @accessoryBatChokerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bat Choker'**
+  String get accessoryBatChokerName;
+
+  /// No description provided for @shopSectionTopUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Up'**
+  String get shopSectionTopUp;
+
+  /// No description provided for @shopSectionPlus.
+  ///
+  /// In en, this message translates to:
+  /// **'Plus'**
+  String get shopSectionPlus;
+
+  /// No description provided for @shopSectionPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Season Pass'**
+  String get shopSectionPass;
+
+  /// No description provided for @shopSectionItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get shopSectionItems;
+
+  /// No description provided for @topUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Up'**
+  String get topUpTitle;
+
+  /// No description provided for @topUpCoins.
+  ///
+  /// In en, this message translates to:
+  /// **'{coins} coins'**
+  String topUpCoins(int coins);
+
+  /// No description provided for @topUpBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'+{percent}% coins'**
+  String topUpBonus(int percent);
+
+  /// No description provided for @topUpBestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Best value'**
+  String get topUpBestValue;
+
+  /// No description provided for @topUpNotOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin packs are not open yet.'**
+  String get topUpNotOpen;
+
+  /// No description provided for @topUpThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Added {coins} coins.'**
+  String topUpThanks(int coins);
 }
 
 class _AppLocalizationsDelegate

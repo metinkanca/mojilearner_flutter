@@ -36,16 +36,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get designMojiBtn => '设计Moji';
 
   @override
-  String get quizMode => '测验';
-
-  @override
   String get quizDesc => '测试你的知识。';
 
   @override
-  String get scenarios => '场景';
+  String get scenarios => '小镇';
 
   @override
   String get scenariosDesc => '练习现实生活对话。';
+
+  @override
+  String get townSchool => '学校';
+
+  @override
+  String get townTab => '小镇';
 
   @override
   String get profile => '个人资料';
@@ -115,21 +118,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get startNewConversation => '开始新对话';
-
-  @override
-  String get blankChat => '空白聊天';
-
-  @override
-  String get blankChatDesc => '无上下文开始';
-
-  @override
-  String get roleplayScenario => '角色扮演场景';
-
-  @override
-  String get roleplayScenarioDesc => '练习特定情况';
-
-  @override
-  String get chooseChatType => '选择聊天类型';
 
   @override
   String get cancel => '取消';
@@ -212,9 +200,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get drills => '错误';
 
   @override
-  String get typeHere => '在此输入...';
-
-  @override
   String get shopTitle => '商店';
 
   @override
@@ -278,9 +263,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get come_back_tomorrow => '明天再来！';
-
-  @override
-  String get streak_broken => '欢迎回来！重新开始';
 
   @override
   String get keep_going => '继续加油！';
@@ -369,10 +351,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shopItemAppleDescription => 'A healthy snack.';
 
   @override
-  String get shopItemCroissantName => 'Croissant';
+  String get shopItemDonutName => '甜甜圈';
 
   @override
-  String get shopItemCroissantDescription => 'Buttery goodness.';
+  String get shopItemDonutDescription => '香甜黏手。';
 
   @override
   String get shopItemPizzaName => 'Pizza Slice';
@@ -450,6 +432,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reviewVocabularyPrompt => '这是什么意思？';
 
   @override
+  String get sceneryTitle => '场景';
+
+  @override
+  String get shopItemBgMeadowName => '草原';
+
+  @override
+  String get sceneInUse => '使用中';
+
+  @override
   String get shopItemBgBlueName => 'Ocean Blue';
 
   @override
@@ -484,19 +475,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get youLabel => '你';
-
-  @override
-  String get mojiSleepReconnect => 'Zzz... Moji 正在打盹，语言连接正在重新连接。请稍后再试。';
-
-  @override
   String get mojiSleepNight => '嘘... Moji 在睡觉。点击 Moji 把它叫醒。';
-
-  @override
-  String get mojiSleepHintReconnect => 'MOJI 正在打盹... 语言连接正在重连';
-
-  @override
-  String get mojiSleepHintNight => 'MOJI 正在睡觉... 点击唤醒';
 
   @override
   String get mojiWakeSuccess => '哈欠... Moji 现在醒啦！我们来练习吧！';
@@ -505,12 +484,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String mojiAwakeFor(int minutes) {
     return '还能醒着 $minutes 分钟';
   }
-
-  @override
-  String get mojiSleepReasonReconnect => 'Moji 正在打盹，语言连接正在重新连接。';
-
-  @override
-  String get mojiSleepReasonNight => 'Moji 在睡觉。点击唤醒。';
 
   @override
   String get levelsScreenTitle => '关卡';
@@ -578,16 +551,88 @@ class AppLocalizationsZh extends AppLocalizations {
   String get characterBird => '鸟';
 
   @override
+  String get characterRabbit => '兔子';
+
+  @override
+  String get characterHamster => '仓鼠';
+
+  @override
+  String get characterParrot => '鹦鹉';
+
+  @override
+  String get characterFox => '狐狸';
+
+  @override
+  String get characterRaccoon => '浣熊';
+
+  @override
+  String get characterRedPanda => '小熊猫';
+
+  @override
+  String get characterSkunk => '臭鼬';
+
+  @override
+  String get characterOtter => '水獭';
+
+  @override
+  String get characterBeaver => '海狸';
+
+  @override
+  String get characterSquirrel => '松鼠';
+
+  @override
+  String get characterChinchilla => '龙猫';
+
+  @override
+  String get characterMouse => '老鼠';
+
+  @override
+  String get characterHedgehog => '刺猬';
+
+  @override
+  String get characterBat => '蝙蝠';
+
+  @override
+  String get characterFennec => '耳廓狐';
+
+  @override
+  String get characterKoala => '考拉';
+
+  @override
+  String get characterWombat => '袋熊';
+
+  @override
+  String get characterPanda => '熊猫';
+
+  @override
+  String get characterSloth => '树懒';
+
+  @override
+  String get characterCapybara => '水豚';
+
+  @override
+  String get characterPiglet => '小猪';
+
+  @override
+  String get characterSeal => '海豹';
+
+  @override
+  String get characterPenguin => '企鹅';
+
+  @override
+  String get characterFrog => '青蛙';
+
+  @override
+  String get characterAxolotl => '六角恐龙';
+
+  @override
+  String get characterGecko => '壁虎';
+
+  @override
+  String get characterChameleon => '变色龙';
+
+  @override
   String get aiUnavailableMessage => 'Zzz…语言连接恢复期间，Moji正在打盹。请稍后再试。';
-
-  @override
-  String get mojiDozingReconnect => '语言连接恢复期间，Moji正在打盹。';
-
-  @override
-  String get mojiSleepingTapWake => 'Moji正在睡觉。点一下叫醒它。';
-
-  @override
-  String get mojiAwakeReady => 'Moji醒了，准备就绪！';
 
   @override
   String get wardrobeTitle => '衣柜';
@@ -606,6 +651,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get eyeColor => '眼睛颜色';
+
+  @override
+  String get beakColor => '喙的颜色';
 
   @override
   String get eyeStyleSolid => '单色';
@@ -851,6 +899,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get carePlayCooldown => 'Moji 暂时被摸够了。';
 
   @override
+  String get playCatch => '玩接球';
+
+  @override
+  String get playCatchAgain => '再玩一次';
+
+  @override
+  String get playToyChest => '玩具箱';
+
+  @override
+  String get playBubbleBath => '泡泡浴';
+
+  @override
+  String get playPounce => '扑地鼠';
+
+  @override
+  String get playPondHop => '跳荷叶';
+
+  @override
+  String get playFetchWords => '叼回词语';
+
+  @override
   String get careClose => '关闭';
 
   @override
@@ -870,9 +939,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get careDragToFeed => '拖到 Moji 身上喂食';
 
   @override
-  String get bondLabel => '羁绊';
-
-  @override
   String get bondStageCurious => '好奇';
 
   @override
@@ -888,18 +954,90 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bondStageInseparable => '形影不离';
 
   @override
-  String bondToNextStage(int points, String stage) {
-    return '距离$stage还差$points';
-  }
-
-  @override
-  String get bondKeepLearning => '继续学习，越来越亲近';
-
-  @override
   String get bondMissesYou => 'Moji 想你了';
 
   @override
   String get bondLonely => 'Moji 已经等你很久了';
+
+  @override
+  String get aiLimitQuizTitle => '今天的 AI 测验已用完';
+
+  @override
+  String get aiLimitMessageTitle => '今天的 AI 消息已用完';
+
+  @override
+  String aiLimitUsage(int used, int total) {
+    return '今天已用 $used/$total';
+  }
+
+  @override
+  String get aiLimitResets => '你的额度明天恢复。';
+
+  @override
+  String get aiLimitReviewOpen => '复习从不需要导师 — 你的卡片一直都在。';
+
+  @override
+  String get aiLimitQuizOpen => '用你自己的词生成的测验仍然可用。';
+
+  @override
+  String get aiLimitWatchAd => '看一段广告再换一次';
+
+  @override
+  String get aiLimitGoPlus => '获取 Mimikin Plus';
+
+  @override
+  String get premiumColumnFree => '免费';
+
+  @override
+  String get premiumColumnPlus => 'Plus';
+
+  @override
+  String get premiumRowQuizzes => '每天 AI 测验';
+
+  @override
+  String get premiumRowMessages => '每天 AI 消息';
+
+  @override
+  String get premiumRowAds => '插页广告';
+
+  @override
+  String get premiumValueShown => '显示';
+
+  @override
+  String get premiumValueNone => '无';
+
+  @override
+  String get premiumRowRollover => '未使用的测验';
+
+  @override
+  String get premiumValueExpire => '作废';
+
+  @override
+  String get premiumValueRollOver => '可结转';
+
+  @override
+  String get premiumRowPetStats => '宠物状态';
+
+  @override
+  String get premiumValueDecay => '下降';
+
+  @override
+  String get premiumValueDecaySlower => '下降更慢';
+
+  @override
+  String get premiumComingSoon => '订阅尚未开放。';
+
+  @override
+  String get premiumActive => 'Mimikin Plus 已启用。';
+
+  @override
+  String get premiumRestore => '恢复购买';
+
+  @override
+  String get premiumRestoreDone => '此账户没有可恢复的内容。';
+
+  @override
+  String get premiumPurchasePending => '正在与商店完成…';
 
   @override
   String get categoryStyle => '造型';
@@ -1056,17 +1194,320 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get onboardingBirthYearTitle => '你出生于哪一年？';
-
-  @override
-  String get onboardingBirthYearHint => '年份';
-
-  @override
-  String get onboardingBirthYearWhy => '这只用于选择适合你的广告。';
-
-  @override
-  String get onboardingBirthYearInvalid => '请输入有效的年份';
-
-  @override
   String get privacyRedactedNotice => '个人信息已在发送前隐藏。';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return '问题 $current/$total';
+  }
+
+  @override
+  String get quizPreparing => '准备中...';
+
+  @override
+  String get quizPickAnswer => '选择正确的答案';
+
+  @override
+  String get quizWellDone => '做得好！';
+
+  @override
+  String get quizEncouragement => '你可以的！';
+
+  @override
+  String petTutorialWelcome(String name) {
+    return '很高兴认识你，$name！我们一起学习吧。';
+  }
+
+  @override
+  String get tutorialOfferTitle => '要带你逛逛吗？';
+
+  @override
+  String get tutorialWatch => '带我看看';
+
+  @override
+  String get tutorialSkip => '跳过';
+
+  @override
+  String get tutorialNext => '下一步';
+
+  @override
+  String get tutorialBack => '上一步';
+
+  @override
+  String get tutorialDone => '完成';
+
+  @override
+  String get tutorialReplay => '重新播放教程';
+
+  @override
+  String get tutorialOfferHome => '要不要快速逛一遍主界面？';
+
+  @override
+  String get tutorialOfferQuiz => '第一次做测验。要不要快速逛一遍？';
+
+  @override
+  String get tutorialOfferChat => '第一次聊天。要不要快速逛一遍？';
+
+  @override
+  String get tutorialOfferShop => '第一次来商店。要不要快速逛一遍？';
+
+  @override
+  String get tutorialOfferProfile => '要不要快速逛一遍你的资料页？';
+
+  @override
+  String get tutorialOfferReview => '第一次复习。要不要快速逛一遍？';
+
+  @override
+  String get tutorialHomePet => '这是 Moji。点它，或在它头上横向滑动来摸摸。';
+
+  @override
+  String get tutorialHomeLevel => '你的等级和经验值。点一下看看接下来的等级会解锁什么。';
+
+  @override
+  String get tutorialHomeFeed => '你的食物。挑一份零食，拖到 Moji 身上。';
+
+  @override
+  String get tutorialHomeCare => 'Moji 需要什么时会出现。点一下看看它怎么了。';
+
+  @override
+  String get tutorialHomeReview => '学习：复习到期的单词，也回顾一下你的错误。';
+
+  @override
+  String get tutorialHomeSettings => '设置：像素字体、提醒，以及重看这些导览。';
+
+  @override
+  String get tutorialNavTown => '小镇：走进一座建筑练习对话，或者去学校做测验。';
+
+  @override
+  String get tutorialNavChat => '聊天：更长的对话，还有角色扮演情景。';
+
+  @override
+  String get tutorialNavShop => '商店：用金币买食物、造型和新世界。';
+
+  @override
+  String get tutorialNavProfile => '资料页：你的数据、语言和账号。';
+
+  @override
+  String get tutorialQuizHeader => '你的等级，以及需要停下来时的暂停键。';
+
+  @override
+  String get tutorialQuizQuestion => '题目。上面的标签说明它在考什么。';
+
+  @override
+  String get tutorialQuizOptions => '选一个答案。答错的会存起来，之后可以复习。';
+
+  @override
+  String get tutorialQuizContinue => '答完就继续往下走。';
+
+  @override
+  String get tutorialChatMenu => '以前的聊天和角色扮演都在这个按钮后面。';
+
+  @override
+  String get tutorialChatMessages => '你们的对话。出错的地方会一路轻轻帮你改。';
+
+  @override
+  String get tutorialChatInput => '在这里写。不用担心写得不完美。';
+
+  @override
+  String get tutorialShopCoins => '你的金币。练习和照顾 Moji 就能赚到。';
+
+  @override
+  String get tutorialShopTabs => '按你想找的筛选：食物、装饰或造型。';
+
+  @override
+  String get tutorialShopGrid => '点任意一项就能买。食物会用完，其余的一直是你的。';
+
+  @override
+  String get tutorialShopFreeCoins => '金币不够了？看一段短片补充一下。';
+
+  @override
+  String get tutorialProfileAvatar => '点 Moji 可以换它的样子和衣橱。';
+
+  @override
+  String get tutorialProfileStats => '你的等级，以及离下一级还差多少。';
+
+  @override
+  String get tutorialProfileDaily => '每天回来领奖励。连续天数越长，给得越多。';
+
+  @override
+  String get tutorialProfileLanguages => '你说的语言和你在学的语言。两个随时都能改。';
+
+  @override
+  String get tutorialProfileAccount => '绑定账号，换手机时 Moji 也不会丢。';
+
+  @override
+  String get tutorialReviewCard => '先试着想出答案，再点卡片对一下。';
+
+  @override
+  String get tutorialReviewGrades => '看过答案后说说做得怎么样。觉得难的卡片会更早回来。';
+
+  @override
+  String get tutorialReviewCount => '这一轮还剩多少张卡片。';
+
+  @override
+  String get seasonPassNotOnSale => '此通行证尚未开售。';
+
+  @override
+  String seasonPassBuy(String price) {
+    return '购买 $price';
+  }
+
+  @override
+  String seasonPassClaim(int count) {
+    return '领取 ($count)';
+  }
+
+  @override
+  String get seasonPassClaiming => '领取中…';
+
+  @override
+  String seasonPassClaimedToast(int count) {
+    return '已领取：$count';
+  }
+
+  @override
+  String seasonPassTierOf(int tier, int total) {
+    return '等级 $tier / $total';
+  }
+
+  @override
+  String seasonPassTrackLength(int count, int xp) {
+    return '$count 件 · $xp XP';
+  }
+
+  @override
+  String get seasonPassComplete => '进度已完成。';
+
+  @override
+  String seasonPassXpToNext(int xp) {
+    return '距离下一件还需 $xp XP';
+  }
+
+  @override
+  String seasonPassTierCost(int xp) {
+    return '$xp XP';
+  }
+
+  @override
+  String get seasonPassReady => '可领取';
+
+  @override
+  String get seasonPassTierClaimed => '已领取';
+
+  @override
+  String get seasonPassTryOn => '试戴一下';
+
+  @override
+  String get sceneAirfieldName => '出发';
+
+  @override
+  String get sceneCozyRoomName => '温馨小屋';
+
+  @override
+  String get sceneEnchantedMeadowName => '魔法草地';
+
+  @override
+  String get sceneMushroomGladeName => '蘑菇林间空地';
+
+  @override
+  String get scenePumpkinPatchName => '南瓜田';
+
+  @override
+  String get seasonPassScenePreviewOwned => '已归你所有。随时在衣橱里切换世界。';
+
+  @override
+  String get seasonPassPreviewOwned => '已归你所有。到衣柜里穿上吧。';
+
+  @override
+  String get seasonPassPreviewLocked => '还不属于你——这只是看看。';
+
+  @override
+  String get seasonPassPromise =>
+      '等级只计算购买通行证之后获得的经验，所以晚买不会有任何损失。这里没有任何东西会过期：已达成的等级会保留，未达成的会一直等着你。';
+
+  @override
+  String seasonPassWaitingToClaim(int count) {
+    return '待领取：$count';
+  }
+
+  @override
+  String get seasonPassEarnedByStudying => '通过学习获得';
+
+  @override
+  String get accessoryBandanaName => '朝阳头巾';
+
+  @override
+  String get accessoryBandanaCloudName => '云白头巾';
+
+  @override
+  String get accessoryScarfDuskName => '暮色围巾';
+
+  @override
+  String get accessoryGogglesName => '飞行护目镜';
+
+  @override
+  String get accessoryGogglesBrassName => '黄铜护目镜';
+
+  @override
+  String get accessoryBeanieDuskName => '暮色针织帽';
+
+  @override
+  String get accessoryFlightCapName => '飞行帽';
+
+  @override
+  String get accessoryFlightCapCloudName => '云白飞行帽';
+
+  @override
+  String get accessoryCowboyHatCharcoalName => '炭灰牛仔帽';
+
+  @override
+  String get accessoryFlightScarfName => '迎风围巾';
+
+  @override
+  String get accessoryPumpkinWitchName => '南瓜女巫帽';
+
+  @override
+  String get accessoryDevilBandName => '恶魔角发箍';
+
+  @override
+  String get accessoryGhostBandanaName => '幽灵头巾';
+
+  @override
+  String get accessoryBatChokerName => '蝙蝠颈链';
+
+  @override
+  String get shopSectionTopUp => '充值';
+
+  @override
+  String get shopSectionPlus => 'Plus';
+
+  @override
+  String get shopSectionPass => '赛季通行证';
+
+  @override
+  String get shopSectionItems => '物品';
+
+  @override
+  String get topUpTitle => '充值';
+
+  @override
+  String topUpCoins(int coins) {
+    return '$coins 金币';
+  }
+
+  @override
+  String topUpBonus(int percent) {
+    return '金币 +$percent%';
+  }
+
+  @override
+  String get topUpBestValue => '最划算';
+
+  @override
+  String get topUpNotOpen => '金币礼包尚未开售。';
+
+  @override
+  String topUpThanks(int coins) {
+    return '已增加 $coins 金币。';
+  }
 }
