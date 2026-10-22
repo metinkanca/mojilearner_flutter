@@ -30,6 +30,8 @@ class LocalSnapshot {
     'quiz_cached_set',
     'quiz_saved_index',
     'quiz_saved_score',
+    // A boss fight put down mid-way: meaningless on another phone.
+    'boss_run_save',
     ...syncBookkeepingPrefs,
   };
 

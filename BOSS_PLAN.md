@@ -45,8 +45,21 @@ opening, 100 coins plus medicine and a pizza slice for a finale
 under `boss_cleared`, which cloud sync carries with the rest of the prefs. The
 economy test counts them.
 
-**Next:** resume-on-close, revive ad, the generated content, per-attempt
-layout shuffling, the toy chest.
+**Built 2026-10-22, third pass:**
+- **Resume on close.** A fight is saved between throws and as each begins
+  (`BossRunSave`, kept on the device, off the cloud copy). Coming back to the
+  same boss, level and language pair offers CONTINUE or START OVER. A throw that
+  was in the air when the fight was left counts as landed and costs a heart,
+  which closes dodging a loss or looking at an answer and quitting. Saved at
+  throw boundaries because a throw's state is a different shape for each of the
+  24 openings. Not saved: the scrolls a run missed (they only feed the results
+  list).
+- **Revive.** A lost fight, on any boss or level, offers "REVIVE · WATCH AN AD"
+  when a rewarded ad is loaded: the same fight on with 2 hearts, once an
+  attempt. It uses a slot of the five rewarded ads a day and pays no coins or
+  quiz. Members still see it.
+
+**Next:** the generated content, per-attempt layout shuffling, the toy chest.
 
 ## Decided 2026-10-22 (the owner's answers to the questions below)
 

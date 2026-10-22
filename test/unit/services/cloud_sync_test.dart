@@ -1,3 +1,4 @@
+import 'package:mojilearner_flutter/utils/boss_run_save.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/services/cloud_sync.dart';
 import 'package:mojilearner_flutter/services/local_snapshot.dart';
@@ -215,6 +216,21 @@ void main() {
       expect(prefs['total_xp'], 900);
       expect(prefs.containsKey('quiz_saved_index'), isFalse);
       expect(prefs.containsKey('chat_migration_complete'), isFalse);
+    });
+
+    test('boss clears travel, a half-finished fight stays', () async {
+      SharedPreferences.setMockInitialValues({
+        'boss_cleared': ['mossback:0', 'mossback:1'],
+        BossRunSave.key: '{"boss":"mossback"}',
+      });
+
+      final snapshot = await LocalSnapshot.capture();
+      final prefs = snapshot['prefs'] as Map<String, dynamic>;
+
+      // A cleared level must not pay again on a new phone; a fight put down
+      // mid-way means nothing there.
+      expect(prefs['boss_cleared'], {'_list': ['mossback:0', 'mossback:1']});
+      expect(prefs.containsKey(BossRunSave.key), isFalse);
     });
 
     test('a string list survives the round trip', () async {

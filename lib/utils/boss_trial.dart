@@ -172,6 +172,10 @@ class BossTrialRules {
   /// with all four in a row and is beaten for good.
   static const int levelsPerBoss = 5;
 
+  /// Hearts a revive hands back after the last one is lost: enough to carry on
+  /// with, never the full three, so a revive is a second chance and not a reset.
+  static const int reviveHearts = 2;
+
   /// Hearts given back as each later round of a finale begins, up to
   /// [maxHearts], so a slip in its first round does not decide its fifth.
   static const int finaleHeartsBack = 1;
@@ -869,6 +873,24 @@ class TrialRun {
       );
 
   TrialRun letLand() => _copy(combo: 0, letSlip: letSlip + 1, lastDamage: 0);
+
+  /// The same fight after a revive: [BossTrialRules.reviveHearts] hearts, the
+  /// streak broken, and the boss exactly as worn down as it was.
+  TrialRun revived() => _copy(
+        hearts: BossTrialRules.reviveHearts,
+        combo: 0,
+        lastDamage: 0,
+      );
+
+  /// The fight picked back up after being left with a throw in the air. The
+  /// throw counts as let land and costs a heart, so leaving mid-throw is never
+  /// a way to dodge a loss or to see an answer for free. See `BossRunSave`.
+  TrialRun leftMidThrow() => _copy(
+        hearts: max(0, hearts - 1),
+        combo: 0,
+        letSlip: letSlip + 1,
+        lastDamage: 0,
+      );
 
   /// One of many small answers in an attack that asks several at once — a
   /// spike matched, a shard called right — with [earliness] of its clock to

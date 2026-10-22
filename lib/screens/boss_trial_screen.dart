@@ -30,11 +30,13 @@ import '../constants/boss_trial_sentences.dart';
 import '../constants/boss_trial_words.dart';
 import '../constants/theme.dart';
 import '../constants/progression.dart' show RewardDef, RewardType;
+import '../providers/ads_provider.dart';
 import '../providers/boss_progress_provider.dart';
 import '../providers/character_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/vocab_provider.dart';
+import '../utils/boss_run_save.dart';
 import '../utils/boss_trial.dart';
 import '../utils/boss_trial_angler.dart';
 import '../utils/boss_trial_crystal.dart';
@@ -992,6 +994,7 @@ class _BossTrialScreenState extends State<BossTrialScreen>
     super.initState();
     _petType = context.read<CharacterProvider>().currentCharacterType;
     _loadContent();
+    unawaited(_loadSaved());
     // Always running: the boss breathes behind the intro panel too.
     _ticker.start();
   }
@@ -1410,11 +1413,13 @@ class _BossTrialScreenState extends State<BossTrialScreen>
   /// round after the first does.
   void _start({int round = 0}) {
     _particles.clear();
+    unawaited(context.read<AdsProvider>().prepareRevive());
     setState(() {
       _startRound = round;
       _round = round;
       _run = _plan.start(round: round);
       _firstClear = const [];
+      _revived = false;
       _fleeTime = null;
       _wave = null;
       _lastPrompt = null;
@@ -1581,6 +1586,7 @@ class _BossTrialScreenState extends State<BossTrialScreen>
       _announce();
       return;
     }
+    _saveRun(inThrow: true);
     switch (_opener) {
       case TrialOpener.catchWords:
         _throwWave();
@@ -3050,9 +3056,11 @@ class _BossTrialScreenState extends State<BossTrialScreen>
       _stageTime = 0;
       _gapSeconds = BossTrialRules.waveGap.inMicroseconds / 1e6;
     });
+    _saveRun(inThrow: false);
   }
 
   void _finish() {
+    unawaited(BossRunSave.clear());
     setState(() {
       _wave = null;
       _throw = null;
@@ -3088,6 +3096,105 @@ class _BossTrialScreenState extends State<BossTrialScreen>
 
   /// What this clear paid, when it was the level's first. Empty for a repeat.
   List<RewardDef> _firstClear = const [];
+
+  // ---- a revive after the hearts run out ----
+
+  /// Whether this attempt has already been revived. Once an attempt: a revive
+  /// is a second chance, and a fight that could be revived forever would never
+  /// be lost.
+  bool _revived = false;
+
+  /// An ad is on screen, so a second tap must not ask for another.
+  bool _reviving = false;
+
+  bool get _canRevive =>
+      !_run.won &&
+      !_revived &&
+      !_reviving &&
+      context.read<AdsProvider>().canOfferRevive;
+
+  /// Watches a rewarded ad and, if it is watched to the end, carries the same
+  /// fight on with two hearts: same round, boss as worn down as it was.
+  Future<void> _reviveWithAd() async {
+    if (!_canRevive) return;
+    final ads = context.read<AdsProvider>();
+    setState(() => _reviving = true);
+    final earned = await ads.watchForRevive();
+    if (!mounted) return;
+    setState(() => _reviving = false);
+    if (!earned) return;
+    final run = _run.revived();
+    final round = _round;
+    _start(round: round);
+    setState(() {
+      _run = run;
+      _startRound = 0;
+      _announcedRound = round;
+      _revived = true;
+    });
+  }
+
+  // ---- a fight left mid-way ----
+
+  /// The fight that was put down last, if there is one. See [BossRunSave].
+  BossRunSave? _saved;
+
+  Future<void> _loadSaved() async {
+    final save = await BossRunSave.load();
+    if (!mounted) return;
+    setState(() => _saved = save);
+  }
+
+  /// The saved fight, when it is this boss, this level and this pair of
+  /// languages, and the intro is up to offer it.
+  BossRunSave? get _resumable {
+    final save = _saved;
+    if (save == null || _phase != _Phase.ready) return null;
+    return save.matches(
+      bossId: _boss.id,
+      step: _step,
+      languageCode: _languageCode,
+      nativeCode: _nativeCode,
+    )
+        ? save
+        : null;
+  }
+
+  /// Records where the fight has got to. Between throws it is as the last one
+  /// left it; as a throw begins it says one is in the air, which costs a heart
+  /// if the fight is left there.
+  void _saveRun({required bool inThrow}) {
+    if (_phase != _Phase.playing || _advanced) return;
+    unawaited(BossRunSave(
+      bossId: _boss.id,
+      step: _step,
+      round: _round,
+      inThrow: inThrow,
+      run: _run,
+      languageCode: _languageCode,
+      nativeCode: _nativeCode,
+    ).save());
+  }
+
+  /// Carries on from the saved fight: its round, its hearts and patience, and
+  /// its streak. A throw that was in the air counts as landed.
+  void _resume(BossRunSave save) {
+    _start(round: save.round);
+    final run = save.resumed();
+    setState(() {
+      _run = run;
+      _startRound = 0;
+      _announcedRound = save.round;
+      _saved = null;
+    });
+    if (run.lost) _finish();
+  }
+
+  void _startOver() {
+    unawaited(BossRunSave.clear());
+    setState(() => _saved = null);
+    _start();
+  }
 
   /// Records the clear and pays it out, once: the progress provider remembers
   /// which levels have paid, so a repeat or a run that ends twice pays nothing.
@@ -4352,7 +4459,16 @@ class _BossTrialScreenState extends State<BossTrialScreen>
           style: _pixel(7, _muted),
         ),
         const SizedBox(height: 18),
-        _button('START TRIAL', _start),
+        if (_resumable case final save?) ...[
+          _body('A fight was left here, with ${save.run.hearts} of '
+              '${BossTrialRules.maxHearts} hearts. If a throw was in the air '
+              'when it was left, it counts as landed.'),
+          const SizedBox(height: 12),
+          _button('CONTINUE', () => _resume(save)),
+          const SizedBox(height: 10),
+          _button('START OVER', _startOver, secondary: true),
+        ] else
+          _button('START TRIAL', _start),
       ],
     );
   }
@@ -4624,6 +4740,10 @@ class _BossTrialScreenState extends State<BossTrialScreen>
           ],
         ],
         const SizedBox(height: 18),
+        if (_canRevive) ...[
+          _button('REVIVE · WATCH AN AD', _reviveWithAd),
+          const SizedBox(height: 10),
+        ],
         Row(
           children: [
             Expanded(

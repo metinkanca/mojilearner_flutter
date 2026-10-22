@@ -197,6 +197,51 @@ class AdsProvider extends ChangeNotifier {
     }
   }
 
+  /// Whether to offer a revive after a lost boss fight.
+  ///
+  /// The same slot and the same ad as the coin offer, so a revive shares the
+  /// five a day. What it does not need is the learning gate: it pays nothing,
+  /// so there is no coin to protect, only a fight to carry on with. Members
+  /// still see it, as they see every rewarded ad.
+  bool get canOfferRevive =>
+      _ledger.hasRewardedLeft &&
+      !_watchingRewarded &&
+      AdsService.I.isRewardedReady;
+
+  /// Fetches a rewarded ad ahead of a fight, so the revive is in hand by the
+  /// time the hearts run out. The coin offer's own prepare is gated on having
+  /// learned today; a fight is not.
+  Future<void> prepareRevive() async {
+    if (!_ledger.hasRewardedLeft) return;
+    await AdsService.I.loadRewarded();
+    notifyListeners();
+  }
+
+  /// Shows a rewarded ad for a revive. True when it was watched to the end.
+  ///
+  /// Uses a slot like any rewarded ad and pays no coins and no quiz: the
+  /// reward is the heart, and it is the screen's to give. Nothing is consumed
+  /// unless the ad confirms, so one that failed to load or was backed out of
+  /// costs the player nothing.
+  Future<bool> watchForRevive() async {
+    if (_watchingRewarded) return false;
+    _rolloverIfNeeded();
+    if (!_ledger.hasRewardedLeft) return false;
+
+    _watchingRewarded = true;
+    notifyListeners();
+    try {
+      final earned = await AdsService.I.showRewarded();
+      if (!earned) return false;
+      _ledger = _ledger.recordingRewarded();
+      await _repository.save(_ledger);
+      return true;
+    } finally {
+      _watchingRewarded = false;
+      notifyListeners();
+    }
+  }
+
   /// Shows an interstitial if the cooldown has elapsed and the player is not
   /// a member. Returns true if one was actually shown.
   ///

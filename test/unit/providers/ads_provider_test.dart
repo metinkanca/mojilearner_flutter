@@ -311,4 +311,55 @@ void main() {
           equals(AdsConstants.rewardedDailyLimit));
     });
   });
+
+  group('a revive after a lost boss fight', () {
+    test('is offered with an ad in hand and a slot left', () {
+      expect(provider().canOfferRevive, isTrue);
+    });
+
+    test('is offered to someone who has not studied today, too', () {
+      // It pays nothing, so there is no coin to protect with the learning gate.
+      expect(provider(learnedToday: false).canOfferRevive, isTrue);
+    });
+
+    test('is not offered with no ad loaded', () {
+      ads.rewardedReady = false;
+      expect(provider().canOfferRevive, isFalse);
+    });
+
+    test('is not offered once the day\'s rewarded ads are used', () async {
+      final adsProvider = provider();
+      for (var i = 0; i < AdsConstants.rewardedDailyLimit; i++) {
+        expect(await adsProvider.watchForRevive(), isTrue);
+      }
+      expect(adsProvider.canOfferRevive, isFalse);
+      expect(await adsProvider.watchForRevive(), isFalse);
+    });
+
+    test('pays no coins and no quiz, only uses the slot', () async {
+      final adsProvider = provider();
+      final before = adsProvider.rewardedRemaining;
+
+      expect(await adsProvider.watchForRevive(), isTrue);
+
+      expect(adsProvider.rewardedRemaining, before - 1);
+      expect(ads.rewardedShowCount, 1);
+    });
+
+    test('an ad that was not watched to the end costs nothing', () async {
+      ads.rewardEarned = false;
+      final adsProvider = provider();
+      final before = adsProvider.rewardedRemaining;
+
+      expect(await adsProvider.watchForRevive(), isFalse);
+
+      expect(adsProvider.rewardedRemaining, before);
+    });
+
+    test('a member still gets it: it is a rewarded ad', () {
+      final adsProvider = provider()
+        ..updateEligibility(isPremium: true, hasLearnedToday: false);
+      expect(adsProvider.canOfferRevive, isTrue);
+    });
+  });
 }

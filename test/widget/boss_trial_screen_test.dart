@@ -9,8 +9,12 @@ import 'package:mojilearner_flutter/constants/progression.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
 import 'package:mojilearner_flutter/screens/boss_trial_screen.dart';
+import 'package:mojilearner_flutter/services/ads_service.dart';
+import 'package:mojilearner_flutter/utils/boss_run_save.dart';
 import 'package:mojilearner_flutter/utils/boss_trial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../helpers/fake_ads.dart';
 import '../helpers/mock_providers.dart';
 import '../helpers/pump_app.dart';
 
@@ -36,6 +40,7 @@ void main() {
   });
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     mockUser = MockUserProvider();
     when(() => mockUser.grantReward(any())).thenAnswer((_) async {});
     mockCharacter = MockCharacterProvider();
@@ -410,6 +415,192 @@ void main() {
     expect(find.text('MOSSBACK HELD ITS GROUND'), findsOneWidget);
     expect(find.text('WORDS TO PRACTISE'), findsOneWidget);
     expect(find.text('TRY AGAIN'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  // ---- a fight left mid-way ------------------------------------------------
+
+  /// Drops the screen as the OS would and brings a fresh one back up.
+  Future<void> leaveAndReturn(WidgetTester tester) async {
+    await tester.pumpWidget(const SizedBox.shrink());
+    await pumpTrial(tester);
+    // The saved fight is read a few microtasks after the screen is up.
+    await tester.pump();
+    await tester.pump();
+  }
+
+  /// One catch, answered right, so the run has something to carry over.
+  Future<void> catchOne(WidgetTester tester) async {
+    await waitForRubble(tester);
+    await tester.tap(find.text(shouted().single.meaning));
+    await tester.pump();
+    for (var i = 0; i < 80; i++) {
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+  }
+
+  testWidgets('a fight left between throws offers to carry on', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    await catchOne(tester);
+    // Wait out the throw's aftermath until the fight is between throws.
+    await advance(tester, 2500);
+
+    await leaveAndReturn(tester);
+
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.text('START OVER'), findsOneWidget);
+    expect(find.text('START TRIAL'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('carrying on keeps the hearts and the streak', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    await catchOne(tester);
+    await advance(tester, 2500);
+    final saved = (await BossRunSave.load())!;
+
+    await leaveAndReturn(tester);
+    await tester.tap(find.text('CONTINUE'));
+    await tester.pump();
+
+    expect(find.text('CONTINUE'), findsNothing);
+    expect(saved.run.caught, greaterThan(0));
+    // The fight is on, with a throw on its way.
+    await waitForRubble(tester);
+    expect(find.text('x${saved.resumed().combo}'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('leaving with a throw in the air costs a heart', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    // Into a throw: the rubble is falling and has not been answered.
+    await waitForRubble(tester);
+    final saved = (await BossRunSave.load())!;
+    expect(saved.inThrow, isTrue);
+
+    expect(saved.resumed().hearts, saved.run.hearts - 1);
+    expect(saved.resumed().combo, 0);
+
+    await leaveAndReturn(tester);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.textContaining('${BossTrialRules.maxHearts} of '),
+        findsOneWidget);
+  });
+
+  testWidgets('starting over drops the saved fight', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    await waitForRubble(tester);
+
+    await leaveAndReturn(tester);
+    await tester.tap(find.text('START OVER'));
+    await tester.pump();
+
+    expect(find.text('CONTINUE'), findsNothing);
+    expect(await BossRunSave.load(), isNull);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a fight that ends leaves nothing to carry on', (tester) async {
+    await pumpTrial(tester);
+    await start(tester);
+    await winTheLevel(tester);
+
+    expect(await BossRunSave.load(), isNull);
+    await leaveAndReturn(tester);
+    expect(find.text('CONTINUE'), findsNothing);
+    expect(find.text('START TRIAL'), findsOneWidget);
+  });
+
+  // ---- a revive after the hearts run out ----------------------------------
+
+  /// Three wrong picks: the fight is lost and the results are up.
+  Future<void> loseTheFight(WidgetTester tester) async {
+    for (var i = 0; i < BossTrialRules.maxHearts; i++) {
+      await waitForRubble(tester);
+      final asked = shouted().single;
+      final wrong = rubble().firstWhere((w) => w != asked);
+      await tester.tap(find.text(wrong.meaning));
+      await tester.pump();
+      await advance(tester, 100);
+    }
+    await advance(tester, 2400);
+    expect(find.text('MOSSBACK HELD ITS GROUND'), findsOneWidget);
+  }
+
+  testWidgets('a lost fight offers a revive when an ad is in hand',
+      (tester) async {
+    final fake = FakeAdsService(rewardedReady: true);
+    AdsService.debugOverride = fake;
+    addTearDown(() => AdsService.debugOverride = null);
+    await pumpTrial(tester);
+    await start(tester);
+    await loseTheFight(tester);
+
+    expect(find.text('REVIVE · WATCH AN AD'), findsOneWidget);
+    expect(find.text('TRY AGAIN'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('no ad loaded, no revive', (tester) async {
+    AdsService.debugOverride = FakeAdsService(rewardedReady: false);
+    addTearDown(() => AdsService.debugOverride = null);
+    await pumpTrial(tester);
+    await start(tester);
+    await loseTheFight(tester);
+
+    expect(find.text('REVIVE · WATCH AN AD'), findsNothing);
+    expect(find.text('TRY AGAIN'), findsOneWidget);
+  });
+
+  testWidgets('a revive carries the same fight on with two hearts',
+      (tester) async {
+    final fake = FakeAdsService(rewardedReady: true);
+    AdsService.debugOverride = fake;
+    addTearDown(() => AdsService.debugOverride = null);
+    await pumpTrial(tester);
+    await start(tester);
+    await loseTheFight(tester);
+
+    await tester.tap(find.text('REVIVE · WATCH AN AD'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(fake.rewardedShowCount, 1);
+    expect(find.text('MOSSBACK HELD ITS GROUND'), findsNothing);
+    // The fight is on again, and a throw comes.
+    await waitForRubble(tester);
+    // It can be lost again, but not revived again.
+    for (var i = 0; i < BossTrialRules.reviveHearts; i++) {
+      await waitForRubble(tester);
+      final wrong = rubble().firstWhere((w) => w != shouted().single);
+      await tester.tap(find.text(wrong.meaning));
+      await tester.pump();
+      await advance(tester, 100);
+    }
+    await advance(tester, 2400);
+    expect(find.text('MOSSBACK HELD ITS GROUND'), findsOneWidget);
+    expect(find.text('REVIVE · WATCH AN AD'), findsNothing,
+        reason: 'one revive an attempt');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('an ad not watched to the end revives nothing', (tester) async {
+    final fake = FakeAdsService(rewardedReady: true, rewardEarned: false);
+    AdsService.debugOverride = fake;
+    addTearDown(() => AdsService.debugOverride = null);
+    await pumpTrial(tester);
+    await start(tester);
+    await loseTheFight(tester);
+
+    await tester.tap(find.text('REVIVE · WATCH AN AD'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('MOSSBACK HELD ITS GROUND'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
