@@ -217,5 +217,100 @@ void main() {
       expect(fresh([taught, related('tarde')]), ['tarde']);
     });
   });
+
+  group('what the learner wrote themselves', () {
+    ExtractedVocab word(String term, {bool related = false}) =>
+        ExtractedVocab(term: term, meaning: 'm', related: related);
+
+    List<String> kept(List<ExtractedVocab> entries, String said) =>
+        VocabExtractor.withoutWritten(entries, userText: said)
+            .map((e) => e.term)
+            .toList();
+
+    test('is dropped from the words the tutor taught as well', () {
+      expect(
+        kept([word('overwhelmed'), word('lately'), word('take breaks')],
+            "I've been feeling quite overwhelmed at work lately."),
+        ['take breaks'],
+      );
+    });
+
+    test('a base form is dropped when an inflected form was written', () {
+      // Found in a real check: the tutor suggested the base form of a word
+      // the learner had just used.
+      expect(kept([word('pazar')], 'Merhaba, ben pazara gidiyorum.'), isEmpty);
+      expect(kept([word('essen')], 'Ich esse gern Pizza.'), isEmpty);
+      expect(kept([word('estar')], 'Hola, ¿cómo estás?'), isEmpty);
+    });
+
+    test('a word that only starts the same way is kept when it is short', () {
+      // Four letters or fewer must match a whole word: `solo` is not `sol`.
+      expect(kept([word('sol')], 'Estoy solo en casa'), ['sol']);
+      expect(kept([word('mar')], 'Un margen grande'), ['mar']);
+    });
+
+    test('a different word is kept', () {
+      expect(kept([word('noche'), word('tarde')], 'Hola, me gusta el café'),
+          ['noche', 'tarde']);
+      expect(kept([word('boisson')], "Bonjour, je voudrais un café"),
+          ['boisson']);
+    });
+
+    test('irregular forms are a known gap, not a promise', () {
+      // `gitmek` after `gidiyorum` changes a consonant, which a stem check
+      // cannot see. It stays: losing a suggestion is cheap, so is keeping one.
+      expect(kept([word('gitmek')], 'ben pazara gidiyorum'), ['gitmek']);
+    });
+
+    test('a phrase is dropped when every word in it was written', () {
+      expect(kept([word('me gusta')], 'A mí me gusta el café'), isEmpty);
+      expect(kept([word('ben de')], 'Merhaba, ben pazara gidiyorum'),
+          ['ben de'],
+          reason: 'one word is new, so the phrase is worth keeping');
+    });
+
+    test('nothing written drops nothing', () {
+      expect(kept([word('hola'), word('adiós')], ''), ['hola', 'adiós']);
+    });
+  });
+
+  group('VocabExtractor.parseList', () {
+    test('reads a bare array and marks every word related', () {
+      final words = VocabExtractor.parseList(
+        '[{"term":"perro","meaning":"dog"},{"term":"gato","meaning":"cat","example":"El gato duerme."}]',
+      );
+      expect(words.map((w) => w.term), ['perro', 'gato']);
+      expect(words.every((w) => w.related), isTrue);
+      expect(words.last.example, 'El gato duerme.');
+    });
+
+    test('takes up to a dozen by default, and the limit can be set', () {
+      final many = jsonEncode([
+        for (var i = 0; i < 30; i++) {'term': 'w$i', 'meaning': 'm$i'},
+      ]);
+      expect(VocabExtractor.parseList(many), hasLength(12));
+      expect(VocabExtractor.parseList(many, limit: 3), hasLength(3));
+    });
+
+    test('tolerates a fenced payload and skips what cannot be used', () {
+      final words = VocabExtractor.parseList(
+        '```json\n[{"term":"a","meaning":"x"},{"term":"","meaning":"y"},{"meaning":"z"},{"term":"A","meaning":"dup"}]\n```',
+      );
+      expect(words.map((w) => w.term), ['a']);
+    });
+
+    test('is empty for nonsense', () {
+      expect(VocabExtractor.parseList('not json'), isEmpty);
+      expect(VocabExtractor.parseList(''), isEmpty);
+    });
+
+    test('a reply that is a reply to a chat keeps its own cap of five', () {
+      final block = jsonEncode([
+        for (var i = 0; i < 9; i++) {'term': 'w$i', 'meaning': 'm$i'},
+      ]);
+      expect(VocabExtractor.extract('TEXT: x\n|||VOCAB|||\n$block').entries,
+          hasLength(VocabExtractor.maxEntries));
+    });
+  });
 }
 

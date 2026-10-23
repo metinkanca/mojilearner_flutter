@@ -27,11 +27,16 @@ test('the free and premium tables match the app', () => {
   assert.equal(FREE.message, 80);
   assert.equal(PREMIUM.quiz, 10);
   assert.equal(PREMIUM.message, 300);
+  // The starter words have a small meter of their own, which the app does not
+  // show: it is a cost backstop, and a refusal just means no refresh today.
+  assert.equal(FREE.words, 3);
+  assert.equal(PREMIUM.words, 6);
 });
 
 test('modes map onto the two meters, and onboarding onto neither', () => {
   assert.equal(meterForBody({ mode: 'quiz' }), 'quiz');
   assert.equal(meterForBody({ mode: 'chat' }), 'message');
+  assert.equal(meterForBody({ mode: 'starter' }), 'words');
   // A learner who cannot finish being assessed has no reason to come back.
   assert.equal(meterForBody({ mode: 'assessment' }), null);
   assert.equal(meterForBody({ mode: 'level' }), null);

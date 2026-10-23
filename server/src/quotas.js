@@ -33,13 +33,17 @@
 export const METER_BY_MODE = {
   quiz: 'quiz',
   chat: 'message',
+  // The starter words a learner is given at the end of onboarding, and again
+  // when the words the games draw on run thin. Small and its own: it must not
+  // take from the quizzes or the messages.
+  starter: 'words',
 };
 
 /** The free tier. Mirrors `EntitlementConstants.free`. */
-export const FREE = { quiz: 3, message: 80 };
+export const FREE = { quiz: 3, message: 80, words: 3 };
 
 /** What Mimikin Plus buys. Mirrors `EntitlementConstants.premium`. */
-export const PREMIUM = { quiz: 10, message: 300 };
+export const PREMIUM = { quiz: 10, message: 300, words: 6 };
 
 /**
  * The most extra quizzes rewarded ads can add in a day.

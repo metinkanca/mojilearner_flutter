@@ -82,7 +82,23 @@ class VocabExtractor {
     );
   }
 
-  static List<ExtractedVocab> _parse(String payload) {
+  /// The words in a bare JSON array, as a starter set comes back, up to
+  /// [limit]. Every one is marked related: they are words the learner has not
+  /// met, which belong in the suggested pile.
+  static List<ExtractedVocab> parseList(String payload, {int limit = 12}) {
+    return [
+      for (final e in _parse(payload, limit: limit))
+        ExtractedVocab(
+          term: e.term,
+          meaning: e.meaning,
+          example: e.example,
+          reading: e.reading,
+          related: true,
+        ),
+    ];
+  }
+
+  static List<ExtractedVocab> _parse(String payload, {int limit = maxEntries}) {
     final cleaned = payload
         .replaceAll('```json', '')
         .replaceAll('```', '')
@@ -110,7 +126,7 @@ class VocabExtractor {
     final entries = <ExtractedVocab>[];
     final seen = <String>{};
     for (final element in raw) {
-      if (entries.length >= maxEntries) break;
+      if (entries.length >= limit) break;
       if (element is! Map) continue;
 
       final term = _field(element['term']);
@@ -131,38 +147,76 @@ class VocabExtractor {
     return entries;
   }
 
-  /// The related words worth keeping: those the learner did not just write and
-  /// does not already have.
+  /// The words worth keeping from [entries]: those the learner did not just
+  /// write.
   ///
-  /// The prompt asks for words new to them, and the model does not always
-  /// comply: in a check it handed back `lago` and `montaña` right after the
-  /// learner had typed both. So the app does not rely on it.
+  /// The learner knows the words they can write, and a game that asks them
+  /// back what they just typed teaches nothing. The prompt asks the tutor to
+  /// leave them out, and the model does not reliably comply: in a check it
+  /// listed `lago` and `montaña` right after the learner had typed both, and
+  /// `pazar`, `essen` and `estar` after `pazara`, `esse` and `estás`. So the
+  /// app does not rely on it.
   ///
   /// A single word has to match a whole word of [userText], so `a` is not
-  /// "found" inside `casa`. A phrase, or a word in a script with no spaces, is
-  /// matched anywhere in it. Accents and case are ignored.
+  /// "found" inside `casa`. A word of five letters or more also matches the
+  /// start of one: it is dropped when a written word begins with its stem (the
+  /// word less its last two letters), which catches `pazar` after `pazara` and
+  /// `essen` after `esse`. That is a heuristic, not a lemmatiser, so it misses
+  /// irregular forms (`gitmek` after `gidiyorum`), and now and then drops a
+  /// different word that shares a stem. Losing a suggestion costs nothing; a
+  /// game asking what you just typed costs the point of it.
+  ///
+  /// A phrase, or a word in a script with no spaces, is matched anywhere in
+  /// [userText], and a phrase is also dropped when every word in it was
+  /// written. Accents and case are ignored.
+  static List<ExtractedVocab> withoutWritten(
+    Iterable<ExtractedVocab> entries, {
+    required String userText,
+  }) {
+    final text = _fold(userText);
+    final words = text
+        .split(RegExp(r'[^\p{L}\p{N}]+', unicode: true))
+        .where((w) => w.isNotEmpty)
+        .toSet();
+    return [
+      for (final entry in entries)
+        if (!_written(entry.term, text, words)) entry,
+    ];
+  }
+
+  /// The related words worth keeping: those [withoutWritten] leaves, that the
+  /// learner does not already have.
   static List<ExtractedVocab> freshRelated(
     Iterable<ExtractedVocab> entries, {
     required String userText,
     required bool Function(String term) isKnown,
   }) {
-    final text = _fold(userText);
-    final words = text.split(RegExp(r'[^\p{L}\p{N}]+', unicode: true)).toSet();
-    return [
-      for (final entry in entries)
-        if (entry.related &&
-            !isKnown(entry.term) &&
-            !_written(entry.term, text, words))
-          entry,
-    ];
+    return withoutWritten(
+      entries.where((e) => e.related && !isKnown(e.term)),
+      userText: userText,
+    );
   }
 
   static bool _written(String term, String foldedText, Set<String> words) {
     final t = _fold(term).trim();
     if (t.isEmpty) return true;
-    final spaced = t.contains(RegExp(r'[^\p{L}\p{N}]', unicode: true));
+    final parts = t
+        .split(RegExp(r'[^\p{L}\p{N}]+', unicode: true))
+        .where((w) => w.isNotEmpty)
+        .toList();
     final unspaced = t.runes.any((r) => r >= 0x2E80);
-    return (spaced || unspaced) ? foldedText.contains(t) : words.contains(t);
+    if (unspaced) return foldedText.contains(t);
+    if (parts.length > 1) {
+      return foldedText.contains(t) || parts.every((w) => _wordWritten(w, words));
+    }
+    return _wordWritten(t, words);
+  }
+
+  static bool _wordWritten(String word, Set<String> written) {
+    if (written.contains(word)) return true;
+    if (word.length < 5) return false;
+    final stem = word.substring(0, word.length - 2);
+    return written.any((w) => w.length >= 3 && w.startsWith(stem));
   }
 
   static const Map<String, String> _accents = {

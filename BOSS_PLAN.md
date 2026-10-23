@@ -100,8 +100,36 @@ there is no new allowance and the 80 messages cover it.
   outside English and Turkish. Those still need generated content or a way to
   take sentences from the player's corrections.
 
-**Next:** a first source of words for players who have not chatted yet; content
-for the sentence and grammar openers; the toy chest's art.
+**Built 2026-10-23, sixth pass: starter words, and no quizzing on what you typed.**
+- **Words the player wrote are never asked back.** A game that asks you what you
+  just typed teaches nothing. A word is dropped, taught or suggested, when it is a
+  word of the player's message, or when a written word begins with its stem (five
+  letters or more: `pazar` after `pazara`, `essen` after `esse`). It is a
+  heuristic and not a lemmatiser: it misses irregular forms (`gitmek` after
+  `gidiyorum`) and now and then drops a different word with the same stem.
+- **Onboarding left the player with no words.** No onboarding screen adds to the
+  vocabulary; only the tutor's vocabulary block in chat does. So a new proxy mode,
+  `starter`, asks for 12 words at the player's assessed level in their language,
+  avoiding up to 40 they already have. They go to the suggested pile. It is asked
+  for in the background when onboarding ends, and again when the toy chest is
+  opened with fewer than 8 words in that language, at most once an hour per
+  language (`StarterWords`). The proxy meters it on its own small `words` meter,
+  3 a day free and 6 for Plus, which the app does not show: a refusal just means
+  no refresh today.
+
+**Proposed, not built: refreshing after runs.** The starter set only seeds the
+pile. The rules I would build, for the owner to confirm:
+- Record each word's result in games and fights (right and wrong counts, current
+  streak).
+- A word answered right three times running leaves the game pool for a week, so
+  the toys do not drill what is known.
+- A word missed is asked more often and also counts a lapse in the review queue,
+  so what the player gets wrong in a game reaches their reviews and the next fight.
+- When the words left in play drop below 8, ask for more (the same call, at their
+  current level, avoiding what they have). That is the refresh.
+
+**Next:** the refresh rules above, once confirmed; content for the sentence and
+grammar openers; the toy chest's art.
 
 ## Decided 2026-10-22 (the owner's answers to the questions below)
 

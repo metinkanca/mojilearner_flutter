@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/language_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/vocab_provider.dart';
+import '../../services/starter_words.dart';
 import '../../utils/fonts.dart';
 import '../../utils/play_games.dart';
 import '../../utils/rtl_locale.dart';
@@ -134,6 +137,9 @@ class ToyChestPicker extends StatelessWidget {
   const ToyChestPicker({super.key});
 
   static Future<void> show(BuildContext context) {
+    // Short of words? Ask for some while the chest is open. The tiles watch
+    // the words, so a toy opens the moment they arrive.
+    unawaited(StarterWords.ensureForPlayer(context));
     return showDialog(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.5),

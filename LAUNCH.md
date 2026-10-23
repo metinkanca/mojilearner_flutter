@@ -82,6 +82,11 @@ looking exactly like success.
       (see `BOSS_PLAN.md`); repeat it with more samples in the live test, and
       add a first source of words for players who have not chatted yet
 
+- [x] Starter words at the end of onboarding (and when the games run thin), kept
+      in the suggested pile; its own `words` meter on the proxy (3 a day, 6 for
+      Plus), not shown in the app. The refresh after the player's runs is
+      designed but not built (see `BOSS_PLAN.md`)
+
 ### AI model plan
 
 What the code already does (`server/src/fallback.js`, `server/.env.example`):

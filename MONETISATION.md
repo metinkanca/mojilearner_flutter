@@ -38,6 +38,7 @@ rather than a pitch. Everything on it is already visible elsewhere in the app.
 |---|---|---|
 | AI quizzes a day | 3 | 10 |
 | AI messages a day (chat + scenario share one meter) | 80 | 300 |
+| Starter-word refreshes a day (proxy only, not shown) | 3 | 6 |
 | Unused quizzes | Expire | Roll over |
 | Interstitial ads | Shown | None |
 | Pet stats | Decay | Decay slower |

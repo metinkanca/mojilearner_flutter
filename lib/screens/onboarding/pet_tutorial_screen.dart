@@ -13,6 +13,7 @@ import '../../constants/theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/user_provider.dart';
+import '../../services/starter_words.dart';
 import '../../utils/fonts.dart';
 import '../../utils/head_scratch.dart';
 import '../../utils/intro_handoff.dart';
@@ -139,6 +140,11 @@ class _PetTutorialScreenState extends State<PetTutorialScreen> {
     await Provider.of<UserProvider>(context, listen: false)
         .markOnboardingComplete();
     if (!mounted) return;
+
+    // The player's level is known now and their vocabulary is empty. Ask for
+    // a first set of words for the games, in the background: nothing waits on
+    // it, and if it fails the toy chest asks again when it is opened.
+    unawaited(StarterWords.ensureForPlayer(context));
 
     // Belt and braces. The redirect above has almost certainly moved us
     // already, in which case this is a no-op on the location we are on.

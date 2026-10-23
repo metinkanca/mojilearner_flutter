@@ -477,7 +477,7 @@ class _ChatScreenState extends State<ChatScreen>
 
         await _parseAndSaveBotResponse(
           _localizeAiText(response.text!),
-          userText: text,
+          userMessage: text,
         );
 
         // Saving the reply is its own async gap, and leaving the chat during
@@ -545,7 +545,7 @@ class _ChatScreenState extends State<ChatScreen>
   Future<void> _parseAndSaveBotResponse(
     String rawText, {
     bool isOpeningTurn = false,
-    String? userText,
+    String? userMessage,
   }) async {
       // 1. Extract the correction the tutor reported.
       //
@@ -592,16 +592,25 @@ class _ChatScreenState extends State<ChatScreen>
         if (languageCode != null) {
           final vocab = Provider.of<VocabProvider>(context, listen: false);
           // What the tutor taught goes to the review queue. What it only
-          // suggested about the topic goes to the pile the games use, minus
-          // anything the learner just wrote or already has.
+          // suggested about the topic goes to the pile the games use. Neither
+          // is kept when the learner wrote the word themselves, since a game
+          // that asks them back what they just typed teaches nothing, and the
+          // pile also drops anything they already have.
+          final userText = userMessage ?? '';
+          final written = userText.isEmpty
+              ? vocabExtraction.entries
+              : VocabExtractor.withoutWritten(
+                  vocabExtraction.entries,
+                  userText: userText,
+                );
           vocab.addVocabularyBatch(
-            vocabExtraction.entries.where((e) => !e.related),
+            written.where((e) => !e.related),
             languageCode: languageCode,
           );
           vocab.addSuggested(
             VocabExtractor.freshRelated(
               vocabExtraction.entries,
-              userText: userText ?? '',
+              userText: userText,
               isKnown: (term) => vocab.knowsVocabulary(languageCode, term),
             ),
             languageCode: languageCode,

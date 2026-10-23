@@ -31,6 +31,7 @@ class FallbackPrompts {
         return _assessment(spec);
       case AiPromptMode.quiz:
       case AiPromptMode.level:
+      case AiPromptMode.starter:
         return null;
     }
   }
@@ -42,6 +43,8 @@ class FallbackPrompts {
         return _quiz(spec);
       case AiPromptMode.level:
         return _level(spec);
+      case AiPromptMode.starter:
+        return _starter(spec);
       case AiPromptMode.chat:
       case AiPromptMode.assessment:
         return null;
@@ -136,6 +139,20 @@ Format:
 [{ "question": "the question, in $native", "topic": "the word or point tested", "options": ["A","B","C","D"], "correct": "A", "explanation": "why, in $native" }]
 
 Generate 5 questions now:''';
+  }
+
+  static String _starter(AiPromptSpec spec) {
+    final target = _languageName(spec.params['targetCode'], 'Spanish');
+    final native = _languageName(spec.params['nativeCode'], 'English');
+    final level = spec.params['level'] ?? 'beginner';
+    final exclude = (spec.params['exclude'] as List?)?.join(', ') ?? '';
+
+    return '''
+List exactly 12 useful $target words or short phrases for a $level learner who speaks $native.
+Spread them over everyday topics. Give each word in its dictionary form, and make every one different.
+${exclude.isEmpty ? '' : 'Do not repeat any of these: $exclude'}
+Reply with a JSON array and nothing else:
+[{ "term": "word in $target", "meaning": "meaning in $native", "example": "short example sentence in $target" }]''';
   }
 
   static String _level(AiPromptSpec spec) {

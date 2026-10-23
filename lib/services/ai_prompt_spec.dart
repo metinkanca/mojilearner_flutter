@@ -24,7 +24,8 @@ enum AiPromptMode {
   chat('chat'),
   assessment('assessment'),
   quiz('quiz'),
-  level('level');
+  level('level'),
+  starter('starter');
 
   const AiPromptMode(this.wireName);
 
@@ -181,6 +182,24 @@ class AiPromptSpec {
           if (dueItems.isNotEmpty)
             'due': dueItems.map((i) => i.toJson()).toList(),
         },
+    });
+  }
+
+  /// A starter set of words for a learner who has few.
+  ///
+  /// [exclude] is what they already have, so the model does not repeat it; the
+  /// server flattens and caps it.
+  factory AiPromptSpec.starter({
+    required String? targetCode,
+    required String? nativeCode,
+    required String level,
+    List<String> exclude = const [],
+  }) {
+    return AiPromptSpec._(AiPromptMode.starter, {
+      'targetCode': targetCode,
+      'nativeCode': nativeCode,
+      'level': level,
+      if (exclude.isNotEmpty) 'exclude': exclude,
     });
   }
 
