@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/models/models.dart';
 import 'package:mojilearner_flutter/providers/mistakes_provider.dart';
@@ -27,6 +28,7 @@ void main() {
   setUp(() async {
     // SecureStorage falls back to an in-memory map under test; clear it so
     // items don't leak between cases.
+    SharedPreferences.setMockInitialValues({});
     await SecureStorage.deleteAll();
   });
 

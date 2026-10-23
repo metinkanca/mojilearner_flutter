@@ -17,6 +17,7 @@ class ExtractedVocab {
     required this.meaning,
     this.example,
     this.reading,
+    this.related = false,
   });
 
   /// The target-language word or phrase.
@@ -31,6 +32,11 @@ class ExtractedVocab {
   /// Romanized pronunciation of [term]. Present only for target languages
   /// written in a non-Latin script.
   final String? reading;
+
+  /// A word the tutor added about the topic rather than one it taught in its
+  /// reply. These go to the suggested pile the games draw on, not into the
+  /// review queue, because the learner has not met them yet.
+  final bool related;
 }
 
 /// The response with the block removed, plus whatever parsed out of it.
@@ -119,9 +125,62 @@ class VocabExtractor {
         meaning: meaning,
         example: example.isEmpty ? null : example,
         reading: reading.isEmpty ? null : reading,
+        related: element['related'] == true,
       ));
     }
     return entries;
+  }
+
+  /// The related words worth keeping: those the learner did not just write and
+  /// does not already have.
+  ///
+  /// The prompt asks for words new to them, and the model does not always
+  /// comply: in a check it handed back `lago` and `montaña` right after the
+  /// learner had typed both. So the app does not rely on it.
+  ///
+  /// A single word has to match a whole word of [userText], so `a` is not
+  /// "found" inside `casa`. A phrase, or a word in a script with no spaces, is
+  /// matched anywhere in it. Accents and case are ignored.
+  static List<ExtractedVocab> freshRelated(
+    Iterable<ExtractedVocab> entries, {
+    required String userText,
+    required bool Function(String term) isKnown,
+  }) {
+    final text = _fold(userText);
+    final words = text.split(RegExp(r'[^\p{L}\p{N}]+', unicode: true)).toSet();
+    return [
+      for (final entry in entries)
+        if (entry.related &&
+            !isKnown(entry.term) &&
+            !_written(entry.term, text, words))
+          entry,
+    ];
+  }
+
+  static bool _written(String term, String foldedText, Set<String> words) {
+    final t = _fold(term).trim();
+    if (t.isEmpty) return true;
+    final spaced = t.contains(RegExp(r'[^\p{L}\p{N}]', unicode: true));
+    final unspaced = t.runes.any((r) => r >= 0x2E80);
+    return (spaced || unspaced) ? foldedText.contains(t) : words.contains(t);
+  }
+
+  static const Map<String, String> _accents = {
+    'á': 'a', 'à': 'a', 'â': 'a', 'ä': 'a', 'ã': 'a', 'å': 'a',
+    'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+    'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i', 'ı': 'i',
+    'ó': 'o', 'ò': 'o', 'ô': 'o', 'ö': 'o', 'õ': 'o',
+    'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u',
+    'ç': 'c', 'ñ': 'n', 'ş': 's', 'ğ': 'g',
+  };
+
+  static String _fold(String value) {
+    final out = StringBuffer();
+    for (final rune in value.toLowerCase().runes) {
+      final ch = String.fromCharCode(rune);
+      out.write(_accents[ch] ?? ch);
+    }
+    return out.toString();
   }
 
   /// Normalises one field: markers escaped so a captured word can't forge a

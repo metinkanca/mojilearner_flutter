@@ -76,7 +76,32 @@ economy test counts them.
   player could meet on day one. A fight's content will have its own small
   allowance, not touching these.
 
-**Next:** the generated content, with its own allowance; the toy chest's art.
+**Decided and built 2026-10-23, fifth pass: related words instead of a call.**
+Rather than a separate model call per fight or per day, the player's vocabulary
+grows from the chat they already do. The tutor's vocabulary block now also
+carries up to 2 *related* words about the topic, at the player's level (the
+level is now sent with chat requests), marked `"related": true`. They are
+**kept in a suggested pile**, apart from the review queue, because the learner
+has not met them: reviewing them as cards would bury the queue. The toy chest
+and the boss fights draw on the player's words plus the pile
+(`VocabProvider.practiseItems`); a word met properly moves into the queue and
+leaves the pile; the pile keeps the newest 150. It costs no extra call, so
+there is no new allowance and the 80 messages cover it.
+- The app does not trust the model to leave out words the player just wrote:
+  in a real check on the main model (8 short chats, about $0.002) it handed back
+  `lago` and `montaña` after the player typed both, so those are filtered out,
+  and so is anything the player already has.
+- That check also found: the vocabulary block parsed every time and 7 of 8
+  replies had related words, but some were off-topic ("school" and "home" after
+  a market) and a roleplay scene (French coffee shop) produced none. Quality is
+  fair, not good; worth another look with more samples.
+- **Not covered:** a player who never chats has no words, so the toys stay shut;
+  and the openers that need sentences, riddles or grammar still have no content
+  outside English and Turkish. Those still need generated content or a way to
+  take sentences from the player's corrections.
+
+**Next:** a first source of words for players who have not chatted yet; content
+for the sentence and grammar openers; the toy chest's art.
 
 ## Decided 2026-10-22 (the owner's answers to the questions below)
 

@@ -313,7 +313,7 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
     _petHappyAir = sprite(PetVisualState.petted, shadow: false);
 
     _pool = playCatchWords(
-      items: context.read<VocabProvider>().items,
+      items: context.read<VocabProvider>().practiseItems,
       targetCode: _targetCode,
       nativeCode: _nativeCode,
     );

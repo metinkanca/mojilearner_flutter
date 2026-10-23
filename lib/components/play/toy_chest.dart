@@ -150,7 +150,7 @@ class ToyChestPicker extends StatelessWidget {
         textDirectionForLocale(Localizations.localeOf(context));
     // What the player has learned decides which toys open. Watched, so a word
     // learned while the chest is up opens one.
-    final items = context.watch<VocabProvider>().items;
+    final items = context.watch<VocabProvider>().practiseItems;
     final languages = context.watch<LanguageProvider>();
     bool playable(PlayGame game) => canPlay(
           game,

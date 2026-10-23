@@ -138,7 +138,7 @@ class _BubbleBathScreenState extends PlayGameState<BubbleBathScreen> {
   @override
   bool loadContent() {
     final words = bubbleBathWords(
-      items: context.read<VocabProvider>().items,
+      items: context.read<VocabProvider>().practiseItems,
       targetCode: targetCode,
       nativeCode: nativeCode,
     );

@@ -77,6 +77,11 @@ looking exactly like success.
       shut and says so. Needs the generated daily pack before Fetch the Words
       and the "related words" can open (see `BOSS_PLAN.md`)
 
+- [x] Related words: the tutor suggests up to 2 a reply, kept in a suggested
+      pile the toy chest and the boss fights use. Real-model check done once
+      (see `BOSS_PLAN.md`); repeat it with more samples in the live test, and
+      add a first source of words for players who have not chatted yet
+
 ### AI model plan
 
 What the code already does (`server/src/fallback.js`, `server/.env.example`):

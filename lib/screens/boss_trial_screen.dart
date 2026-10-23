@@ -1020,7 +1020,7 @@ class _BossTrialScreenState extends State<BossTrialScreen>
     final languages = context.read<LanguageProvider>();
     var target = languages.targetLanguage?.code;
     var native = languages.nativeLanguage.code;
-    final items = context.read<VocabProvider>().items;
+    final items = context.read<VocabProvider>().practiseItems;
     // An opener with English and Turkish content only fights in that pair,
     // whatever the player's is — and so does a finale with one in it, rather
     // than changing language between rounds.

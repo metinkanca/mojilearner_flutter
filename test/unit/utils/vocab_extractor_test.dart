@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mojilearner_flutter/utils/vocab_extractor.dart';
 
@@ -136,4 +138,84 @@ void main() {
           equals(VocabExtractor.maxFieldLength));
     });
   });
+
+  group('related words', () {
+    String block(List<Map<String, Object?>> entries) =>
+        'TEXT: hola\n|||VOCAB|||\n${jsonEncode(entries)}';
+
+    test('are told apart from the words the tutor taught', () {
+      final out = VocabExtractor.extract(block([
+        {'term': 'hola', 'meaning': 'hello'},
+        {'term': 'tarde', 'meaning': 'afternoon', 'related': true},
+      ]));
+      expect(out.entries.map((e) => e.related), [false, true]);
+    });
+
+    test('only an actual true marks one: a string or a one does not', () {
+      final out = VocabExtractor.extract(block([
+        {'term': 'a1', 'meaning': 'x', 'related': 'true'},
+        {'term': 'a2', 'meaning': 'x', 'related': 1},
+        {'term': 'a3', 'meaning': 'x', 'related': false},
+        {'term': 'a4', 'meaning': 'x'},
+      ]));
+      expect(out.entries.every((e) => !e.related), isTrue);
+    });
+
+    ExtractedVocab related(String term) =>
+        ExtractedVocab(term: term, meaning: 'm', related: true);
+
+    List<String> fresh(
+      List<ExtractedVocab> entries, {
+      String said = '',
+      Set<String> known = const {},
+    }) =>
+        VocabExtractor.freshRelated(
+          entries,
+          userText: said,
+          isKnown: known.contains,
+        ).map((e) => e.term).toList();
+
+    test('keeps a related word the learner has not written', () {
+      expect(
+          fresh([related('tarde'), related('noche')],
+              said: 'Hola, me gusta el café'),
+          ['tarde', 'noche']);
+    });
+
+    test('drops one the learner just wrote, ignoring case and accents', () {
+      expect(
+        fresh([related('montaña'), related('LAGO'), related('río')],
+            said: 'Ayer fui a la Montana y vimos un lago precioso'),
+        ['río'],
+      );
+    });
+
+    test('a short word is not "found" inside a longer one', () {
+      expect(fresh([related('a'), related('as')], said: 'casa y pasa'),
+          ['a', 'as']);
+    });
+
+    test('a phrase is matched anywhere in what was written', () {
+      expect(
+          fresh([related('por favor')], said: 'Un café, por favor.'), isEmpty);
+      expect(fresh([related('por la tarde')], said: 'Un café, por favor.'),
+          ['por la tarde']);
+    });
+
+    test('a script with no spaces is matched anywhere', () {
+      expect(fresh([related('猫'), related('犬')], said: '私は猫がすきです'),
+          ['犬']);
+    });
+
+    test('drops one the learner already has', () {
+      expect(fresh([related('tarde'), related('noche')], known: {'noche'}),
+          ['tarde']);
+    });
+
+    test('never returns a word the tutor taught, only the related ones', () {
+      const taught = ExtractedVocab(term: 'hola', meaning: 'hello');
+      expect(fresh([taught, related('tarde')]), ['tarde']);
+    });
+  });
 }
+

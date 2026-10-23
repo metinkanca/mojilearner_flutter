@@ -140,7 +140,7 @@ class _PounceScreenState extends PlayGameState<PounceScreen> {
   @override
   bool loadContent() {
     final words = playWords(
-      items: context.read<VocabProvider>().items,
+      items: context.read<VocabProvider>().practiseItems,
       targetCode: targetCode,
       nativeCode: nativeCode,
     );

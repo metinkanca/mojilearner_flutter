@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/app_runtime_config.dart';
 import '../constants/sample_mistakes.dart';
@@ -53,6 +55,7 @@ class VocabProvider extends ChangeNotifier {
   Future<void> load() async {
     if (_isLoaded) return;
 
+    await _loadSuggested();
     try {
       final data = await SecureStorage.readReviewItems();
       if (data != null && data.isNotEmpty) {
@@ -90,6 +93,109 @@ class VocabProvider extends ChangeNotifier {
         kind: ReviewItemKind.correction,
         flush: false,
       );
+    }
+  }
+
+  // ==================== THE SUGGESTED PILE ====================
+
+  /// Words the tutor suggested about what the learner was talking about.
+  ///
+  /// Kept apart from [items] on purpose. A review item is something the
+  /// learner met and is being asked to remember; these are words they have not
+  /// met yet. Reviewing them as if they had would bury the queue in cards they
+  /// never engaged with. They exist for the games: the toy chest and the boss
+  /// fights draw on [practiseItems], so practising there practises what the
+  /// player was just talking about, and a word learned that way is one they
+  /// have now seen. If one is met properly later, it becomes an item and
+  /// leaves the pile.
+  ///
+  /// In prefs, not in the encrypted store: it is not private learner text, and
+  /// prefs travel with the rest of a save.
+  static const String _suggestedKey = 'suggested_words';
+
+  /// The newest this many are kept; a longer pile only goes stale.
+  static const int maxSuggested = 150;
+
+  final List<ReviewItem> _suggested = [];
+
+  List<ReviewItem> get suggestedItems => List.unmodifiable(_suggested);
+
+  /// What a game or a fight is played with: the player's own words, then the
+  /// suggested ones they do not already have.
+  List<ReviewItem> get practiseItems {
+    final own = items;
+    final keys = {for (final item in own) item.key};
+    return [
+      ...own,
+      for (final item in _suggested)
+        if (!keys.contains(item.key)) item,
+    ];
+  }
+
+  /// Whether [term] is already a word the learner has, or has been suggested.
+  bool knowsVocabulary(String languageCode, String term) {
+    final key = ReviewItem.dedupeKey(
+      languageCode: languageCode,
+      kind: ReviewItemKind.vocabulary,
+      prompt: term,
+    );
+    return items.any((item) => item.key == key) ||
+        _suggested.any((item) => item.key == key);
+  }
+
+  /// Adds suggested words to the pile, skipping any already known.
+  List<ReviewItem> addSuggested(
+    Iterable<ExtractedVocab> entries, {
+    required String languageCode,
+  }) {
+    final added = <ReviewItem>[];
+    for (final entry in entries) {
+      if (knowsVocabulary(languageCode, entry.term)) continue;
+      final item = ReviewItem(
+        id: 'sg_${DateTime.now().microsecondsSinceEpoch}_${_suggested.length}',
+        languageCode: languageCode,
+        prompt: entry.term,
+        answer: entry.meaning,
+        context: entry.example,
+        reading: entry.reading,
+      );
+      _suggested.add(item);
+      added.add(item);
+    }
+    if (added.isEmpty) return added;
+    if (_suggested.length > maxSuggested) {
+      _suggested.removeRange(0, _suggested.length - maxSuggested);
+    }
+    unawaited(_saveSuggested());
+    notifyListeners();
+    return added;
+  }
+
+  Future<void> _loadSuggested() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_suggestedKey);
+      if (raw == null) return;
+      _suggested
+        ..clear()
+        ..addAll([
+          for (final json in jsonDecode(raw) as List)
+            ReviewItem.fromJson(Map<String, dynamic>.from(json as Map)),
+        ]);
+    } catch (e) {
+      debugPrint('⚠️ VOCAB: Failed to load suggested words - $e');
+    }
+  }
+
+  Future<void> _saveSuggested() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _suggestedKey,
+        jsonEncode([for (final item in _suggested) item.toJson()]),
+      );
+    } catch (e) {
+      debugPrint('⚠️ VOCAB: Failed to save suggested words - $e');
     }
   }
 
@@ -212,6 +318,12 @@ class VocabProvider extends ChangeNotifier {
         notifyListeners();
       }
       return updated;
+    }
+
+    // A word that was only suggested, now met properly: it leaves the pile.
+    if (_suggested.any((s) => s.key == key)) {
+      _suggested.removeWhere((s) => s.key == key);
+      unawaited(_saveSuggested());
     }
 
     final item = ReviewItem(

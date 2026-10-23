@@ -22,6 +22,7 @@ import '../../providers/ads_provider.dart';
 import '../../providers/user_provider.dart';
 import '../components/ai_limit_sheet.dart';
 import '../constants/entitlements.dart';
+import '../../providers/calibration_provider.dart';
 import '../../providers/vocab_provider.dart';
 import '../../utils/review_selection.dart';
 import '../../utils/rtl_locale.dart';
@@ -283,9 +284,15 @@ class _ChatScreenState extends State<ChatScreen>
       dueItems: vocabProvider.nextSession(languageCode: targetCode),
     );
 
+    final level = targetCode == null
+        ? null
+        : Provider.of<CalibrationProvider>(context, listen: false)
+            .getLanguageProficiency(targetCode)
+            ?.aiDeterminedLevel;
     final spec = AiPromptSpec.chat(
       targetCode: targetCode,
       nativeCode: languageProvider.nativeLanguage.code,
+      level: level,
       scenarioTitle: effectiveScenarioTitle,
       scenarioHost: scenario?.hostPet,
       objectives: objectives,
@@ -468,7 +475,10 @@ class _ChatScreenState extends State<ChatScreen>
           return;
         }
 
-        await _parseAndSaveBotResponse(_localizeAiText(response.text!));
+        await _parseAndSaveBotResponse(
+          _localizeAiText(response.text!),
+          userText: text,
+        );
 
         // Saving the reply is its own async gap, and leaving the chat during
         // it is ordinary: the reply is already persisted, so dropping the
@@ -535,6 +545,7 @@ class _ChatScreenState extends State<ChatScreen>
   Future<void> _parseAndSaveBotResponse(
     String rawText, {
     bool isOpeningTurn = false,
+    String? userText,
   }) async {
       // 1. Extract the correction the tutor reported.
       //
@@ -579,9 +590,20 @@ class _ChatScreenState extends State<ChatScreen>
                 .targetLanguage
                 ?.code;
         if (languageCode != null) {
-          Provider.of<VocabProvider>(context, listen: false)
-              .addVocabularyBatch(
-            vocabExtraction.entries,
+          final vocab = Provider.of<VocabProvider>(context, listen: false);
+          // What the tutor taught goes to the review queue. What it only
+          // suggested about the topic goes to the pile the games use, minus
+          // anything the learner just wrote or already has.
+          vocab.addVocabularyBatch(
+            vocabExtraction.entries.where((e) => !e.related),
+            languageCode: languageCode,
+          );
+          vocab.addSuggested(
+            VocabExtractor.freshRelated(
+              vocabExtraction.entries,
+              userText: userText ?? '',
+              isKnown: (term) => vocab.knowsVocabulary(languageCode, term),
+            ),
             languageCode: languageCode,
           );
         }

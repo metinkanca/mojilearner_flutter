@@ -116,11 +116,15 @@ class AiPromptSpec {
   ///
   /// [scenarioHost] is the pet type playing the scene's other side, which the
   /// tutor is cast as.
+  ///
+  /// [level] is the player's assessed level in [targetCode], one of the three
+  /// words the server recognises.
   factory AiPromptSpec.chat({
     required String? targetCode,
     required String? nativeCode,
     String? scenarioTitle,
     String? scenarioHost,
+    String? level,
     List<AiObjective> objectives = const [],
     List<AiReviewItem> troubleSpots = const [],
     List<AiReviewItem> dueItems = const [],
@@ -128,6 +132,9 @@ class AiPromptSpec {
     return AiPromptSpec._(AiPromptMode.chat, {
       'targetCode': targetCode,
       'nativeCode': nativeCode,
+      // The tutor's own wording does not change with it. It pitches the related
+      // words it adds to the vocabulary block, and only those.
+      if (level != null && level.isNotEmpty) 'level': level,
       if (scenarioTitle != null && scenarioTitle.isNotEmpty)
         'scenario': {
           'title': scenarioTitle,
