@@ -19,7 +19,11 @@ plugins {
 
 android {
     namespace = "com.mimikin.app"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_secure_storage compiles against API 37, one past Flutter's own
+    // default. Compiling against the highest any plugin needs is backward
+    // compatible and silences the build's warning; it does not change which
+    // Android versions the app runs on (minSdk and targetSdk are untouched).
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
