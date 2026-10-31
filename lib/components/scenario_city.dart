@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/scenarios.dart';
@@ -559,7 +558,6 @@ class _ScenarioCityMapState extends State<ScenarioCityMap>
   @override
   Widget build(BuildContext context) {
     const scenarios = ScenarioCatalog.all;
-    final l10n = AppLocalizations.of(context)!;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -605,35 +603,17 @@ class _ScenarioCityMapState extends State<ScenarioCityMap>
                   for (var i = 0; i < scenarios.length; i++)
                     Positioned.fromRect(
                       rect: _layout.lot(i),
-                      // Rebuilt as the view moves: what a building draws over
-                      // the map is chrome, and has to stay screen-sized while
-                      // the town under it zooms.
-                      child: AnimatedBuilder(
-                        animation: _view,
-                        builder: (context, _) => CityBuilding(
-                          scenario: scenarios[i],
-                          label: scenarios[i].title(l10n),
-                          lotWidth: _layout.lot(i).width,
-                          art: _buildingArt[i],
-                          chipDy: _layout.chipDy(i),
-                          selected: scenarios[i].id == widget.selectedId,
-                          mapScale: _view.value.getMaxScaleOnAxis(),
-                          onTap: () => widget.onSelect(scenarios[i].id),
-                        ),
+                      child: CityBuilding(
+                        scenario: scenarios[i],
+                        art: _buildingArt[i],
+                        onTap: () => widget.onSelect(scenarios[i].id),
                       ),
                     ),
                   Positioned.fromRect(
                     rect: _layout.schoolLot,
-                    child: AnimatedBuilder(
-                      animation: _view,
-                      builder: (context, _) => CityBuilding(
-                        label: l10n.townSchool,
-                        lotWidth: _layout.schoolLot.width,
-                        art: _schoolArt,
-                        selected: widget.selectedId == CityLayout.schoolId,
-                        mapScale: _view.value.getMaxScaleOnAxis(),
-                        onTap: () => widget.onSelect(CityLayout.schoolId),
-                      ),
+                    child: CityBuilding(
+                      art: _schoolArt,
+                      onTap: () => widget.onSelect(CityLayout.schoolId),
                     ),
                   ),
                   _pet(
@@ -652,131 +632,32 @@ class _ScenarioCityMapState extends State<ScenarioCityMap>
   }
 }
 
-/// One place on the map: the building itself, the tap target over it, the
-/// pin over the selected one, and its name on the roof, so the player can see
-/// what each building is without picking it.
-///
-/// The building is scenery and scales with the town. Everything else it draws
-/// is chrome, so it is counter-scaled by [mapScale] and stays the same size on
-/// screen however far the town is zoomed out.
+/// One place on the map: the building itself and the tap target over it. Its
+/// name is not drawn on the map; it is on the card that opens when the place is
+/// picked.
 class CityBuilding extends StatelessWidget {
   const CityBuilding({
     super.key,
     this.scenario,
-    required this.label,
-    required this.lotWidth,
-    required this.selected,
     required this.onTap,
     this.art,
-    this.chipDy = 0,
-    this.mapScale = 1,
   });
 
   /// The scenario this is the place of; null for the school, which has no
   /// scenario to have cleared.
   final ScenarioDefinition? scenario;
-
-  /// The place's name, in the player's language.
-  final String label;
-
-  /// How wide the building's box is, in map units.
-  final double lotWidth;
-  final bool selected;
   final VoidCallback onTap;
 
   /// The building's picture, filling the box. Passed in so a caller that
   /// rebuilds this as the camera moves can keep one instance of it.
   final Widget? art;
 
-  /// How far down the box the name sits, in map units: on the roof rather than
-  /// the top of the box.
-  final double chipDy;
-  final double mapScale;
-
   @override
   Widget build(BuildContext context) {
-    final counter = mapScale <= 0 ? 1.0 : 1 / mapScale;
-
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          if (art != null) Positioned.fill(child: art!),
-          if (selected)
-            Positioned(
-              left: 0,
-              right: 0,
-              top: -12 * counter,
-              child: Transform.scale(
-                scale: counter,
-                alignment: Alignment.bottomCenter,
-                child: const Icon(
-                  LucideIcons.mapPin,
-                  color: AppTheme.retroPrimary,
-                  size: 30,
-                ),
-              ),
-            ),
-          // The name sits on the roof, where it is readable at a glance from
-          // anywhere on the map. The box is as wide as the building looks on
-          // screen, so a long name in a long language wraps inside it.
-          Positioned(
-            left: 0,
-            top: chipDy,
-            width: lotWidth * mapScale,
-            child: Transform.scale(
-              scale: counter,
-              alignment: Alignment.topLeft,
-              child: Center(
-                child: BuildingName(scenario: scenario, label: label),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// A place's name on the map, in a small sign. A scenario the player has
-/// cleared at least once has a green sign, the way its tally used to turn
-/// green; the count itself is on the card that opens when the place is picked.
-class BuildingName extends StatelessWidget {
-  const BuildingName({super.key, this.scenario, required this.label});
-
-  final ScenarioDefinition? scenario;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final textDirection =
-        textDirectionForLocale(Localizations.localeOf(context));
-    final id = scenario?.id;
-    final cleared =
-        id != null && context.watch<ScenarioProvider>().hasEverCompleted(id);
-
-    return Container(
-      key: ValueKey('building-name-${id ?? CityLayout.schoolId}'),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: cleared ? AppTheme.retroGrass : Colors.white,
-        border: Border.all(color: AppTheme.retroDark, width: 2),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        textDirection: textDirection,
-        textAlign: TextAlign.center,
-        style: AppFonts.pressStart2p(
-          fontSize: 9,
-          color: AppTheme.retroDark,
-          fontWeight: FontWeight.bold,
-          height: 1.4,
-        ),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
+      child: art == null ? const SizedBox.expand() : art!,
     );
   }
 }

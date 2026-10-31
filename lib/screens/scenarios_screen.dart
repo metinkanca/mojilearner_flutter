@@ -4,7 +4,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import '../components/scenario_city.dart';
 import '../constants/entitlements.dart';
-import '../constants/pets.dart';
 import '../constants/scenarios.dart';
 import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
@@ -12,10 +11,11 @@ import '../providers/user_provider.dart';
 import '../utils/rtl_locale.dart';
 import '../../utils/fonts.dart';
 
-/// The scenarios, as a town: each one is a building with its host pet at the
-/// door. Tapping one sends the player's pet walking over and opens a card to
-/// go in. The school beside the town hall is the way into the quizzes: its card
-/// shows how many of today's the player has used, and starts one.
+/// The scenarios, as a town: each one is a building. Tapping one sends the
+/// player's pet walking over and opens a card with the place's name and a go
+/// button that names what is practised there. The school beside the town hall
+/// is the way into the quizzes: its card shows how many of today's the player
+/// has used, and starts one.
 class ScenariosScreen extends StatefulWidget {
   const ScenariosScreen({super.key});
 
@@ -44,17 +44,14 @@ class _ScenariosScreenState extends State<ScenariosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context);
-    final textDirection = textDirectionForLocale(locale);
     final selected = ScenarioCatalog.byId(_selectedId);
     final schoolSelected = _selectedId == CityLayout.schoolId;
 
     return Scaffold(
       backgroundColor: AppTheme.retroSky,
-      // The town fills the whole screen, status bar and all; the header and
-      // the place card float over it. What they leave empty passes taps
-      // through to the map beneath.
+      // The town fills the whole screen, status bar and all; the place card
+      // floats over it. What it leaves empty passes taps through to the map
+      // beneath.
       body: Stack(
         children: [
           Positioned.fill(
@@ -63,76 +60,97 @@ class _ScenariosScreenState extends State<ScenariosScreen> {
               onSelect: (id) => setState(() => _selectedId = id),
             ),
           ),
-          SafeArea(
-            child: Column(
-              children: [
-                // Retro Header
-                Container(
-                  margin: const EdgeInsets.all(16),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.retroUi,
-                    border: Border.all(color: AppTheme.retroDark, width: 4),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: AppTheme.retroDark,
-                        offset: Offset(4, 4),
-                        blurRadius: 0,
-                      ),
-                    ],
-                  ),
-                  // The town is a tab of the bottom bar, which is the way out:
-                  // no back button of its own.
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            l10n.scenarios.toUpperCase(),
-                            textDirection: textDirection,
-                            textAlign: TextAlign.center,
-                            style: AppFonts.pressStart2p(
-                              fontSize: 16,
-                              color: AppTheme.retroDark,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Expanded(
-                  child: Stack(
-                    children: [
-                      if (schoolSelected)
-                        Positioned(
-                          left: 16,
-                          right: 16,
-                          bottom: 16,
-                          child: _SchoolCard(onEnter: () => _startQuiz(context)),
-                        )
-                      else if (selected != null)
-                        Positioned(
-                          left: 16,
-                          right: 16,
-                          bottom: 16,
-                          child: _PlaceCard(
-                            scenario: selected,
-                            onEnter: () => _enter(context, selected),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
+          if (schoolSelected)
+            Positioned(
+              left: _cardMargin,
+              right: _cardMargin,
+              bottom: _cardMargin,
+              child: _SchoolCard(onEnter: () => _startQuiz(context)),
+            )
+          else if (selected != null)
+            Positioned(
+              left: _cardMargin,
+              right: _cardMargin,
+              bottom: _cardMargin,
+              child: _PlaceCard(
+                scenario: selected,
+                onEnter: () => _enter(context, selected),
+              ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// How far a card stands off the screen's edges and the bar below it. Kept
+/// small, so the card hides as little of the town as it can.
+const double _cardMargin = 8;
+
+/// The white frame every place's card shares.
+class _CardFrame extends StatelessWidget {
+  const _CardFrame({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: AppTheme.retroDark, width: 4),
+        boxShadow: const [
+          BoxShadow(
+            color: AppTheme.retroDark,
+            offset: Offset(4, 4),
+            blurRadius: 0,
           ),
         ],
       ),
+      child: child,
+    );
+  }
+}
+
+/// The small coloured square with a place's icon in it.
+class _PlaceTile extends StatelessWidget {
+  const _PlaceTile({required this.color, required this.icon});
+
+  final Color color;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(color: AppTheme.retroDark, width: 3),
+      ),
+      child: Icon(icon, color: AppTheme.retroDark, size: 22),
+    );
+  }
+}
+
+/// A place's name, at the head of its card.
+class _PlaceName extends StatelessWidget {
+  const _PlaceName(this.name);
+
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      name.toUpperCase(),
+      textDirection: textDirectionForLocale(Localizations.localeOf(context)),
+      style: AppFonts.pressStart2p(
+        fontSize: 10,
+        color: AppTheme.retroDark,
+        height: 1.4,
+      ),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
@@ -155,51 +173,22 @@ class _SchoolCard extends StatelessWidget {
     final used = (total - user.aiRemaining(AiSpend.quiz)).clamp(0, total);
     final title = l10n.townSchool;
 
-    return Container(
+    return _CardFrame(
       key: const ValueKey('school-card'),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: AppTheme.retroDark, width: 4),
-        boxShadow: const [
-          BoxShadow(
-            color: AppTheme.retroDark,
-            offset: Offset(4, 4),
-            blurRadius: 0,
-          ),
-        ],
-      ),
       child: Row(
         textDirection: textDirection,
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              // The school's own wall: the coral its picture is built from.
-              color: const Color(0xFFe58472),
-              border: Border.all(color: AppTheme.retroDark, width: 3),
-            ),
-            child: const Icon(LucideIcons.graduationCap,
-                color: AppTheme.retroDark, size: 24),
-          ),
-          const SizedBox(width: 12),
+          // The school's own wall: the coral its picture is built from.
+          const _PlaceTile(
+              color: Color(0xFFe58472), icon: LucideIcons.graduationCap),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  title.toUpperCase(),
-                  textDirection: textDirection,
-                  style: AppFonts.pressStart2p(
-                    fontSize: 10,
-                    color: AppTheme.retroDark,
-                    height: 1.4,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
+                _PlaceName(title),
+                const SizedBox(height: 6),
                 Text(
                   user.isPremium
                       ? l10n.quizDesc
@@ -217,31 +206,43 @@ class _SchoolCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          _EnterButton(label: title, onTap: onEnter),
+          const SizedBox(width: 10),
+          _GoButton(label: title, onTap: onEnter),
         ],
       ),
     );
   }
 }
 
-/// The green door button at the end of a place's card.
-class _EnterButton extends StatelessWidget {
-  const _EnterButton({required this.label, required this.onTap});
+/// The green button at the end of a place's card. With a [practice] it names
+/// what the player will do inside; without one it is just the door.
+class _GoButton extends StatelessWidget {
+  const _GoButton({required this.label, required this.onTap, this.practice});
 
+  /// For screen readers.
   final String label;
+  final String? practice;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final textDirection =
+        textDirectionForLocale(Localizations.localeOf(context));
+    final practice = this.practice;
+
     return Semantics(
       button: true,
       label: label,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          width: 56,
-          height: 56,
+          constraints: BoxConstraints(
+            minWidth: 48,
+            minHeight: 48,
+            maxWidth: practice == null ? 48 : 130,
+          ),
+          padding: EdgeInsets.symmetric(
+              horizontal: practice == null ? 0 : 8, vertical: 6),
           decoration: BoxDecoration(
             color: AppTheme.retroGrass,
             border: Border.all(color: AppTheme.retroDark, width: 4),
@@ -253,10 +254,30 @@ class _EnterButton extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(
-            LucideIcons.doorOpen,
-            color: AppTheme.retroDark,
-            size: 26,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            textDirection: textDirection,
+            children: [
+              const Icon(LucideIcons.doorOpen,
+                  color: AppTheme.retroDark, size: 22),
+              if (practice != null) ...[
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    practice.toUpperCase(),
+                    textDirection: textDirection,
+                    style: AppFonts.pressStart2p(
+                      fontSize: 8,
+                      color: AppTheme.retroDark,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ),
@@ -264,8 +285,8 @@ class _EnterButton extends StatelessWidget {
   }
 }
 
-/// The place the player's pet is heading to: what it is, who works there, how
-/// far the player has got, and the way in.
+/// The place the player's pet is heading to: what it is called, how far the
+/// player has got, and the way in, which says what is practised there.
 class _PlaceCard extends StatelessWidget {
   const _PlaceCard({required this.scenario, required this.onEnter});
 
@@ -277,74 +298,32 @@ class _PlaceCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final textDirection =
         textDirectionForLocale(Localizations.localeOf(context));
-    final title = scenario.title(l10n);
+    final practice = scenario.title(l10n);
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: AppTheme.retroDark, width: 4),
-        boxShadow: const [
-          BoxShadow(
-            color: AppTheme.retroDark,
-            offset: Offset(4, 4),
-            blurRadius: 0,
-          ),
-        ],
-      ),
+    return _CardFrame(
+      key: const ValueKey('place-card'),
       child: Row(
         textDirection: textDirection,
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: scenarioPlaceColor(scenario.id),
-              border: Border.all(color: AppTheme.retroDark, width: 3),
-            ),
-            child: Icon(scenario.icon, color: AppTheme.retroDark, size: 24),
-          ),
-          const SizedBox(width: 12),
+          _PlaceTile(
+              color: scenarioPlaceColor(scenario.id), icon: scenario.icon),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  title.toUpperCase(),
-                  textDirection: textDirection,
-                  style: AppFonts.pressStart2p(
-                    fontSize: 10,
-                    color: AppTheme.retroDark,
-                    height: 1.4,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  textDirection: textDirection,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        petDisplayName(l10n, scenario.hostPet).toUpperCase(),
-                        textDirection: textDirection,
-                        style: AppFonts.pressStart2p(
-                          fontSize: 8,
-                          color: AppTheme.retroDark,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    ScenarioProgressChip(scenario: scenario),
-                  ],
+                _PlaceName(scenario.place(l10n)),
+                const SizedBox(height: 6),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: ScenarioProgressChip(scenario: scenario),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          _EnterButton(label: title, onTap: onEnter),
+          const SizedBox(width: 10),
+          _GoButton(label: practice, practice: practice, onTap: onEnter),
         ],
       ),
     );

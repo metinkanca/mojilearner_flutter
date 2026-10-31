@@ -56,6 +56,7 @@ class ScenarioDefinition {
     required this.id,
     required this.icon,
     required this.title,
+    required this.place,
     required this.objectives,
     required this.hostPet,
     this.service,
@@ -64,7 +65,11 @@ class ScenarioDefinition {
   /// Stable id, e.g. 'coffee'. Persisted on the chat and on progress.
   final String id;
   final IconData icon;
+  /// What the player practises here ("Ordering Coffee"): on the go button.
   final String Function(AppLocalizations) title;
+
+  /// The building itself ("Café"): the name on its card in the town.
+  final String Function(AppLocalizations) place;
   final List<ScenarioObjective> objectives;
 
   /// The pet playing the other side of the scene — the barista, the
@@ -102,9 +107,10 @@ class ScenarioCatalog {
   static const List<ScenarioDefinition> all = [
     ScenarioDefinition(
       id: 'coffee',
-      hostPet: 'raccoon',
+      hostPet: 'fox',
       icon: LucideIcons.coffee,
       title: _coffeeTitle,
+      place: _cafePlace,
       objectives: [
         ScenarioObjective(id: 'order', label: _objCoffeeOrder),
         ScenarioObjective(id: 'customize', label: _objCoffeeCustomize),
@@ -118,6 +124,7 @@ class ScenarioCatalog {
       hostPet: 'rabbit',
       icon: LucideIcons.briefcase,
       title: _interviewTitle,
+      place: _townHallPlace,
       objectives: [
         ScenarioObjective(id: 'greet', label: _objInterviewGreet),
         ScenarioObjective(id: 'experience', label: _objInterviewExperience),
@@ -131,6 +138,7 @@ class ScenarioCatalog {
       hostPet: 'dog',
       icon: LucideIcons.map,
       title: _directionsTitle,
+      place: _gazeboPlace,
       objectives: [
         ScenarioObjective(id: 'ask', label: _objDirectionsAsk),
         ScenarioObjective(id: 'clarify', label: _objDirectionsClarify),
@@ -145,6 +153,7 @@ class ScenarioCatalog {
       service: ScenarioService(objectiveId: 'symptom', itemId: 'medicine'),
       icon: LucideIcons.stethoscope,
       title: _doctorTitle,
+      place: _hospitalPlace,
       objectives: [
         ScenarioObjective(id: 'symptom', label: _objDoctorSymptom),
         ScenarioObjective(id: 'duration', label: _objDoctorDuration),
@@ -155,9 +164,10 @@ class ScenarioCatalog {
     ),
     ScenarioDefinition(
       id: 'shopping',
-      hostPet: 'bird',
+      hostPet: 'hamster',
       icon: LucideIcons.store,
       title: _shoppingTitle,
+      place: _shopPlace,
       objectives: [
         ScenarioObjective(id: 'find', label: _objShoppingFind),
         ScenarioObjective(id: 'size', label: _objShoppingSize),
@@ -171,6 +181,7 @@ class ScenarioCatalog {
       service: ScenarioService(objectiveId: 'order', itemId: 'pizza'),
       icon: LucideIcons.utensils,
       title: _restaurantTitle,
+      place: _restaurantPlace,
       objectives: [
         ScenarioObjective(id: 'table', label: _objRestaurantTable),
         ScenarioObjective(id: 'order', label: _objRestaurantOrder),
@@ -196,6 +207,13 @@ String _directionsTitle(AppLocalizations l) => l.askingDirections;
 String _doctorTitle(AppLocalizations l) => l.atTheDoctor;
 String _shoppingTitle(AppLocalizations l) => l.shopping;
 String _restaurantTitle(AppLocalizations l) => l.restaurant;
+
+String _cafePlace(AppLocalizations l) => l.placeCafe;
+String _townHallPlace(AppLocalizations l) => l.placeTownHall;
+String _gazeboPlace(AppLocalizations l) => l.placeGazebo;
+String _hospitalPlace(AppLocalizations l) => l.placeHospital;
+String _shopPlace(AppLocalizations l) => l.placeShop;
+String _restaurantPlace(AppLocalizations l) => l.restaurant;
 
 String _objCoffeeOrder(AppLocalizations l) => l.objCoffeeOrder;
 String _objCoffeeCustomize(AppLocalizations l) => l.objCoffeeCustomize;
