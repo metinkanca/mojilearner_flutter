@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants/theme.dart';
 import '../l10n/app_localizations.dart';
+import 'home_button_art.dart';
 import 'play/play_kit.dart';
 import 'play/toy_chest.dart';
 
@@ -42,8 +42,9 @@ class HomeActionBar extends StatelessWidget {
   static const Key mistakesKey = ValueKey('home-mistakes-button');
   static const Key climbKey = ValueKey('home-climb-button');
 
-  /// One pixel of the icons, in points. Whole numbers keep the cells sharp.
-  static const double _cell = 3;
+  /// One pixel of the tower, in points. 32 rows at 2 points fill the
+  /// tap target's height.
+  static const double _towerCell = 2;
 
   /// The books are on a much finer grid than the placeholder icons.
   static const double _booksCell = 0.9;
@@ -53,7 +54,12 @@ class HomeActionBar extends StatelessWidget {
   // stands 88 up (`_kPetFootOffset` on the home screen), which leaves the
   // margins at 0.09 and 0.91 clear for the two upright things, and puts the
   // books, which are low, in front of the pet's feet rather than beside them.
-  static const double _toysX = 0.91, _toysBase = 66;
+  static const double _toysX = 0.92, _toysBase = 66;
+
+  /// The chest and the toys either side of it are one drawing, 34 cells wide.
+  /// It has to fit the margin beside the pet, which is a little under 60
+  /// points on a tall phone, so a cell is 1.65 points.
+  static const double _toysWidth = 56;
   static const double _booksX = 0.34, _booksBase = 14;
   static const double _climbX = 0.09, _climbBase = 82;
 
@@ -83,9 +89,9 @@ class HomeActionBar extends StatelessWidget {
                   semanticLabel: 'Boss climb',
                   onTap: onClimb,
                   child: const _PixelIcon(
-                    rows: towerRows,
-                    inks: _towerInks,
-                    cell: _cell,
+                    rows: bossTowerArtRows,
+                    inks: bossTowerArtInks,
+                    cell: _towerCell,
                   ),
                 ),
               ),
@@ -103,7 +109,7 @@ class HomeActionBar extends StatelessWidget {
                   child: ToyChest(
                     semanticLabel: l10n?.playToyChest ?? 'Toy chest',
                     onTap: canPlay ? onToys : () {},
-                    size: 42,
+                    size: _toysWidth,
                     padding: 0,
                   ),
                 ),
@@ -260,34 +266,4 @@ const List<String> booksRows = [
   '..................XXXXXXXXlllllllllXXXXXX................',
   '......................XXXXXXXXXXXXXXXX...................',
   '..........................XXXXXXXXXX.....................',
-];
-
-const Map<String, Color> _towerInks = {
-  'X': AppTheme.retroDark,
-  'r': AppTheme.retroPrimary,
-  'g': Color(0xFFB9B4AA),
-  'G': Color(0xFF8A867D),
-  'D': Color(0xFF4A3426),
-  's': Color(0x40000000),
-};
-
-/// A stone tower with a pennant on top: the climb up to the bosses.
-const List<String> towerRows = [
-  '.......XXXXXX...',
-  '.......XrrrrrX..',
-  '.......XrrrXX...',
-  '.......XXXX.....',
-  '.......X........',
-  '..XXX.XXX.XXX...',
-  '..XgX.XgX.XgX...',
-  '..XgXXXgXXXgX...',
-  '..XgggggggggX...',
-  '..XGGGGGGGGGX...',
-  '..XggggDggggX...',
-  '..XggggDggggX...',
-  '..XgggggggggX...',
-  '..XgggDDDgggX...',
-  '..XgggDDDgggX...',
-  '..XXXXXXXXXXX...',
-  '..sssssssssss...',
 ];

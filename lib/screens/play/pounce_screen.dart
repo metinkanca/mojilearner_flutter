@@ -3,9 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/boss_trial/arena_pieces.dart' show ShoutBubble;
+import '../../components/play/play_kit.dart';
 import '../../components/play/play_props.dart';
-import '../../constants/theme.dart';
+import '../../components/scene_backdrop.dart';
+import '../../constants/scenes.dart';
 import '../../providers/vocab_provider.dart';
 import '../../utils/boss_trial.dart';
 import '../../utils/boss_trial_moss.dart';
@@ -13,6 +14,9 @@ import '../../utils/play_games.dart';
 import 'play_game_state.dart';
 
 /// Pounce: Mossback's Pebble Pop, played in the garden.
+///
+/// The garden is the Mushroom Glade's picture, as the home screen draws it:
+/// its toadstools standing behind the pet on the line where the grass begins.
 ///
 /// The pet wants a word by its meaning, in the player's language. Moles pop
 /// out of six molehills holding up signs with words in the language being
@@ -56,8 +60,8 @@ class _Geo {
     petTop = petFeet - petBox;
     colW = (w - 16) / 3;
     signW = min(colW - 12, 150.0).roundToDouble();
-    popH = (signH * (1 + MoleSign.headShare)).roundToDouble();
-    moundW = (min(signW * 0.7, 92.0) / 4).roundToDouble() * 4;
+    popH = MoleSign.popH;
+    moundW = MoundPiece.w;
     final block = popH + lipH;
     final gap = max(8.0, (h - horizon - 8 - 2 * block) / 3);
     holeY = [
@@ -69,13 +73,14 @@ class _Geo {
   static const double promptTop = 8;
   static const double promptH = 54;
   static const double _promptBottom = promptTop + promptH + 12;
-  static const double signH = 40;
-  static const double lipH = 24;
 
-  /// The far side of a molehill, and how much of it stands above the line
-  /// its mole comes out of: the dark of the hole shows there.
-  static const double moundBackH = 20;
-  static const double moundBackAbove = 16;
+  /// The near lip of a molehill, hanging from the line its mole comes out of.
+  static final double lipH = MoundPiece.frontH;
+
+  /// The glade's picture is 864 by 1872, its grass starting 1096 down.
+  static const double roomW = 864;
+  static const double roomH = 1872;
+  static const double groundLine = 1096;
 
   final double w, h;
   late final double petBox, horizon, petX, petFeet, petTop;
@@ -93,6 +98,10 @@ class _Geo {
 }
 
 class _PounceScreenState extends PlayGameState<PounceScreen> {
+  /// The picture the garden is drawn from.
+  static final SceneTheme _glade =
+      kSceneThemes.firstWhere((s) => s.id == kMushroomGladeSceneId);
+
   static const double _firstWait = 0.9;
   static const double _wait = 0.5;
 
@@ -264,7 +273,7 @@ class _PounceScreenState extends PlayGameState<PounceScreen> {
     final at = geo.pounceFeet(hole);
     if (!reduceMotion) {
       particles.sparks(Offset(at.dx, geo.holeLine(hole)),
-          count: 8, colors: MolehillPainter.dirt);
+          count: 8, colors: moleDirt);
     }
     final head = at.translate(0, -geo.petBox * 0.7);
     if (_clean) {
@@ -348,38 +357,41 @@ class _PounceScreenState extends PlayGameState<PounceScreen> {
 
     return Stack(
       children: [
-        Positioned.fill(child: Container(color: AppTheme.retroSky)),
+        // The sky and the grass, until the picture is ready.
+        const Positioned.fill(child: ColoredBox(color: PlayPalette.glass)),
         Positioned(
           left: 0,
           right: 0,
           top: geo.horizon,
           bottom: 0,
-          child: Container(
-            decoration: const BoxDecoration(
-              color: AppTheme.retroGrass,
-              border: Border(
-                  top: BorderSide(color: PlayGameState.ink, width: 4)),
+          child: const ColoredBox(color: Color(0xFF5DB89A)),
+        ),
+        Positioned(
+          left: 0,
+          width: geo.w,
+          top: geo.horizon - geo.w * _Geo.groundLine / _Geo.roomW,
+          height: geo.w * _Geo.roomH / _Geo.roomW,
+          child: IgnorePointer(
+            child: SceneBackdrop(
+              scene: _glade,
+              time: SceneTime.day,
+              fit: BoxFit.fill,
+              rasterize: true,
             ),
           ),
         ),
         for (var hole = 0; hole < MossRules.holes; hole++)
           Positioned(
             left: geo.holeX(hole) - geo.moundW / 2,
-            top: geo.holeLine(hole) - _Geo.moundBackAbove,
-            width: geo.moundW,
-            height: _Geo.moundBackH,
-            child: const CustomPaint(painter: MolehillPainter(back: true)),
+            top: geo.holeLine(hole) - MoundPiece.backAbove,
+            child: const MoundPiece(back: true),
           ),
         if (wave != null) ..._buildMoles(geo, wave),
         for (var hole = 0; hole < MossRules.holes; hole++)
           Positioned(
-            left: geo.holeX(hole) - geo.moundW / 2 - 4,
-            top: geo.holeLine(hole) - 4,
-            width: geo.moundW + 8,
-            height: _Geo.lipH,
-            child: const IgnorePointer(
-              child: CustomPaint(painter: MolehillPainter(back: false)),
-            ),
+            left: geo.holeX(hole) - geo.moundW / 2,
+            top: geo.holeLine(hole),
+            child: const IgnorePointer(child: MoundPiece(back: false)),
           ),
         particleLayer(front: false),
         positionedPet(
@@ -396,9 +408,9 @@ class _PounceScreenState extends PlayGameState<PounceScreen> {
             left: 12,
             top: _Geo.promptTop,
             width: geo.w - 24,
-            height: _Geo.promptH + ShoutBubble.tailH,
+            height: _Geo.promptH + PlayBubble.tailH,
             child: IgnorePointer(
-              child: ShoutBubble(
+              child: PlayBubble(
                 word: wave.prompt.meaning,
                 style: pixelNative(16, PlayGameState.ink),
                 tailX: (geo.petX - 12).clamp(24.0, geo.w - 48),
@@ -437,7 +449,7 @@ class _PounceScreenState extends PlayGameState<PounceScreen> {
           final bonked = i == _hit && _landed;
           // Squashed down into its hill under the pet.
           final squash = bonked ? 0.35 : 0.0;
-          final down = ((1 - rise + squash) * geo.popH / 4).roundToDouble() * 4;
+          final down = ((1 - rise + squash) * geo.popH / 3).roundToDouble() * 3;
           return Positioned(
             left: geo.holeX(pop.hole) - geo.signW / 2,
             top: line - geo.popH,
@@ -448,9 +460,7 @@ class _PounceScreenState extends PlayGameState<PounceScreen> {
                 offset: Offset(0, down),
                 child: MoleSign(
                   label: pop.word.target,
-                  style: state == PropState.wrong
-                      ? pixelTarget(10, propInk(state))
-                      : style,
+                  style: style,
                   state: state,
                   bonked: bonked || state == PropState.wrong,
                   onTapDown: _stage == _Stage.popping && state == PropState.plain

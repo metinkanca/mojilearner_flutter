@@ -7,9 +7,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mojilearner_flutter/components/boss_trial/arena_pieces.dart';
+import 'package:mojilearner_flutter/components/play/play_kit.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_words.dart';
-import 'package:mojilearner_flutter/constants/theme.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
 import 'package:mojilearner_flutter/screens/play_catch_screen.dart';
@@ -35,6 +34,8 @@ void main() {
       final loader = FontLoader('PressStart2P')
         ..addFont(rootBundle.load('assets/fonts/PressStart2P-Regular.ttf'));
       await loader.load();
+      // The room's picture, read once outside the test's fake clock.
+      await rootBundle.loadString('assets/svgs/cozy_room.svg');
     });
 
     final character = MockCharacterProvider();
@@ -78,26 +79,26 @@ void main() {
 
     Future<void> settleArt() async {
       await tester.runAsync(
-          () => Future<void>.delayed(const Duration(milliseconds: 200)));
+          () => Future<void>.delayed(const Duration(milliseconds: 600)));
       await tester.pump();
     }
 
     String askedMeaning() {
-      final word = tester.widget<ShoutBubble>(find.byType(ShoutBubble)).word;
+      final word = tester.widget<PlayBubble>(find.byType(PlayBubble)).word;
       return stock.firstWhere((w) => w.target == word).meaning;
     }
 
     Future<void> tapMeaning(String meaning) async {
       await tester.tap(find.ancestor(
-          of: find.text(meaning), matching: find.byType(RubbleTile)));
+          of: find.text(meaning), matching: find.byType(PlayTile)));
       await tester.pump();
     }
 
     Future<void> untilThrown() async {
       while (!tester
-          .widgetList<RubbleTile>(find.byType(RubbleTile))
-          .every((t) => t.face == AppTheme.retroLight) ||
-          find.byType(RubbleTile).evaluate().length != 4) {
+          .widgetList<PlayTile>(find.byType(PlayTile))
+          .every((t) => t.face == PlayTile.open) ||
+          find.byType(PlayTile).evaluate().length != 4) {
         await tester.pump(const Duration(milliseconds: 16));
       }
     }
@@ -105,6 +106,7 @@ void main() {
     // The first ball a third of the way to the pet.
     await untilThrown();
     await advance(2000);
+    await settleArt();
     await settleArt();
     await _shoot(tester, '$dir/catch_flying.png');
 
@@ -122,7 +124,7 @@ void main() {
     await advance(1200);
     final right = askedMeaning();
     final wrong = tester
-        .widgetList<RubbleTile>(find.byType(RubbleTile))
+        .widgetList<PlayTile>(find.byType(PlayTile))
         .map((t) => t.label)
         .firstWhere((l) => l != right);
     await tapMeaning(wrong);

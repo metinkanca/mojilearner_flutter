@@ -3,11 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/boss_trial/angler_pieces.dart' show LetterBubble;
-import '../../components/boss_trial/arena_pieces.dart' show ShoutBubble;
-import '../../components/boss_trial/spell_pieces.dart' show SpellLine;
-import '../../components/boss_trial/trial_particles.dart' show DebrisPalette;
+import '../../components/play/play_kit.dart';
 import '../../components/play/play_props.dart';
+import '../../components/play/toy_chest_art.dart';
 import '../../providers/vocab_provider.dart';
 import '../../utils/boss_trial.dart';
 import '../../utils/boss_trial_angler.dart';
@@ -64,6 +62,8 @@ class _Geo {
     frontTop = (floorTop + 16 - frontH).roundToDouble();
     insideH = max(28.0, (petBox * 0.42 / 4).roundToDouble() * 4);
     backTop = frontTop - insideH;
+    // The tile band stops a step above the tub's rim.
+    wainscotTop = (backTop - 7 * PlayPalette.cell).roundToDouble();
     petX = (w / 2).roundToDouble();
     // Feet just behind the front of the tub: sprites stand low in their box,
     // and any lower and the bath hides all but the ears.
@@ -71,7 +71,7 @@ class _Geo {
     petTop = petFeet - petBox;
     spellTop = (frontTop + (frontH - TubFrontPainter.feetH - spellLineH) / 2 + 2)
         .roundToDouble();
-    bubblesTop = promptTop + promptH + ShoutBubble.tailH + 10;
+    bubblesTop = promptTop + promptH + PlayBubble.tailH + 10;
     bubblesBottom = backTop - 6;
   }
 
@@ -82,7 +82,8 @@ class _Geo {
 
   final double w, h;
   late final double petBox, floorTop, tubW, tubLeft, frontH, frontTop;
-  late final double insideH, backTop, petX, petFeet, petTop, spellTop;
+  late final double insideH, backTop, wainscotTop, petX, petFeet, petTop;
+  late final double spellTop;
   late final double bubblesTop, bubblesBottom;
 
   /// Where the water's surface is with [level] of it left: up the pet's body
@@ -325,7 +326,22 @@ class _BubbleBathScreenState extends PlayGameState<BubbleBathScreen> {
     return Stack(
       children: [
         Positioned.fill(
-          child: CustomPaint(painter: BathroomPainter(floorTop: geo.floorTop)),
+          child: CustomPaint(
+            painter: BathroomPainter(
+              floorTop: geo.floorTop,
+              wainscotTop: geo.wainscotTop,
+            ),
+          ),
+        ),
+        // The window over the tub, on the wall above the tile band.
+        Positioned(
+          left: geo.tubLeft + 4 * PlayPalette.cell,
+          top: geo.wainscotTop - bathWindowArtRows.length * PlayPalette.cell,
+          width: bathWindowArtRows.first.length * PlayPalette.cell,
+          height: bathWindowArtRows.length * PlayPalette.cell,
+          child: const CustomPaint(
+            painter: PixelPatternPainter(bathWindowArtRows, bathWindowArtInks),
+          ),
         ),
         Positioned(
           left: geo.tubLeft,
@@ -364,12 +380,12 @@ class _BubbleBathScreenState extends PlayGameState<BubbleBathScreen> {
             height: _Geo.spellLineH,
             child: IgnorePointer(
               child: Center(
-                child: SpellLine(
+                child: PlaySpellLine(
                   slots: wave.letters.length,
                   filled: _stage == _Stage.drained
                       ? wave.letters
                       : [for (final i in cast.placed) wave.bubbles[i]],
-                  style: pixelTarget(12, DebrisPalette.runeLight),
+                  style: pixelTarget(12, PlayPalette.ink),
                   glow: _stage == _Stage.spelled,
                   textDirection: targetDirection,
                 ),
@@ -384,7 +400,7 @@ class _BubbleBathScreenState extends PlayGameState<BubbleBathScreen> {
             if (!cast.placed.contains(i))
               Positioned.fromRect(
                 rect: _bubbleRect(geo, i),
-                child: LetterBubble(
+                child: PlayLetterBubble(
                   label: wave.bubbles[i],
                   style: pixelTarget(14, PlayGameState.ink),
                   flashing: _flashing == i && _t - _flashAt < 0.3,
@@ -396,9 +412,9 @@ class _BubbleBathScreenState extends PlayGameState<BubbleBathScreen> {
             left: 12,
             top: _Geo.promptTop,
             width: geo.w - 24,
-            height: _Geo.promptH + ShoutBubble.tailH,
+            height: _Geo.promptH + PlayBubble.tailH,
             child: IgnorePointer(
-              child: ShoutBubble(
+              child: PlayBubble(
                 word: wave.word.meaning,
                 style: pixelNative(16, PlayGameState.ink),
                 tailX: (geo.petX - 12).clamp(24.0, geo.w - 48),

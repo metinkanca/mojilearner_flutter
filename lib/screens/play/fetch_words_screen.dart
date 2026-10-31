@@ -2,11 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../components/boss_trial/arena_pieces.dart' show ShoutBubble;
-import '../../components/boss_trial/spell_pieces.dart' show SpellLine;
-import '../../components/boss_trial/trial_particles.dart' show DebrisPalette;
+import '../../components/play/play_kit.dart';
 import '../../components/play/play_props.dart';
-import '../../constants/theme.dart';
+import '../../components/play/toy_chest_art.dart';
 import '../../utils/boss_trial.dart';
 import '../../utils/play_games.dart';
 import 'play_game_state.dart';
@@ -23,6 +21,9 @@ import 'play_game_state.dart';
 ///
 /// The stock has six sentences a language until the AI writes more, so a
 /// game deals five of them without repeats.
+///
+/// The park is flat colours on the pet's cells: glass sky, leaf grass under an
+/// ink line, a tree and a bush on the line, and a few flowers lower down.
 class FetchWordsScreen extends StatefulWidget {
   const FetchWordsScreen({super.key, this.random});
 
@@ -293,20 +294,21 @@ class _FetchWordsScreenState extends PlayGameState<FetchWordsScreen> {
     return Stack(
       key: _sceneKey,
       children: [
-        Positioned.fill(child: Container(color: AppTheme.retroSky)),
+        const Positioned.fill(child: ColoredBox(color: PlayPalette.glass)),
         Positioned(
           left: 0,
           right: 0,
           top: geo.horizon,
           bottom: 0,
-          child: Container(
-            decoration: const BoxDecoration(
-              color: AppTheme.retroGrass,
+          child: const DecoratedBox(
+            decoration: BoxDecoration(
+              color: PlayPalette.leaf,
               border: Border(
-                  top: BorderSide(color: PlayGameState.ink, width: 4)),
+                  top: BorderSide(color: PlayPalette.ink, width: 3)),
             ),
           ),
         ),
+        ..._buildPark(geo),
         particleLayer(front: false),
         if (wave != null)
           Positioned(
@@ -329,10 +331,10 @@ class _FetchWordsScreenState extends PlayGameState<FetchWordsScreen> {
             height: _Geo.lineH,
             child: IgnorePointer(
               child: Center(
-                child: SpellLine(
+                child: PlaySpellLine(
                   slots: wave.sentence.tokens.length,
                   filled: shown,
-                  style: pixelTarget(11, DebrisPalette.runeLight),
+                  style: pixelTarget(11, PlayPalette.ink),
                   glow: _stage == _Stage.built && _tosses.isEmpty,
                   textDirection: targetDirection,
                 ),
@@ -355,11 +357,7 @@ class _FetchWordsScreenState extends PlayGameState<FetchWordsScreen> {
                   for (var i = 0; i < wave.stones.length; i++)
                     WordStick(
                       label: wave.stones[i],
-                      style: pixelTarget(
-                          12,
-                          _flashing == i && _time - _flashAt < 0.3
-                              ? AppTheme.retroLight
-                              : PlayGameState.ink),
+                      style: pixelTarget(12, PlayPalette.ink),
                       used: placed.contains(i) || _stage == _Stage.tooSlow,
                       flashing: _flashing == i && _time - _flashAt < 0.3,
                       onTapDown: _stage == _Stage.fetching
@@ -376,9 +374,9 @@ class _FetchWordsScreenState extends PlayGameState<FetchWordsScreen> {
             left: 12,
             top: _Geo.promptTop,
             width: geo.w - 24,
-            height: _Geo.promptH + ShoutBubble.tailH,
+            height: _Geo.promptH + PlayBubble.tailH,
             child: IgnorePointer(
-              child: ShoutBubble(
+              child: PlayBubble(
                 word: wave.sentence.meaning,
                 style: pixelNative(14, PlayGameState.ink),
                 tailX: (geo.petX - 12).clamp(24.0, geo.w - 48),
@@ -389,6 +387,50 @@ class _FetchWordsScreenState extends PlayGameState<FetchWordsScreen> {
         ...buildPopups(),
       ],
     );
+  }
+
+  /// The tree and the bush on the grass line, the flowers lower down.
+  List<Widget> _buildPark(_Geo geo) {
+    Widget art(List<String> rows, Map<String, Color> inks) => IgnorePointer(
+          child: SizedBox(
+            width: rows.first.length * PlayPalette.cell,
+            height: rows.length * PlayPalette.cell,
+            child: CustomPaint(painter: PixelPatternPainter(rows, inks)),
+          ),
+        );
+    final treeH = parkTreeArtRows.length * PlayPalette.cell;
+    final bushH = parkBushArtRows.length * PlayPalette.cell;
+    final flowerH = parkFlowerArtRows.length * PlayPalette.cell;
+    // Where the flowers grow: whole cells, below the sticks.
+    const spots = [
+      Offset(0.08, 0.90),
+      Offset(0.24, 0.80),
+      Offset(0.37, 0.95),
+      Offset(0.55, 0.84),
+      Offset(0.70, 0.93),
+      Offset(0.88, 0.82),
+    ];
+    return [
+      Positioned(
+        right: 8,
+        top: geo.horizon + 3 - treeH,
+        child: art(parkTreeArtRows, parkTreeArtInks),
+      ),
+      Positioned(
+        left: 4,
+        top: geo.horizon + 2 - bushH,
+        child: art(parkBushArtRows, parkBushArtInks),
+      ),
+      for (final spot in spots)
+        Positioned(
+          left: (geo.w * spot.dx / PlayPalette.cell).roundToDouble() *
+              PlayPalette.cell,
+          top: ((geo.h * spot.dy - flowerH) / PlayPalette.cell)
+                  .roundToDouble() *
+              PlayPalette.cell,
+          child: art(parkFlowerArtRows, parkFlowerArtInks),
+        ),
+    ];
   }
 
   /// A stick in the air, turning end over end on its way to the pet.
@@ -413,7 +455,7 @@ class _FetchWordsScreenState extends PlayGameState<FetchWordsScreen> {
               scale: 1 - 0.35 * k,
               child: WordStick(
                 label: toss.label,
-                style: pixelTarget(12, PlayGameState.ink),
+                style: pixelTarget(12, PlayPalette.ink),
                 onTapDown: null,
               ),
             ),

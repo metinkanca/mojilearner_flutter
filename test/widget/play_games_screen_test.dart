@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mojilearner_flutter/components/boss_trial/angler_pieces.dart';
 import 'package:mojilearner_flutter/components/boss_trial/arena_pieces.dart';
+import 'package:mojilearner_flutter/components/play/play_kit.dart';
 import 'package:mojilearner_flutter/components/play/play_props.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_sentences.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_words.dart';
@@ -84,8 +84,14 @@ void main() {
     }
   }
 
-  String asked(WidgetTester tester) =>
-      tester.widget<ShoutBubble>(find.byType(ShoutBubble)).word;
+  /// The word the pet is calling for: Bubble Bath's bubble is the house one,
+  /// the others still draw the boss trials'.
+  String asked(WidgetTester tester) {
+    final house = find.byType(PlayBubble);
+    return house.evaluate().isNotEmpty
+        ? tester.widget<PlayBubble>(house).word
+        : tester.widget<ShoutBubble>(find.byType(ShoutBubble)).word;
+  }
 
   void expectPaidInFull(WidgetTester tester, int rounds) {
     expect(find.text('$rounds/$rounds'), findsOneWidget);
@@ -98,14 +104,14 @@ void main() {
   // ---------------------------------------------------------- Bubble Bath --
 
   group('bubble bath', () {
-    bool spelling() => find.byType(LetterBubble).evaluate().isNotEmpty;
+    bool spelling() => find.byType(PlayLetterBubble).evaluate().isNotEmpty;
 
     Future<void> spell(WidgetTester tester) async {
       await until(tester, spelling);
       final word = stock.firstWhere((w) => w.meaning == asked(tester));
       for (final letter in word.target.split('')) {
         tester
-            .widgetList<LetterBubble>(find.byType(LetterBubble))
+            .widgetList<PlayLetterBubble>(find.byType(PlayLetterBubble))
             .firstWhere((b) => b.label == letter)
             .onTapDown!();
         await tester.pump();
@@ -129,13 +135,13 @@ void main() {
       await until(tester, spelling);
       final word = stock.firstWhere((w) => w.meaning == asked(tester));
       final stray = tester
-          .widgetList<LetterBubble>(find.byType(LetterBubble))
+          .widgetList<PlayLetterBubble>(find.byType(PlayLetterBubble))
           .firstWhere((b) => !word.target.contains(b.label));
       stray.onTapDown!();
       await tester.pump();
       for (final letter in word.target.split('')) {
         tester
-            .widgetList<LetterBubble>(find.byType(LetterBubble))
+            .widgetList<PlayLetterBubble>(find.byType(PlayLetterBubble))
             .firstWhere((b) => b.label == letter)
             .onTapDown!();
         await tester.pump();
@@ -181,7 +187,7 @@ void main() {
 
     Future<void> pounce(WidgetTester tester) async {
       await until(tester, () =>
-          find.byType(ShoutBubble).evaluate().isNotEmpty &&
+          find.byType(PlayBubble).evaluate().isNotEmpty &&
           upMoles(tester).any((m) => m.label == target(tester)));
       upMoles(tester).firstWhere((m) => m.label == target(tester)).onTapDown!();
       await tester.pump();
@@ -345,7 +351,8 @@ void main() {
       await advance(tester, 2000);
       expect(find.text('5/5'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.replay));
+      await tester.tap(find.byWidgetPredicate(
+          (w) => w is PlaySquareButton && w.icon == PlayIcon.play));
       await tester.pump();
 
       expect(find.text('5/5'), findsNothing);

@@ -6,13 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../components/boss_trial/arena_pieces.dart';
 import '../components/boss_trial/trial_particles.dart';
 import '../components/character_sprite.dart';
 import '../components/play/play_kit.dart';
+import '../components/play/toy_chest_art.dart';
 import '../components/pet_hearts.dart' show PixelHeartPainter;
-import '../components/play_toy.dart' show BeachBallPainter;
-import '../constants/theme.dart';
+import '../components/scene_backdrop.dart';
+import '../constants/scenes.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/character_provider.dart';
 import '../providers/language_provider.dart';
@@ -25,13 +25,16 @@ import '../utils/play_games.dart';
 
 /// Catch, played with the pet at home.
 ///
-/// The ball sits on its spot across the grass from the pet. The pet calls out
+/// The ball sits on its spot across the room from the pet. The pet calls out
 /// a word in the language being learned, the ball is thrown to it, and while
 /// it is in the air the player picks what the word means. Right, and the pet
 /// leaps up to meet the ball, knocks it back to its spot and drops back onto
 /// the grass. Wrong — or no answer by the time it arrives — and the pet never
 /// jumps: the ball bonks off its head and bounces away, and a new one rolls
 /// in. See [PlayCatchRules] for the numbers.
+///
+/// Played in the cozy room, drawn as the home screen draws it: the wall behind,
+/// the floor under the pet, and the answers laid out on the rug.
 ///
 /// The ball is the clock: there is no timer on screen, just how far it has
 /// still to go. That is also most of the game's personality, so the pet reacts
@@ -89,10 +92,12 @@ class _Geo {
     petTop = (horizon - petBox * 0.9).roundToDouble();
     // Whole cells of the ball's pixel grid, so it never draws half a pixel.
     ball = max(
-      BeachBallPainter.cols * 2.0,
-      (min(petBox * 0.26, 40.0) / BeachBallPainter.cols).floorToDouble() *
-          BeachBallPainter.cols,
+      ballCols * 2.0,
+      (min(petBox * 0.26, 40.0) / ballCols).floorToDouble() * ballCols,
     );
+    // Where the wall meets the floor: far enough behind the pet that the
+    // window above it clears the word bubble.
+    wallBase = (horizon - petBox * 0.72).roundToDouble();
     spot = Offset((w * 0.85).roundToDouble(), horizon - ball / 2 + 2);
     // Where a throw meets a pet that stayed put: the top of the head, a
     // little forward.
@@ -115,13 +120,16 @@ class _Geo {
         max(0.0, (fieldBottom - fieldTop) - (2 * tileH + tileGap)) / 2;
   }
 
+  /// Cells across the ball's drawing.
+  static final int ballCols = toyCatchArtRows.first.length;
+
   static const double bubbleH = 54;
   static const double bubbleLeft = 12;
   static const double tileInset = 16;
   static const double tileGap = 12;
 
   final double w, h;
-  late final double horizon, petBox, petX, petTop, ball;
+  late final double horizon, petBox, petX, petTop, ball, wallBase;
   late final Offset spot, head, headAnchor;
   late final double throwArc, returnArc, bubbleTip, bubbleWidth;
   late final double tileW, tileH, gridTop;
@@ -145,43 +153,37 @@ class _Popup {
 
 class _PlayCatchScreenState extends State<PlayCatchScreen>
     with SingleTickerProviderStateMixin {
-  static const Color _sky = AppTheme.retroSky;
-  static const Color _grass = AppTheme.retroGrass;
-  static const Color _ink = AppTheme.retroDark;
-  static const Color _gold = AppTheme.retroAccent;
+  static const Color _ink = PlayPalette.ink;
+  static const Color _gold = PlayPalette.gold;
 
-  /// Block faces once a throw is answered: the right meaning lit in full
-  /// green, a wrong pick in full red, the rest stepping well back. Pale tints
-  /// read as nothing at arm's length, so these are the flat colours the rest
-  /// of the game is drawn in, with the label flipped to stay legible on them.
-  static const Color _openFace = AppTheme.retroLight;
-  static const Color _rightFace = AppTheme.retroGrass;
-  static const Color _wrongFace = AppTheme.retroPrimary;
-  static const Color _dimFace = Color(0xFF9E9A92);
+  /// Tile faces once a throw is answered: the right meaning lit in leaf green,
+  /// a wrong pick in coral, the rest stepping back to stone. Flat colours,
+  /// since pale tints read as nothing at arm's length.
+  static const Color _openFace = PlayTile.open;
+  static const Color _rightFace = PlayPalette.leaf;
+  static const Color _wrongFace = PlayPalette.coral;
+  static const Color _dimFace = PlayPalette.stone;
 
-  /// One toy colour per answer block.
-  static final List<SlabPalette> _lanes = [
-    SlabPalette.tinted(const Color(0xFFD95763)),
-    SlabPalette.tinted(const Color(0xFFDF7126)),
-    SlabPalette.tinted(const Color(0xFF76428A)),
-    SlabPalette.tinted(const Color(0xFF37946E)),
-  ];
+  /// The room's picture is 852 by 1846, its floor starting 1053 down.
+  static const double _roomW = 852;
+  static const double _roomH = 1846;
+  static const double _roomFloor = 1053;
 
   static const List<Color> _hitSparks = [
-    AppTheme.retroAccent,
-    Color(0xFFFFF3B0),
+    PlayPalette.gold,
+    PlayPalette.wall,
   ];
 
   /// Hearts for a ball knocked back, rising off the pet.
   static const int _heartCount = 3;
   static const double _heartSeconds = 0.95;
   static const List<Color> _bonkSparks = [
-    AppTheme.retroAccent,
-    AppTheme.retroLight,
+    PlayPalette.gold,
+    PlayPalette.wall,
   ];
   static const List<Color> _dust = [
-    Color(0xFF4B8F1D),
-    Color(0xFFC9C3B1),
+    PlayPalette.wood,
+    PlayPalette.wall,
   ];
 
   static const double _firstGap = 0.9;
@@ -717,19 +719,7 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
     return ClipRect(
       child: Stack(
         children: [
-          Positioned.fill(child: Container(color: _sky)),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: geo.horizon,
-            bottom: 0,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: _grass,
-                border: Border(top: BorderSide(color: _ink, width: 4)),
-              ),
-            ),
-          ),
+          _buildRoom(geo),
           if (_stage != _Stage.over) _buildBallShadow(geo),
           Positioned.fill(
             child: IgnorePointer(
@@ -742,11 +732,9 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
             for (var lane = 0; lane < wave.lanes.length; lane++)
               Positioned.fromRect(
                 rect: geo.tileRect(lane),
-                child: RubbleTile(
+                child: PlayTile(
                   label: wave.lanes[lane].meaning,
-                  style: _pixel(11, _labelFor(wave, lane),
-                      localeCode: _nativeCode),
-                  palette: _lanes[lane],
+                  style: _pixel(11, _ink, localeCode: _nativeCode),
                   face: _faceFor(wave, lane),
                   onTapDown: () => _choose(lane),
                 ),
@@ -782,14 +770,37 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
     return _dimFace;
   }
 
-  /// The label's ink, which has to change with the face under it: dark on the
-  /// open and green ones, light on the red, and faded on the ones that no
-  /// longer matter.
-  Color _labelFor(TrialWave wave, int lane) {
-    final face = _faceFor(wave, lane);
-    if (face == _wrongFace) return AppTheme.retroLight;
-    if (face == _dimFace) return const Color(0xFF55524D);
-    return _ink;
+  /// The cozy room behind the game, as the home screen draws it: its wall
+  /// down to a baseboard a step behind the pet, the floor under the rest. The
+  /// flat wall and floor colours are what shows until the picture is ready.
+  Widget _buildRoom(_Geo geo) {
+    final pictureH = geo.w * _roomH / _roomW;
+    return Stack(
+      children: [
+        const Positioned.fill(child: ColoredBox(color: PlayPalette.wall)),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: geo.wallBase,
+          bottom: 0,
+          child: const ColoredBox(color: PlayPalette.wood),
+        ),
+        Positioned(
+          left: 0,
+          width: geo.w,
+          top: geo.wallBase - geo.w * _roomFloor / _roomW,
+          height: pictureH,
+          child: const IgnorePointer(
+            child: SceneBackdrop(
+              scene: kDefaultScene,
+              time: SceneTime.day,
+              fit: BoxFit.fill,
+              rasterize: true,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildPet(_Geo geo) {
@@ -911,11 +922,11 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
         .toDouble();
     return Positioned(
       left: _Geo.bubbleLeft,
-      top: geo.bubbleTip - _Geo.bubbleH - ShoutBubble.tailH,
+      top: geo.bubbleTip - _Geo.bubbleH - PlayBubble.tailH,
       width: width,
-      height: _Geo.bubbleH + ShoutBubble.tailH,
+      height: _Geo.bubbleH + PlayBubble.tailH,
       child: IgnorePointer(
-        child: ShoutBubble(
+        child: PlayBubble(
           word: prompt.target,
           style: _pixel(18, _ink, localeCode: _targetCode),
           tailX: tailX,
@@ -949,7 +960,7 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
           child: Transform.rotate(
             angle: turns * pi / 2,
             child: const CustomPaint(
-              painter: BeachBallPainter(withShadow: false),
+              painter: PixelPatternPainter(toyCatchArtRows, toyCatchArtInks),
             ),
           ),
         ),
@@ -988,7 +999,7 @@ class _PlayCatchScreenState extends State<PlayCatchScreen>
           style: AppFonts.pressStart2p(
             fontSize: 12,
             color: p.color,
-            shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2))],
+            shadows: const [Shadow(color: _ink, offset: Offset(2, 2))],
           ),
         ),
       ),

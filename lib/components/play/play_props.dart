@@ -1,295 +1,181 @@
 /// The props of the toy chest's games, drawn on whole pixels like the pets:
-/// the chest itself and the toys in it, the bath, the moles and their
-/// molehills, the pond and its lily pads, and the word sticks.
+/// the chest beside the pet, the bath, the moles and their molehills, the pond
+/// and its lily pads, and the word sticks. (The toys in the open chest are
+/// `toy_chest_art.dart`.)
 ///
-/// All placeholder art in the app's own palette, the way the beach ball is —
-/// no sheet from the owner yet. Small fixed things are [PixelPatternPainter]
-/// grids; things that stretch to fit a word are painted on a 4px cell.
+/// Drawn in the cozy room's flat colours ([PlayPalette]) on 3pt cells. Small
+/// fixed things are [PixelPatternPainter] grids made in
+/// `art_src/pxl/toychest.px.js`; things that stretch to fit a word, or move,
+/// are painted on the same cell, and every one is drawn from a cached image
+/// (see [PlayImageCache]).
 library;
-
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../constants/theme.dart';
+import '../home_button_art.dart';
 import 'play_kit.dart';
+import 'toy_chest_art.dart';
 
-const double _u = 4;
-const Color _outline = AppTheme.retroDark;
-
-/// How a pad, a stick or a sign is showing once a round is answered.
+/// How a pad or a sign is showing once a round is answered.
 enum PropState { plain, right, wrong, dim }
-
-/// A word's face in [state]: lit gold for the right answer, red for a wrong
-/// pick, faded for the rest — flat colours, since pale tints read as nothing
-/// at arm's length.
-Color propFace(PropState state, Color plain) => switch (state) {
-      PropState.plain => plain,
-      PropState.right => AppTheme.retroAccent,
-      PropState.wrong => AppTheme.retroPrimary,
-      PropState.dim => const Color(0xFFB9B4AA),
-    };
-
-/// The ink a word on [state]'s face is written in.
-Color propInk(PropState state) => switch (state) {
-      PropState.wrong => AppTheme.retroLight,
-      PropState.dim => const Color(0xFF55524D),
-      _ => _outline,
-    };
 
 // ---- the toy chest ----------------------------------------------------------
 
-const Map<String, Color> _chestInks = {
-  'X': _outline,
-  'l': AppTheme.wardrobeShelf,
-  'L': AppTheme.wardrobeWoodLight,
-  'W': AppTheme.wardrobeWood,
-  'D': AppTheme.wardrobeWoodDark,
-  'y': AppTheme.wardrobeBrass,
-  'r': AppTheme.retroPrimary,
-  'h': Color(0xFFF1A7AE),
-  'o': AppTheme.retroLight,
-  'b': Color(0xFF5B6EE1),
-  's': Color(0x40000000),
-};
-
-/// The toy chest beside the pet, the beach ball resting on its lid.
-const List<String> toyChestRows = [
-  '.........XXX..',
-  '........XrrrX.',
-  '.......XrhrrrX',
-  '.......XoooooX',
-  '.......XbbbbbX',
-  '........XbbbX.',
-  '.XXXXXXXXXXXX.',
-  'XllllllllllllX',
-  'XLLLLLLLLLLLLX',
-  'XDDDDDyyDDDDDX',
-  'XXXXXXyyXXXXXX',
-  'XWWWWWyyWWWWWX',
-  'XWWWWWWWWWWWWX',
-  'XWWWWWWWWWWWWX',
-  'XDDDDDDDDDDDDX',
-  'XXXXXXXXXXXXXX',
-  '.ssssssssssss.',
-];
+/// The toy chest beside the pet, a beach ball standing at its side.
+/// Generated from `art_src/pxl/buttons.px.js` (see `home_button_art.dart`).
+const List<String> toyChestRows = toyChestArtRows;
 
 const PixelPatternPainter toyChestPainter =
-    PixelPatternPainter(toyChestRows, _chestInks);
-
-// ---- the toys in it ---------------------------------------------------------
-
-const Map<String, Color> _toyInks = {
-  'X': _outline,
-  'y': AppTheme.retroAccent,
-  'd': Color(0xFFD9A020),
-  'o': AppTheme.retroOrange,
-  'm': Color(0xFF7A5A48),
-  'n': Color(0xFF5A4034),
-  'p': Color(0xFFF1A7AE),
-  'g': Color(0xFF6ABE30),
-  'G': Color(0xFF3F7F22),
-  'e': Color(0xFF2E5E1A),
-  'w': AppTheme.retroLight,
-  'k': Color(0xFF8F563B),
-  'K': Color(0xFF663931),
-  't': Color(0xFFD9A066),
-  'D': Color(0xFF4A3426),
-};
-
-/// Bubble Bath's toy: a rubber duck.
-const List<String> rubberDuckRows = [
-  '......XXX...',
-  '.....XyyyX..',
-  '.....XyXyXX.',
-  '.....XyyyXoX',
-  '.X...XyyyXX.',
-  'XyXXXXyyyyX.',
-  'XyyyyyyyyyX.',
-  'XyyyyyyyydX.',
-  '.XddddddddX.',
-  '..XXXXXXXX..',
-];
-
-/// Pounce's toy: a mole peeking out of its hill.
-const List<String> moleToyRows = [
-  '....XXXX....',
-  '...XmmmmX...',
-  '..XmXmmXmX..',
-  '..XmmppmmX..',
-  '..XmmmmmmX..',
-  '.XXnnnnnnXX.',
-  'XnnnDDDDnnnX',
-  'XnnnnnnnnnnX',
-  '.XXXXXXXXXX.',
-];
-
-/// Pond Hop's toy: a lily pad with a flower.
-const List<String> lilyPadToyRows = [
-  '......XX....',
-  '.....XpwX...',
-  '..XXXXpXXX..',
-  '.XggGXXgggX.',
-  'XggggXgggggX',
-  'XgggGXggGggX',
-  'XggGggggggGX',
-  '.XgggGgggeX.',
-  '..XXeeeeXX..',
-  '....XXXX....',
-];
-
-/// Fetch the Words' toy: a stick.
-const List<String> stickToyRows = [
-  '.........XX.',
-  '........XtX.',
-  '.....XX.XtX.',
-  '....XtkXtkX.',
-  '...XtkkkkX..',
-  '..XtkkKX....',
-  '.XtkkKX.....',
-  'XtkkKX......',
-  'XkKKX.......',
-  '.XXX........',
-];
-
-PixelPatternPainter toyPainter(List<String> rows) =>
-    PixelPatternPainter(rows, _toyInks);
+    PixelPatternPainter(toyChestRows, toyChestArtInks);
 
 // ---- the bath ---------------------------------------------------------------
 
-/// The bathroom: tiles on the wall down to [floorTop], a checked floor under
-/// it.
+const double _c = PlayPalette.cell;
+
+/// The bathroom: a cream wall with a band of glass-blue tile up from the floor
+/// to [wainscotTop], capped in ink, and a wood floor under a baseboard line.
 class BathroomPainter extends CustomPainter {
-  const BathroomPainter({required this.floorTop});
+  const BathroomPainter({required this.floorTop, required this.wainscotTop});
 
   final double floorTop;
-
-  static const Color tile = Color(0xFFA9D8E8);
-  static const Color tileLight = Color(0xFFC8E8F2);
-  static const Color grout = Color(0xFF7FB3C6);
-  static const Color floorA = Color(0xFFE8E2D6);
-  static const Color floorB = Color(0xFFC9BFAE);
+  final double wainscotTop;
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size size) => PlayImageCache.paint(
+      canvas, size, ('bathroom', floorTop, wainscotTop), _record);
+
+  void _record(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
+    final w = size.width;
     canvas.drawRect(
-        Rect.fromLTWH(0, 0, size.width, floorTop), paint..color = tile);
-    const t = 8 * _u;
-    for (var y = 0.0; y < floorTop; y += t) {
-      for (var x = 0.0; x < size.width; x += t) {
-        // A glint in each tile's corner, grout round it.
-        canvas.drawRect(Rect.fromLTWH(x + _u, y + _u, 2 * _u, _u),
-            paint..color = tileLight);
-        canvas.drawRect(Rect.fromLTWH(x, y, t, _u / 2), paint..color = grout);
-        canvas.drawRect(Rect.fromLTWH(x, y, _u / 2, t), paint);
+        Rect.fromLTWH(0, 0, w, floorTop), paint..color = PlayPalette.wall);
+    if (wainscotTop < floorTop) {
+      canvas.drawRect(Rect.fromLTWH(0, wainscotTop, w, floorTop - wainscotTop),
+          paint..color = PlayPalette.glass);
+      // The seams between the tiles, in the wall's cream.
+      paint.color = PlayPalette.wall;
+      const t = 8 * _c;
+      for (var x = 0.0; x < w; x += t) {
+        canvas.drawRect(
+            Rect.fromLTWH(x, wainscotTop, _c, floorTop - wainscotTop), paint);
       }
+      for (var y = wainscotTop + t; y < floorTop; y += t) {
+        canvas.drawRect(Rect.fromLTWH(0, y, w, _c), paint);
+      }
+      canvas.drawRect(Rect.fromLTWH(0, wainscotTop, w, _c),
+          paint..color = PlayPalette.ink);
     }
     canvas.drawRect(
-        Rect.fromLTWH(0, floorTop, size.width, size.height - floorTop),
-        paint..color = floorA);
-    const f = 6 * _u;
-    var row = 0;
-    for (var y = floorTop; y < size.height; y += f, row++) {
-      for (var x = (row.isEven ? 0.0 : f); x < size.width; x += 2 * f) {
-        canvas.drawRect(Rect.fromLTWH(x, y, f, f), paint..color = floorB);
-      }
-    }
-    canvas.drawRect(Rect.fromLTWH(0, floorTop - _u, size.width, _u),
-        paint..color = _outline);
+        Rect.fromLTWH(0, floorTop, w, size.height - floorTop),
+        paint..color = PlayPalette.wood);
+    canvas.drawRect(Rect.fromLTWH(0, floorTop - _c, w, _c),
+        paint..color = PlayPalette.ink);
   }
 
   @override
-  bool shouldRepaint(covariant BathroomPainter old) => old.floorTop != floorTop;
+  bool shouldRepaint(covariant BathroomPainter old) =>
+      old.floorTop != floorTop || old.wainscotTop != wainscotTop;
 }
 
-/// The tub's inside, seen over its front: the far wall, darker the deeper.
+/// The tub's inside, seen over its front: a cream rim along the top and the
+/// far wall in stone.
 class TubBackPainter extends CustomPainter {
   const TubBackPainter();
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size size) =>
+      PlayImageCache.paint(canvas, size, 'tub back', _record);
+
+  void _record(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
     final w = size.width, h = size.height;
-    // The rim: outline, white enamel, then the shadowed inside.
+    // The outline, its top corners stepped in.
     canvas.drawRect(
-        Rect.fromLTWH(2 * _u, 0, w - 4 * _u, h), paint..color = _outline);
-    canvas.drawRect(Rect.fromLTWH(0, 2 * _u, w, h - 2 * _u), paint);
-    canvas.drawRect(Rect.fromLTWH(3 * _u, _u, w - 6 * _u, h - _u),
-        paint..color = TubFrontPainter.enamel);
-    canvas.drawRect(Rect.fromLTWH(_u, 3 * _u, w - 2 * _u, h - 3 * _u), paint);
-    canvas.drawRect(Rect.fromLTWH(3 * _u, 3 * _u, w - 6 * _u, h - 3 * _u),
-        paint..color = const Color(0xFFB8C6D0));
+        Rect.fromLTWH(2 * _c, 0, w - 4 * _c, h), paint..color = PlayPalette.ink);
+    canvas.drawRect(Rect.fromLTWH(0, 2 * _c, w, h - 2 * _c), paint);
+    // The rim: two rows of cream with ink under them, then the inside wall.
+    canvas.drawRect(Rect.fromLTWH(3 * _c, _c, w - 6 * _c, _c),
+        paint..color = PlayPalette.wall);
+    canvas.drawRect(Rect.fromLTWH(_c, 2 * _c, w - 2 * _c, _c), paint);
+    canvas.drawRect(Rect.fromLTWH(_c, 3 * _c, w - 2 * _c, _c),
+        paint..color = PlayPalette.ink);
+    canvas.drawRect(Rect.fromLTWH(_c, 4 * _c, w - 2 * _c, h - 4 * _c),
+        paint..color = PlayPalette.stone);
   }
 
   @override
   bool shouldRepaint(covariant TubBackPainter old) => false;
 }
 
-/// The tub's front: white enamel on gold claw feet. Words are spelled on it.
+/// The tub's front: coral under a cream rim, on gold claw feet. Words are
+/// spelled on it.
 class TubFrontPainter extends CustomPainter {
   const TubFrontPainter();
 
-  static const Color enamel = Color(0xFFF4F1EC);
-  static const Color shade = Color(0xFFC9C6C0);
-  static const Color feet = Color(0xFFE3B65D);
-
   /// How tall the feet stand under it.
-  static const double feetH = 3 * _u;
+  static const double feetH = 4 * _c;
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size size) =>
+      PlayImageCache.paint(canvas, size, 'tub front', _record);
+
+  void _record(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
     final w = size.width, h = size.height - feetH;
     // Feet first, under the belly.
-    for (final x in [4 * _u, w - 9 * _u]) {
-      canvas.drawRect(Rect.fromLTWH(x, h - _u, 5 * _u, feetH + _u),
-          paint..color = _outline);
-      canvas.drawRect(
-          Rect.fromLTWH(x + _u, h, 3 * _u, feetH - _u), paint..color = feet);
+    for (final x in [4 * _c, w - 9 * _c]) {
+      canvas.drawRect(Rect.fromLTWH(x, h - _c, 5 * _c, feetH + _c),
+          paint..color = PlayPalette.ink);
+      canvas.drawRect(Rect.fromLTWH(x + _c, h, 3 * _c, feetH - _c),
+          paint..color = PlayPalette.gold);
     }
     // The body, its bottom corners rounded off in steps.
     canvas.drawRect(
-        Rect.fromLTWH(0, 0, w, h - 2 * _u), paint..color = _outline);
-    canvas.drawRect(Rect.fromLTWH(_u, h - 2 * _u, w - 2 * _u, _u), paint);
-    canvas.drawRect(Rect.fromLTWH(2 * _u, h - _u, w - 4 * _u, _u), paint);
-    canvas.drawRect(
-        Rect.fromLTWH(_u, _u, w - 2 * _u, h - 3 * _u), paint..color = enamel);
-    canvas.drawRect(Rect.fromLTWH(2 * _u, h - 2 * _u, w - 4 * _u, _u), paint);
-    // The rim's roll along the top, and the belly's shadow along the bottom.
-    canvas.drawRect(
-        Rect.fromLTWH(_u, 2 * _u, w - 2 * _u, _u), paint..color = shade);
-    canvas.drawRect(
-        Rect.fromLTWH(3 * _u, h - 4 * _u, w - 6 * _u, 2 * _u), paint);
+        Rect.fromLTWH(0, 0, w, h - 2 * _c), paint..color = PlayPalette.ink);
+    canvas.drawRect(Rect.fromLTWH(_c, h - 2 * _c, w - 2 * _c, _c), paint);
+    canvas.drawRect(Rect.fromLTWH(2 * _c, h - _c, w - 4 * _c, _c), paint);
+    canvas.drawRect(Rect.fromLTWH(_c, _c, w - 2 * _c, h - 3 * _c),
+        paint..color = PlayPalette.coral);
+    canvas.drawRect(Rect.fromLTWH(2 * _c, h - 2 * _c, w - 4 * _c, _c), paint);
+    // The rim's roll along the top, and the seam under it.
+    canvas.drawRect(Rect.fromLTWH(_c, _c, w - 2 * _c, 2 * _c),
+        paint..color = PlayPalette.wall);
+    canvas.drawRect(Rect.fromLTWH(_c, 3 * _c, w - 2 * _c, _c),
+        paint..color = PlayPalette.ink);
   }
 
   @override
   bool shouldRepaint(covariant TubFrontPainter old) => false;
 }
 
-/// The bathwater: a band of water with a lighter line along its surface.
+/// The bathwater: a flat band of glass-blue with a line of cream along its
+/// surface, stepping along as time goes.
 class BathWaterPainter extends CustomPainter {
   const BathWaterPainter(this.time);
 
   final double time;
 
-  static const Color water = Color(0xCC5FA8E0);
-  static const Color surface = Color(0xFFBFE3FA);
-
   /// Bursts of bubble bath on the surface, and on the letters.
-  static const List<Color> foam = [surface, Color(0xFFFFFFFF), water];
+  static const List<Color> foam = [
+    PlayPalette.wall,
+    PlayPalette.glass,
+    PlayPalette.wall,
+  ];
 
   @override
   void paint(Canvas canvas, Size size) {
     if (size.height <= 0) return;
     final paint = Paint()..isAntiAlias = false;
-    canvas.drawRect(Offset.zero & size, paint..color = water);
+    // The waves step in from past either end: none may show outside the tub.
+    canvas.clipRect(Offset.zero & size);
+    canvas.drawRect(Offset.zero & size, paint..color = PlayPalette.glass);
+    paint.color = PlayPalette.wall;
     // A wavy surface line, stepping by whole cells.
-    final shift = ((time * 6) / _u).floor() * _u;
-    for (var x = -2 * _u; x < size.width; x += 6 * _u) {
-      final at = (x + shift) % (size.width + 6 * _u) - 3 * _u;
-      canvas.drawRect(Rect.fromLTWH(at, 0, 4 * _u, _u), paint..color = surface);
-      canvas.drawRect(Rect.fromLTWH(at + 4 * _u, _u, 2 * _u, _u), paint);
+    final shift = ((time * 6) / _c).floor() * _c;
+    for (var x = -2 * _c; x < size.width; x += 6 * _c) {
+      final at = (x + shift) % (size.width + 6 * _c) - 3 * _c;
+      canvas.drawRect(Rect.fromLTWH(at, 0, 4 * _c, _c), paint);
+      canvas.drawRect(Rect.fromLTWH(at + 4 * _c, _c, 2 * _c, _c), paint);
     }
   }
 
@@ -299,101 +185,55 @@ class BathWaterPainter extends CustomPainter {
 
 // ---- the garden -------------------------------------------------------------
 
-/// A molehill: a mound of earth round the hole a mole comes out of. Drawn in
-/// two halves, so the mole can rise between them: the [back] of the mound
-/// with the dark hole, and its front lip, which covers the mole's feet.
-class MolehillPainter extends CustomPainter {
-  const MolehillPainter({required this.back});
+/// What a pounce kicks up.
+const List<Color> moleDirt = [
+  PlayPalette.wood,
+  PlayPalette.wall,
+  PlayPalette.leaf,
+];
+
+/// A molehill, in two halves so a mole can rise between them: the [back] of
+/// the mound, a wood ring round the dark hole, and its front lip, which covers
+/// the mole's feet. The lip hangs from the line the moles come out of; the
+/// back stands [backAbove] over it.
+class MoundPiece extends StatelessWidget {
+  const MoundPiece({super.key, required this.back});
 
   final bool back;
 
-  static const Color earth = Color(0xFF8F5A3A);
-  static const Color earthLight = Color(0xFFB07A52);
-  static const Color hole = Color(0xFF1C130E);
+  static final double w = moundBackArtRows.first.length * _c;
+  static final double backH = moundBackArtRows.length * _c;
+  static final double frontH = moundFrontArtRows.length * _c;
 
-  /// What a pounce kicks up.
-  static const List<Color> dirt = [earth, earthLight, Color(0xFF4B8F1D)];
+  /// How far above the line the back's top stands: its hole is where the
+  /// mole comes out of.
+  static const double backAbove = 5 * _c;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..isAntiAlias = false;
-    final cols = (size.width / _u).floor();
-    final rows = (size.height / _u).floor();
-    if (cols < 8 || rows < 3) return;
-    final x0 = ((size.width - cols * _u) / 2).roundToDouble();
-
-    void run(int y, int from, int to, Color color) {
-      if (to <= from) return;
-      canvas.drawRect(
-        Rect.fromLTWH(x0 + from * _u, y * _u, (to - from) * _u, _u),
-        paint..color = color,
-      );
-    }
-
-    if (back) {
-      // The far rim of the mound, stepping in at the top, and the hole sunk
-      // in it: the mole comes up out of the dark.
-      const insets = [5, 3, 2, 1];
-      for (var y = 0; y < rows; y++) {
-        final inset = insets[min(y, insets.length - 1)];
-        run(y, inset, cols - inset, _outline);
-        if (y == 0) continue;
-        run(y, inset + 1, cols - inset - 1, y == 1 ? earthLight : earth);
-        // The hole: an oval of dark, narrower at its far edge.
-        if (y < 2) continue;
-        final edge = inset + 2 + (y == 2 ? 1 : 0);
-        run(y, edge, cols - edge, hole);
-      }
-      return;
-    }
-    // The near side: a dome of earth over the mole's feet, its rim narrow
-    // round the hole and spreading out to the grass.
-    const insets = [3, 2, 1, 0];
-    for (var y = 0; y < rows; y++) {
-      final inset = insets[min(y, insets.length - 1)];
-      run(y, inset, cols - inset, _outline);
-      if (y == 0 || y == rows - 1) continue;
-      run(y, inset + 1, cols - inset - 1, y == 1 ? earthLight : earth);
-    }
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: w,
+      height: back ? backH : frontH,
+      child: CustomPaint(
+        painter: back
+            ? const PixelPatternPainter(moundBackArtRows, moundBackArtInks)
+            : const PixelPatternPainter(moundFrontArtRows, moundFrontArtInks),
+      ),
+    );
   }
-
-  @override
-  bool shouldRepaint(covariant MolehillPainter old) => old.back != back;
 }
 
-const Map<String, Color> _moleInks = {
-  'X': _outline,
-  'm': Color(0xFF6E5446),
-  'M': Color(0xFF4F3B31),
-  'p': Color(0xFFF1A7AE),
-  'w': AppTheme.retroLight,
-};
+/// The face of a mole's sign once the round is answered: coral for a wrong
+/// mole, leaf green lit for the right one.
+Color moleFace(PropState state) => switch (state) {
+      PropState.plain => PlayPalette.wall,
+      PropState.right => PlayPalette.leaf,
+      PropState.wrong => PlayPalette.coral,
+      PropState.dim => PlayPalette.stone,
+    };
 
-/// A mole's head and paws, peeking over the sign it holds up.
-const List<String> _moleRows = [
-  '...XXXXXX...',
-  '..XmmmmmmX..',
-  '.XmmmmmmmmX.',
-  '.XmXmmmmXmX.',
-  '.XmmmppmmmX.',
-  '.XMmmppmmMX.',
-  'XppXMMMMXppX',
-  'XppX....XppX',
-];
-
-/// The same mole, eyes screwed shut: bonked.
-const List<String> _moleBonkedRows = [
-  '...XXXXXX...',
-  '..XmmmmmmX..',
-  '.XmmmmmmmmX.',
-  '.XXXmmmmXXX.',
-  '.XmmmppmmmX.',
-  '.XMmmppmmMX.',
-  'XppXMMMMXppX',
-  'XppX....XppX',
-];
-
-/// A mole holding up a sign with a word on it.
+/// A mole holding up a sign with a word on it: its egg-shaped head behind the
+/// sign, its claws over the sign's top edge.
 class MoleSign extends StatelessWidget {
   const MoleSign({
     super.key,
@@ -410,11 +250,23 @@ class MoleSign extends StatelessWidget {
   final PropState state;
   final bool bonked;
 
-  /// The mole's head over the sign, as a share of the sign's height.
-  static const double headShare = 0.62;
+  static final double headW = moleHeadArtRows.first.length * _c;
+  static final double headH = moleHeadArtRows.length * _c;
+  static final double clawsW = moleClawsArtRows.first.length * _c;
+  static final double clawsH = moleClawsArtRows.length * _c;
+
+  /// How far the sign covers the foot of the head.
+  static const double overlap = 2 * _c;
+  static const double signH = 12 * _c;
+
+  /// The mole and its sign together.
+  static final double popH = headH + signH - overlap;
 
   @override
   Widget build(BuildContext context) {
+    const claws = CustomPaint(
+      painter: PixelPatternPainter(moleClawsArtRows, moleClawsArtInks),
+    );
     return Semantics(
       button: onTapDown != null,
       label: label,
@@ -422,19 +274,24 @@ class MoleSign extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTapDown: onTapDown == null ? null : (_) => onTapDown!(),
         child: LayoutBuilder(builder: (context, box) {
-          final signH = box.maxHeight / (1 + headShare);
-          final headH = box.maxHeight - signH;
-          final headW = headH * 12 / 8;
+          final centre = box.maxWidth / 2;
+          final signTop = popH - signH;
+          // Over the sign's top corners, either side of the head.
+          final clawTop = signTop - clawsH + 2 * _c;
           return Stack(
+            clipBehavior: Clip.none,
             children: [
               Positioned(
-                left: (box.maxWidth - headW) / 2,
+                left: (centre - headW / 2).roundToDouble(),
                 top: 0,
                 width: headW,
-                height: headH + _u,
+                height: headH,
                 child: CustomPaint(
-                  painter: PixelPatternPainter(
-                      bonked ? _moleBonkedRows : _moleRows, _moleInks),
+                  painter: bonked
+                      ? const PixelPatternPainter(
+                          moleHeadBonkArtRows, moleHeadBonkArtInks)
+                      : const PixelPatternPainter(
+                          moleHeadArtRows, moleHeadArtInks),
                 ),
               ),
               Positioned(
@@ -442,20 +299,30 @@ class MoleSign extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 height: signH,
-                child: CustomPaint(
-                  painter: WoodPanelPainter(
-                      face: propFace(state, const Color(0xFFF3E2C3))),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    child: Center(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(label, maxLines: 1, style: style),
-                      ),
+                child: PixelPanel(
+                  color: moleFace(state),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Center(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(label, maxLines: 1, style: style),
                     ),
                   ),
                 ),
+              ),
+              Positioned(
+                left: (centre - headW / 2 - clawsW + 2 * _c).roundToDouble(),
+                top: clawTop,
+                width: clawsW,
+                height: clawsH,
+                child: claws,
+              ),
+              Positioned(
+                left: (centre + headW / 2 - 2 * _c).roundToDouble(),
+                top: clawTop,
+                width: clawsW,
+                height: clawsH,
+                child: claws,
               ),
             ],
           );
@@ -465,59 +332,73 @@ class MoleSign extends StatelessWidget {
   }
 }
 
-/// A board of wood with a face for a word: the moles' signs.
-class WoodPanelPainter extends CustomPainter {
-  const WoodPanelPainter({required this.face});
-
-  final Color face;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..isAntiAlias = false;
-    final w = size.width, h = size.height;
-    canvas.drawRect(
-        Rect.fromLTWH(_u, 0, w - 2 * _u, h), paint..color = _outline);
-    canvas.drawRect(Rect.fromLTWH(0, _u, w, h - 2 * _u), paint);
-    canvas.drawRect(Rect.fromLTWH(_u, _u, w - 2 * _u, h - 2 * _u),
-        paint..color = AppTheme.wardrobeWood);
-    canvas.drawRect(Rect.fromLTWH(2 * _u, 2 * _u, w - 4 * _u, h - 4 * _u),
-        paint..color = face);
-  }
-
-  @override
-  bool shouldRepaint(covariant WoodPanelPainter old) => old.face != face;
-}
-
 // ---- the pond ---------------------------------------------------------------
 
-/// The pond, its ripples drifting with [time].
+/// The pond, its ripples drifting with [time]: flat glass-blue water, with
+/// rows of cream ripples that each drift their own way.
+///
+/// The ripples are two images, one for the rows that drift right and one for
+/// those that drift left, each a strip that repeats every [period]; a frame
+/// slides each along and draws it. They used to be a rectangle apiece, some
+/// three hundred a frame.
 class PondPainter extends CustomPainter {
   const PondPainter(this.time);
 
   final double time;
 
-  static const Color water = Color(0xFF3B7DD8);
-  static const Color ripple = Color(0xFF5A9BF0);
-  static const Color glint = Color(0xFFA9D4FF);
+  static const Color water = PlayPalette.glass;
+  static const Color ripple = PlayPalette.wall;
+
+  /// The lit line along the tide's edge.
+  static const Color glint = PlayPalette.wall;
 
   /// A splash.
-  static const List<Color> splash = [ripple, glint, Color(0xFFFFFFFF)];
+  static const List<Color> splash = [
+    PlayPalette.glass,
+    PlayPalette.wall,
+    PlayPalette.wall,
+  ];
+
+  /// How far apart a row's ripples are: the strips repeat at this.
+  static const double period = 28 * _c;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
+    canvas.clipRect(Offset.zero & size);
     canvas.drawRect(Offset.zero & size, paint..color = water);
-    // Ripples in rows, each row drifting its own way, in whole cells.
+    final ratio = PlayImageCache.pixelRatio;
+    paint.filterQuality = FilterQuality.none;
+    for (var parity = 0; parity < 2; parity++) {
+      final image = PlayImageCache.image(
+        ('ripples', parity),
+        Size(size.width + period, size.height),
+        (c, s) => _record(c, s, parity),
+      );
+      // Rows drift opposite ways, in whole cells.
+      final shift =
+          ((time * 8 * (parity == 0 ? 1 : -1)) / _c).floor() * _c;
+      final x = (shift % period) - period;
+      canvas.drawImageRect(
+        image,
+        Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+        Rect.fromLTWH(x, 0, image.width / ratio, image.height / ratio),
+        paint,
+      );
+    }
+  }
+
+  void _record(Canvas canvas, Size size, int parity) {
+    final paint = Paint()
+      ..isAntiAlias = false
+      ..color = ripple;
     var row = 0;
-    for (var y = 3 * _u; y < size.height - _u; y += 7 * _u, row++) {
-      final dir = row.isEven ? 1 : -1;
-      final shift = ((time * 8 * dir) / _u).floor() * _u;
-      for (var x = (row * 37 % 80) - 80.0; x < size.width; x += 80) {
-        final at = (x + shift) % (size.width + 80) - 40;
-        canvas.drawRect(
-            Rect.fromLTWH(at, y, 5 * _u, _u), paint..color = ripple);
-        canvas.drawRect(
-            Rect.fromLTWH(at + _u, y, _u, _u), paint..color = glint);
+    for (var y = 3 * _c; y < size.height - _c; y += 7 * _c, row++) {
+      if (row % 2 != parity) continue;
+      // Each row's own offset, so the ripples do not line up in columns.
+      final offset = (row * 37 % 28) * _c;
+      for (var x = offset - period; x < size.width; x += period) {
+        canvas.drawRect(Rect.fromLTWH(x, y, 5 * _c, _c), paint);
       }
     }
   }
@@ -527,28 +408,30 @@ class PondPainter extends CustomPainter {
 }
 
 /// A bank of grass at the edge of the pond, its edge facing [down] the
-/// screen (the far bank) or up it (the near one).
+/// screen (the far bank) or up it (the near one): a strip of soil, then a
+/// line of ink where it meets the water.
 class BankPainter extends CustomPainter {
   const BankPainter({required this.down});
 
   final bool down;
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size size) => PlayImageCache.paint(
+      canvas, size, ('bank', down), _record);
+
+  void _record(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
     final w = size.width, h = size.height;
-    canvas.drawRect(Offset.zero & size, paint..color = AppTheme.retroGrass);
-    final edge = down ? h - 2 * _u : 0.0;
-    canvas.drawRect(Rect.fromLTWH(0, edge, w, 2 * _u),
-        paint..color = const Color(0xFF8F5A3A));
-    canvas.drawRect(Rect.fromLTWH(0, down ? h - _u : 2 * _u, w, _u),
-        paint..color = _outline);
-    // Tufts.
-    for (var x = 6 * _u; x < w; x += 17 * _u) {
-      final y = down ? 3 * _u : h - 5 * _u;
-      canvas.drawRect(Rect.fromLTWH(x, y, _u, 2 * _u),
-          paint..color = AppTheme.retroGrassDark);
-      canvas.drawRect(Rect.fromLTWH(x + 2 * _u, y + _u, _u, _u), paint);
+    canvas.drawRect(Offset.zero & size, paint..color = PlayPalette.leaf);
+    canvas.drawRect(Rect.fromLTWH(0, down ? h - 3 * _c : _c, w, 2 * _c),
+        paint..color = PlayPalette.wood);
+    canvas.drawRect(Rect.fromLTWH(0, down ? h - _c : 0, w, _c),
+        paint..color = PlayPalette.ink);
+    // Tufts of grass, in ink.
+    for (var x = 6 * _c; x < w; x += 17 * _c) {
+      final y = down ? 3 * _c : h - 5 * _c;
+      canvas.drawRect(Rect.fromLTWH(x, y, _c, 2 * _c), paint);
+      canvas.drawRect(Rect.fromLTWH(x + 2 * _c, y + _c, _c, _c), paint);
     }
   }
 
@@ -575,11 +458,20 @@ class LilyPad extends StatelessWidget {
   final PropState state;
   final double sunk;
 
-  static const Color pad = Color(0xFF8FD14F);
+  /// The pad's size: whole cells, so it is drawn crisp.
+  static final double w = lilyPadArtRows.first.length * _c;
+  static final double h = lilyPadArtRows.length * _c;
 
   @override
   Widget build(BuildContext context) {
     final words = label;
+    final painter = switch (state) {
+      PropState.right =>
+        const PixelPatternPainter(lilyPadRightArtRows, lilyPadRightArtInks),
+      PropState.wrong =>
+        const PixelPatternPainter(lilyPadWrongArtRows, lilyPadWrongArtInks),
+      _ => const PixelPatternPainter(lilyPadArtRows, lilyPadArtInks),
+    };
     return Semantics(
       button: onTapDown != null,
       label: words,
@@ -590,13 +482,14 @@ class LilyPad extends StatelessWidget {
           child: LayoutBuilder(builder: (context, box) {
             final down = ((sunk * 6).ceil() / 6).clamp(0.0, 1.0);
             return Transform.translate(
-              offset: Offset(0, (down * box.maxHeight / _u).round() * _u),
+              offset: Offset(0, (down * box.maxHeight / _c).round() * _c),
               child: CustomPaint(
-                painter: _LilyPadPainter(face: propFace(state, pad)),
+                painter: painter,
                 child: words == null
                     ? const SizedBox.expand()
                     : Padding(
-                        padding: const EdgeInsets.fromLTRB(14, 8, 14, 6),
+                        // Inside the pad, clear of its edges.
+                        padding: const EdgeInsets.fromLTRB(9, 6, 9, 6),
                         child: Center(
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
@@ -611,69 +504,6 @@ class LilyPad extends StatelessWidget {
       ),
     );
   }
-}
-
-class _LilyPadPainter extends CustomPainter {
-  const _LilyPadPainter({required this.face});
-
-  final Color face;
-
-  static const Color rim = Color(0xFF2E6B2A);
-  static const Color vein = Color(0xFF5FA83A);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..isAntiAlias = false;
-    final cols = (size.width / _u).floor();
-    final rows = (size.height / _u).floor();
-    if (cols < 6 || rows < 4) return;
-    final x0 = ((size.width - cols * _u) / 2).roundToDouble();
-    final a = cols / 2, b = rows / 2;
-    // The notch: a wedge cut into the top edge, right of centre.
-    final notchFrom = (a + 1).floor(), notchTo = (a + 1 + cols / 8).ceil();
-
-    (int, int) span(double inset, int y) {
-      final ry = b - inset;
-      final dy = y + 0.5 - b;
-      if (ry <= 0 || dy.abs() > ry) return (0, 0);
-      final half = (a - inset) * sqrt(1 - (dy / ry) * (dy / ry));
-      return ((a - half).round(), (a + half).round());
-    }
-
-    void run(int y, int from, int to, Color color) {
-      if (to <= from) return;
-      canvas.drawRect(
-        Rect.fromLTWH(x0 + from * _u, y * _u, (to - from) * _u, _u),
-        paint..color = color,
-      );
-    }
-
-    final notchRows = (rows / 3).ceil();
-    for (var y = 0; y < rows; y++) {
-      final (o0, o1) = span(0, y);
-      final (i0, i1) = span(1, y);
-      if (y >= notchRows || o1 <= notchFrom) {
-        run(y, o0, o1, rim);
-        run(y, i0, i1, face);
-        continue;
-      }
-      // Either side of the notch, each closed off with rim; the notch
-      // itself is left unpainted, so the water shows through it.
-      run(y, o0, min(o1, notchFrom), rim);
-      run(y, i0, min(i1, notchFrom - 1), face);
-      run(y, max(o0, notchTo), o1, rim);
-      run(y, max(i0, notchTo + 1), i1, face);
-      if (y == notchRows - 1) run(y, notchFrom, notchTo, rim);
-    }
-    // Two veins running out from the notch, low down where words seldom go.
-    if (face == LilyPad.pad) {
-      run(rows - 3, (a - cols / 4).round(), (a - cols / 4).round() + 2, vein);
-      run(rows - 3, (a + cols / 5).round(), (a + cols / 5).round() + 2, vein);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _LilyPadPainter old) => old.face != face;
 }
 
 // ---- the park ---------------------------------------------------------------
@@ -695,11 +525,11 @@ class WordStick extends StatelessWidget {
   /// Given where the tap landed, so the stick can be thrown from there.
   final void Function(Offset global)? onTapDown;
 
-  /// Already fetched: a flattened patch of grass is left where it lay, so
-  /// the other sticks never shuffle about under the player's finger.
+  /// Already fetched: its place on the grass is left empty, so the other
+  /// sticks never shuffle about under the player's finger.
   final bool used;
 
-  /// Just refused: its face flashes red.
+  /// Just refused: its face flashes coral.
   final bool flashing;
 
   static const double height = 44;
@@ -723,74 +553,58 @@ class WordStick extends StatelessWidget {
     return Semantics(
       button: !used,
       label: label,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(6, 12, 6, 6),
-              color: Colors.black.withValues(alpha: used ? 0.18 : 0),
-            ),
+      child: Visibility(
+        visible: !used,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapDown: used || onTapDown == null
+              ? null
+              : (d) => onTapDown!(d.globalPosition),
+          child: CustomPaint(
+            painter: StickPainter(flashing: flashing),
+            child: stick,
           ),
-          Visibility(
-            visible: !used,
-            maintainSize: true,
-            maintainAnimation: true,
-            maintainState: true,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTapDown: used || onTapDown == null
-                  ? null
-                  : (d) => onTapDown!(d.globalPosition),
-              child: CustomPaint(
-                painter: StickPainter(flashing: flashing),
-                child: stick,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-/// A stick: a pale-wood face for its word between knobbly ends, a twig off
-/// its top.
+/// A stick: a wood face for its word between two ringed ends, a twig off its
+/// top, all fenced in ink. Drawn on whole cells, from an image of each size.
 class StickPainter extends CustomPainter {
   const StickPainter({this.flashing = false});
 
   final bool flashing;
 
-  static const Color wood = Color(0xFFD9A066);
-  static const Color bark = Color(0xFF8F563B);
-  static const Color barkDark = Color(0xFF663931);
-
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(Canvas canvas, Size size) => PlayImageCache.paint(
+      canvas, size, ('stick', flashing), _record);
+
+  void _record(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
     final w = size.width, h = size.height;
-    final top = 3 * _u;
-    final face = flashing ? AppTheme.retroPrimary : wood;
+    final top = 3 * _c;
     // The twig, off the top right.
-    canvas.drawRect(Rect.fromLTWH(w - 7 * _u, 0, 3 * _u, top + _u),
-        paint..color = _outline);
+    canvas.drawRect(Rect.fromLTWH(w - 8 * _c, 0, 3 * _c, top + _c),
+        paint..color = PlayPalette.ink);
+    canvas.drawRect(Rect.fromLTWH(w - 7 * _c, _c, _c, top),
+        paint..color = PlayPalette.wood);
+    // The stick: outline with stepped ends, wood inside.
+    canvas.drawRect(Rect.fromLTWH(_c, top, w - 2 * _c, h - top),
+        paint..color = PlayPalette.ink);
+    canvas.drawRect(Rect.fromLTWH(0, top + _c, w, h - top - 2 * _c), paint);
+    canvas.drawRect(Rect.fromLTWH(_c, top + _c, w - 2 * _c, h - top - 2 * _c),
+        paint..color = flashing ? PlayPalette.coral : PlayPalette.wood);
+    // Rings on the ends, which set the face for the word apart from them.
+    paint.color = PlayPalette.ink;
     canvas.drawRect(
-        Rect.fromLTWH(w - 6 * _u, _u, _u, top), paint..color = bark);
-    // The stick: outline with stepped ends, bark round a pale face.
+        Rect.fromLTWH(3 * _c, top + 2 * _c, _c, h - top - 4 * _c), paint);
     canvas.drawRect(
-        Rect.fromLTWH(_u, top, w - 2 * _u, h - top), paint..color = _outline);
-    canvas.drawRect(Rect.fromLTWH(0, top + _u, w, h - top - 2 * _u), paint);
-    canvas.drawRect(Rect.fromLTWH(_u, top + _u, w - 2 * _u, h - top - 2 * _u),
-        paint..color = bark);
-    canvas.drawRect(
-        Rect.fromLTWH(2 * _u, top + _u, w - 4 * _u, h - top - 3 * _u),
-        paint..color = face);
-    canvas.drawRect(Rect.fromLTWH(2 * _u, h - 2 * _u, w - 4 * _u, _u),
-        paint..color = barkDark);
-    // Rings on the ends.
-    canvas.drawRect(Rect.fromLTWH(_u, top + 2 * _u, _u, h - top - 4 * _u),
-        paint..color = barkDark);
-    canvas.drawRect(
-        Rect.fromLTWH(w - 2 * _u, top + 2 * _u, _u, h - top - 4 * _u), paint);
+        Rect.fromLTWH(w - 4 * _c, top + 2 * _c, _c, h - top - 4 * _c), paint);
   }
 
   @override
@@ -836,43 +650,35 @@ class PatienceHearts extends StatelessWidget {
     );
   }
 
-  /// 'A' the left half's red and 'L' its shine, 'B' the right half's red
-  /// and 'b' its shade, so a heart can be half spent.
+  /// 'A' the left half's fill and 'B' the right's, so a heart can be half
+  /// spent.
   static const List<String> _heartRows = [
-    '.XX.XX.',
-    'XLAXBBX',
-    'XAAABbX',
-    'XAAABbX',
-    '.XAABX.',
-    '..XAX..',
-    '...X...',
+    '..XX.XX..',
+    '.XAAXBBX.',
+    'XAAAABBBX',
+    'XAAAABBBX',
+    '.XAAABBX.',
+    '..XAABX..',
+    '...XAX...',
+    '....X....',
   ];
 
-  static const Color _red = AppTheme.retroPrimary;
-  static const Color _spent = Color(0xFF4E4A4E);
-
   static const Map<String, Color> _fullHeart = {
-    'X': _outline,
-    'L': Color(0xFFF1A7AE),
-    'A': _red,
-    'B': _red,
-    'b': Color(0xFFAC3232),
+    'X': PlayPalette.ink,
+    'A': PlayPalette.coral,
+    'B': PlayPalette.coral,
   };
 
   /// Left half full, right half spent.
   static const Map<String, Color> _halfHeart = {
-    'X': _outline,
-    'L': Color(0xFFF1A7AE),
-    'A': _red,
-    'B': _spent,
-    'b': _spent,
+    'X': PlayPalette.ink,
+    'A': PlayPalette.coral,
+    'B': PlayPalette.stone,
   };
 
   static const Map<String, Color> _emptyHeart = {
-    'X': _outline,
-    'L': Color(0xFF6E6A6E),
-    'A': _spent,
-    'B': _spent,
-    'b': _spent,
+    'X': PlayPalette.ink,
+    'A': PlayPalette.stone,
+    'B': PlayPalette.stone,
   };
 }

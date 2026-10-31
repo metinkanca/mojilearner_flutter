@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/boss_trial/arena_pieces.dart' show ShoutBubble;
 import '../../components/character_sprite.dart';
+import '../../components/play/play_kit.dart';
 import '../../components/play/play_props.dart';
 import '../../providers/vocab_provider.dart';
 import '../../utils/boss_trial.dart';
@@ -63,14 +63,14 @@ class _Geo {
     pondBottom = h - nearBank;
     pitch = (pondBottom - pondTop) / (PondHopRules.rowsPerPond + 0.4);
     laneW = (w - 16) / BossTrialRules.wordsPerWave;
-    padW = ((laneW - 8) / 4).floorToDouble() * 4;
-    padH = (min(44.0, pitch * 0.44) / 4).roundToDouble() * 4;
+    padW = LilyPad.w;
+    padH = LilyPad.h;
     petBox = min(min(pitch * 0.8, laneW * 0.95), 110.0).roundToDouble();
     frogBox = min(farBank * 0.85, 72.0).roundToDouble();
     frogX = (w - frogBox / 2 - 10).roundToDouble();
     frogFeet = farBank - 6;
     bubbleW = (w - frogBox - 34).roundToDouble();
-    bubbleH = min(54.0, farBank - 14 - ShoutBubble.tailH);
+    bubbleH = min(54.0, farBank - 14 - PlayBubble.tailH);
   }
 
   static const double bubbleTop = 6;
@@ -532,9 +532,9 @@ class _PondHopScreenState extends PlayGameState<PondHopScreen> {
             left: 10,
             top: _Geo.bubbleTop,
             width: geo.bubbleW,
-            height: geo.bubbleH + ShoutBubble.tailH,
+            height: geo.bubbleH + PlayBubble.tailH,
             child: IgnorePointer(
-              child: ShoutBubble(
+              child: PlayBubble(
                 word: line.prompt.target,
                 style: pixelTarget(16, PlayGameState.ink),
                 tailX: geo.bubbleW - 20,
@@ -577,9 +577,7 @@ class _PondHopScreenState extends PlayGameState<PondHopScreen> {
               rect: geo.padRect(r, lane),
               child: LilyPad(
                 label: current ? row.stones[s].meaning : null,
-                style: state == PropState.wrong
-                    ? pixelNative(10, propInk(state))
-                    : labelStyle,
+                style: labelStyle,
                 state: state,
                 sunk: sunk,
                 onTapDown: current && _stage == _Stage.choosing

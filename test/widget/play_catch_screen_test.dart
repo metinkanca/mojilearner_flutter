@@ -3,10 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mojilearner_flutter/components/boss_trial/arena_pieces.dart';
-import 'package:mojilearner_flutter/components/play_toy.dart';
+import 'package:mojilearner_flutter/components/play/play_kit.dart';
+import 'package:mojilearner_flutter/components/play/toy_chest_art.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_words.dart';
-import 'package:mojilearner_flutter/constants/theme.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
 import 'package:mojilearner_flutter/screens/play_catch_screen.dart';
@@ -65,10 +64,10 @@ void main() {
     }
   }
 
-  List<RubbleTile> blocks(WidgetTester tester) =>
-      tester.widgetList<RubbleTile>(find.byType(RubbleTile)).toList();
+  List<PlayTile> blocks(WidgetTester tester) =>
+      tester.widgetList<PlayTile>(find.byType(PlayTile)).toList();
 
-  RubbleTile block(WidgetTester tester, String meaning) =>
+  PlayTile block(WidgetTester tester, String meaning) =>
       blocks(tester).firstWhere((b) => b.label == meaning);
 
   /// Pumps until a ball is in the air: four answers up, none answered yet.
@@ -76,7 +75,7 @@ void main() {
     for (var i = 0; i < 300; i++) {
       final up = blocks(tester);
       if (up.length == BossTrialRules.wordsPerWave &&
-          up.every((b) => b.face == AppTheme.retroLight)) {
+          up.every((b) => b.face == PlayTile.open)) {
         return;
       }
       await tester.pump(const Duration(milliseconds: 50));
@@ -86,14 +85,14 @@ void main() {
 
   /// The word the pet is calling for, read off its bubble.
   TrialWord asked(WidgetTester tester) {
-    final word = tester.widget<ShoutBubble>(find.byType(ShoutBubble)).word;
+    final word = tester.widget<PlayBubble>(find.byType(PlayBubble)).word;
     return stock.firstWhere((w) => w.target == word);
   }
 
   Future<void> tapBlock(WidgetTester tester, String meaning) async {
     await tester.tap(find.ancestor(
       of: find.text(meaning),
-      matching: find.byType(RubbleTile),
+      matching: find.byType(PlayTile),
     ));
     await tester.pump();
   }
@@ -114,7 +113,10 @@ void main() {
   }
 
   Rect ball(WidgetTester tester) => tester.getRect(find.byWidgetPredicate(
-      (w) => w is CustomPaint && w.painter is BeachBallPainter));
+      (w) =>
+          w is CustomPaint &&
+          w.painter is PixelPatternPainter &&
+          (w.painter! as PixelPatternPainter).rows == toyCatchArtRows));
 
   testWidgets('catching every throw finishes a clean game', (tester) async {
     await pumpGame(tester);
@@ -156,7 +158,7 @@ void main() {
 
     // The right block lit, the wrong pick marked apart from it.
     final right = block(tester, word.meaning).face;
-    expect(right, isNot(AppTheme.retroLight));
+    expect(right, isNot(PlayTile.open));
     expect(block(tester, wrong).face, isNot(right));
 
     // Into the pet, then up and back over it: left of where it was thrown
@@ -185,7 +187,7 @@ void main() {
     // The right block lit; nothing marked as a wrong pick.
     final faces = blocks(tester).map((b) => b.face).toList();
     final right = block(tester, word.meaning).face;
-    expect(right, isNot(AppTheme.retroLight));
+    expect(right, isNot(PlayTile.open));
     expect(faces.where((f) => f == right), hasLength(1));
     expect(faces.toSet(), hasLength(2));
 

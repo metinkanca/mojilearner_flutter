@@ -7,10 +7,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:mojilearner_flutter/components/boss_trial/angler_pieces.dart';
 import 'package:mojilearner_flutter/components/boss_trial/arena_pieces.dart';
+import 'package:mojilearner_flutter/components/play/play_kit.dart';
 import 'package:mojilearner_flutter/components/play/play_props.dart';
 import 'package:mojilearner_flutter/components/play/toy_chest.dart';
+import 'package:mojilearner_flutter/constants/app_runtime_config.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_sentences.dart';
 import 'package:mojilearner_flutter/constants/boss_trial_words.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
@@ -75,6 +76,9 @@ void main() {
         final loader = FontLoader('PressStart2P')
           ..addFont(rootBundle.load('assets/fonts/PressStart2P-Regular.ttf'));
         await loader.load();
+        // The pictures the games are drawn on, read once outside the fake
+        // clock.
+        await rootBundle.loadString('assets/svgs/mushroom_glade.svg');
       });
 
   Future<void> advance(WidgetTester tester, int ms) async {
@@ -85,7 +89,7 @@ void main() {
 
   Future<void> settleArt(WidgetTester tester) async {
     await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 200)));
+        () => Future<void>.delayed(const Duration(milliseconds: 600)));
     await tester.pump();
   }
 
@@ -97,6 +101,10 @@ void main() {
   }
 
   String? bubbleWord(WidgetTester tester) {
+    final house = find.byType(PlayBubble);
+    if (house.evaluate().isNotEmpty) {
+      return tester.widget<PlayBubble>(house.first).word;
+    }
     final found = find.byType(ShoutBubble);
     if (found.evaluate().isEmpty) return null;
     return tester.widget<ShoutBubble>(found.first).word;
@@ -105,35 +113,45 @@ void main() {
   const sizes = {'tall': kHandsetSurface, 'se': Size(375, 667)};
 
   for (final MapEntry(key: size, value: surface) in sizes.entries) {
-    testWidgets('draw the toy chest ($size)', (tester) async {
-      await loadFont(tester);
-      await pumpApp(
-        tester,
-        Scaffold(
-          backgroundColor: const Color(0xFF6ABE30),
-          body: Stack(
-            children: [
-              Positioned(
-                left: 40,
-                top: 40,
-                child: ToyChest(semanticLabel: 'Toy chest', onTap: () {}, size: 84),
-              ),
-              Positioned(
-                left: 200,
-                top: 60,
-                child: ToyChest(semanticLabel: 'Toy chest', onTap: () {}, size: 42),
-              ),
-              const Positioned.fill(top: 160, child: ToyChestPicker()),
-            ],
+    for (final shut in [false, true]) {
+      testWidgets('draw the toy chest ($size${shut ? ', shut' : ''})',
+          (tester) async {
+        AppRuntimeConfig.debugStockContent = !shut;
+        addTearDown(() => AppRuntimeConfig.debugStockContent = null);
+        await loadFont(tester);
+        await pumpApp(
+          tester,
+          Scaffold(
+            backgroundColor: const Color(0xFFF2E3C6),
+            body: Stack(
+              children: [
+                Positioned(
+                  left: 40,
+                  top: 40,
+                  child: ToyChest(
+                      semanticLabel: 'Toy chest', onTap: () {}, size: 84),
+                ),
+                Positioned(
+                  left: 200,
+                  top: 60,
+                  child: ToyChest(
+                      semanticLabel: 'Toy chest', onTap: () {}, size: 42),
+                ),
+                const Positioned.fill(top: 100, child: ToyChestPicker()),
+              ],
+            ),
           ),
-        ),
-        settingsProvider: settings,
-        surfaceSize: surface,
-      );
-      await tester.pump();
-      await _shoot(tester, '$dir/chest_$size.png');
-      await tester.pumpWidget(const SizedBox());
-    }, skip: dir.isEmpty);
+          languageProvider: language,
+          settingsProvider: settings,
+          vocabProvider: VocabProvider(),
+          surfaceSize: surface,
+        );
+        await tester.pump();
+        await _shoot(
+            tester, '$dir/chest_$size${shut ? '_shut' : ''}.png');
+        await tester.pumpWidget(const SizedBox());
+      }, skip: dir.isEmpty);
+    }
 
     testWidgets('draw bubble bath ($size)', (tester) async {
       await loadFont(tester);
@@ -154,13 +172,13 @@ void main() {
 
       Future<void> tapLetter(String letter) async {
         final bubble = tester
-            .widgetList<LetterBubble>(find.byType(LetterBubble))
+            .widgetList<PlayLetterBubble>(find.byType(PlayLetterBubble))
             .firstWhere((b) => b.label == letter);
         bubble.onTapDown!();
         await tester.pump();
       }
 
-      await until(tester, () => find.byType(LetterBubble).evaluate().isNotEmpty);
+      await until(tester, () => find.byType(PlayLetterBubble).evaluate().isNotEmpty);
       await advance(tester, 1500);
       final first = letters();
       await tapLetter(first[0]);
@@ -176,17 +194,17 @@ void main() {
       await _shoot(tester, '$dir/bath_spelled_$size.png');
 
       // The next one left to drain.
-      await until(tester, () => find.byType(LetterBubble).evaluate().isNotEmpty);
+      await until(tester, () => find.byType(PlayLetterBubble).evaluate().isNotEmpty);
       await advance(tester, 6000);
       await _shoot(tester, '$dir/bath_draining_$size.png');
-      await until(tester, () => find.byType(LetterBubble).evaluate().isEmpty,
+      await until(tester, () => find.byType(PlayLetterBubble).evaluate().isEmpty,
           maxMs: 12000);
       await advance(tester, 300);
       await _shoot(tester, '$dir/bath_drained_$size.png');
 
       for (var i = 2; i < BubbleBathRules.wordsPerGame; i++) {
         await until(
-            tester, () => find.byType(LetterBubble).evaluate().isNotEmpty,
+            tester, () => find.byType(PlayLetterBubble).evaluate().isNotEmpty,
             maxMs: 12000);
         for (final l in letters()) {
           await tapLetter(l);

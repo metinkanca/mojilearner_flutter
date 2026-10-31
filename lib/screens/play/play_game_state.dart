@@ -10,7 +10,6 @@ import '../../components/boss_trial/trial_particles.dart';
 import '../../components/character_sprite.dart';
 import '../../components/pet_hearts.dart' show PixelHeartPainter;
 import '../../components/play/play_kit.dart';
-import '../../constants/theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/character_provider.dart';
 import '../../providers/language_provider.dart';
@@ -31,19 +30,19 @@ import '../../utils/play_games.dart';
 /// listed at the end.
 abstract class PlayGameState<T extends StatefulWidget> extends State<T>
     with SingleTickerProviderStateMixin {
-  static const Color ink = AppTheme.retroDark;
-  static const Color gold = AppTheme.retroAccent;
+  static const Color ink = PlayPalette.ink;
+  static const Color gold = PlayPalette.gold;
 
   /// The heart colours a right answer sparkles in.
   static const List<Color> cheerSparks = [
-    AppTheme.retroAccent,
-    Color(0xFFFFF3B0),
+    PlayPalette.gold,
+    PlayPalette.wall,
   ];
 
   /// What a wrong answer knocks loose.
   static const List<Color> bonkSparks = [
-    AppTheme.retroAccent,
-    AppTheme.retroLight,
+    PlayPalette.gold,
+    PlayPalette.wall,
   ];
 
   static const double heartSeconds = 0.95;
