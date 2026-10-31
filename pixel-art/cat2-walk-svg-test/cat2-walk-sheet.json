@@ -1,0 +1,199 @@
+{
+ "frames": [
+  {
+   "filename": "frame_0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_1",
+   "frame": {
+    "x": 120,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_2",
+   "frame": {
+    "x": 240,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_3",
+   "frame": {
+    "x": 360,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_4",
+   "frame": {
+    "x": 480,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_5",
+   "frame": {
+    "x": 600,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_6",
+   "frame": {
+    "x": 720,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  },
+  {
+   "filename": "frame_7",
+   "frame": {
+    "x": 840,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 120,
+    "h": 92
+   },
+   "sourceSize": {
+    "w": 120,
+    "h": 92
+   },
+   "duration": 110
+  }
+ ],
+ "meta": {
+  "app": "pixelstudio",
+  "version": "1.0.0",
+  "image": "cat2-walk-sheet.png",
+  "format": "RGBA8888",
+  "size": {
+   "w": 960,
+   "h": 92
+  },
+  "scale": "1",
+  "frameTags": [
+   {
+    "name": "walk",
+    "from": 0,
+    "to": 7,
+    "direction": "forward"
+   }
+  ]
+ }
+}

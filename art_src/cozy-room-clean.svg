@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="852" height="1846" viewBox="0 0 852 1846" version="1.1" shape-rendering="crispEdges">
+  <title>Cozy Room — selected room with the second pet bed</title>
+  <desc>Editable pixel-art vectors traced exactly from the selected 852 by 1846 PNG. Named layers separate the wall, floor, window, curtains, shelf, books, plant, pet bed and rug. Six solid colours. All vertices use the original integer pixel grid; collinear vertices are removed. No embedded images, external assets, fonts, gradients or effects. Visible source pixels are preserved. Outlines cleaned by art_src/clean_cozy_room.py. THIS IS THE FILE TO EDIT: save it, then run `python art_src/build_cozy_room.py` to rebuild the app copy (assets/svgs/cozy_room.svg).</desc>
+  <g id="wall" inkscape:label="01 · Wall" inkscape:groupmode="layer">
+    <rect id="plain-cream-wall" width="852" height="1846" fill="#f2e3c6" />
+  </g>
+  <g id="floor" inkscape:label="02 · Wooden floor" inkscape:groupmode="layer">
+    <rect id="floor-base" x="0" y="1054" width="852" height="792" fill="#c58c56" />
+    
+    <path d="M0 1048h530v6h-530z M821 1048h31v6h-31z M0 1103h593v4h-511v7h-1v7h-1v6h-1v13h-3v12h-1v6h-2v11h-1v5h780v5h-63v5h1v12h1v7h1v11h1v1h2v13h1v12h1v6h1v7h54v5h-180v1h-13v-6h135v-6h-1v-7h-1v-12h-1v-8h-1v-5h-1v-5h-1v-8h-1v-7h-1v-10h-1v-6h-785v-4h34v-1h34v-5h1v-7h1v-4h1v-4h1v-14h3v-12h1v-3h1v-9h1v-9h-78z M808 1103h44v4h-44z M0 1253h198v6h-14v-1h-184z M32 1343h50v5h-82v-4h32z M771 1343h78v1h3v4h-81z M1 1445h133v5h-85v-1h-49v-3h1z M720 1445h132v5h-35v8h1v19h1v15h1v1h1v8h1v23h1v7h1v12h1v12h1v3h26v5h-852v-5h821v-20h-1v-14h-2v-25h-1v-6h-1v-1h-1v-12h-1v-16h-1v-14h-93z M668 1470h2v3h-2z" id="visible-floor-outline" fill="#14120e" fill-rule="evenodd" />
+    <path d="M0 1054h530v5h7v24h43v-24h62v2h-32v7h-5v5h-6v11h-4v1h-2v18h-593z M821 1054h31v49h-44v-8h-1v-12h7v-24h7z M759 1059h13v2h-13z M0 1107h78v9h-1v9h-1v3h-1v12h-3v14h-1v4h-1v4h-1v7h-1v5h-34v1h-34z M82 1107h511v23h2v1h3v3h1v7h6v5h6v6h13v6h19v1h1v5h111v-1h1v-5h20v-5h1v-1h12v-6h6v-5h6v-7h1v-3h5v-12h1v-12h44v67h-780v-5h1v-11h2v-6h1v-12h3v-13h1v-6h1v-7h1z M0 1179h785v6h1v10h1v7h1v8h1v5h1v5h1v8h1v12h1v7h1v6h-142v-1h-14v-6h-20v-6h-27v-6h-32v-6h-37v-1h-1v-6h-186v1h-1v6h-37v6h-31v2h-1v4h-26v6h-20v6h-15v1h-204z M789 1179h63v74h-54v-7h-1v-6h-1v-12h-1v-13h-2v-1h-1v-11h-1v-7h-1v-12h-1z M0 1258h184v5h-1v2h-12v6h-13v6h-1v1h-10v5h-7v1h-1v4h-8v4h-4v3h-3v1h-3v3h-1v1h-5v4h-1v1h-5v1h-1v5h-5v1h-1v5h-1v5h-6v8h-6v1h-1v12h-56v1h-32z M672 1258h180v86h-3v-1h-84v-5h-1v-8h-6v-9h-6v-4h-1v-4h-1v-2h-5v-6h-6v-1h-1v-5h-5v-1h-5v-4h-1v-2h-5v-4h-7v-4h-2v-1h-5v-1h-1v-4h-9v-3h-1v-4h-12v-5h-1v-1h-12z M0 1348h82v42h6v13h2v1h5v9h6v6h4v1h1v6h6v1h1v5h7v6h7v1h1v6h-127v1h-1z M771 1348h81v97h-128v-6h1v-1h8v-5h1v-1h6v-6h6v-6h5v-1h1v-6h6v-9h1v-1h5v-11h1v-2h6z M0 1449h49v1h91v1h7v6h12v6h12v1h1v5h14v6h1v1h15v3h1v2h15v6h21v6h27v6h31v6h37v1h1v6h186v-7h39v-6h31v-6h27v-1h1v-5h2v-1h17v-5h14v-1h1v-5h13v-1h1v-1h3v-3h1v-1h10v-5h1v-1h11v-6h13v-6h8v-1h99v14h1v16h1v12h1v1h1v6h1v25h2v14h1v20h-821z M817 1450h35v108h-26v-3h-1v-12h-1v-12h-1v-7h-1v-23h-1v-8h-1v-1h-1v-15h-1v-19h-1z M0 1563h852v283h-852z" id="visible-floor-honey-wood" fill="#c58c56" fill-rule="evenodd" />
+  </g>
+  <g id="window" inkscape:label="03 · Window frame and glass" inkscape:groupmode="layer">
+    <g id="wooden-window-frame" inkscape:label="Wooden window frame">
+      <path d="M38 547h443v6h1v1h6v31h-5v-4h-7v-1h-1v-1h6v-19h-5v-6h-433v6h-6v18h1v1h6v1h-1v6h-5v-1h-7v-31h6v-1h1z M140 579h239v1h-1v5h-237v1h-1z M140 604h110v142h-146v-4h1v-1h1v-1h139v-130h-1v-1h-104z M269 604h109v5h-104v131h1v1h34v-1h103v6h-143z M378 622h1v13h-1z M475 649h1v55h-1z M385 652h1v2h-1z M43 722h1v31h-1z M417 765h1v8h-1v-2h-143v123h123v7h-1v-2h-127v-133h148z M101 766h149v133h-129v-5h123v-1h1v-121h-1v-1h-143z M417 787h1v1h-1z M43 791h1v19h-1z M403 866h1v21h-1z M121 922h275v7h-110v1h-165z" id="window-frame-outline" fill="#14120e" fill-rule="evenodd" />
+      <path d="M43 554h433v6h5v19h-443v-1h-1v-18h6z M141 585h237v19h-109v142h152v7h3v5h-1v2h-5v5h-1v1h-148v133h127v23h-275v-23h129v-133h-149v-6h-5v-8h1v-5h1v-1h152v-142h-110v-18h1z" id="window-frame-honey-wood" fill="#c58c56" fill-rule="evenodd" />
+      
+      
+    </g>
+    <g id="window-glass" inkscape:label="Four sky-blue glass panes">
+      <path d="M140 609h104v1h1v130h-141v-6h5v-10h2v-1h1v-2h3v-13h4v-1h1v-1h1v-9h1v-3h1v-2h1v-1h1v-7h1v-7h6v-17h1v-18h6v-7h1z" id="glass-pane-1" fill="#a8dcef" fill-rule="evenodd" />
+      <path d="M274 609h104v26h1v7h6v12h1v22h1v1h5v10h1v4h3v3h1v13h6v14h1v1h5v12h5v6h-105v1h-34v-1h-1z" id="glass-pane-2" fill="#a8dcef" fill-rule="evenodd" />
+      <path d="M101 771h143v1h1v121h-1v1h-123v-6h-6v-30h-1v-1h-6v-29h-2v-1h-5v-24h-6v-13h5v-17h1z" id="glass-pane-3" fill="#a8dcef" fill-rule="evenodd" />
+      <path d="M274 771h143v17h1v2h5v13h-5v1h-1v23h-6v1h-1v29h-6v1h-1v30h-6v6h-123z" id="glass-pane-4" fill="#a8dcef" fill-rule="evenodd" />
+    </g>
+  </g>
+  <g id="curtains" inkscape:label="04 · Curtains" inkscape:groupmode="layer">
+    <g id="left-curtain" inkscape:label="Left curtain">
+      <path d="M44 579h96v56h-1v7h-6v18h-1v17h-6v7h-1v7h-1v1h-1v2h-1v3h-1v9h-1v1h-1v1h-4v13h-3v2h-1v1h-2v10h-5v6h2v1h-1v1h-1v4h-6v1h-1v5h-1v8h5v13h-1v17h-5v13h6v24h5v1h2v29h6v1h1v30h6v56h-20v6h-51v-6h-8v-103h1v-31h1v-19h-2v-1h-4v-37h6v-31h-1v-142h1z M94 585v94h-1v4h-5v32h-6v17h-1v1h-3v13h-1v1h-2v6h16v-6h3v-1h1v-5h2v-1h1v-4h1v-2h4v-7h1v-5h4v-2h1v-17h6v-8h1v-1h3v-3h1v-18h6v-1h1v-34h6v-9h1v-44z M50 585v1h-1v130h1v37h21v-1h1v-5h2v-13h1v-1h2v-20h5v-1h1v-33h2v-1h4v-28h1v-64h-1v-1z M44 759v25h51v-22h-2v-1h-1v-2z M73 791v18h1v1h1v17h1v1h2v29h3v87h17v-6h17v-44h-6v-36h-7v-25h-2v-1h-4v-4h-1v-19h-1v-1h-1v-3h-4v-13h-1v-1z M50 790v26h-1v32h-1v90h8v6h21v-81h-1v-5h-1v-1h-1v-3h-1v-26h-1v-1h-1v-12h-1v-6h-1v-18h-1v-1z" id="left-curtain-outline" fill="#14120e" fill-rule="evenodd" />
+      
+      <path d="M50 585h39v1h1v64h-1v28h-4v1h-2v33h-1v1h-5v20h-2v1h-1v13h-2v5h-1v1h-21v-37h-1v-130h1z M94 585h40v44h-1v9h-6v34h-1v1h-6v18h-1v3h-3v1h-1v8h-6v17h-1v2h-4v5h-1v7h-4v2h-1v4h-1v1h-2v5h-1v1h-3v6h-16v-6h2v-1h1v-13h3v-1h1v-17h6v-32h5v-4h1z M44 759h48v2h1v1h2v22h-51z M50 790h18v1h1v18h1v6h1v12h1v1h1v26h1v3h1v1h1v5h1v81h-21v-6h-8v-90h1v-32h1z M73 791h15v1h1v13h4v3h1v1h1v19h1v4h4v1h2v25h7v36h6v44h-17v6h-17v-87h-3v-29h-2v-1h-1v-17h-1v-1h-1z" id="left-curtain-coral" fill="#e98a7b" fill-rule="evenodd" />
+    </g>
+    <g id="right-curtain" inkscape:label="Right curtain">
+      <path d="M379 579h96v1h1v1h7v4h-5v1h-2v63h-1v104h6v37h-2v1h-4v48h1v48h1v57h-8v6h-51v-5h-1v-1h-21v-43h1v-13h6v-1h1v-21h-1v-8h1v-1h6v-29h1v-1h6v-23h1v-1h5v-13h-5v-3h-1v-14h1v-13h5v-2h1v-5h-3v-7h-9v-6h2v-6h-5v-12h-5v-1h-1v-14h-6v-13h-1v-3h-3v-4h-1v-10h-5v-1h-1v-24h-1v-10h-6v-20h-1v-42h1z M385 585v1h-1v30h1v23h6v7h1v27h6v15h1v4h1v4h3v6h1v1h2v1h1v2h1v2h1v9h1v5h4v5h1v1h1v6h2v6h4v1h1v3h1v3h1v6h18v-6h-1v-1h-1v-12h-4v-1h-1v-18h-5v-31h-1v-4h-5v-95z M430 585v1h-1v63h1v30h6v34h3v1h1v1h1v18h3v5h1v8h1v1h1v6h22v-110h1v-57h-1v-1z M427 759v2h-1v1h-2v23h22v-1h29v-25z M430 790v7h-1v12h-7v24h-6v25h-6v35h-1v1h-6v25h-1v19h20v6h14v-80h1v-7h4v87h22v-5h1v-1h7v-68h-1v-31h-1v-49h-19v19h-1v7h-1v11h-1v3h-1v27h-4v-29h1v-11h1v-7h1v-20z" id="right-curtain-outline" fill="#14120e" fill-rule="evenodd" />
+      
+      <path d="M385 585h40v95h5v4h1v31h5v18h1v1h4v12h1v1h1v6h-18v-6h-1v-3h-1v-3h-1v-1h-4v-6h-2v-6h-1v-1h-1v-5h-4v-5h-1v-9h-1v-2h-1v-2h-1v-1h-2v-1h-1v-6h-3v-4h-1v-4h-1v-15h-6v-27h-1v-7h-6v-23h-1v-30h1z M430 585h39v1h1v57h-1v110h-22v-6h-1v-1h-1v-8h-1v-5h-3v-18h-1v-1h-1v-1h-3v-34h-6v-30h-1v-63h1z M427 759h48v25h-29v1h-22v-23h2v-1h1z M430 790h15v20h-1v7h-1v11h-1v29h4v-27h1v-3h1v-11h1v-7h1v-19h19v49h1v31h1v68h-7v1h-1v5h-22v-87h-4v7h-1v80h-14v-6h-20v-19h1v-25h6v-1h1v-35h6v-25h6v-24h7v-12h1z" id="right-curtain-coral" fill="#e98a7b" fill-rule="evenodd" />
+    </g>
+  </g>
+  <g id="shelf" inkscape:label="05 · Low shelf" inkscape:groupmode="layer">
+    
+    <path d="M622 906h148v1h50v5h1v146h-1v1h-6v24h-7v1h-5v-1h-1v-6h7v-18h-49v-4h-26v-2h81v-1h1v-139h-278v140h129v2h-24v4h-62v18h-1v6h-42v-24h-6v-5h-1v-6h1v-141h91z M556 932h240v102h-34v-3h1v-3h29v-91h-103v7h-2v90h-55v-6h30v-91h-102v7h-3v1h-1z M667 937v93h14v-1h3v-92z M543 1059v18h31v-18z" id="shelf-outline" fill="#14120e" fill-rule="evenodd" />
+    <path d="M537 913h278v139h-1v1h-81v-3h-1v-1h-66v4h-129z M560 937h102v91h-32v-66h-3v-5h-3v-1h-27v-5h-1v-1h-1v-6h-35z M667 937h17v92h-3v1h-14z M689 937h103v91h-31v-66h-3v-5h-2v-1h-29v-8h-1v-4h-37z M556 932v102h240v-102z M530 1054h1v5h-1z M820 1058h1v1h-1z M543 1059h31v18h-31z M772 1059h36v18h-7v-3h-5v-1h-1v-6h-5v-6h-18z M579 1077h1v6h-1z" id="shelf-honey-wood" fill="#c58c56" fill-rule="evenodd" />
+    
+    
+  </g>
+  <g id="books" inkscape:label="06 · Books" inkscape:groupmode="layer">
+    <g id="book-1" inkscape:label="Book 1">
+      <path d="M557 944h38v6h1v1h1v5h-5v-6h-29v1h-1v77h29v6h-35v-89h1z" id="book-1-outline" fill="#14120e" fill-rule="evenodd" />
+      <path d="M563 950h29v78h-30v-77h1z" id="book-1-coral" fill="#e98a7b" fill-rule="evenodd" />
+    </g>
+    <g id="book-2" inkscape:label="Book 2">
+      <path d="M592 956h32v1h3v5h3v66h2v6h-41v-6h1z M597 962v66h29v-66z" id="book-2-outline" fill="#14120e" fill-rule="evenodd" />
+      <path d="M597 962h29v66h-29z" id="book-2-leaf-green" fill="#8cc56a" fill-rule="evenodd" />
+    </g>
+    <g id="book-3" inkscape:label="Book 3">
+      <path d="M687 944h39v4h1v8h-5v-6h-29v78h28v6h-34z" id="book-3-outline" fill="#14120e" fill-rule="evenodd" />
+      <path d="M693 950h29v78h-29z" id="book-3-leaf-green" fill="#8cc56a" fill-rule="evenodd" />
+    </g>
+    <g id="book-4" inkscape:label="Book 4">
+      <path d="M722 956h34v1h2v5h3v66h2v3h-1v3h-41v-6h1z M727 962v66h29v-66z" id="book-4-outline" fill="#14120e" fill-rule="evenodd" />
+      <path d="M727 962h29v66h-29z" id="book-4-coral" fill="#e98a7b" fill-rule="evenodd" />
+    </g>
+  </g>
+  <g id="potted-plant" inkscape:label="07 · Potted plant" inkscape:groupmode="layer">
+    <g id="plant-foliage" inkscape:label="Leaves and stems">
+      <path d="M739 747h38v18h-5v1h-1v5h-3v2h-1v3h-1v1h-2v7h-5v7h33v6h10v3h1v3h5v5h1v1h5v12h-5v-6h-4v-6h-5v-6h-11v-6h-25v5h-1v1h-12v3h-1v3h-4v1h-1v5h-4v1h-1v5h-2v1h-5v11h-5v12h18v-5h2v-1h5v-6h12v-5h30v4h1v2h12v5h6v-18h6v24h-16v-5h-1v-1h-13v-6h-19v1h-1v5h-12v6h5v2h-101v-2h-15v1h-1v1h-18v-2h13v-4h25v4h28v-6h-3v-5h-3v-1h-1v-5h-1v-1h-2v-6h6v5h1v2h1v5h5v6h1v1h2v5h11v-11h-1v-1h-1v-23h-2v-1h-4v-18h-5v-1h-1v-6h-6v-5h-1v-1h-11v-1h-1v-5h-32v7h6v8h2v1h1v1h1v2h3v6h6v7h1v1h5v2h1v5h1v3h11v6h-12v-3h-1v-3h-5v-1h-27v1h-5v6h-7v5h-1v1h-4v1h-1v5h-5v14h-6v-13h3v-1h2v-5h1v-5h2v-1h4v-6h6v-1h3v-6h10v-2h17v-10h-5v-5h-1v-1h-1v-1h-5v-6h-6v-12h3v-2h1v-5h30v1h8v5h1v1h10v6h6v6h10v-12h6v12h-5v25h5v18h1v1h1v17h5v-6h1v-5h4v-6h1v-7h5v-6h1v-5h6v-7h6v-7h1v-5h5v-9h1v-1h1v-1h5v-6h4v-3h1v-1h1v-7h6v-10h-31v6h-12v-6h11z M722 759h6v6h-4v2h-1v1h-2v4h-6v-6h5v-2h2z" id="foliage-outline" fill="#14120e" fill-rule="evenodd" />
+      
+      
+      <path d="M740 753h31v10h-6v7h-1v1h-1v3h-4v6h-5v1h-1v1h-1v9h-5v5h-1v7h-6v7h-6v5h-1v6h-5v7h-1v6h-4v5h-1v6h-5v-17h-1v-1h-1v-18h-5v-25h5v-12h6v-4h2v-1h1v-2h4v-6h12z M646 772h32v5h1v1h11v1h1v5h6v6h1v1h5v18h4v1h2v23h1v1h1v11h-11v-5h-2v-1h-1v-6h-5v-5h-1v-2h-1v-5h-6v-6h-11v-3h-1v-5h-1v-2h-5v-1h-1v-7h-6v-6h-3v-2h-1v-1h-1v-1h-2v-8h-6z M764 797h25v6h11v6h5v6h4v6h5v18h-6v-5h-12v-2h-1v-4h-30v5h-12v6h-5v1h-2v5h-18v-12h5v-11h5v-1h2v-5h1v-1h4v-5h1v-1h4v-3h1v-3h12v-1h1z M639 814h27v1h5v3h1v3h12v6h2v1h1v5h1v1h3v5h3v6h-28v-4h-25v4h-13v2h-12v-14h5v-5h1v-1h4v-1h1v-5h7v-6h5z" id="foliage-leaf-green" fill="#8cc56a" fill-rule="evenodd" />
+    </g>
+    <g id="plant-pot" inkscape:label="Honey-wood plant pot">
+      <path d="M610 847h6v4h12v-4h18v4h-17v6h-19z M662 847h101v41h-5v8h-1v4h-5v6h-9v-6h4v-6h5v-9h5v-1h1v-33h-93v34h3v1h3v11h2v1h1v2h4v6h-6v-5h-2v-1h-4v-6h-1v-6h-1v-1h-5v-36h3z" id="plant-pot-outline" fill="#14120e" fill-rule="evenodd" />
+      <path d="M665 851h93v33h-1v1h-5v9h-5v6h-4v6h-65v-6h-4v-2h-1v-1h-2v-11h-3v-1h-3z" id="plant-pot-honey-wood" fill="#c58c56" fill-rule="evenodd" />
+      
+      <path d="M616 847h12v4h-12z" id="plant-pot-leaf-green" fill="#8cc56a" fill-rule="evenodd" />
+    </g>
+  </g>
+  <g id="pet-bed" inkscape:label="08 · Pet bed from design 2" inkscape:groupmode="layer">
+    <path d="M666 1049h66v1h1v5h26v6h31v6h5v6h1v1h5v9h1v1h5v11h1v24h-1v12h-5v3h-1v7h-6v5h-6v6h-12v1h-1v5h-20v5h-1v1h-111v-5h-1v-1h-19v-6h-13v-6h-6v-5h-6v-7h-1v-3h-3v-1h-2v-45h2v-1h4v-11h6v-5h5v-7h32v-6h24z M616 1067v6h-6v6h-5v1h-1v8h-3v1h-3v35h1v1h5v10h1v1h5v5h6v6h12v6h20v6h103v-6h21v-6h12v-6h6v-5h6v-11h6v-36h-1v-1h-5v-9h-6v-5h-1v-1h-5v-6h-7v5h1v8h5v20h-5v2h-1v4h-12v5h-1v1h-18v6h-92v-6h-20v-6h-14v-6h-2v-21h4v-5h1v-1h1v-6z M671 1055v6h-26v6h-9v1h-1v2h-2v1h-3v2h-1v6h-1v1h-3v21h12v5h1v1h21v5h1v1h80v-1h1v-5h19v-6h12v-1h1v-6h4v-14h-5v-7h-6v-4h-1v-1h-1v-1h-10v-6h-26v-6z" id="pet-bed-outline" fill="#14120e" fill-rule="evenodd" />
+    <path d="M616 1067h8v6h-1v1h-1v5h-4v21h2v6h14v6h20v6h92v-6h18v-1h1v-5h12v-4h1v-2h5v-20h-5v-8h-1v-5h7v6h5v1h1v5h6v9h5v1h1v36h-6v11h-6v5h-6v6h-12v6h-21v6h-103v-6h-20v-6h-12v-6h-6v-5h-5v-1h-1v-10h-5v-1h-1v-35h3v-1h3v-8h1v-1h5v-6h6z" id="pet-bed-honey-wood" fill="#c58c56" fill-rule="evenodd" />
+    <path d="M671 1055h57v6h26v6h10v1h1v1h1v4h6v7h5v14h-4v6h-1v1h-12v6h-19v5h-1v1h-80v-1h-1v-5h-21v-1h-1v-5h-12v-21h3v-1h1v-6h1v-2h3v-1h2v-2h1v-1h9v-6h26z" id="pet-bed-coral" fill="#e98a7b" fill-rule="evenodd" />
+    <desc>The selected second bed, copied without rescaling or redrawing.</desc>
+  </g>
+  <g id="round-rug" inkscape:label="09 · Round coral rug" inkscape:groupmode="layer">
+    <path d="M335 1221h186v6h1v1h37v6h32v6h27v6h20v6h14v1h7v6h13v6h12v1h1v5h12v4h1v3h9v4h1v1h5v1h2v4h7v4h5v2h1v4h5v1h5v5h1v1h6v6h5v2h1v4h1v4h6v9h6v8h1v5h6v47h-6v2h-1v11h-5v1h-1v9h-6v6h-1v1h-5v6h-6v6h-6v1h-1v5h-8v1h-1v6h-4v5h-6v1h-8v6h-13v6h-11v1h-1v5h-10v1h-3v3h-1v1h-1v1h-13v5h-1v1h-14v5h-17v1h-2v5h-1v1h-27v6h-31v6h-39v7h-186v-6h-1v-1h-37v-6h-31v-6h-27v-6h-21v-6h-15v-2h-1v-3h-15v-1h-1v-6h-14v-5h-1v-1h-12v-6h-12v-6h-7v-1h-6v-5h-6v-6h-1v-1h-7v-6h-7v-5h-1v-1h-6v-6h-1v-1h-4v-6h7v6h1v1h6v6h7v5h1v2h9v6h8v5h1v1h10v6h10v3h1v3h3v1h10v5h2v1h13v6h17v5h16v6h20v6h25v2h1v4h31v6h38v1h1v6h179v-7h38v-6h32v-6h25v-1h1v-5h18v-1h1v-5h14v-5h15v-6h15v-1h1v-5h11v-1h2v-6h12v-6h10v-2h1v-4h7v-1h1v-5h6v-1h2v-5h1v-1h8v-6h4v-1h1v-5h2v-1h1v-1h5v-10h1v-1h4v-1h2v-14h6v-38h-6v-13h-6v-3h-1v-9h-6v-6h-5v-1h-1v-6h-6v-2h-1v-4h-6v-6h-6v-3h-2v-1h-4v-3h-4v-1h-2v-2h-5v-4h-6v-1h-2v-5h-1v-1h-11v-6h-12v-3h-2v-1h-3v-1h-1v-1h-13v-6h-1v-1h-17v-5h-1v-1h-20v-6h-25v-4h-1v-2h-32v-6h-27v-1h-11v-6h-179v2h-1v4h-37v1h-1v6h-31v6h-25v2h-1v4h-20v6h-18v1h-1v6h-15v1h-1v3h-1v2h-15v6h-10v1h-1v5h-10v1h-1v4h-5v1h-4v4h-1v1h-7v4h-5v1h-1v5h-8v6h-5v1h-1v6h-6v6h-6v9h-1v2h-5v1h-1v13h-6v38h2v1h4v13h4v1h3v12h-6v-9h-5v-1h-2v-13h-6v-47h6v-12h1v-1h6v-8h6v-5h1v-5h1v-1h5v-5h1v-1h5v-1h1v-4h5v-1h1v-3h3v-1h3v-3h4v-4h8v-4h1v-1h7v-5h10v-1h1v-6h13v-6h12v-2h1v-4h14v-6h6v-1h15v-6h20v-6h26v-4h1v-2h31v-6h37v-6h1z" id="rug-outline" fill="#14120e" fill-rule="evenodd" />
+    
+    <path d="M339 1227h179v6h11v1h27v6h32v2h1v4h25v6h20v1h1v5h17v1h1v6h13v1h1v1h3v1h2v3h12v6h11v1h1v5h2v1h6v4h5v2h2v1h4v3h4v1h2v3h6v6h6v4h1v2h6v6h1v1h5v6h6v9h1v3h6v13h6v38h-6v14h-2v1h-4v1h-1v10h-5v1h-1v1h-2v5h-1v1h-4v6h-8v1h-1v5h-2v1h-6v5h-1v1h-7v4h-1v2h-10v6h-12v6h-2v1h-11v5h-1v1h-15v6h-15v5h-14v5h-1v1h-18v5h-1v1h-25v6h-32v6h-38v7h-179v-6h-1v-1h-38v-6h-31v-4h-1v-2h-25v-6h-20v-6h-16v-5h-17v-6h-13v-1h-2v-5h-10v-1h-3v-3h-1v-3h-10v-6h-10v-1h-1v-5h-8v-6h-9v-2h-1v-5h-7v-6h-6v-1h-1v-6h-7v-12h-3v-1h-4v-13h-4v-1h-2v-38h6v-13h1v-1h5v-2h1v-9h6v-6h6v-6h1v-1h5v-6h8v-5h1v-1h5v-4h7v-1h1v-4h4v-1h5v-4h1v-1h10v-5h1v-1h10v-6h15v-2h1v-3h1v-1h15v-6h1v-1h18v-6h20v-4h1v-2h25v-6h31v-6h1v-1h37v-4h1z" id="rug-coral" fill="#e98a7b" fill-rule="evenodd" />
+  </g>
+</svg>

@@ -1,0 +1,78 @@
+# Rabbit cell map -- one character per art cell, built from the pixel-art
+# reference roster (art_src/pets_reference.jpeg).
+# Edit this file, then re-run gen_rabbit.py. Never hand-edit the generated SVGs.
+#
+#   .  background      K  outline        M  coat (main)
+#   S  coat shade      N  nose
+#
+# The reference put the left eye (ours) one cell further from the nose than
+# the right one. It is squared up here: both sit four cells out from the
+# nose's centre line.
+#
+# The muzzle was off the same way: a two-cell nose over a one-cell philtrum
+# and mouth gap cannot centre on this grid, and the mouth's left arm ran a
+# cell longer than its right. Philtrum and gap widened to two cells and the
+# arms evened up, so nose, philtrum, mouth and both eyes now share one axis.
+# The nose then carries the muzzle rather than the philtrum: four cells wide
+# tapering to two, over a single row of philtrum. Squaring it up with the
+# small nose the reference drew left a heavy 2x2 black block under it.
+#
+# The face is pushed right on the head, as the cat's and dog's are. Measured
+# against head width, the muzzle sits +10.4% right of head centre on the cat
+# and +22.6% on the dog; here it is +12.5%, with the right eye 15.0% of head
+# width in from the head's edge against the cat's 14.6%. The head outline is
+# itself perfectly symmetric about cell 13 -- the face deliberately is not
+# centred on it. Move eyes, nose, philtrum and mouth together, never one alone.
+#
+# Muzzle matches art_src/rabbit_ref.png, which is the authority for it -- the
+# user hand-edited a render to settle the shape after several rounds of
+# guessing. Three-cell nose bar, one-cell philtrum one row deep, then a
+# two-plus-two mouth with a one-cell gap on the row directly below.
+# Note the pixel-art reference (pets_reference.jpeg) drew a TWO-cell nose over
+# a one-cell philtrum, which cannot centre: the nose overhangs a cell left,
+# and that was the original lopsidedness. Three is the narrowest nose that
+# centres on a one-cell philtrum; four over two reads far too heavy.
+# from it than the right, which is the way the cat is drawn too -- its left
+# eye is 36.5 units from its nose and its right 25.5. An exactly symmetric
+# pair reads as too close on the left; do not 'correct' it.
+....KKKKK........KKKKK..
+...KMMMMMK.....KKMMMMMK.
+..KMMMMMMMKK..KMMMMMMMMK
+..KMMMMMMMKK..KMMMMMMMMK
+..KMMSSSMMKK..KMMMSSSMMK
+..KMMSSSSMKK..KMMSSSSMMK
+..KMMSSSSMKK..KMMSSSSMMK
+..KMMSSSSMKK..KMMSSSSMMK
+..KMMSSSSMKK..KMMSSSSMMK
+...KMMSSSMKK..KMMSSSMMK.
+...KMMSSSMKK..KMMSSSMMK.
+...KKMMSSMKKKKKMMSSMMKK.
+....KKMMMMMMMMMMMMMMKK..
+.....KMMMMMMMMMMMMMMK...
+....KMMMMMMMMMMMMMMMMK..
+....KMMMMMMMMMMMMMMMMK..
+...KMMMMMMMMMMMMMMMMMMK.
+...KMMMMMMMMMMMMMMMMMMK.
+...KMMMMMMEEMMMMMMEEMMK.
+...KMMMMMMEEMMMMMMEEMMK.
+...KMMMMMMEEMMMMMMEEMMK.
+...KMMMMMMMMMMNNNMMMMMK.
+...KMMMMMMMMMMMKMMMMMMK.
+...KMMMMMMMMMKKMKKMMMMK.
+...KMMMMMMMMMMMMMMMMMMK.
+....KSMMMMMMMMMMMMMMMK..
+.....KKMMMMMMMMMMMMKK...
+......KKSSSSSSSSSSKK....
+......KMSSSSSSSSSSMK....
+.....KMMMMMMMMMMMMMK....
+....KSMMMMMMMMMMMMMMK...
+....KMMMMMMMMMMMMMMMK...
+...KMMMMMMMMMMMMMMMMK...
+.KKKMMMMMMMMMMMMMMMMK...
+KMMKMMMSSMMMMMMMMMMKK...
+KMMKMMMMMKMMMKKKMMMKK...
+KMMKMMMMMKMMMMKMMMKMMK..
+KMMKMMMMKKKMMMKMMMKMMK..
+.KKKMMMMMMKMMMKMMMKMMMK.
+...KKMMMMMMKMMKMMKMMMMK.
+.....KKKKKKKKKKKKKKKKKK.

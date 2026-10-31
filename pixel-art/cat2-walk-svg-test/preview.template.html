@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cat 02 / Walk study</title>
+  <style>
+    :root { color-scheme: light; font: 15px/1.5 ui-sans-serif, system-ui, sans-serif; color: #292b27; background: #f5f2eb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 960px; margin: 0 auto; padding: 40px 28px 28px; }
+    .eyebrow { margin: 0 0 12px; font-size: 11px; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; color: #72756a; }
+    h1 { margin: 0; font-size: clamp(26px, 4vw, 38px); line-height: 1.2; font-weight: 550; letter-spacing: -.045em; }
+    .intro { margin: 13px 0 26px; color: #72756a; }
+    .card { margin: 0; overflow: hidden; border: 1px solid #d6d4c9; background: #faf8f2; }
+    figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 15px 18px; border-bottom: 1px solid #d6d4c9; font-weight: 550; }
+    .caption-note { font-size: 12px; font-weight: 400; color: #72756a; }
+    .stage { display: flex; justify-content: center; align-items: center; min-height: 410px; padding: 20px 12px; background: #e8e4da; }
+    .stage > svg { display: block; width: 480px; height: 368px; max-width: 100%; overflow: hidden; shape-rendering: crispEdges; image-rendering: pixelated; }
+    main[data-background="dark"] .stage { background: #454945; }
+    main[data-background="checker"] .stage { background-color: #eeeae1; background-image: conic-gradient(#d9d7ce 25%, transparent 0 50%, #d9d7ce 0 75%, transparent 0); background-size: 24px 24px; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; padding: 20px 0; }
+    .control-group { display: flex; align-items: center; gap: 8px; }
+    .control-label { font-size: 12px; color: #72756a; margin-right: 4px; }
+    button, select { font: inherit; font-size: 13px; line-height: 1.3; color: inherit; background: #faf8f2; border: 1px solid #c9ccbd; border-radius: 3px; padding: 9px 12px; min-height: 38px; cursor: pointer; }
+    button:hover, select:hover { background: #eeeee4; border-color: #a2a993; }
+    button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid #737f5b; outline-offset: 4px; }
+    button[aria-pressed="true"] { background: #e0e5d5; border-color: #8d987a; }
+    #play-toggle { min-width: 78px; color: #faf8f2; background: #515c43; border-color: #515c43; }
+    #play-toggle:hover { background: #404b34; }
+    select { padding-right: 7px; }
+    .timeline { padding: 16px 18px 18px; border: 1px solid #d6d4c9; background: #faf8f2; }
+    .timeline-labels { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 10px; font-size: 12px; color: #72756a; }
+    #pose-label { color: #414937; }
+    #time-label { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    #scrubber { display: block; width: 100%; margin: 0; accent-color: #65744f; cursor: pointer; }
+    .motion-note { min-height: 18px; margin: 10px 0 0; font-size: 12px; color: #72756a; }
+    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 23px; color: #72756a; font-size: 12px; }
+    footer p { margin: 0; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
+    a { color: #4c5a3d; text-underline-offset: 3px; }
+    @media (max-width: 760px) { main { padding: 28px 20px 24px; } .toolbar { gap: 14px; } }
+    @media (max-width: 430px) { main { padding-inline: 16px; } .stage { min-height: 260px; } .caption-note { font-size: 11px; } .control-group { gap: 6px; } button, select { padding-inline: 10px; } }
+  </style>
+</head>
+<body>
+  <main data-background="light">
+    <header>
+      <p class="eyebrow">Pixel art / Motion test</p>
+      <h1>Cat 02 / Walk study</h1>
+      <p class="intro">Eight poses. Four paws. Same square edges.</p>
+    </header>
+    <figure class="card">
+      <figcaption><span>Walking right</span><span class="caption-note">In-place loop</span></figcaption>
+      <div class="stage">__ANIMATED_SVG__</div>
+    </figure>
+    <div class="toolbar">
+      <div class="control-group" role="group" aria-label="Animation controls">
+        <button id="play-toggle" type="button">Pause</button>
+        <button id="restart" type="button">Restart</button>
+        <label class="control-label" for="speed">Speed</label>
+        <select id="speed"><option value="0.5">0.5&times;</option><option value="1" selected>1&times;</option><option value="2">2&times;</option></select>
+      </div>
+      <div class="control-group" role="group" aria-label="Preview background">
+        <span class="control-label">Stage</span>
+        <button type="button" data-background="light" aria-pressed="true">Light</button>
+        <button type="button" data-background="dark" aria-pressed="false">Dark</button>
+        <button type="button" data-background="checker" aria-pressed="false">Checker</button>
+      </div>
+    </div>
+    <section class="timeline" aria-label="Animation timeline">
+      <div class="timeline-labels"><label for="scrubber">Scrub the loop &middot; <span id="pose-label">Contact</span></label><output id="time-label" for="scrubber">0.00 s</output></div>
+      <input id="scrubber" type="range" min="0" max="1" step="1" value="0" aria-label="Animation position">
+      <p class="motion-note" id="motion-note">Drag the timeline to pause on a pose.</p>
+    </section>
+    <footer>
+      <p>Two colors &middot; Square edges &middot; Standalone experiment</p>
+      <nav aria-label="Animation files"><a href="cat2-walk.svg">Open SVG</a><a href="cat2-walk.gif">Open GIF</a><a href="../cat2-svg-test/index.html">Idle study</a></nav>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      const timeline = __TIMELINE_JSON__;
+      const duration = __DURATION_MS__;
+      const svg = document.getElementById('cat-animation');
+      const toggle = document.getElementById('play-toggle');
+      const scrubber = document.getElementById('scrubber');
+      const poseLabel = document.getElementById('pose-label');
+      const timeLabel = document.getElementById('time-label');
+      const note = document.getElementById('motion-note');
+      const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+      const initialized = new WeakSet();
+      let playing = !motionPreference.matches;
+      let motionEnabled = !motionPreference.matches;
+      let position = 0;
+      let playbackRate = 1;
+      scrubber.max = String(duration - 1);
+
+      // The moving floor belongs to this preview, never to the exported artwork.
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const ground = document.createElementNS(svgNS, 'g');
+      ground.setAttribute('id', 'preview-ground');
+      ground.setAttribute('fill', '#1f2223');
+      ground.setAttribute('opacity', '.15');
+      ground.setAttribute('aria-hidden', 'true');
+      const groundLine = document.createElementNS(svgNS, 'rect');
+      groundLine.setAttribute('x', '0');
+      groundLine.setAttribute('y', '84');
+      groundLine.setAttribute('width', String(svg.viewBox.baseVal.width));
+      groundLine.setAttribute('height', '1');
+      ground.appendChild(groundLine);
+      const groundTicks = document.createElementNS(svgNS, 'g');
+      groundTicks.setAttribute('id', 'ground-ticks');
+      for (let x = -24; x <= 144; x += 24) {
+        const tick = document.createElementNS(svgNS, 'rect');
+        tick.setAttribute('x', String(x));
+        tick.setAttribute('y', '85');
+        tick.setAttribute('width', '3');
+        tick.setAttribute('height', '1');
+        groundTicks.appendChild(tick);
+      }
+      ground.appendChild(groundTicks);
+      svg.insertBefore(ground, svg.querySelector('.pose'));
+
+      function fitSprite(stage, availableWidth) {
+        const sprite = stage.querySelector('svg');
+        const nativeWidth = sprite.viewBox.baseVal.width;
+        const nativeHeight = sprite.viewBox.baseVal.height;
+        const scale = Math.max(1, Math.min(4, Math.floor(availableWidth / nativeWidth)));
+        sprite.style.width = `${nativeWidth * scale}px`;
+        sprite.style.height = `${nativeHeight * scale}px`;
+        sprite.style.maxWidth = 'none';
+        sprite.style.flexShrink = '0';
+      }
+      const stages = Array.from(document.querySelectorAll('.stage'));
+      function fitAllSprites() {
+        for (const stage of stages) {
+          const style = getComputedStyle(stage);
+          fitSprite(stage, stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+        }
+      }
+      fitAllSprites();
+      if ('ResizeObserver' in window) {
+        const stageObserver = new ResizeObserver(entries => {
+          for (const entry of entries) fitSprite(entry.target, entry.contentRect.width);
+        });
+        for (const stage of stages) stageObserver.observe(stage);
+      } else {
+        window.addEventListener('resize', fitAllSprites);
+      }
+
+      function animations() {
+        if (!motionEnabled) return [];
+        const items = svg.getAnimations({ subtree: true });
+        for (const animation of items) {
+          if (initialized.has(animation)) continue;
+          animation.pause();
+          animation.currentTime = position;
+          animation.updatePlaybackRate(playbackRate);
+          if (playing) animation.play();
+          initialized.add(animation);
+        }
+        return items;
+      }
+
+      function optIntoMotion() {
+        motionEnabled = true;
+        svg.classList.add('allow-motion');
+        note.textContent = 'Drag the timeline to pause on a pose.';
+      }
+
+      function currentPosition() {
+        const active = animations()[0];
+        if (active && active.currentTime !== null) {
+          position = ((Number(active.currentTime) % duration) + duration) % duration;
+        }
+        return position;
+      }
+
+      function render() {
+        const time = currentPosition();
+        const pose = timeline.find(entry => time >= entry.startMs && time < entry.startMs + entry.durationMs) || timeline[0];
+        groundTicks.setAttribute('transform', `translate(${-(Math.floor(time / 110) % 8) * 3} 0)`);
+        scrubber.value = String(Math.floor(time));
+        poseLabel.textContent = pose ? pose.label : 'Contact';
+        timeLabel.textContent = `${(time / 1000).toFixed(2)} / ${(duration / 1000).toFixed(2)} s`;
+        scrubber.setAttribute('aria-valuetext', `${(time / 1000).toFixed(2)} seconds, ${pose ? pose.label : 'Contact'}`);
+        toggle.textContent = playing ? 'Pause' : 'Play';
+        toggle.setAttribute('aria-label', playing ? 'Pause animation' : 'Play animation');
+      }
+
+      function pause() {
+        currentPosition();
+        playing = false;
+        for (const animation of animations()) {
+          animation.pause();
+          animation.currentTime = position;
+        }
+        render();
+      }
+
+      function play() {
+        optIntoMotion();
+        playing = true;
+        for (const animation of animations()) {
+          animation.currentTime = position;
+          animation.play();
+        }
+        render();
+      }
+
+      toggle.addEventListener('click', () => playing ? pause() : play());
+      document.getElementById('restart').addEventListener('click', () => {
+        position = 0;
+        for (const animation of animations()) animation.currentTime = 0;
+        render();
+      });
+      document.getElementById('speed').addEventListener('change', event => {
+        playbackRate = Number(event.target.value);
+        for (const animation of animations()) animation.updatePlaybackRate(playbackRate);
+        render();
+      });
+      scrubber.addEventListener('input', event => {
+        const nextPosition = Number(event.target.value);
+        pause();
+        optIntoMotion();
+        position = nextPosition;
+        for (const animation of animations()) {
+          animation.pause();
+          animation.currentTime = position;
+        }
+        render();
+      });
+      for (const button of document.querySelectorAll('button[data-background]')) {
+        button.addEventListener('click', () => {
+          document.querySelector('main').dataset.background = button.dataset.background;
+          for (const item of document.querySelectorAll('button[data-background]')) {
+            item.setAttribute('aria-pressed', String(item === button));
+          }
+        });
+      }
+      motionPreference.addEventListener('change', event => {
+        if (!event.matches) return;
+        pause();
+        position = 0;
+        motionEnabled = false;
+        svg.classList.remove('allow-motion');
+        note.textContent = 'Reduced motion is on. Press Play to view the animation.';
+        render();
+      });
+      if (motionPreference.matches) note.textContent = 'Reduced motion is on. Press Play to view the animation.';
+      render();
+      function tick() {
+        if (playing) render();
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>

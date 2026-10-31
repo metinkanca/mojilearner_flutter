@@ -1,0 +1,157 @@
+{
+  "durationMs": 5560,
+  "timeline": [
+    {
+      "startMs": 0,
+      "durationMs": 650,
+      "label": "Rest",
+      "pose": 0
+    },
+    {
+      "startMs": 650,
+      "durationMs": 220,
+      "label": "Tail left",
+      "pose": 1
+    },
+    {
+      "startMs": 870,
+      "durationMs": 240,
+      "label": "Tail returns",
+      "pose": 0
+    },
+    {
+      "startMs": 1110,
+      "durationMs": 140,
+      "label": "Breathe out",
+      "pose": 2
+    },
+    {
+      "startMs": 1250,
+      "durationMs": 420,
+      "label": "Head follows",
+      "pose": 3
+    },
+    {
+      "startMs": 1670,
+      "durationMs": 60,
+      "label": "Blink closes",
+      "pose": 4
+    },
+    {
+      "startMs": 1730,
+      "durationMs": 100,
+      "label": "Blink",
+      "pose": 5
+    },
+    {
+      "startMs": 1830,
+      "durationMs": 60,
+      "label": "Blink opens",
+      "pose": 4
+    },
+    {
+      "startMs": 1890,
+      "durationMs": 360,
+      "label": "Rest low",
+      "pose": 6
+    },
+    {
+      "startMs": 2250,
+      "durationMs": 140,
+      "label": "Breathe in",
+      "pose": 7
+    },
+    {
+      "startMs": 2390,
+      "durationMs": 260,
+      "label": "Head returns",
+      "pose": 1
+    },
+    {
+      "startMs": 2650,
+      "durationMs": 400,
+      "label": "Rest",
+      "pose": 0
+    },
+    {
+      "startMs": 3050,
+      "durationMs": 80,
+      "label": "Ear twitch",
+      "pose": 8
+    },
+    {
+      "startMs": 3130,
+      "durationMs": 120,
+      "label": "Ear returns",
+      "pose": 9
+    },
+    {
+      "startMs": 3250,
+      "durationMs": 440,
+      "label": "Rest",
+      "pose": 0
+    },
+    {
+      "startMs": 3690,
+      "durationMs": 140,
+      "label": "Breathe out",
+      "pose": 2
+    },
+    {
+      "startMs": 3830,
+      "durationMs": 400,
+      "label": "Head follows",
+      "pose": 3
+    },
+    {
+      "startMs": 4230,
+      "durationMs": 320,
+      "label": "Tail returns",
+      "pose": 6
+    },
+    {
+      "startMs": 4550,
+      "durationMs": 140,
+      "label": "Breathe in",
+      "pose": 7
+    },
+    {
+      "startMs": 4690,
+      "durationMs": 220,
+      "label": "Head returns",
+      "pose": 1
+    },
+    {
+      "startMs": 4910,
+      "durationMs": 650,
+      "label": "Rest",
+      "pose": 0
+    }
+  ],
+  "uniquePoses": 10,
+  "canvas": [
+    85,
+    90
+  ],
+  "sourcePalette": [
+    "#959379",
+    "#1f2223"
+  ],
+  "sourceHashes": {
+    "cat2_base.svg": "03ecce7c3dd19e266291620aecee9142f9740186fae7decad09ccf5464a0a6e8",
+    "cat2_tail.svg": "bbbf095dbd3e2cb8d8e4c686c62037a1a7a02a31bf7de41f2dc394bde5930cf1",
+    "cat2_tail_l.svg": "21ebec77b0f0b24db9071e1a9a1a7762be14cdea9cdbde2405e7c6e90d38e3d7",
+    "cat2_tail_r.svg": "b4623518bf896e7c6615d03850b899d4176ede04e4de247d8ff1be6eb659af62",
+    "cat2_eyes.svg": "2f51d8a34723d6a39e79399afe9e3034cee23e1d49251acf71819678228f3feb",
+    "cat2_mouth.svg": "0a40fb8c1444d412d171a2b4e107b79509bde3ed66a0516a915351b3a3920c0f",
+    "cat2.svg": "df6edf11024046a618044f80f140d500ead22335c23d3e6df93141a0ba002079"
+  },
+  "checks": {
+    "originalPoseExact": true,
+    "fixedPaws": true,
+    "orthogonalPathsOnly": true,
+    "transparentMargin": true,
+    "seamlessRest": true,
+    "sourceFilesUnchanged": true
+  }
+}

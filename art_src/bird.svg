@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="230"
+   height="248"
+   viewBox="0 0 230 248"
+   shape-rendering="crispEdges"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="bird.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="4.6018966"
+     inkscape:cx="187.74868"
+     inkscape:cy="62.039639"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <title
+     id="title1">Bird editable vector</title>
+  <path
+     id="bird-silhouette"
+     fill="#16130e"
+     fill-rule="evenodd"
+     d="m 112,4 h 64 v 8 h 16 v 12 h 8 v 12 h 12 v 20 h 8 v 32 h 8 v 28 h -8 v 12 h -8 v 44 h -12 v 12 h -8 v 12 h -12 v 8 h -16 v 12 h -12 v 16 h 16 v 12 h -44 v -12 h 12 v -16 h -36 v 16 h 16 v 12 H 68 V 232 H 84 V 216 H 64 V 204 H 48 v -8 H 36 v -4 -4 -4 H 24 V 172 H 12 V 156 H 4 v -32 h 8 V 112 H 40 V 100 H 52 V 88 52 H 72 V 36 H 84 V 24 H 96 V 12 h 16 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="bird-fill-1"
+     fill="#ffd33b"
+     fill-rule="evenodd"
+     d="m 116,13 h 60 v 11 h 16 v 12 h 8 v 20 h 4 4 v 4 28 h 8 v 24 h -8 v 12 h -8 v 44 h -8 v 12 4 h -4 -8 v 8 h -16 v 12 H 64 V 192 H 48 v -8 H 36 V 172 H 24 v -16 h -8 -4 v -4 -24 -4 h 4 24 V 112 H 52 V 100 H 64 V 60 h 8 v -8 h 4 8 V 48 36 H 96 V 24 h 20 z m 12,47 v 28 h 16 V 64 60 h -4 z m 52,0 v 21 h -16 v 7 h -8 v 10 h 8 v 12 h 24 v -2 -7 l 4,-3 h 8 V 88 h -4 V 60 Z M 64,124 v 12 H 40 v 24 h 12 v 12 h 12 v 8 h 36 v -12 h 12 v -8 h 12 v -24 h -8 -4 v -4 -8 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="bird-fill-2"
+     fill="#e6a42c"
+     fill-rule="evenodd"
+     d="m 52,124 h 60 v 8 4 h 4 8 v 24 h -12 v 12 h -12 v 8 H 64 v -8 H 52 V 160 H 40 v -24 h 12 z"
+     sodipodi:nodetypes="ccccccccccccccccccc" />
+  <path
+     id="bird-fill-3"
+     fill="#f29422"
+     fill-rule="evenodd"
+     d="m 164,81 h 16 5 11 v 5 h 4 v 12 h -8 v 8 h -4 v 4 h -24 v -4 h -8 V 98 86 h 8 z"
+     sodipodi:nodetypes="cccccccccccccccccc" />
+</svg>

@@ -1,0 +1,97 @@
+{
+  "durationMs": 880,
+  "timeline": [
+    {
+      "startMs": 0,
+      "durationMs": 110,
+      "label": "Near hind contact",
+      "pose": 0
+    },
+    {
+      "startMs": 110,
+      "durationMs": 110,
+      "label": "Weight settles",
+      "pose": 1
+    },
+    {
+      "startMs": 220,
+      "durationMs": 110,
+      "label": "Near front contact",
+      "pose": 2
+    },
+    {
+      "startMs": 330,
+      "durationMs": 110,
+      "label": "Passing",
+      "pose": 3
+    },
+    {
+      "startMs": 440,
+      "durationMs": 110,
+      "label": "Far hind contact",
+      "pose": 4
+    },
+    {
+      "startMs": 550,
+      "durationMs": 110,
+      "label": "Weight settles",
+      "pose": 5
+    },
+    {
+      "startMs": 660,
+      "durationMs": 110,
+      "label": "Far front contact",
+      "pose": 6
+    },
+    {
+      "startMs": 770,
+      "durationMs": 110,
+      "label": "Passing",
+      "pose": 7
+    }
+  ],
+  "uniquePoses": 8,
+  "canvas": [
+    120,
+    92
+  ],
+  "sourcePalette": [
+    "#959379",
+    "#1f2223"
+  ],
+  "sourceHashes": {
+    "assets\\svgs\\cat2.svg": "df6edf11024046a618044f80f140d500ead22335c23d3e6df93141a0ba002079",
+    "assets\\svgs\\cat2_base.svg": "03ecce7c3dd19e266291620aecee9142f9740186fae7decad09ccf5464a0a6e8",
+    "assets\\svgs\\cat2_eyes.svg": "2f51d8a34723d6a39e79399afe9e3034cee23e1d49251acf71819678228f3feb",
+    "assets\\svgs\\cat2_mouth.svg": "0a40fb8c1444d412d171a2b4e107b79509bde3ed66a0516a915351b3a3920c0f",
+    "assets\\svgs\\cat2_mouth_open.svg": "215a560faf9193b1119fe96194bb85f2458b9d785a7d84078e43ae54d5750e2e",
+    "assets\\svgs\\cat2_tail.svg": "bbbf095dbd3e2cb8d8e4c686c62037a1a7a02a31bf7de41f2dc394bde5930cf1",
+    "assets\\svgs\\cat2_tail_l.svg": "21ebec77b0f0b24db9071e1a9a1a7762be14cdea9cdbde2405e7c6e90d38e3d7",
+    "assets\\svgs\\cat2_tail_r.svg": "b4623518bf896e7c6615d03850b899d4176ede04e4de247d8ff1be6eb659af62",
+    "pixel-art\\cat2-svg-test\\animation.json": "14a29ee60d40e5200c62e3cc1466a2b446038e908e8dae8fb60952b419dd9430",
+    "pixel-art\\cat2-svg-test\\blink-check.png": "03803e0e694b8d29bef047aded0d3c00199b4fba2bcf6f227e8798a9fd2571c7",
+    "pixel-art\\cat2-svg-test\\build.py": "c2a57f51f5a011f67e56fce9c4f4156703bafeade2f43719db6b1f9b061f0a01",
+    "pixel-art\\cat2-svg-test\\cat2-animated.gif": "f167ad80dcc63f801182ca9c067a66d0f903623abbeaa0dc4f02444cf0558540",
+    "pixel-art\\cat2-svg-test\\cat2-animated.svg": "2a5b90cee91674c8bc0965b73ed5a8f69f45d77f7af6b0300ec970d96a86da04",
+    "pixel-art\\cat2-svg-test\\cat2-sheet.json": "b5a24ec9fd7c6d558a0c7727275c9c366e4b9f659f82bae092faffad9405325e",
+    "pixel-art\\cat2-svg-test\\cat2-sheet.png": "d1dfbf9cf9f155b0170bc579019281f5b1e56c7a23c214cc6ea4b0d275f148d9",
+    "pixel-art\\cat2-svg-test\\cat2@1x.png": "da2bbdd78116883f02301e6b7051682c5d325c7f0b5dc30486bae7ddcc30174f",
+    "pixel-art\\cat2-svg-test\\cat2@4x.png": "217bbaf4518ea6c185420017f33ee21423b8f819c35d3e412d406bb49c909bfa",
+    "pixel-art\\cat2-svg-test\\index.html": "a1a8de506a4be36047a7fd436fa9fa17593800da90474c8b06ecb0a8671da364",
+    "pixel-art\\cat2-svg-test\\preview-mobile.png": "efe88e86ec3d7a9c4c6d9c4b0a4fb9eb0b2f059cf6ada84a28e746a28cffb1dc",
+    "pixel-art\\cat2-svg-test\\preview-page.png": "8e9650400a0761a47538faf94df315d24f4200709bd1f1de2bf4c17ee16d9f01",
+    "pixel-art\\cat2-svg-test\\preview.png": "6991a2cb7f205264bc558680ae318de5de92afb410695be0c0b03f0b0360bd9c",
+    "pixel-art\\cat2-svg-test\\preview.template.html": "c42cec512d8154265291451eb5b3670bff7224b966014cda038c895ec47dfcb7",
+    "pixel-art\\cat2-svg-test\\README.md": "f5e8fc55d074d8801bc3820eaae5edd210411f14224e580134aa262e95125430",
+    "pixel-art\\cat2-svg-test\\verify-preview.cjs": "82afe54b7a4607442b9cba4264b06d9dbce223c7e5bbe85aad7271fd173a628c"
+  },
+  "groundY": 84,
+  "stridePerCycle": 24,
+  "checks": {
+    "originalHeadExact": true,
+    "fourAlternatingPaws": true,
+    "orthogonalPathsOnly": true,
+    "clearMargins": true,
+    "sourceAndIdleUnchanged": true
+  }
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="330" height="331" viewBox="0 0 330 331" shape-rendering="crispEdges" version="1.1">
+  <title>Beaver rework test - editable vector</title>
+  <desc>Beaver from pet_goal.png, simplified into large pixel steps and flat colors. Shared dog template: 330 by 331 canvas, crown y=4, eyes x=168..184 and 244..260 at y=84..116, nose center x=228, smile y=140..156 and ground y=328. Broad paddle tail, small ears, tucked paws and two cream incisors. Eyes and mouth are independent layers with solid fur underneath; teeth move with the mouth.</desc>
+  <g id="beaver-base" inkscape:groupmode="layer" inkscape:label="Body and coat">
+    <g id="beaver-tail">
+      <path id="beaver-tail-outline" fill="#16130e" d="M 28,156 H 68 V 164 H 84 V 176 H 96 V 196 H 104 V 224 H 116 V 284 H 100 V 296 H 68 V 288 H 44 V 276 H 28 V 264 H 16 V 244 H 8 V 220 H 4 V 184 H 12 V 168 H 28 Z" />
+      <path id="beaver-tail-fill" fill="#70513c" d="M 28,168 H 68 V 176 H 80 V 188 H 88 V 208 H 96 V 232 H 104 V 276 H 96 V 284 H 68 V 276 H 48 V 264 H 36 V 252 H 24 V 236 H 16 V 216 H 12 V 188 H 20 V 176 H 28 Z" />
+      <!-- Sparse, broad scale marks keep the paddle readable at small sizes. -->
+      <path id="beaver-tail-scales" fill="#513b2e" d="M 32,184 H 44 V 192 H 56 V 204 H 44 V 196 H 32 Z M 64,208 H 76 V 220 H 88 V 232 H 76 V 224 H 64 Z M 24,216 H 36 V 224 H 48 V 236 H 36 V 228 H 24 Z M 48,248 H 60 V 256 H 72 V 268 H 60 V 260 H 48 Z" />
+    </g>
+    <path id="beaver-body-outline" fill="#16130e" d="M 132,156 H 260 V 176 H 268 V 200 H 276 V 240 H 280 V 288 H 288 V 328 H 92 V 320 H 80 V 308 H 72 V 288 H 68 V 248 H 76 V 224 H 88 V 200 H 104 V 184 H 120 V 168 H 132 Z" />
+    <path id="beaver-body-fill" fill="#b67a38" d="M 136,168 H 248 V 180 H 256 V 204 H 264 V 244 H 268 V 296 H 276 V 316 H 100 V 308 H 92 V 296 H 84 V 284 H 80 V 248 H 88 V 228 H 100 V 208 H 116 V 192 H 128 V 180 H 136 Z" />
+    <path id="beaver-haunch-shade" fill="#925e30" d="M 96,244 H 108 V 288 H 120 V 304 H 148 V 316 H 100 V 308 H 92 V 296 H 84 V 284 H 80 V 260 H 88 V 252 H 96 Z" />
+    <path id="beaver-feet" fill="#16130e" d="M 116,300 H 144 V 292 H 164 V 304 H 180 V 316 H 168 V 312 H 116 Z M 228,300 H 252 V 288 H 264 V 308 H 276 V 316 H 228 Z" />
+    <path id="beaver-head-outline" fill="#16130e" d="M 156,4 H 240 V 12 H 264 V 20 H 276 V 12 H 296 V 20 H 304 V 48 H 296 V 64 H 304 V 88 H 312 V 140 H 304 V 160 H 288 V 172 H 268 V 184 H 160 V 176 H 140 V 164 H 124 V 144 H 116 V 108 H 120 V 72 H 128 V 52 H 120 V 20 H 128 V 12 H 148 V 20 H 156 Z" />
+    <path id="beaver-head-fill" fill="#b67a38" d="M 160,12 H 240 V 20 H 260 V 28 H 284 V 20 H 292 V 28 H 296 V 40 H 288 V 64 H 296 V 92 H 304 V 140 H 296 V 152 H 280 V 164 H 260 V 176 H 164 V 168 H 148 V 156 H 136 V 140 H 128 V 108 H 132 V 76 H 140 V 44 H 128 V 24 H 140 V 28 H 160 Z" />
+    <path id="beaver-ear-insets" fill="#925e30" d="M 132,24 H 140 V 32 H 148 V 44 H 136 V 36 H 132 Z M 284,28 H 292 V 40 H 280 V 48 H 272 V 36 H 284 Z" />
+    <!-- Join the neck to the head without a heavy horizontal outline. -->
+    <path id="beaver-neck" fill="#b67a38" d="M 160,168 H 256 V 196 H 144 V 180 H 160 Z" />
+    <path id="beaver-muzzle" fill="#d69a50" d="M 208,116 H 244 V 124 H 264 V 132 H 280 V 152 H 268 V 164 H 244 V 180 H 204 V 168 H 184 V 160 H 172 V 140 H 184 V 128 H 208 Z" />
+    <path id="beaver-paw-outlines" fill="#16130e" d="M 140,224 H 152 V 236 H 164 V 248 H 184 V 276 H 148 V 264 H 136 V 252 H 148 V 260 H 172 V 256 H 156 V 244 H 140 Z M 240,224 H 252 V 260 H 244 V 276 H 220 V 252 H 232 V 264 H 240 Z" />
+  </g>
+  <g id="beaver-nose" inkscape:groupmode="layer" inkscape:label="Nose">
+    <path id="beaver-nose-shape" fill="#16130e" d="M 212,116 H 244 V 132 H 236 V 140 H 220 V 132 H 212 Z" />
+  </g>
+  <g id="beaver-eyes" inkscape:groupmode="layer" inkscape:label="Eyes - blink" fill="#16130e">
+    <path id="beaver-eye-left" d="M 168,84 H 184 V 116 H 168 Z" />
+    <path id="beaver-eye-right" d="M 244,84 H 260 V 116 H 244 Z" />
+  </g>
+  <g id="beaver-mouth" inkscape:groupmode="layer" inkscape:label="Mouth and teeth - eat">
+    <path id="beaver-mouth-shape" fill="#16130e" d="M 224,140 H 232 V 144 H 240 V 148 H 252 V 140 H 260 V 152 H 248 V 180 H 212 V 156 H 196 V 152 H 192 V 140 H 200 V 148 H 216 V 144 H 224 Z" />
+    <path id="beaver-tooth-left" fill="#ffe1a4" d="M 216,156 H 228 V 176 H 216 Z" />
+    <path id="beaver-tooth-right" fill="#ffe1a4" d="M 232,156 H 244 V 176 H 232 Z" />
+  </g>
+</svg>

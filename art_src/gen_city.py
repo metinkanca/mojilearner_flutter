@@ -1,0 +1,1157 @@
+"""Turns the owner's town picture and room PNGs into the city's SVGs.
+
+    python art_src/gen_city.py              # everything: town, buildings, rooms
+    python art_src/gen_city.py ground cafe  # just these (names in PICTURES, or
+                                            # `ground` for the map and its buildings)
+    python art_src/gen_city.py --preview D  # also write the cleaned pictures and a
+                                            # whole-town composite to the folder D
+
+Writes, into assets/svgs/:  city_ground.svg, city_<building>.svg (6) and
+scenario_<id>_room.svg (6), and prints the numbers `CityLayout` in
+lib/components/scenario_city.dart is built from -- the lots, doors and paving
+lines are decided here, because they are decided by where the picture puts
+things.  `test/unit/components/scenario_city_layout_test.dart` fails if the two
+drift apart.
+
+THE TOWN is one picture, `New scenarios city map.jpg` (1344x3168, 2026-10-20):
+the owner's town with a title bar across the top, a pet at every door, a speech
+bubble at every roof, and a pet waiting on the avenue.  None of those belong to
+it -- the app draws its own title, pets and tally -- so they are taken out (see
+REPAIRS), and what is left is cut into the ground and one picture a building:
+each building is the part of the map shut in by its own outline, standing exactly
+where the owner put it, and the ground is the map with the buildings lifted out.
+The first town (two 1024x1536 maps, a pair with and without buildings) is still
+buildable with `gen_city_v1.py`.
+
+THE ROOMS are separate pictures (1942x809, drawn for the chat stage).
+
+THE SCHOOL (2026-10-20) is not on the owner's map: it is `School building.jpg`, a
+building on its own, cut and placed beside the town hall by `rearrange()`, which
+also scales the hall down to the restaurant's width, runs the avenue up between
+the two to the top edge, copies the sidewalk in front of both doors, and gives the
+two side roads out of the plaza the avenue's slab spacing.  The school is not a
+scenario: it is the way into the quizzes, so it is not in BUILDINGS (which are the
+scenarios' places) but in SCHOOL.
+
+HAND EDITS.  Every file this writes is recorded in `art_src/.city_manifest.json`
+with the fingerprint of what was written.  A file whose fingerprint no longer
+matches has been edited by hand, and is left alone (with a message) unless the run
+is given --force: the SVGs are plain paths and the owner may fix them in an editor.
+
+All of it is generated "pixel art" whose lattice is only roughly there (the
+steps drift in size from one part of a picture to the next, so there is no grid
+to recover -- the same finding as `cozy-room-scene`), with edges smeared into a
+few thousand colours.  Shown at phone size it is 3-5x smaller than it is here,
+so what has to be kept is the flat colours and the black outline:
+
+  1. KEY.     Which pixels count: a building's silhouette, a room's every pixel.
+  2. SNAP.    Every pixel becomes the nearest colour of the palette the pictures
+              were drawn with (found by clustering them), after a 3x3 median to
+              take the compression noise out.
+  3. VOTE.    Each cell takes its commonest colour, which turns smeared edges
+              back into stair-steps.
+  4. TIDY.    Anything thinner than two cells is a blur between two colours (ink
+              melting into orange reads as dark wood), not a drawn detail, so it
+              is absorbed by its neighbour.  Same rule as `gen_clinic.despeckle`.
+     THIN.    The town's outlines are a cell thinner than the picture's (see
+              THIN below), to sit with the cozy room and the pets.
+  5. TRACE.   One even-odd path per colour, each fill grown a cell under the ink
+              and later fills around it (`scene_art.asset_svg`'s scheme, for the
+              same pale-fringe reason, see cozy-room-scene), the ink painted
+              last.  Re-read and compared with the picture before it is written.
+
+Needs numpy, scipy, Pillow.  The two room pictures for the coffee shop are the
+same room with a different window; the broad window (the later file) is used.
+"""
+import argparse
+import hashlib
+import json
+import math
+import os
+import sys
+from pathlib import Path
+
+import numpy as np
+from PIL import Image
+from scipy import ndimage as ndi
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+import scene_art  # noqa: E402  (loops / path_data / rasterise live there)
+
+ASSETS = HERE.parent / 'assets' / 'svgs'
+MANIFEST = HERE / '.city_manifest.json'
+FORCE = False                   # --force: overwrite files that were edited by hand
+
+
+def write_asset(name, text):
+    """Write `name` into assets/svgs/, unless it has been edited by hand since this
+    last wrote it (its fingerprint is not the one in the manifest), which --force
+    overrides.  Files this has never recorded are taken as ours."""
+    path = ASSETS / name
+    manifest = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    # The bytes as they are written (this platform's line endings), because that is
+    # what an edit changes and what the fingerprint has to be of.
+    data = text.replace('\n', os.linesep).encode('utf-8')
+    if path.exists() and name in manifest and not FORCE:
+        now = hashlib.sha256(path.read_bytes()).hexdigest()
+        if now != manifest[name] and now != hashlib.sha256(data).hexdigest():
+            print('  KEPT %s: edited by hand since it was generated (--force overwrites)' % name)
+            return False
+    path.write_bytes(data)
+    manifest[name] = hashlib.sha256(data).hexdigest()
+    MANIFEST.write_text(json.dumps(manifest, indent=1, sort_keys=True))
+    return True
+
+GONE = -1                       # a transparent cell
+S4 = ndi.generate_binary_structure(2, 1)
+S8 = ndi.generate_binary_structure(2, 2)
+
+
+class Pal:
+    """A set of colours: paint order after the underlay, big flat fills first,
+    the ink (named 'ink') last."""
+
+    def __init__(self, colours):
+        self.names = [n for n, _ in colours]
+        self.hexes = [h for _, h in colours]
+        self.rgb = np.array([[int(h[i:i + 2], 16) for i in (1, 3, 5)] for h in self.hexes],
+                            np.float32)
+        self.ink = self.names.index('ink')
+
+    def __len__(self):
+        return len(self.names)
+
+    def index(self, *names):
+        return [self.names.index(n) for n in names]
+
+
+# The rooms'.
+MASTER = Pal([
+    ('sand', '#cfc3b1'), ('cream', '#f6eedb'), ('orange', '#f2a636'),
+    ('coral', '#ef8169'), ('purple', '#8e73ce'), ('lilac', '#a880e5'),
+    ('grass', '#b9e29a'), ('green', '#89bf63'), ('sky', '#8dd4f3'),
+    ('blue', '#3f8fc3'), ('wood', '#ab744c'), ('dkwood', '#7f5434'),
+    ('ink', '#0d0a07'),
+])
+
+# The town's, found by clustering the map.  `leaf` is the green the trees and
+# bushes are filled with, a shade off the grass; `sand` is the paving and also
+# the walls of the cream buildings; `shade` the steps, ledges and the fountain's
+# rim; `mid` the window frames, the dome's rim and the fountain's water.
+CITY = Pal([
+    ('grass', '#93c66a'), ('leaf', '#87be63'), ('dkgreen', '#3f6c55'),
+    ('sand', '#f4e1c1'), ('shade', '#dec9b4'), ('wood', '#bb8251'),
+    ('dkwood', '#926c4c'), ('coral', '#e58472'), ('purple', '#6a76b7'),
+    ('sky', '#a2d7ec'), ('blue', '#64b1dc'), ('mid', '#83c4e1'),
+    ('ink', '#050403'),
+])
+C = {name: i for i, name in enumerate(CITY.names)}
+
+
+class Picture:
+    """One room picture and how it is cut."""
+
+    def __init__(self, name, src, out, cell=3, minthick=2):
+        self.name, self.src, self.out = name, src, out
+        self.cell, self.minthick = cell, minthick
+
+
+PICTURES = [
+    Picture('room_coffee', 'Pixel café with a broad blue window.png', 'scenario_coffee_room.svg'),
+    Picture('room_restaurant', 'Warm pixel-art pizza restaurant.png', 'scenario_restaurant_room.svg'),
+    Picture('room_doctor', 'Pixel-art stethoscope on examination table.png', 'scenario_doctor_room.svg'),
+    Picture('room_shopping', 'Empty Pet Accessory Shop Interior.png', 'scenario_shopping_room.svg'),
+    Picture('room_interview', 'Bright pixel-art interview office.png', 'scenario_job_interview_room.svg'),
+    Picture('room_directions', 'Empty kiosk counter.png', 'scenario_directions_room.svg'),
+]
+
+
+# --- 2: snap ---------------------------------------------------------------------
+
+def snap(rgb, pal, allowed=None):
+    """Nearest palette colour per pixel, after a 3x3 median.  `allowed` limits
+    the choice to some colours, by name: a roof must never come out as pond."""
+    med = np.stack([ndi.median_filter(rgb[:, :, c], size=3) for c in range(3)], -1)
+    flat = med.reshape(-1, 3).astype(np.float32)
+    # weighted a little toward green, where the eye is most sensitive
+    w = np.array([2.0, 4.0, 3.0], np.float32)
+    ids = np.array(pal.index(*allowed) if allowed else range(len(pal)))
+    out = np.empty(len(flat), np.int8)
+    step = 400_000
+    for i in range(0, len(flat), step):
+        d = (((flat[i:i + step, None, :] - pal.rgb[ids][None]) ** 2) * w).sum(-1)
+        out[i:i + step] = ids[d.argmin(1)]
+    return out.reshape(rgb.shape[:2])
+
+
+# --- 3: vote ---------------------------------------------------------------------
+
+def vote(classes, keep, cell, ncls, prefer=None):
+    """Commonest class per cell; a cell is gone when most of it is.  A tie goes
+    to `prefer` (the ink): at 2 px cells a 3 px line is half a cell wider than
+    the cells it covers, and without this the half loses every time and the
+    line thins to nothing."""
+    h, w = classes.shape
+    H, W = h // cell, w // cell
+    c = classes[:H * cell, :W * cell]
+    k = keep[:H * cell, :W * cell]
+    blocks = c.reshape(H, cell, W, cell).transpose(0, 2, 1, 3).reshape(H, W, cell * cell)
+    kb = k.reshape(H, cell, W, cell).transpose(0, 2, 1, 3).reshape(H, W, cell * cell)
+    counts = np.zeros((H, W, ncls), np.float32)
+    for i in range(ncls):
+        counts[:, :, i] = ((blocks == i) & kb).sum(-1)
+    if prefer is not None:
+        counts[:, :, prefer] += 0.5
+    out = counts.argmax(-1).astype(np.int8)
+    out[kb.sum(-1) * 2 < cell * cell] = GONE
+    return out
+
+
+# --- 4: tidy ---------------------------------------------------------------------
+
+def tidy(cells, minthick, thin_ok=()):
+    """Absorb every region too thin to hold a minthick x minthick square."""
+    cells = cells.copy()
+    sq = np.ones((minthick, minthick), bool)
+    for _ in range(4):
+        thin = np.zeros(cells.shape, bool)
+        for cls in np.unique(cells):
+            if cls == GONE or cls in thin_ok:
+                continue
+            m = cells == cls
+            thin |= m & ~ndi.binary_opening(m, structure=sq)
+        if not thin.any():
+            break
+        src = ndi.distance_transform_cdt(thin, metric='chessboard',
+                                         return_distances=False, return_indices=True)
+        filled = cells[src[0], src[1]]
+        # a sliver is absorbed by a colour, never by the empty space round a
+        # sprite: that would eat the outline's outer edge
+        take = thin & (filled != GONE)
+        if not take.any():
+            break
+        cells[take] = filled[take]
+    return cells
+
+
+# --- 5: trace --------------------------------------------------------------------
+
+def paint_order(cells, pal):
+    """Classes present, by area, big first, the ink last."""
+    ids, counts = np.unique(cells[cells != GONE], return_counts=True)
+    order = [int(i) for i in ids[np.argsort(-counts)] if i != pal.ink]
+    if pal.ink in ids:
+        order.append(pal.ink)
+    return order
+
+
+def to_svg(cells, pal):
+    h, w = cells.shape
+    order = paint_order(cells, pal)
+    rank = {c: i for i, c in enumerate(order)}
+    rk = np.full(cells.shape, -1, np.int16)
+    for c, i in rank.items():
+        rk[cells == c] = i
+    solid = not (cells == GONE).any()
+
+    parts, els = [], []
+    for i, c in enumerate(order):
+        region = cells == c
+        if i == 0 and solid:
+            parts.append('<rect width="%d" height="%d" fill="%s"/>' % (w, h, pal.hexes[c]))
+            els.append(None)
+            continue
+        if c != pal.ink:
+            region |= ndi.binary_dilation(region, structure=np.ones((3, 3), bool)) & (rk > i)
+        d = scene_art.path_data(region)
+        parts.append('<path fill="%s" fill-rule="evenodd" d="%s"/>' % (pal.hexes[c], d))
+        els.append(dict(tag='path', d=d, cls=i))
+    text = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
+            'shape-rendering="crispEdges">%s</svg>\n' % (w, h, ''.join(parts)))
+
+    # re-read: painting the paths in order must give the picture back
+    back = np.full(cells.shape, -1, np.int16)
+    if solid:
+        back[:] = 0
+    for e in els:
+        if e is not None:
+            back[scene_art.rasterise(e, cells.shape)] = e['cls']
+    if not (back == rk).all():
+        bad = np.argwhere(back != rk)
+        sys.exit('traced svg does not reproduce the picture (%d cells, first at x=%d y=%d)'
+                 % (len(bad), bad[0][1], bad[0][0]))
+    return text, order
+
+
+def content_box(cells):
+    """(row0, row1, col0, col1) of the cells that are not gone."""
+    ys, xs = np.nonzero(cells != GONE)
+    return ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+
+
+def drop_islands(cells, min_cells=40):
+    """Floating bits of a silhouette: crumbs of the edge."""
+    alive = cells != GONE
+    lab, n = ndi.label(alive, structure=S8)
+    if n == 0:
+        return cells
+    size = ndi.sum(alive, lab, range(1, n + 1))
+    out = cells.copy()
+    for i, s in enumerate(size, 1):
+        if s < min_cells:
+            out[lab == i] = GONE
+    return out
+
+
+def preview(cells, path, pal):
+    h, w = cells.shape
+    img = np.zeros((h, w, 4), np.uint8)
+    for i, rgb in enumerate(pal.rgb.astype(np.uint8)):
+        img[cells == i] = (*rgb, 255)
+    Image.fromarray(img, 'RGBA').save(path)
+
+
+# --- the rooms ---------------------------------------------------------------------
+
+def build(pic, preview_dir):
+    rgb = np.asarray(Image.open(HERE / pic.src).convert('RGB'))
+    cells = vote(snap(rgb, MASTER), np.ones(rgb.shape[:2], bool), pic.cell, len(MASTER))
+    cells = tidy(cells, pic.minthick)
+    text, order = to_svg(cells, MASTER)
+    write_asset(pic.out, text)
+    h, w = cells.shape
+    print('%-16s %4dx%-4d cells  %3d KB  %s -> %s' % (
+        pic.name, w, h, len(text) // 1024,
+        ' '.join(MASTER.names[c] for c in order), pic.out))
+    if preview_dir:
+        preview(cells, Path(preview_dir) / (pic.name + '_cells.png'), MASTER)
+
+
+# --- the town ----------------------------------------------------------------------
+#
+# Positions are in cells of the town until the end, a cell being CELL wu (the
+# app's world unit).  The map is scaled to be 1024 wu across, as the first
+# town's was, so that every number in the app (a pet is 124 wu tall) means what
+# it did; the title bar is cropped off, and what is left is 2250 wu tall, taller
+# than any phone.
+
+MAP = 'New scenarios city map.jpg'
+HEADER = 214                    # source rows above this are the screen's title bar
+SRC_W = 1344
+CELL = 2                        # wu per cell: a 3-4 cell outline is the art's 1 pixel
+W_WU, H_WU = 1024, 2250
+SCALE = W_WU / SRC_W            # wu per source pixel
+AVENUE_X = 512                  # the avenue's middle: the world's
+INK = C['ink']
+
+
+def town_cells():
+    """The map as cells of CITY colours: cropped, snapped, scaled to the world
+    by sampling the classes (they are flat, so nothing is blurred in), voted."""
+    rgb = np.asarray(Image.open(HERE / MAP).convert('RGB'))
+    cls = snap(rgb, CITY)
+    ys = np.minimum(((np.arange(H_WU) + 0.5) / SCALE + HEADER).astype(int), cls.shape[0] - 1)
+    xs = np.minimum(((np.arange(W_WU) + 0.5) / SCALE).astype(int), cls.shape[1] - 1)
+    px = cls[ys][:, xs]
+    return vote(px, np.ones(px.shape, bool), CELL, len(CITY), prefer=[INK])
+
+
+# REPAIRS.  What the map shows that the app draws itself is taken out, and the
+# picture behind it put back.  The pets sat at the doors and the speech bubbles
+# at the roofs' ends, so each hid something: a step, a door, a wall's foot, a
+# roof's edge.  All but one of the buildings are the same either side of their
+# middle (the kiosk's gazebo, the town hall, the shop, the cafe, the dome), so
+# what is hidden on one side is copied, turned round, from the other: `mirror`
+# takes the cells of rows x cols from the columns `s - col`.  Where the picture
+# is not the same both sides (the paving's joints, the paths, the grass) it is
+# redrawn by hand: `fill`, and `rowext`, which carries a column across.  The
+# numbers are rows and columns of `town_cells()`.  Nothing else is touched.
+
+def mirror(cells, src, rows, cols, s):
+    (r0, r1), (c0, c1) = rows, cols
+    for c in range(c0, c1):
+        cells[r0:r1, c] = src[r0:r1, s - c]
+
+
+def fill(cells, rows, cols, name):
+    cells[rows[0]:rows[1], cols[0]:cols[1]] = C[name]
+
+
+def rowext(cells, rows, cols, from_c):
+    for r in range(*rows):
+        cells[r, cols[0]:cols[1]] = cells[r, from_c]
+
+
+def edge_line(cells, src, rows, roof, win, clear_to):
+    """Redraw the outline along a roof's edge for `rows`, where a speech bubble
+    sat against it and its border ran into the line.  The roof's own fill is
+    not touched by the bubble, so the line is where the fill ends: for each row,
+    just past the last cell of `roof` colours in the columns `win`, as thick as
+    the line is in the eight rows below `rows` (measured in `src`), never
+    further left than the row above it.  Right of the line is lawn, to
+    `clear_to`."""
+    ids = [C[n] for n in roof]
+    c0, c1 = win
+
+    def last(r, m):
+        cols = [c for c in range(c0, c1) if m[r, c] in ids]
+        return max(cols) if cols else None
+
+    widths = []
+    for r in range(rows[1], rows[1] + 8):
+        edge = last(r, src)
+        if edge is None:
+            continue
+        n = 0
+        while src[r, edge + 1 + n] == INK:
+            n += 1
+        widths.append(n)
+    thick = int(np.median(widths))
+    prev = 0
+    for r in range(*rows):
+        edge = last(r, src)
+        if edge is None:
+            continue
+        left = max(edge + 1, prev)
+        prev = left
+        cells[r, left:left + thick] = INK
+        cells[r, left + thick:clear_to] = C['grass']
+
+
+def repair(cells):
+    src = cells.copy()
+    out = cells.copy()
+
+    # --- the pets, one at each door -------------------------------------------
+    # The rabbit on the town hall's steps: the hall is the same either side of
+    # the avenue (columns c and 510 - c).
+    mirror(out, src, (240, 296), (205, 250), 510)
+    # The shop's left window: its second stool was drawn with a black smudge; the
+    # right window's, turned round, replaces it.
+    mirror(out, src, (455, 485), (346, 368), 803)
+    # The cat at the shop's door.  The door is turned about its own middle (805),
+    # the window beside it about the front's (803), in the rows the cat covered;
+    # the foot of the wall is a band of outline, the paving a joint, redrawn.
+    mirror(out, src, (481, 505), (407, 425), 805)    # with the steps, which stand out of the line
+    mirror(out, src, (481, 498), (425, 457), 803)
+    rowext(out, (498, 505), (425, 457), 459)
+    fill(out, (505, 522), (407, 459), 'sand')
+    fill(out, (505, 522), (426, 429), 'ink')
+    # The axolotl at the restaurant's door: the door's left half is its right half
+    # turned about the door's middle (223), the axolotl having covered the plain
+    # middle, which is filled, then the wall and the foot of it, and the paving
+    # with the joint that runs up to the wall.
+    mirror(out, src, (456, 480), (93, 112), 223)    # above the knob, which is not repeated
+    mirror(out, src, (480, 501), (93, 105), 223)
+    fill(out, (480, 486), (105, 113), 'wood')
+    fill(out, (486, 501), (105, 123), 'wood')
+    fill(out, (486, 499), (75, 94), 'sand')
+    fill(out, (499, 501), (67, 94), 'ink')
+    fill(out, (501, 505), (67, 124), 'ink')
+    fill(out, (505, 522), (67, 119), 'sand')
+    fill(out, (505, 522), (84, 87), 'ink')
+    # The cat at the dome's door: the door and wall turned about the door (218),
+    # the wall's foot, then the lawn and the path, whose edge is the line at 83.
+    mirror(out, src, (743, 754), (56, 106), 218)
+    fill(out, (754, 758), (56, 106), 'ink')
+    fill(out, (758, 783), (56, 83), 'grass')
+    fill(out, (758, 783), (83, 86), 'ink')
+    fill(out, (758, 783), (86, 106), 'sand')
+    # The fox at the cafe's door: the porch turned about the cafe's middle
+    # (804), the lawn and path below it about the path's own (814).
+    mirror(out, src, (735, 750), (413, 461), 804)
+    mirror(out, src, (750, 782), (413, 461), 814)
+    # The dog at the gazebo: its right half is the left half turned about the
+    # gazebo (812); the dog covered the middle too, where the panel behind it is
+    # carried down.  The path is carried on to its end, and shut off there.
+    rowext(out, (986, 1007), (398, 415), 396)
+    mirror(out, src, (986, 1007), (415, 434), 812)
+    rowext(out, (1007, 1035), (398, 431), 397)
+    fill(out, (1007, 1035), (431, 434), 'ink')
+    fill(out, (1007, 1035), (434, 444), 'grass')
+    # The cat on the avenue: paving, and its joints run straight across.
+    rowext(out, (1060, 1100), (236, 280), 233)
+
+    # --- the speech bubbles, one at each roof's end ----------------------------
+    # Each sat on the lawn against the roof's edge, and its border ran into the
+    # line.  The lawn is put back, and the line redrawn where the roof's fill
+    # ends (`edge_line`); the picture is not the same at the two ends of a roof,
+    # so nothing is copied.  The dome's bubble stood clear of it.
+    fill(out, (108, 128), (367, 396), 'grass')            # the town hall's
+    fill(out, (109, 118), (363, 367), 'grass')
+    edge_line(out, src, (118, 128), ('blue',), (340, 380), 397)
+    fill(out, (338, 357), (199, 228), 'grass')            # the restaurant's
+    edge_line(out, src, (353, 357), ('coral',), (178, 215), 228)
+    fill(out, (344, 362), (486, 512), 'grass')            # the shop's
+    edge_line(out, src, (350, 361), ('sky', 'mid', 'purple'), (462, 512), 512)
+    fill(out, (594, 612), (188, 219), 'grass')            # the dome's
+    fill(out, (602, 620), (484, 512), 'grass')            # the cafe's
+    edge_line(out, src, (605, 621), ('wood',), (455, 512), 512)
+    return out
+
+
+# THIN.  The picture's outline is one of its big pixels, 3-4 cells here, which on
+# a phone is 3.1 px: heavier than the cozy room's 2.7 px and nearly twice the
+# pets' 1.7 px (measured in captures of the home and scenarios screens), and the
+# town is 15-19% ink against the room's 11-15%.  So every outline three or more
+# cells thick loses one cell: a line of 3 is 2, of 4 is 3.  A diagonal (already
+# thinner, never three cells thick both ways) and a two-cell line are left alone,
+# and so is lone black bigger than any outline (9 cells), and a band still five or
+# more thick is peeled twice more, so thickness evens out to about 2 px.  The cell comes off the top of a horizontal line, and off the
+# OUTER side of an upright one -- the left of it left of `axis2`, the right of it
+# right of it -- so that what is the same either side of a middle stays so;
+# peeling top-left everywhere gave one slope of a roof a different line from the
+# other.  `axis2` is c + c' for the columns the picture is the same about.
+
+def thin_ink(cells, axis2=None):
+    out = cells
+    # once for everything three or more cells thick, then twice more for what is
+    # still five or more, so a heavy band is no heavier than the lines round it
+    for width in (3, 5, 5):
+        out = _peel(out, width, axis2)
+    return out
+
+
+def _peel(cells, width, axis2):
+    ink = cells == INK
+    line = ndi.binary_opening(ink, structure=np.ones((width, width), bool))
+    mass = ndi.binary_opening(ink, structure=np.ones((9, 9), bool))
+    up = np.roll(cells, 1, 0)
+    up[0] = INK
+    left = np.roll(cells, 1, 1)
+    left[:, 0] = INK
+    right = np.roll(cells, -1, 1)
+    right[:, -1] = INK
+    outer = left
+    if axis2 is not None:
+        right_half = np.arange(cells.shape[1]) * 2 > axis2
+        outer = np.where(right_half[None, :], right, left)
+    top = line & ~mass & (up != INK)
+    side = line & ~mass & (outer != INK) & ~top
+    out = cells.copy()
+    out[top] = up[top]
+    out[side] = outer[side]
+    return out
+
+
+# BUILDINGS.  What each is, a point inside it, and the box its outline is found
+# in; `blank` is grass painted over what touches it while its outline is found
+# (a bush's, a tree's) and `cut` what its picture lets go of (the edges of the
+# path it stands on); the colours it is drawn in, so the grass it stands on never
+# fringes its outline green; where its door is and the paving the player's pet
+# stands on in front of it, in wu, measured off the picture; `axis` the c + c' it is
+# the same about (what `repair` mirrors by, and what `thin_ink` keeps symmetrical);
+# `keep` a rect of fine detail that `tidy` would flatten, put back from the
+# picture (see `protect`); `chip` where its tally goes, down from the top
+# of its box in wu, when the roof's end is not the box's (the gazebo's signpost
+# sticks out past it).  Cells, except `door`, `pave` and `chip`.
+
+class Building:
+    def __init__(self, scenario, art, seed, box, colours, door, pave, axis, blank=(),
+                 cut=(), chip=None, keep=(), width=None):
+        self.scenario, self.art, self.seed, self.box = scenario, art, seed, box
+        self.colours, self.door, self.pave, self.axis = colours, door, pave, axis
+        self.blank, self.cut, self.chip, self.keep = blank, cut, chip, keep
+        self.width = width      # cells across to scale it to, before it is thinned
+
+
+BUILDINGS = [
+    Building('job_interview', 'city_office', (150, 150), (60, 276, 125, 389),
+             ['blue', 'sky', 'mid', 'sand', 'shade', 'wood', 'dkwood', 'ink'],
+             510, 580, 510, blank=[(94, 123, 112, 147)],
+             cut=[(226, 234, 120, 134), (226, 234, 380, 394)],
+             keep=[(198, 250, 228, 284)], width=223),
+    Building('restaurant', 'city_restaurant', (420, 110), (300, 505, 3, 226),
+             ['coral', 'sand', 'sky', 'mid', 'wood', 'dkwood', 'shade', 'blue', 'ink'],
+             224, 1040, 224),
+    Building('shopping', 'city_shop', (430, 400), (312, 502, 288, 512),
+             ['purple', 'sky', 'mid', 'blue', 'sand', 'wood', 'dkwood', 'shade', 'coral', 'ink'],
+             806, 1040, 803),
+    Building('doctor', 'city_clinic', (700, 100), (570, 775, 2, 222),
+             ['dkgreen', 'blue', 'sky', 'mid', 'sand', 'shade', 'wood', 'dkwood', 'ink',
+              'coral', 'leaf', 'grass'],
+             218, 1552, 218, cut=[(758, 775, 60, 134)]),
+    Building('coffee', 'city_cafe', (680, 400), (550, 760, 290, 510),
+             ['wood', 'dkwood', 'coral', 'sky', 'mid', 'sand', 'shade', 'ink'],
+             808, 1552, 804, blank=[(500, 598, 471, 512)],
+             cut=[(750, 760, 384, 387), (750, 760, 428, 431)]),
+    Building('directions', 'city_kiosk', (960, 410), (880, 1007, 350, 480),
+             ['wood', 'dkwood', 'coral', 'sand', 'shade', 'ink', 'grass'],
+             800, 2032, 812, chip=80, blank=[(870, 975, 458, 512)],
+             keep=[(955, 1004, 356, 400), (955, 1004, 418, 456)]),
+]
+
+
+# The school, which is not a scenario's place: the way into the quizzes.  Its door
+# and pavement are worked out in `build_town`, where it is put beside the hall.
+SCHOOL = Building('school', 'city_school', None, None, [], 0, 0, 0)
+ALL_PLACES = BUILDINGS + [SCHOOL]
+
+
+def protect(cells, raw, rects):
+    """Put back, from the picture before `tidy`, rects of detail finer than
+    `tidy` keeps (the town hall's door canopy: rings of blue and ink a cell or
+    two thick).  The 1-cell fringes of blended colour in them are named for what
+    they are blending: dark green and purple are ink and window frame."""
+    for r0, r1, c0, c1 in rects:
+        part = raw[r0:r1, c0:c1].copy()
+        part[part == C['dkgreen']] = INK
+        part[part == C['purple']] = C['mid']
+        part[part == C['blue']] = C['mid']
+        cells[r0:r1, c0:c1] = part
+
+
+def building_mask(cells, b):
+    """The cells shut in by a building's own outline: what the outside cannot
+    reach, going round it through anything that is not ink, from the edge of its
+    box.  Windows and doors are not ink, but are shut in; the lawn, the paving
+    and the neighbouring trees are not, so are left out.
+
+    A one-cell break in an outline would let the outside in and take a whole
+    roof with it, so the outline is closed over gaps of up to two cells first,
+    and the cells that closed one (the ones with the outside on one side and the
+    building on the other) are made ink.  Returns (mask, cells with those healed).
+    """
+    work = cells.copy()
+    for r0, r1, c0, c1 in b.blank:
+        work[r0:r1, c0:c1] = C['grass']
+    closed = ndi.binary_closing(work == INK, structure=np.ones((3, 3), bool))
+    r0, r1, c0, c1 = b.box
+    lab, _ = ndi.label(~closed[r0:r1, c0:c1], structure=S4)
+    edge = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
+    outside = np.isin(lab, edge[edge != 0])
+    full = np.zeros(cells.shape, bool)
+    full[r0:r1, c0:c1] = ~outside
+    # the gap cells: closed ink that is not ink, touching the outside
+    out_full = np.zeros(cells.shape, bool)
+    out_full[r0:r1, c0:c1] = outside
+    gap = closed & (work != INK) & ndi.binary_dilation(out_full, structure=S8)
+    healed = cells.copy()
+    healed[gap & full] = INK
+    for cr0, cr1, cc0, cc1 in b.cut:
+        full[cr0:cr1, cc0:cc1] = False
+    lab, _ = ndi.label(full, structure=S8)
+    i = lab[b.seed]
+    if i == 0:
+        sys.exit('no building at %s for %s: the outline has a gap' % (b.seed, b.art))
+    return lab == i, healed
+
+
+def building_cells(cells, mask, b):
+    """A building as cells, cropped to its silhouette: (cells, row0, col0).  A
+    cell in a colour the building is not drawn in takes the nearest one it is;
+    its outline is thinned about its own axis, and tidied."""
+    ok = mask & np.isin(cells, CITY.index(*b.colours))
+    near = ndi.distance_transform_edt(~ok, return_indices=True, return_distances=False)
+    sprite = np.where(mask, np.where(ok, cells, cells[near[0], near[1]]), GONE).astype(np.int8)
+    r0, r1, c0, c1 = content_box(sprite)
+    sub = sprite[r0:r1, c0:c1]
+    axis2, keep = b.axis - 2 * c0, b.keep
+    if b.width:                                      # scaled down while its outline is
+        axis2 = int(round(axis2 * b.width / sub.shape[1]))   # still the picture's thickness
+        sub, keep = resample(sub, b.width), ()
+    thinned = thin_ink(sub, axis2)
+    sprite = tidy(thinned, 2)
+    for k0, k1, j0, j1 in keep:                      # detail `tidy` would flatten
+        sprite[k0 - r0:k1 - r0, j0 - c0:j1 - c0] = thinned[k0 - r0:k1 - r0, j0 - c0:j1 - c0]
+    sprite = drop_islands(sprite)
+    s0, s1, d0, d1 = content_box(sprite)
+    return sprite[s0:s1, d0:d1], r0 + s0, c0 + d0
+
+
+def town_ground(cells, masks):
+    """The map with the buildings lifted out: each cell of one takes the colour
+    of the nearest cell of the ground, which is hidden by its picture anyway."""
+    gone = np.any(masks, 0)
+    near = ndi.distance_transform_edt(gone, return_indices=True, return_distances=False)
+    out = cells.copy()
+    out[gone] = cells[near[0], near[1]][gone]
+    return tidy(thin_ink(out, 2 * AVENUE_X // CELL), 2)
+
+
+def chip_dy(cells):
+    """Where the roof is at the building's right-hand end, wu down from the top
+    of its box: the top of the first opaque cell in the last 12% of columns."""
+    k = max(2, int(cells.shape[1] * 0.12))
+    rows = np.nonzero((cells[:, -k:] != GONE).any(1))[0]
+    return int(rows.min()) * CELL
+
+
+def lot_rects(sprites):
+    """Each building's box in wu: (left, top, width, height)."""
+    return {art: (c0 * CELL, r0 * CELL, cells.shape[1] * CELL, cells.shape[0] * CELL)
+            for art, (cells, r0, c0) in sprites.items()}
+
+
+def world_preview(world, sprites, lots, path, network=None):
+    """The whole town at 1 px per wu, with each building, its door and where
+    the player's pet stops in front of it."""
+    from PIL import ImageDraw
+    img = np.zeros((world.shape[0] * CELL, world.shape[1] * CELL, 4), np.uint8)
+    for i, rgb in enumerate(CITY.rgb.astype(np.uint8)):
+        img[np.kron(world == i, np.ones((CELL, CELL), bool))] = (*rgb, 255)
+    im = Image.fromarray(img, 'RGBA')
+    d = ImageDraw.Draw(im)
+    for b in ALL_PLACES:
+        cells = sprites[b.art][0]
+        left, top, w, h = lots[b.art]
+        spr = np.zeros(cells.shape + (4,), np.uint8)
+        for i, rgb in enumerate(CITY.rgb.astype(np.uint8)):
+            spr[cells == i] = (*rgb, 255)
+        spr = np.kron(spr, np.ones((CELL, CELL, 1), np.uint8))
+        im.alpha_composite(Image.fromarray(spr, 'RGBA'), (left, top))
+        d.rectangle([left, top, left + w, top + h], outline=(255, 0, 255, 255))
+        d.line([b.door, top, b.door, top + h], fill=(255, 0, 0, 255))
+        d.ellipse([b.door - 45, b.pave - 124, b.door + 45, b.pave],
+                  outline=(255, 0, 0, 255), width=3)
+    if network:
+        nodes, links = network
+        for a, b in links:
+            d.line([nodes[a], nodes[b]], fill=(255, 0, 255, 255), width=4)
+        for x, y in nodes.values():
+            d.ellipse([x - 7, y - 7, x + 7, y + 7], fill=(0, 0, 255, 255))
+    im.save(path)
+
+
+FOUNTAIN = (AVENUE_X, 1670)     # the middle of the plaza's basin
+START = (AVENUE_X, 2130)        # where the player's pet waits: the avenue, south of
+                                # the plaza and of the kiosk's path
+GRASS_HEX = CITY.hexes[C['grass']]
+
+
+# PATHS.  The pet walks the paving, not a grid: down the avenue, round the square
+# (never through its fountain), along the walkway, up a stub to a door.  This is the
+# network as junctions and the links between them, in wu, all measured off the
+# ground: the avenue is c 231-281 (x 512), the upper walkway rows 505-541 (y 1040),
+# the square an ellipse about (512, 1686) 192 across and 166 down with the
+# fountain's basin 102 across, the arms rows 822-858 (y 1680), the stubs under the
+# dome and the cafe 86-127 and 386-427 across, the gazebo's path rows 1010-1031 (y
+# 2032: a tree's crown overlaps its lower edge).  The line round the basin keeps to the middle of the ring's paving.
+# `check_paths` fails the build if any of it leaves the paving, and the layout test
+# checks the Dart side against it.
+
+RING_CENTRE = (AVENUE_X, 1682)
+RING_RADII = (150, 132)         # wu, across and down: a line round the basin
+RING_STEPS = 12
+ARMS_Y = 1682
+
+
+def path_network():
+    """(nodes, links): {name: (x, y)} and [(name, name)]."""
+    import math
+    nodes = {'top': (AVENUE_X, TOP_PAVE), 'walk': (AVENUE_X, 1040),
+             'gate': (AVENUE_X, [b.pave for b in BUILDINGS if b.scenario == 'directions'][0]),
+             'start': START}
+    for k in range(RING_STEPS):
+        a = 2 * math.pi * k / RING_STEPS
+        nodes['ring%d' % k] = (round(RING_CENTRE[0] + RING_RADII[0] * math.sin(a)),
+                               round(RING_CENTRE[1] - RING_RADII[1] * math.cos(a)))
+    east, west = RING_STEPS // 4, 3 * RING_STEPS // 4
+    for b in BUILDINGS:
+        nodes[b.scenario] = (b.door, b.pave)
+    door = {b.scenario: b.door for b in BUILDINGS}
+    nodes['school'] = (SCHOOL.door, SCHOOL.pave)
+    nodes['arm_w'] = (door['doctor'], ARMS_Y)
+    nodes['arm_e'] = (door['coffee'], ARMS_Y)
+    links = [('top', 'job_interview'), ('top', 'school'), ('top', 'walk'),
+             ('walk', 'restaurant'),
+             ('walk', 'shopping'), ('walk', 'ring0'), ('gate', 'directions'),
+             ('gate', 'start'), ('gate', 'ring%d' % (RING_STEPS // 2)),
+             ('ring%d' % west, 'arm_w'), ('arm_w', 'doctor'),
+             ('ring%d' % east, 'arm_e'), ('arm_e', 'coffee')]
+    links += [('ring%d' % k, 'ring%d' % ((k + 1) % RING_STEPS)) for k in range(RING_STEPS)]
+    return nodes, links
+
+
+def check_paths(world, nodes, links):
+    """Every point along every link must be paving (sand, or the ink of a joint
+    between two slabs) and well inside it: the nearest cell that is not paving at
+    least 6 cells (12 wu) away.  Exits with the first offender."""
+    paving = np.isin(world, [C['sand'], C['shade']])
+    walkable = ndi.binary_closing(paving, structure=np.ones((5, 5), bool))
+    fountain = np.zeros(world.shape, bool)
+    far = ndi.distance_transform_edt(walkable)
+    worst = 1e9
+    for a, b in links:
+        (x0, y0), (x1, y1) = nodes[a], nodes[b]
+        n = max(2, int(math.hypot(x1 - x0, y1 - y0) // 4))
+        for i in range(n + 1):
+            x = x0 + (x1 - x0) * i / n
+            y = y0 + (y1 - y0) * i / n
+            r, c = int(y) // CELL, int(x) // CELL
+            if not walkable[r, c] or world[r, c] == C['shade']:
+                sys.exit('path %s-%s leaves the paving at (%d, %d) wu' % (a, b, x, y))
+            worst = min(worst, far[r, c])
+    if worst < 6:
+        sys.exit('a path comes within %.1f cells of the paving\'s edge' % worst)
+    print('  paths: %d junctions, %d links, all on the paving, %.0f cells in at the edge'
+          % (len(nodes), len(links), worst))
+DART = HERE.parent / 'lib' / 'components' / 'scenario_city.dart'
+
+
+# THE SCHOOL AND THE REARRANGED TOP.  The town hall is scaled to the restaurant's
+# width and the school, cut from its own picture, stands opposite it in the shop's
+# column: the top row is the second row's pair, with the avenue between and the
+# sidewalk in front.  Everything here is in cells.
+
+SCHOOL_PIC = 'School building.jpg'
+W = W_WU // CELL                 # the world's width in cells
+STRIP = 266                      # the upper sidewalk's first row (the lower one's is 505)
+LOWER_STRIP = (505, 545)         # its sand is 505-542, its bottom outline 543-544
+AVE = (226, 288)                 # the avenue and a little lawn either side of it
+PITCH = 95                       # two tiles of the avenue's paving (joints every 47.4)
+HALL_COL, SCHOOL_COL = 3, 288    # the left column's first cell, the right column's
+TOP_PAVE = (STRIP + 15) * CELL   # where the pet stands on the upper sidewalk, wu
+
+
+def resample(sprite, width, prefer_ink=1.6):
+    """Area-vote a sprite of cells to `width` cells across, keeping its shape.
+    Ink counts extra so a thin outline survives the shrink."""
+    h, w = sprite.shape
+    out_h = max(1, round(h * width / w))
+    score = np.zeros((out_h, width, len(CITY) + 1), np.float32)
+    for k in range(-1, len(CITY)):
+        m = Image.fromarray((sprite == k).astype(np.float32), 'F')
+        part = np.asarray(m.resize((width, out_h), Image.BOX))
+        score[..., k + 1] = part * prefer_ink if k == INK else part
+    return (score.argmax(-1) - 1).astype(np.int8)
+
+
+def redraw_windows(sp):
+    """The school's four windows, redrawn.  The shrink left their frames uneven:
+    brown on one side, a black blob on the other.  Each is found by its glass and
+    drawn again the same way -- glass with an ink mullion, a two-cell brown frame,
+    a two-cell ink outline with its top corners cut, sitting on the sill -- and the
+    right ones are the left ones turned round, so a pair is the same."""
+    sky, wood, coral = C['sky'], C['wood'], C['coral']
+    width = sp.shape[1]
+    lab, n = ndi.label(ndi.binary_dilation(sp == sky, iterations=2))
+    boxes = []
+    for i in range(1, n + 1):
+        rr, cc = np.nonzero((lab == i) & (sp == sky))
+        if len(rr) < 30:
+            continue
+        c0, c1 = cc.min(), cc.max() + 1
+        if abs((c0 + c1) / 2 - (width - 1) / 2) < 45:       # the door's glass
+            continue
+        boxes.append((rr.min(), rr.max() + 1, c0, c1))
+    left = sorted(b for b in boxes if (b[2] + b[3]) / 2 < width / 2)
+    right = sorted(b for b in boxes if (b[2] + b[3]) / 2 >= width / 2)
+    if len(left) != 2 or len(right) != 2:
+        sys.exit('the school: expected 2 + 2 windows, found %d + %d' % (len(left), len(right)))
+
+    def draw(r0, r1, c0, c1):
+        sp[r0 - 4:r1 + 2, c0 - 4:c1 + 4] = INK                 # outline
+        sp[r0 - 2:r1 + 2, c0 - 2:c1 + 2] = wood                # frame, down to the sill
+        sp[r0:r1, c0:c1] = sky                                 # glass
+        m = (c0 + c1) // 2
+        sp[r0:r1, m - 1:m + 1] = INK                           # mullion
+        sp[r0 - 4, c0 - 4] = sp[r0 - 4, c1 + 3] = coral        # top corners cut
+        sp[r0 - 3, c0 - 4] = sp[r0 - 3, c1 + 3] = INK
+
+    for r0, r1, c0, c1 in left + right:                        # wipe the old ones
+        area = sp[r0 - 7:r1 + 3, c0 - 7:c1 + 7]
+        area[np.isin(area, [INK, wood, C['dkwood'], sky])] = coral
+    for r0, r1, c0, c1 in left:
+        draw(r0, r1, c0, c1)
+        draw(r0, r1, width - c1, width - c0)                   # its mirror, on the right
+    return sp
+
+
+def school_cells(width=223):
+    """The school picture as cells in the town's colours, `width` across: snapped
+    to the town palette, shrunk in two steps (to twice the width and tidied, then
+    exactly half of that, so the outlines come out clean), its windows redrawn.
+    The bell is cream against the dark arch the magenta hole behind it becomes."""
+    rgb = np.asarray(Image.open(HERE / SCHOOL_PIC).convert('RGB')).astype(int)
+    mag = (rgb[..., 0] > 200) & (rgb[..., 1] < 90) & (rgb[..., 2] > 200)
+    lab, _ = ndi.label(mag)
+    edge = set(np.unique(np.r_[lab[0], lab[-1], lab[:, 0], lab[:, -1]])) - {0}
+    outside = np.isin(lab, list(edge))
+    allowed = ['coral', 'sand', 'dkgreen', 'sky', 'blue', 'mid', 'wood', 'dkwood',
+               'ink', 'shade', 'leaf', 'grass']
+    cls = snap(rgb, CITY, allowed=allowed).astype(np.int8)
+    cls[mag & ~outside] = C['dkwood']
+    gold = (rgb[..., 0] > 215) & (rgb[..., 1] > 140) & (rgb[..., 1] < 205) & (rgb[..., 2] < 110)
+    cls[gold & (cls != INK)] = C['sand']
+    cls[outside] = GONE
+    ys, xs = np.where(cls != GONE)
+    cls = cls[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+    big = tidy(resample(cls, width * 2, prefer_ink=1.2), 3)
+    small = drop_islands(tidy(resample(big, width, prefer_ink=1.5), 2))
+    s0, s1, d0, d1 = content_box(small)
+    return redraw_windows(small[s0:s1, d0:d1].copy())
+
+
+def strip_rows(ground):
+    """The lower sidewalk, clean and full width: the right half is real paving up
+    to column 451 and repeats from there by two tiles; the left half is its
+    mirror; the avenue crossing is copied as it is."""
+    src = ground[LOWER_STRIP[0]:LOWER_STRIP[1]]
+    right = np.empty_like(src)
+    for c in range(W // 2, W):
+        right[:, c] = src[:, c if c < 452 else c - PITCH]
+    out = right.copy()
+    for c in range(0, W // 2):
+        out[:, c] = right[:, W - 1 - c]
+    out[:, AVE[0]:AVE[1]] = src[:, AVE[0]:AVE[1]]
+    return out
+
+
+def restyle_arms(world):
+    """The two roads that run out of the plaza east and west had slabs 58 cells
+    long, against the avenue's 47.5.  Their old joints are taken out and new ones
+    put at the sidewalk's spacing.  The plaza ring and the park's trees, which
+    overlap the road's lower edge, are not touched: a joint is only taken out
+    where it has paving beside it, and only put where there is paving."""
+    sand = C['sand']
+    sides = [((822, 866), (43, 44, 45, 102, 103), (39, 40, 85, 86, 133, 134)),
+             ((822, 866), (409, 410, 467, 468), (378, 379, 426, 427, 472, 473))]
+    for (r0, r1), old, new in sides:
+        for r in range(r0, r1):
+            for c in old:
+                if world[r, c] == INK and (world[r, c - 4] == sand or world[r, c + 4] == sand):
+                    world[r, c] = sand
+        for r in range(r0, r1):
+            for c in new:
+                if world[r, c] == sand:
+                    world[r, c] = INK
+
+
+def repave_stub(world, top, left, right):
+    """The short path from a door down to the road, redrawn as exactly one slab:
+    two-cell borders at `left` and `right` (the road's joint columns, so the lines
+    run straight on into it), paving between, from the building's foot (`top`) to
+    the road's own top border.  Its old borders, which ran on up behind the
+    building, are taken out."""
+    world[640:820, left - 6:right + 8] = C['grass']
+    world[top:820, left + 2:right] = C['sand']
+    world[top:820, left:left + 2] = INK
+    world[top:820, right:right + 2] = INK
+
+
+def unify_borders(world):
+    """Every straight border on a path is two cells, like the joints, the arms'
+    edges and the buildings' outlines.  The old avenue's were three: its edges and
+    a few joints.  Where a line is three the cell on the paving's side goes (left
+    edge, joints) or the one on the lawn's (right edge), so the lines stay put."""
+    sand, grass = C['sand'], C['grass']
+    for r in range(STRIP, world.shape[0]):
+        if 780 <= r <= 910:                       # the plaza: its ring is left as it is
+            continue
+        if (world[r, 228] == INK and world[r, 229] == INK and world[r, 230] == INK
+                and world[r, 231] == sand):
+            world[r, 230] = sand
+        if (world[r, 282] == INK and world[r, 283] == INK and world[r, 284] == INK
+                and world[r, 281] == sand and world[r, 285] == grass):
+            world[r, 284] = grass
+    r = 306                                       # the avenue's joints three rows thick
+    while r < world.shape[0] - 2:
+        if world[r, 256] == INK and (r < 780 or r > 910):
+            k = r
+            while world[k, 256] == INK:
+                k += 1
+            if k - r == 3 and world[r, 230] == INK:
+                world[k - 1, 230:282] = sand
+            r = k
+        r += 1
+    if world[1032, 380] == INK and world[1034, 380] == INK and world[1035, 380] == grass:
+        world[1034, 358:411] = grass              # the gazebo path's bottom border
+
+
+def restore_trees(world, ground):
+    """The trees at the edges of the second row reach up into the band the upper
+    sidewalk covers, and the lawn and paving were drawn over their tops.  Put them
+    back, over the paving: the pet never walks out to the edges, so a crown
+    overlapping the sidewalk there costs nothing."""
+    keep = (ground != C['grass']) & (ground != C['sand'])
+    region = np.zeros(ground.shape, bool)
+    region[250:350, 0:62] = True
+    region[250:350, 440:512] = True
+    lab, n = ndi.label(keep & region, structure=np.ones((3, 3)))
+    for i in range(1, n + 1):
+        m = lab == i
+        rows = np.nonzero(m.any(1))[0]
+        if rows.min() < 306 <= rows.max() and m.sum() > 150:     # a tree the sidewalk cut
+            world[m] = ground[m]
+
+
+def rearrange(ground, sprites):
+    """The ground of the new town, from the map's ground with the buildings
+    lifted out: lawn where the hall and its forecourt were, the upper sidewalk with
+    its border, the avenue drawn up to the top edge (more town is to come), the
+    edge trees put back, the side roads and the stubs to the doors re-laid."""
+    world = ground.copy()
+    strip = strip_rows(ground)
+    world[62:STRIP + 40, :] = C['grass']          # below the top edge's trees
+    world[STRIP:STRIP + 40, :] = strip
+    for c in range(W):                            # both sidewalks' top borders, in their gaps
+        if not 230 <= c < 282:
+            world[STRIP - 2:STRIP, c] = INK
+            world[LOWER_STRIP[0] - 2:LOWER_STRIP[0], c] = INK
+    restore_trees(world, ground)
+    # the avenue to the edge, drawn so its borders are straight and two cells: edges
+    # 228-229 and 282-283, a joint every 47.4 rows, the first just above the sidewalk
+    world[0:STRIP, AVE[0]:AVE[1]] = C['grass']
+    world[0:STRIP, 230:282] = C['sand']
+    world[0:STRIP, 228:230] = INK
+    world[0:STRIP, 282:284] = INK
+    for k in range(6):
+        j = round(STRIP - 7 - 47.4 * k)
+        if j >= 0:
+            world[j:j + 2, 228:284] = INK
+    unify_borders(world)
+    restyle_arms(world)
+
+    def foot(art, door):
+        """The first row under a building at its door: where its stub begins."""
+        spr, r0, c0 = sprites[art]
+        return r0 + int(np.nonzero(spr[:, door - c0] != GONE)[0].max()) + 1
+
+    repave_stub(world, foot('city_clinic', 109), 85, 133)       # the dome's
+    repave_stub(world, foot('city_cafe', 404), 378, 426)        # the cafe's
+    return world
+
+
+def build_town(preview_dir):
+    # Tidied first, so the 1-cell fringes of blended colour along the outlines are
+    # gone before thinning takes a cell off and would widen them to two.  The
+    # buildings are cut out of this, with their outlines whole, and thinned after.
+    raw = repair(town_cells())
+    cells = tidy(raw, 2)
+    for b in BUILDINGS:
+        protect(cells, raw, b.keep)
+    masks, sprites = [], {}
+    for b in BUILDINGS:
+        mask, healed = building_mask(cells, b)
+        masks.append(mask)
+        sprites[b.art] = building_cells(healed, mask, b)
+        sprite = sprites[b.art][0]
+        text, order = to_svg(sprite, CITY)
+        write_asset(b.art + '.svg', text)
+        h, w = sprite.shape
+        print('%-16s %4dx%-4d cells  %3d KB  %s -> %s.svg' % (
+            b.art, w, h, len(text) // 1024, ' '.join(CITY.names[c] for c in order), b.art))
+    # the hall, scaled, takes the left column and the school, cut from its own picture,
+    # the right one; both stand on the upper sidewalk, and their doors are their middles
+    hall = sprites['city_office'][0]
+    sprites['city_office'] = (hall, STRIP - hall.shape[0], HALL_COL)
+    school = school_cells()
+    sprites['city_school'] = (school, STRIP - school.shape[0], SCHOOL_COL)
+    text, order = to_svg(school, CITY)
+    write_asset('city_school.svg', text)
+    print('%-16s %4dx%-4d cells  %3d KB  -> city_school.svg' % (
+        'city_school', school.shape[1], school.shape[0], len(text) // 1024))
+    for b, col, spr in ((next(x for x in BUILDINGS if x.art == 'city_office'), HALL_COL, hall),
+                        (SCHOOL, SCHOOL_COL, school)):
+        b.door, b.pave = int((col + spr.shape[1] / 2) * CELL), TOP_PAVE
+    world = rearrange(town_ground(cells, np.stack(masks)), sprites)
+    assert world.shape == (H_WU // CELL, W_WU // CELL), world.shape
+    text, order = to_svg(world, CITY)
+    write_asset('city_ground.svg', text)
+    h, w = world.shape
+    print('%-16s %4dx%-4d cells  %3d KB  -> city_ground.svg  (%d x %d wu)' % (
+        'ground', w, h, len(text) // 1024, w * CELL, h * CELL))
+    lots = lot_rects(sprites)
+    chips = {b.art: b.chip if b.chip is not None else chip_dy(sprites[b.art][0])
+             for b in BUILDINGS}
+    chips[SCHOOL.art] = 0                       # no tally: its progress is on its card
+    nodes, links = path_network()
+    check_paths(world, nodes, links)
+    print_layout(lots)
+    sync_dart(lots, chips, nodes, links)
+    if preview_dir:
+        world_preview(world, sprites, lots, str(Path(preview_dir) / 'town.png'),
+                      (nodes, links))
+
+
+def print_layout(lots):
+    """The numbers `CityLayout` is built from, as the Dart that holds them."""
+    print('  world %d x %d, avenue x %d, fountain %s, start %s' % (
+        W_WU, H_WU, AVENUE_X, FOUNTAIN, START))
+    for b in ALL_PLACES:
+        left, top, w, h = lots[b.art]
+        print("    '%s': %s at (%d, %d) %dx%d, door %d, pavement %d" % (
+            b.scenario, b.art, left, top, w, h, b.door, b.pave))
+
+
+def sync_dart(lots, chips, nodes, links):
+    """Write those numbers into `CityLayout` in scenario_city.dart, and nothing
+    else, so the two cannot be pasted wrong.  Fails loudly if the file has
+    changed shape."""
+    import re
+    raw = DART.read_bytes().decode('utf-8')
+    crlf = '\r\n' in raw
+    text = raw.replace('\r\n', '\n')
+
+    def swap(pattern, repl, what):
+        nonlocal text
+        text, n = re.subn(pattern, repl, text, count=1)
+        if n != 1:
+            sys.exit('scenario_city.dart: cannot find %s to update' % what)
+
+    swap(r'static const Size mapSize = Size\([\d.]+, [\d.]+\);',
+         'static const Size mapSize = Size(%d, %d);' % (W_WU, H_WU), 'mapSize')
+    swap(r'static const double avenueX = [\d.]+;',
+         'static const double avenueX = %d;' % AVENUE_X, 'avenueX')
+    swap(r'Offset get start => const Offset\(avenueX, [\d.]+\);',
+         'Offset get start => const Offset(avenueX, %d);' % START[1], 'start')
+    swap(r'Offset get fountain => const Offset\([\d.]+, [\d.]+\);',
+         'Offset get fountain => const Offset(%d, %d);' % FOUNTAIN, 'fountain')
+    swap(r'static const Color _mapEdge = Color\(0xFF[0-9a-fA-F]{6}\);',
+         'static const Color _mapEdge = Color(0xFF%s);' % GRASS_HEX[1:], '_mapEdge')
+    for b in BUILDINGS:
+        left, top, w, h = lots[b.art]
+        swap(r"('%s': _CitySpot\(\n      art: ')\w+(',\n      bounds: Rect\.fromLTWH\()[^)]*"
+             r"(\),\n      doorX: )[\d.]+(,\n      pavement: )[\d.]+"
+             r"(,\n      chipDy: )[\d.]+" % b.scenario,
+             lambda m: '%s%s%s%d, %d, %d, %d%s%d%s%d%s%d' % (
+                 m.group(1), b.art, m.group(2), left, top, w, h, m.group(3), b.door,
+                 m.group(4), b.pave, m.group(5), chips[b.art]),
+             "the '%s' place" % b.scenario)
+    left, top, w, h = lots[SCHOOL.art]
+    swap(r"(static const _CitySpot _school = _CitySpot\(\n    art: ')\w+(',\n    bounds: Rect\.fromLTWH\()[^)]*"
+         r"(\),\n    doorX: )[\d.]+(,\n    pavement: )[\d.]+(,\n    chipDy: )[\d.]+",
+         lambda m: '%s%s%s%d, %d, %d, %d%s%d%s%d%s%d' % (
+             m.group(1), SCHOOL.art, m.group(2), left, top, w, h, m.group(3), SCHOOL.door,
+             m.group(4), SCHOOL.pave, m.group(5), 0),
+         'the school')
+    block = ('  // BEGIN paths (written by art_src/gen_city.py)\n'
+             '  static const Map<String, Offset> _nodes = {\n'
+             + ''.join("    '%s': Offset(%d, %d),\n" % (k, x, y) for k, (x, y) in nodes.items())
+             + '  };\n\n  static const List<(String, String)> _links = [\n'
+             + ''.join("    ('%s', '%s'),\n" % (a, b) for a, b in links)
+             + '  ];\n  // END paths')
+    text, n = re.subn(r'  // BEGIN paths.*?  // END paths', lambda m: block, text, count=1,
+                      flags=re.S)
+    if n != 1:
+        sys.exit('scenario_city.dart: cannot find the paths block to update')
+    if crlf:
+        text = text.replace('\n', '\r\n')
+    if text != raw:
+        DART.write_bytes(text.encode('utf-8'))
+        print('updated the numbers in lib/components/scenario_city.dart')
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('names', nargs='*')
+    ap.add_argument('--preview', metavar='DIR')
+    ap.add_argument('--force', action='store_true',
+                    help='overwrite files that were edited by hand')
+    opts = ap.parse_args()
+    global FORCE
+    FORCE = opts.force
+    if opts.preview:
+        os.makedirs(opts.preview, exist_ok=True)
+    for pic in PICTURES:
+        if opts.names and pic.name not in opts.names:
+            continue
+        build(pic, opts.preview)
+    if not opts.names or 'ground' in opts.names:
+        build_town(opts.preview)
+
+
+if __name__ == '__main__':
+    main()

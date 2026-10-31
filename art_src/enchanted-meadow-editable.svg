@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="864" height="1872" viewBox="0 0 864 1872" version="1.1" shape-rendering="crispEdges">
+  <title>Enchanted Meadow — editable pixel-art scene</title>
+  <desc>Editable 864 by 1872 pixel-art meadow with the smaller corner moon and centered right tree. Small outline chips, spurs and short accidental notches have been removed while retaining deliberate pixel steps and internal detail. Eleven named layers, seven flat colors, 2-pixel grid, and vector paths only. No embedded bitmap or external asset.</desc>
+  <g id="sky" inkscape:label="01 · Lavender sky" inkscape:groupmode="layer">
+    <rect id="sky-fill" width="864" height="1872" fill="#d9c8f0" />
+  </g>
+  <g id="moon" inkscape:label="02 · Corner moon and five craters" inkscape:groupmode="layer">
+    <path id="moon-outer-silhouette" fill="#14120e" fill-rule="evenodd" d="M0 0h396v28h-2v20h-2v14h-2v12h-2v10h-2v8h-2v8h-2v8h-2v6h-2v8h-2v6h-2v4h-2v6h-2v6h-2v4h-2v6h-2v4h-2v4h-2v6h-2v4h-2v4h-2v4h-2v4h-2v4h-2v2h-2v4h-2v4h-2v4h-2v2h-2v4h-2v4h-2v2h-2v4h-2v2h-2v4h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-4v2h-2v2h-2v2h-4v2h-2v2h-4v2h-2v2h-4v2h-2v2h-4v2h-4v2h-2v2h-4v2h-4v2h-4v2h-2v2h-4v2h-4v2h-4v2h-4v2h-4v2h-6v2h-4v2h-4v2h-6v2h-4v2h-6v2h-6v2h-4v2h-6v2h-8v2h-6v2h-8v2h-8v2h-8v2h-10v2h-12v2h-14v2h-20v2h-28z" />
+    <path id="moon-violet-face" fill="#9a7cc8" fill-rule="evenodd" d="M0 0h388v28h-2v20h-2v14h-2v12h-2v10h-2v8h-2v8h-2v6h-2v8h-2v6h-2v6h-2v6h-2v6h-2v4h-2v6h-2v4h-2v4h-2v6h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v2h-2v4h-2v4h-2v4h-2v2h-2v4h-2v2h-2v4h-2v2h-2v4h-2v2h-2v4h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-4v2h-2v2h-4v2h-2v2h-4v2h-2v2h-4v2h-2v2h-4v2h-2v2h-4v2h-4v2h-4v2h-2v2h-4v2h-4v2h-4v2h-4v2h-4v2h-4v2h-6v2h-4v2h-4v2h-6v2h-4v2h-6v2h-6v2h-6v2h-6v2h-8v2h-6v2h-8v2h-8v2h-10v2h-12v2h-14v2h-20v2h-28z" />
+    <g id="moon-crater-01" inkscape:label="Angular crater 1" transform="translate(0 0)">
+      <path id="moon-crater-01-outline" fill="#14120e" fill-rule="evenodd" d="M0 0h154v50h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-4v2h-4v2h-6v2h-6v2h-10v2h-10v2h-10v2h-10v2h-22v-2h-2v-2h-4v-2h-4v-2h-2v-2h-4v-2h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-2z" />
+      <path id="moon-crater-01-crater-purple" fill="#70549b" fill-rule="evenodd" d="M0 0h150v48h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v4h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-4v2h-4v2h-6v2h-6v2h-10v2h-10v2h-10v2h-10v2h-18v-2h-2v-2h-4v-2h-4v-2h-2v-2h-4v-2h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-4z" />
+    </g>
+    <g id="moon-crater-02" inkscape:label="Angular crater 2" transform="translate(214 22)">
+      <path id="moon-crater-02-outline" fill="#14120e" fill-rule="evenodd" d="M42 0h16v2h12v2h10v2h8v2h6v2h6v2h2v2h2v2h2v4h2v2h2v4h2v4h2v4h2v2h2v4h2v4h2v4h2v6h2v18h-2v12h-2v12h-2v8h-2v4h-2v2h-2v2h-2v2h-4v2h-2v2h-4v2h-2v2h-2v2h-4v2h-2v2h-4v2h-2v2h-52v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-48h2v-16h2v-4h2v-2h2v-2h4v-2h2v-2h2v-2h4v-2h2v-2h2v-2h2v-2h4v-2h2v-2h2v-2h4v-2h2v-2h2z" />
+      <path id="moon-crater-02-crater-purple" fill="#70549b" fill-rule="evenodd" d="M44 4h12v2h12v2h10v2h8v2h6v2h6v2h2v2h2v4h2v2h2v4h2v4h2v4h2v2h2v4h2v4h2v4h2v6h2v14h-2v12h-2v12h-2v8h-2v4h-2v2h-2v2h-4v2h-2v2h-4v2h-2v2h-2v2h-4v2h-2v2h-4v2h-2v2h-48v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-44h2v-16h2v-4h2v-2h4v-2h2v-2h2v-2h4v-2h2v-2h2v-2h2v-2h4v-2h2v-2h2v-2h4v-2h2v-2h2z" />
+    </g>
+    <g id="moon-crater-03" inkscape:label="Angular crater 3" transform="translate(256 180)">
+      <path id="moon-crater-03-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h28v2h2v2h2v2h2v4h2v26h-2v4h-2v2h-2v2h-2v2h-2v2h-26v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-30h2v-2h2v-2h4v-2h2z" />
+      <path id="moon-crater-03-crater-purple" fill="#70549b" fill-rule="evenodd" d="M12 4h24v2h2v2h2v4h2v22h-2v4h-2v2h-2v2h-2v2h-22v-2h-2v-2h-2v-2h-2v-2h-2v-26h2v-2h4v-2h2z" />
+    </g>
+    <g id="moon-crater-04" inkscape:label="Angular crater 4" transform="translate(0 204)">
+      <path id="moon-crater-04-outline" fill="#14120e" fill-rule="evenodd" d="M0 0h8v2h4v2h2v2h2v2h4v2h2v2h2v2h2v2h4v2h2v2h2v2h2v2h4v2h2v2h2v2h2v60h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-10z" />
+      <path id="moon-crater-04-crater-purple" fill="#70549b" fill-rule="evenodd" d="M0 4h6v2h4v2h2v2h2v2h4v2h2v2h2v2h2v2h4v2h2v2h2v2h2v2h4v2h2v2h2v56h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-8z" />
+    </g>
+    <g id="moon-crater-05" inkscape:label="Angular crater 5" transform="translate(90 208)">
+      <path id="moon-crater-05-outline" fill="#14120e" fill-rule="evenodd" d="M70 0h16v2h4v2h4v2h4v2h4v2h4v2h4v2h4v2h2v2h4v2h2v2h2v4h2v4h2v4h2v6h2v4h2v6h2v6h2v20h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v2h-4v2h-4v2h-4v2h-4v2h-4v2h-4v2h-6v2h-4v2h-6v2h-16v-2h-10v-2h-8v-2h-6v-2h-6v-2h-6v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-4h-2v-2h-2v-4h-2v-4h-2v-2h-2v-4h-2v-6h-2v-8h-2v-18h2v-6h2v-4h2v-4h2v-4h2v-2h2v-4h2v-4h2v-4h2v-4h2v-2h2v-4h2v-2h2v-2h4v-2h8v-2h8v-2h8v-2h8v-2h8z" />
+      <path id="moon-crater-05-crater-purple" fill="#70549b" fill-rule="evenodd" d="M72 4h12v2h4v2h4v2h4v2h4v2h4v2h4v2h4v2h2v2h4v2h2v4h2v4h2v4h2v6h2v4h2v6h2v6h2v16h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-2v4h-4v2h-4v2h-4v2h-4v2h-4v2h-4v2h-6v2h-4v2h-6v2h-12v-2h-10v-2h-8v-2h-6v-2h-6v-2h-6v-2h-2v-2h-2v-2h-2v-4h-2v-4h-2v-2h-2v-4h-2v-4h-2v-2h-2v-4h-2v-6h-2v-8h-2v-14h2v-6h2v-4h2v-4h2v-4h2v-2h2v-4h2v-4h2v-4h2v-4h2v-2h2v-4h2v-2h4v-2h8v-2h8v-2h8v-2h8v-2h8z" />
+    </g>
+  </g>
+  <g id="stars" inkscape:label="03 · Twenty-four individual stars" inkscape:groupmode="layer">
+    <g id="star-01" inkscape:label="Star 01" transform="translate(716 48)">
+      <path id="star-01-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-01-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-02" inkscape:label="Star 02" transform="translate(516 100)">
+      <path id="star-02-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-02-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-03" inkscape:label="Star 03" transform="translate(776 120)">
+      <path id="star-03-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-03-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-04" inkscape:label="Star 04" transform="translate(612 176)">
+      <path id="star-04-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-04-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-05" inkscape:label="Star 05" transform="translate(744 256)">
+      <path id="star-05-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-05-gold" fill="#f0a93c" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-06" inkscape:label="Star 06" transform="translate(556 306)">
+      <path id="star-06-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-06-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-07" inkscape:label="Star 07" transform="translate(670 388)">
+      <path id="star-07-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-07-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-08" inkscape:label="Star 08" transform="translate(804 404)">
+      <path id="star-08-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-08-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-09" inkscape:label="Star 09" transform="translate(504 438)">
+      <path id="star-09-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-09-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-10" inkscape:label="Star 10" transform="translate(36 470)">
+      <path id="star-10-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-10-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-11" inkscape:label="Star 11" transform="translate(592 514)">
+      <path id="star-11-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-11-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-12" inkscape:label="Star 12" transform="translate(382 528)">
+      <path id="star-12-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-12-gold" fill="#f0a93c" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-13" inkscape:label="Star 13" transform="translate(232 542)">
+      <path id="star-13-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-13-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-14" inkscape:label="Star 14" transform="translate(496 602)">
+      <path id="star-14-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-14-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-15" inkscape:label="Star 15" transform="translate(328 626)">
+      <path id="star-15-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-15-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-16" inkscape:label="Star 16" transform="translate(46 644)">
+      <path id="star-16-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-16-gold" fill="#f0a93c" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-17" inkscape:label="Star 17" transform="translate(804 654)">
+      <path id="star-17-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-17-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-18" inkscape:label="Star 18" transform="translate(428 696)">
+      <path id="star-18-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-18-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-19" inkscape:label="Star 19" transform="translate(606 704)">
+      <path id="star-19-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-19-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-20" inkscape:label="Star 20" transform="translate(756 724)">
+      <path id="star-20-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-20-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-21" inkscape:label="Star 21" transform="translate(84 728)">
+      <path id="star-21-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-21-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-22" inkscape:label="Star 22" transform="translate(516 802)">
+      <path id="star-22-outline" fill="#14120e" fill-rule="evenodd" d="M14 0h8v4h2v6h2v2h6v2h4v8h-4v2h-6v2h-2v6h-2v4h-8v-4h-2v-6h-2v-2h-6v-2h-4v-8h4v-2h6v-2h2v-6h2z M6 20h6v2h2v2h2v6h4v-6h2v-2h2v-2h6v-4h-6v-2h-2v-2h-2v-6h-4v6h-2v2h-2v2h-6z" />
+      <path id="star-22-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M16 6h4v6h2v2h2v2h6v4h-6v2h-2v2h-2v6h-4v-6h-2v-2h-2v-2h-6v-4h6v-2h2v-2h2z" />
+    </g>
+    <g id="star-23" inkscape:label="Star 23" transform="translate(330 808)">
+      <path id="star-23-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-23-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+    <g id="star-24" inkscape:label="Star 24" transform="translate(432 878)">
+      <path id="star-24-outline" fill="#14120e" fill-rule="evenodd" d="M10 0h8v8h2v2h6v2h2v4h-2v2h-6v2h-2v8h-8v-8h-2v-2h-6v-2h-2v-4h2v-2h6v-2h2z M10 16h2v2h4v-2h2v-4h-2v-2h-4v2h-2z" />
+      <path id="star-24-gold" fill="#f0a93c" fill-rule="evenodd" d="M12 10h4v2h2v4h-2v2h-4v-2h-2v-4h2z" />
+    </g>
+  </g>
+  <g id="hills-and-edge-growth" inkscape:label="04 · Hills and edge growth" inkscape:groupmode="layer">
+    <path id="hills-outline" fill="#14120e" fill-rule="evenodd" d="M296 770h2v2h-2z M636 802h2v2h-2z M690 838h4v2h-4z M572 858h4v2h-4z M314 924h48v6h16v6h12v6h2v2h10v4h4v2h8v4h4v2h6v2h2v2h2v2h8v4h2v2h8v2h2v2h2v2h10v-2h2v-2h2v-2h10v-6h10v-2h2v-2h8v-2h8v-2h4v-4h20v2h2v2h4v2h-10v2h-12v2h-2v2h-6v2h-12v4h-2v2h-10v2h-2v4h-10v2h-2v4h-18v-2h-2v-4h-8v-2h-2v-2h-2v-2h-8v-4h-2v-2h-2v-2h-10v-6h-10v-2h-2v-4h-10v-4h-2v-2h-12v-6h-16v-6h-2v-2h-6v2h-12v-2h-14v2h-6v4h-2v2h-14v6h-14v6h-12v4h-6v2h-2v-8h4v-4h10v-4h2v-4h14v-6h16z M554 962h4v2h-4z M838 980h16v2h6v4h4v8h-2v-2h-2v-2h-6v-2h-2v-2h-12v2h-2v2h-4v-8h4z M12 984h32v2h2v4h6v6h-10v-4h-28v2h-2v2h-8v2h-4v-8h6v-2h4v-2h2z M150 990h8v6h-6v2h-4v2h-2v-2h-2v-4h-2v-2h8z M786 990h6v8h-6v2h-4v-8h4z M98 996h4v2h4v2h2v4h-2v2h-6v-6h-2z M34 1024h18v2h-2v2h2v2h-14v2h-2v2h-2v2h-2v2h-2v6h-10v2h-2v2h-2v2h-2v6h-2v4h-2v2h-2v2h-2v10h2v6h-8v-24h6v-6h2v-2h2v-2h2v-2h2v-2h2v-2h4v-2h4v-2h2v-6h6v-2h2z M790 1032h2v6h2v2h2v2h-2v2h-6v4h-2v2h-10v2h-4v2h-2v2h-2v4h2v2h4v2h2v2h2v2h2v6h2v4h2v2h-8v-6h-2v-4h-2v-2h-6v-4h-2v-2h-14v-4h-2v-2h-2v-2h4v-2h2v-2h2v4h10v-2h2v-2h2v-2h2v-2h2v-2h8v-2h4v-2h2v-2h2v-2h2z M840 1032h14v2h4v2h2v2h4v12h-2v-4h-2v-2h-4v-2h-2v-2h-2v-2h-14v-4h2z M822 1048h4v2h-4z M524 1050h2v2h4v2h2v2h-4v4h-2v2h-12v2h-2v4h-6v2h-2v4h-4v6h-10v-6h6v-6h4v-2h2v-4h6v-2h2v-4h12v-2h2z M538 1052h2v2h-2z M728 1052h6v2h-6z M372 1056h4v6h6v6h2v2h4v10h-6v-6h-4v-6h-4v-4h-2z" />
+    <path id="hills-violet" fill="#9a7cc8" fill-rule="evenodd" d="M324 930h14v2h12v-2h6v2h2v6h16v6h12v2h2v4h10v4h2v2h10v6h10v2h2v2h2v4h8v2h2v2h2v2h8v4h2v2h18v-4h2v-2h10v-4h2v-2h10v-2h2v-4h12v-2h6v-2h2v-2h12v-2h16v2h4v2h6v2h6v2h12v2h12v2h12v2h28v24h-2v2h-2v16h-4v-6h-2v-6h-2v-2h-2v-8h-4v-2h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-4h-8v-2h-6v-2h-2v-2h-32v4h-4v2h-6v4h-4v2h-2v4h-2v2h-2v2h-2v2h-2v6h-2v2h-2v2h-2v10h-2v2h-4v22h4v2h2v4h2v4h6v4h8v6h-2v2h-12v4h-2v2h-6v4h-2v2h-4v6h-6v6h-102v-10h-4v-2h-2v-6h-6v-6h-6v-12h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-2h-2v-2h-2v-4h-2v-2h-6v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v-36h-4v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-6v4h-4v4h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-4v6h-8v-46h-6v-4h6v-2h6v-4h12v-6h14v-6h14v-2h2v-4h6z M680 970h10v4h-2v2h-2v2h-2v4h-4z M840 986h12v2h2v2h6v2h2v2h2v44h-4v-2h-2v-2h-4v-2h-16v-4h-2v-18h-2v-2h-2v-18h6v-2h2z M14 992h28v4h10v2h4v20h-2v6h-20v4h-2v2h-6v6h-2v2h-4v2h-4v2h-2v2h-2v2h-2v2h-2v2h-2v6h-6v-58h4v-2h8v-2h2z M152 996h10v8h-6v4h-4v-2h-2v-2h-2v-2h-2v-2h2v-2h4z M792 996h2v2h2v14h-2v6h-2v8h2v2h-2v2h-2v6h-2v2h-2v2h-2v2h-4v2h-8v2h-2v2h-2v2h-2v2h-2v2h-10v-4h2v-2h6v-2h4v-2h4v-2h2v-2h2v-2h2v-2h2v-4h4v-6h2v-20h-2v-6h4v-2h6z M96 1000h4v6h6v4h-2v6h-2v20h-4v-10h-2z M602 1028h4v10h-4v10h-4v-4h-2v-2h-2v-4h2v-2h2v-2h2v-2h2z M38 1030h14v2h4v2h2v2h6v2h4v2h2v26h2v2h2v6h2v4h2v2h-70v-6h-2v-10h2v-2h2v-2h2v-4h2v-6h2v-2h2v-2h2v-2h10v-6h2v-2h2v-2h2v-2h2z M800 1038h10v2h4v2h2v2h4v2h2v4h4v-6h4v-2h2v-2h2v-2h18v2h2v2h2v2h4v2h2v4h2v30h-80v-2h-2v-4h-2v-6h-2v-2h-2v-2h-2v-2h-4v-2h-2v-4h2v-2h2v-2h4v-2h10v-2h2v-4h6v-2h2v-2h4z M734 1052h10v2h2v2h2v2h2v4h14v2h2v4h6v2h2v4h2v6h-50v-8h-2v-16h2v-2h8z M532 1054h10v6h2v8h-2v6h-2v6h-40v-6h4v-4h2v-2h6v-4h2v-2h12v-2h2v-4h4z M368 1062h4v2h2v4h4v6h4v6h-20v-8h2v-2h2v-6h2z" />
+    <g id="background-behind-centered-tree" inkscape:label="Sky and hills behind the centered tree">
+      <path id="tree-background-1" fill="#d9c8f0" fill-rule="evenodd" d="M788 904h76v22h-2v2h-2v2h-8v14h-2v4h-2v4h-2v2h-2v4h-2v2h-2v2h-4v2h-2v2h-4v18h-2v2h-14v2h-14v2h-4v-60h-8z M822 924h2v-2h-2z M818 926h2v-2h-2z M832 932h2v-2h-2v-2h-2v12h2z" />
+      <path id="tree-background-2" fill="#9a7cc8" fill-rule="evenodd" d="M828 990h4v18h12v24h-44v2h-6v2h-6v-28h8v-10h-2v-2h8v-2h12v-2h14z M800 1038h44v12h-56v-8h6v-2h6z" />
+      <path id="tree-background-0" fill="#14120e" fill-rule="evenodd" d="M828 984h6v6h-6v2h-14v2h-12v2h-10v-6h8v-2h14v-2h14z M800 1032h44v6h-44v2h-6v2h-6v-6h6v-2h6z" />
+    </g>
+  </g>
+  <g id="curly-trees" inkscape:label="05 · Curly trees" inkscape:groupmode="layer">
+    <g id="left-tree" inkscape:label="Left curly tree" transform="translate(0 790)">
+      <path id="left-tree-outline" fill="#14120e" fill-rule="evenodd" d="M60 0h40v4h2v2h8v2h2v4h6v4h2v2h4v6h4v4h2v4h2v8h18v2h2v2h2v2h2v2h6v2h2v4h6v4h2v4h2v28h4v6h-4v16h-2v2h-2v2h-2v-2h-4v4h-4v6h2v24h-4v4h-2v4h-4v2h-2v2h-2v4h-8v2h-4v2h-2v2h-20v-2h-4v8h-4v2h-2v4h-6v4h-6v16h2v2h2v2h2v4h-2v26h2v12h-2v2h-6v-2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v-2h-4v-2h-2v-4h-2v-2h-4v-2h-6v-2h-2v-2h-4v-4h-2v-2h2v-2h2v-6h2v-20h-4v-8h4v-6h-6v-6h-6v-2h-2v-4h-2v-2h-4v-14h-10v-2h-4v-4h-6v-2h-2v-4h-2v-2h-4v-24h-8v-14h4v2h2v2h2v4h8v8h-2v14h2v4h2v2h2v4h6v2h4v2h18v-2h4v-2h6v-2h2v-2h2v-4h2v-6h6v6h4v2h2v2h4v2h8v-2h4v-2h2v-4h2v-4h6v12h2v2h2v2h2v2h4v2h4v2h14v-2h4v-2h8v-4h2v-2h6v-6h2v-4h2v-20h-2v-2h-2v-4h2v-2h4v-2h2v-2h4v-2h2v-2h2v-4h2v-30h-2v-4h-2v-4h-2v-4h-2v-2h-4v-2h-2v-4h-6v-2h-2v-2h-14v2h-8v-16h-2v-2h-2v-6h-4v-4h-2v-2h-4v-2h-2v-2h-2v-2h-10v-4h-2v-2h-30v6h-12v4h-2v2h-6v2h-2v2h-2v2h-4v6h-2v6h-4v18h2v6h-12v2h-2v4h-4v2h-4v4h-2v8h-8v-14h6v-4h2v-2h4v-2h2v-4h8v-22h6v-10h4v-2h2v-4h4v-2h2v-4h6v-2h2v-4h10v-2h2z M88 58h22v4h6v6h4v22h-6v-18h-2v-4h-6v-4h-14v4h-4v4h-4v12h2v2h2v4h8v-2h2v-2h2v-4h-6v-6h8v2h2v12h-2v2h-2v4h-16v-6h-6v-22h4v-4h2v-2h4z M42 170h2v6h2v2h2v2h2v2h2v2h2v2h8v52h2v2h2v2h4v2h2v2h4v2h4v-2h2v-2h2v-2h6v-10h-2v-26h-2v-2h-2v-46h-10v-2h-2v-2h-6v20h-2v2h-8v-2h-2v-2h-2v-2h-2v-4h-2v-2h-6z M100 170h4v-8h-2v-2h-2v-2h-2v-4h-4v2h-2v2h-2v22h4v-2h2v-2h2v-2h2z" />
+      <path id="left-tree-violet" fill="#9a7cc8" fill-rule="evenodd" d="M64 8h30v2h2v4h10v2h2v2h2v2h4v2h2v4h4v6h2v2h2v16h8v-2h14v2h2v2h6v4h2v2h4v2h2v4h2v4h2v4h2v30h-2v4h-2v2h-2v2h-4v2h-2v2h-4v2h-2v4h2v2h2v20h-2v4h-2v6h-6v2h-2v4h-8v2h-4v2h-14v-2h-4v-2h-4v-2h-2v-2h-2v-2h-2v-12h-6v4h-2v4h-2v2h-4v2h-8v-2h-4v-2h-2v-2h-4v-6h-6v6h-2v4h-2v2h-2v2h-6v2h-4v2h-18v-2h-4v-2h-6v-4h-2v-2h-2v-4h-2v-14h2v-8h-8v-4h-2v-2h-2v-2h-4v-32h8v-8h2v-4h4v-2h4v-4h2v-2h12v-6h-2v-18h4v-6h2v-6h4v-2h2v-2h2v-2h6v-2h2v-4h12z M92 64h14v4h6v4h2v18h6v-22h-4v-6h-6v-4h-22v4h-4v2h-2v4h-4v22h6v6h16v-4h2v-2h2v-12h-2v-2h-8v6h6v4h-2v2h-2v2h-8v-4h-2v-2h-2v-12h4v-4h4z" />
+      <path id="left-tree-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M66 154h6v2h2v2h10v46h2v2h2v26h2v10h-6v2h-2v2h-2v2h-4v-2h-4v-2h-2v-2h-4v-2h-2v-2h-2v-52h-8v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-6h-2v-6h6v2h2v4h2v2h2v2h2v2h8v-2h2z M94 154h4v4h2v2h2v2h2v8h-4v4h-2v2h-2v2h-2v2h-4v-22h2v-2h2z" />
+    </g>
+    <g id="right-tree" inkscape:label="Right curly tree · centered trunk">
+      <g id="right-tree-centered-trunk" inkscape:label="Centered trunk and root">
+        <path id="centered-trunk-outline" fill="#14120e" fill-rule="evenodd" d="M788 914h2v2h4v2h2v4h2v10h2v-4h2v-2h2v-2h4v-2h6v2h4v2h2v4h2v10h-2v4h-2v4h-2v4h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-4v30h2v18h2v14h2v6h-2v4h-2v2h-2v2h-2v2h-4v2h-6v-2h-4v-2h-4v-2h-12v-2h-4v-2h-2v-4h-2v-14h2v-88h2v-4h2v-2h4v-2h4v2h2v-2h2v-2h4v-2h2v-2h4z" />
+        <path id="centered-trunk-cream" fill="#f6f0dc" fill-rule="evenodd" d="M788 922h2v28h8v-2h2v-2h2v-2h4v-12h2v-2h6v10h-2v4h-2v4h-2v2h-2v4h-2v2h-4v4h-8v36h2v18h2v14h2v6h-2v2h-2v2h-6v-2h-4v-2h-2v-2h-14v-14h2v-88h4v8h6v-8h2v-4h4v-2h2z M770 1030h2v-2h-2z" />
+      </g>
+      <g id="right-tree-crown" inkscape:label="Original curly crown">
+        <path id="right-tree-outline" fill="#14120e" fill-rule="evenodd" d="M758 776h38v4h2v2h8v4h4v2h2v2h2v2h2v4h2v2h2v4h4v2h2v8h14v4h8v4h2v2h2v2h2v2h2v2h2v6h6v36h-2v-2h-10v-4h2v-2h2v-8h2v-6h-2v-8h-2v-4h-2v-2h-2v-4h-2v-2h-2v-2h-2v-2h-6v-2h-2v-2h-10v2h-8v-14h-2v-2h-2v-4h-2v-2h-2v-4h-8v-6h-10v-4h-2v-2h-28v6h-10v2h-2v4h-6v2h-2v4h-2v2h-2v2h-2v4h-4v4h-2v8h-2v2h-2v22h2v6h-18v2h-2v4h-6v8h4v4h2v2h4v2h2v2h2v2h2v2h4v2h2v2h4v4h2v2h4v2h2v4h2v2h4v2h2v4h4v2h2v4h4v2h2v4h2v2h2v4h10v-2h2v-2h2v-4h2v-2h6v6h2v2h4v2h4v2h16v-2h4v-2h2v-2h4v-2h2v-4h6v4h2v2h2v2h2v2h4v2h20v-2h2v-2h4v-2h2v8h-2v2h-2v2h-4v2h-20v-2h-4v-2h-4v-2h-2v-2h-6v2h-4v2h-4v2h-4v2h-16v-2h-6v-4h-6v-2h-4v2h-4v2h-2v2h-6v2h-6v-4h-2v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-4v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-2h-2v-2h-4v-4h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-4h-2v-8h4v-2h2v-4h4v-2h2v-4h6v-2h8v-10h-2v-10h2v-6h4v-2h2v-10h4v-4h4v-6h4v-2h2v-4h2v-2h6v-2h2v-4h8v-2h2z M772 836h24v2h2v2h2v2h2v2h2v2h4v24h-8v-20h-2v-2h-2v-2h-2v-2h-2v-2h-16v2h-2v2h-4v4h-2v12h2v4h2v2h2v2h6v-2h2v-2h2v-6h-6v-6h8v2h2v16h-2v2h-2v2h-14v-2h-2v-2h-2v-2h-4v-24h2v-2h2v-2h2v-2h4z" />
+        <path id="right-tree-violet" fill="#9a7cc8" fill-rule="evenodd" d="M762 784h28v2h2v4h10v6h8v4h2v2h2v4h2v2h2v14h8v-2h10v2h2v2h6v2h2v2h2v2h2v4h2v2h2v4h2v8h2v6h-2v8h-2v2h-2v4h10v2h2v48h-2v2h-4v2h-2v2h-20v-2h-4v-2h-2v-2h-2v-2h-2v-4h-6v4h-2v2h-4v2h-2v2h-4v2h-16v-2h-4v-2h-4v-2h-2v-6h-6v2h-2v4h-2v2h-2v2h-10v-4h-2v-2h-2v-4h-2v-2h-4v-4h-2v-2h-4v-4h-2v-2h-4v-2h-2v-4h-2v-2h-4v-2h-2v-4h-4v-2h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-4h-4v-8h6v-4h2v-2h18v-6h-2v-22h2v-2h2v-8h2v-4h4v-4h2v-2h2v-2h2v-4h2v-2h6v-4h2v-2h10z M776 842h16v2h2v2h2v2h2v2h2v20h8v-24h-4v-2h-2v-2h-2v-2h-2v-2h-2v-2h-24v4h-4v2h-2v2h-2v2h-2v24h4v2h2v2h2v2h14v-2h2v-2h2v-16h-2v-2h-8v6h6v6h-2v2h-2v2h-6v-2h-2v-2h-2v-4h-2v-12h2v-4h4v-2h2z" />
+      </g>
+    </g>
+  </g>
+  <g id="floating-rocks" inkscape:label="06 · Floating rocks and crystals" inkscape:groupmode="layer">
+    <g id="floating-island-1" inkscape:label="Floating island 1">
+      <g id="floating-stone-1" inkscape:label="Off-white stone 1" transform="translate(90 536)">
+        <path id="floating-stone-1-outline" fill="#14120e" fill-rule="evenodd" d="M0 0h86v22h-6v4h-2v6h-8v6h-2v4h-6v4h-2v4h-2v2h-4v2h-2v2h-2v2h-2v4h-12v-4h-2v-2h-2v-2h-2v-2h-4v-6h-6v-2h-2v-2h-2v-4h-4v-6h-6v-8h-2v-2h-4z M6 18h4v2h2v6h2v2h2v2h4v6h2v2h8v4h2v6h2v2h4v4h6v-2h2v-2h4v-6h2v-14h-8v-6h10v-6h6v6h14v-6h4v-12h-72z M60 34h4v-4h-4z" />
+        <path id="floating-stone-1-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M6 6h72v12h-4v6h-14v-6h-6v6h-10v6h8v14h-2v6h-4v2h-2v2h-6v-4h-4v-2h-2v-6h-2v-4h-8v-2h-2v-6h-4v-2h-2v-2h-2v-6h-2v-2h-4z M60 30h4v4h-4z" />
+      </g>
+      <g id="floating-crystals-1" inkscape:label="Mint crystals 1" transform="translate(108 472)">
+        <path id="floating-crystals-1-outline" fill="#14120e" fill-rule="evenodd" d="M22 0h6v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h4v44h-8v-38h-4v2h-4v2h-2v4h-2v2h-4v12h2v2h2v14h-8v-2h2v-26h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-4v38h-8v-44h4v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2z M12 22h2v2h4v4h4v2h6v-2h2v-2h2v-2h2v-2h2v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-4v2h-2v2h-2v2h-2v2h-2v2h-2z" />
+        <path id="floating-crystals-1-mint" fill="#8fe3d0" fill-rule="evenodd" d="M22 8h4v2h2v2h2v2h2v2h2v2h2v4h-2v2h-2v2h-2v2h-2v2h-6v-2h-4v-4h-4v-2h-2v-4h2v-2h2v-2h2v-2h2v-2h2z M8 26h4v2h4v2h2v2h2v2h2v2h2v26h-2v2h-14z M38 26h4v38h-12v-14h-2v-2h-2v-12h4v-2h2v-4h2v-2h4z" />
+      </g>
+    </g>
+    <g id="floating-island-2" inkscape:label="Floating island 2">
+      <g id="floating-stone-2" inkscape:label="Off-white stone 2" transform="translate(658 588)">
+        <path id="floating-stone-2-outline" fill="#14120e" fill-rule="evenodd" d="M0 0h130v30h-6v10h-6v2h-2v2h-6v10h-4v2h-2v6h-4v2h-2v2h-6v2h-4v2h-2v8h-2v2h-4v4h-2v2h-4v4h-16v-2h-2v-2h-4v-6h-4v-6h-10v-2h-2v-2h-2v-2h-2v-6h-6v-16h-12v-2h-2v-4h-2v-2h-4v-8h-6z M8 24h2v2h2v6h2v2h2v2h2v2h4v2h8v2h2v6h2v8h2v2h2v2h2v4h2v2h8v2h2v2h2v4h2v4h4v4h4v2h6v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-14h2v-12h-14v-6h14v-10h6v8h2v2h18v-2h2v-2h4v-2h2v-6h2v-2h4v-18h-116z M102 48h2v-4h-14v14h4v-2h4v-4h2v-2h2z" />
+        <path id="floating-stone-2-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M8 6h116v18h-4v2h-2v6h-2v2h-4v2h-2v2h-18v-2h-2v-8h-6v10h-14v6h14v12h-2v14h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h-6v-2h-4v-4h-4v-4h-2v-4h-2v-2h-2v-2h-8v-2h-2v-4h-2v-2h-2v-2h-2v-8h-2v-6h-2v-2h-8v-2h-4v-2h-2v-2h-2v-2h-2v-6h-2v-2h-2z M90 44h14v4h-2v2h-2v2h-2v4h-4v2h-4z" />
+      </g>
+      <g id="floating-crystals-2" inkscape:label="Mint crystals 2" transform="translate(676 502)">
+        <path id="floating-crystals-2-outline" fill="#14120e" fill-rule="evenodd" d="M62 0h6v4h2v4h2v2h2v2h4v2h2v4h2v2h4v4h2v2h4v60h-8v-32h2v-22h-6v2h-4v2h-2v2h-2v2h-2v2h-2v2h-4v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-6h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v56h-8v-18h-6v2h-2v2h-2v2h-2v2h-4v-2h-2v-2h-2v-2h-4v-2h-2v-2h-4v16h2v4h-8v-24h4v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h6v2h2v2h2v2h2v2h2v2h4v-30h4v-2h2v-4h4v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2z M12 66h4v2h2v2h6v-2h2v-2h2v-6h-2v-2h-2v-2h-6v2h-4v4h-2z" />
+        <path id="floating-crystals-2-mint" fill="#8fe3d0" fill-rule="evenodd" d="M64 10h2v2h2v2h2v2h2v2h2v2h2v2h2v6h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h4v-2h2v-2h2v-2h2v-2h2v-2h4v-2h6v22h-2v32h-40v-56h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2z M18 56h6v2h2v2h2v6h-2v2h-2v2h-6v-2h-2v-2h-4v-4h2v-4h4z M6 66h4v2h2v2h4v2h2v2h2v2h4v-2h2v-2h2v-2h2v-2h6v18h-28v-4h-2z" />
+      </g>
+    </g>
+  </g>
+  <g id="wizard-tower" inkscape:label="07 · Wizard tower" inkscape:groupmode="layer">
+    <g id="tower-masonry" inkscape:label="Tower masonry and mortar">
+      <path id="wall-behind-windows" fill="#f6f0dc" fill-rule="evenodd" d="M206 812h20v2h4v4h2v2h2v2h2v2h2v2h2v4h2v16h-2v4h-2v2h-2v2h-2v2h-2v2h-2v4h-4v2h-20v-2h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-16h2v-4h2v-2h2v-2h2v-2h2v-2h2v-4h4z M206 906h20v2h4v4h2v2h2v2h2v2h2v2h2v4h2v16h-2v4h-2v2h-2v2h-2v2h-2v2h-2v4h-4v2h-20v-2h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-16h2v-4h2v-2h2v-2h2v-2h2v-2h2v-4h4z" />
+      <path id="tower-masonry-outline" fill="#14120e" fill-rule="evenodd" d="M168 786h6v4h22v8h-22v82h8v-6h6v6h8v6h-22v78h-6v40h2v2h8v-2h4v-24h6v26h18v6h-44v32h34v6h-48v30h-10v-16h2v-6h2v-14h8v-4h2v-28h2v-4h2v-4h6v-8h-4v-8h4v-28h4v-2h2v-54h-4v-8h2v-4h2v-30h-2v-4h-2v-14h4z M258 788h6v160h4v8h-4v4h6v46h10v6h2v28h2v4h8v18h2v10h2v8h-10v-8h-2v-22h-40v30h-6v-30h-12v-6h46v-32h-34v-6h8v-2h18v-38h-6v-168h-20v-8h20z M204 812h2v2h-2z M226 812h2v2h-2z M200 816h2v2h-2z M230 816h2v2h-2z M190 828h2v2h-2z M240 828h2v2h-2z M190 846h2v2h-2z M240 846h2v2h-2z M200 858h2v2h-2z M230 858h2v2h-2z M204 862h2v2h-2z M226 862h2v2h-2z M204 906h2v2h-2z M226 906h2v2h-2z M200 910h2v2h-2z M230 910h2v2h-2z M190 922h2v2h-2z M240 922h2v2h-2z M190 940h2v2h-2z M240 940h2v2h-2z M200 952h2v2h-2z M230 952h2v2h-2z M204 956h2v2h-2z M226 956h2v2h-2z" />
+      <path id="tower-masonry-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M204 762h26v2h24v2h4v24h-20v8h20v168h6v38h-18v2h-8v6h34v32h-46v6h12v30h-90v-30h48v-6h-34v-32h44v-6h-18v-26h-6v24h-4v2h-8v-2h-2v-40h6v-78h22v-6h-8v-6h-6v6h-8v-82h22v-8h-22v-24h6v-2h24z M190 848h2v2h2v2h2v2h2v2h2v4h2v2h2v2h24v-2h2v-2h2v-4h2v-2h2v-2h2v-2h2v-2h2v-20h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-2h-2v-2h-24v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-2z M190 942h2v2h2v2h2v2h2v2h2v4h2v2h2v2h24v-2h2v-2h2v-4h2v-2h2v-2h2v-2h2v-2h2v-20h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-2h-2v-2h-24v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v2h-2z M244 1050h40v22h2v8h-42z" />
+    </g>
+    <g id="crooked-gold-roof" inkscape:label="Crooked gold roof" transform="translate(138 600)">
+      <path id="crooked-gold-roof-outline" fill="#14120e" fill-rule="evenodd" d="M120 0h28v2h2v4h8v6h4v2h2v18h-4v2h-6v-2h-2v-2h-4v-2h-2v-2h-8v2h-4v2h-2v4h-4v10h-4v34h2v2h2v18h2v2h2v14h4v2h2v12h4v10h6v8h4v2h2v4h6v18h-2v2h-4v4h-6v2h-2v2h-2v2h-8v2h-2v2h-2v2h-12v-22h-4v-2h-24v-2h-26v2h-24v2h-6v20h-6v2h-6v-4h-2v-2h-10v-4h-2v-2h-6v-4h-4v-16h2v-2h2v-2h2v-2h2v-2h4v-4h2v-2h4v-2h2v-2h2v-2h2v-2h2v-2h2v-4h4v-2h2v-2h2v-4h2v-4h2v-2h2v-2h2v-4h2v-2h2v-2h2v-6h2v-2h2v-4h2v-2h2v-4h2v-2h2v-4h2v-6h4v-6h2v-2h2v-6h2v-2h2v-6h4v-2h2v-6h2v-4h4v-6h2v-2h2v-2h2v-6h4v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-4h8v-4h2z M132 20h16v2h4v2h4v-8h-2v-2h-8v-4h-2v-2h-22v6h-6v2h-2v2h-4v2h-2v4h-4v6h-2v2h-2v2h-2v4h-2v2h-2v4h-2v4h-2v2h-2v6h-2v2h-2v4h-2v4h-2v2h-2v2h-2v4h-2v6h-4v6h-2v2h-2v2h-2v6h-2v2h-2v4h-2v4h-2v2h-2v4h-2v2h-2v2h-2v4h-2v4h-2v2h-2v2h-2v2h-2v4h-4v4h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v2h-2v6h2v2h2v2h2v2h4v2h2v2h4v2h6v-10h-4v2h-6v-4h2v-2h2v-2h6v-2h8v-2h16v-2h56v2h12v2h6v2h4v2h4v2h4v4h-8v-2h-6v12h4v-2h4v-2h6v-2h2v-4h4v-2h2v-2h2v-2h2v-6h-2v-2h-4v-4h-2v-2h-2v-2h-2v-4h-2v-4h-2v-6h-2v-2h-2v-8h-2v-4h-2v-2h-2v-12h-2v-2h-2v-18h-2v-4h-2v-44h4v-6h2v-2h2v-4h2v-2h4z" />
+      <path id="crooked-gold-roof-gold" fill="#f0a93c" fill-rule="evenodd" d="M122 8h22v2h2v4h8v2h2v8h-4v-2h-4v-2h-16v4h-4v2h-2v4h-2v2h-2v6h-4v44h2v4h2v18h2v2h2v12h2v2h2v4h2v8h2v2h2v6h2v4h2v4h2v2h2v2h2v4h4v2h2v6h-2v2h-2v2h-2v2h-4v4h-2v2h-6v2h-4v2h-4v-12h6v2h8v-4h-4v-2h-4v-2h-4v-2h-6v-2h-12v-2h-56v2h-16v2h-8v2h-6v2h-2v2h-2v4h6v-2h4v10h-6v-2h-4v-2h-2v-2h-4v-2h-2v-2h-2v-2h-2v-6h2v-2h2v-2h2v-2h2v-2h2v-2h4v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-4h4v-4h2v-2h2v-2h2v-2h2v-4h2v-4h2v-2h2v-2h2v-4h2v-2h2v-4h2v-4h2v-2h2v-6h2v-2h2v-2h2v-6h4v-6h2v-4h2v-2h2v-2h2v-4h2v-4h2v-2h2v-6h2v-2h2v-4h2v-4h2v-2h2v-4h2v-2h2v-2h2v-6h4v-4h2v-2h4v-2h2v-2h6z" />
+    </g>
+    <g id="tower-window-1" inkscape:label="Mint window 1" transform="translate(190 812)">
+      <path id="tower-window-1-outline" fill="#14120e" fill-rule="evenodd" d="M16 0h20v2h4v4h2v2h2v2h2v2h2v2h2v4h2v16h-2v4h-2v2h-2v2h-2v2h-2v2h-2v4h-4v2h-20v-2h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-16h2v-4h2v-2h2v-2h2v-2h2v-2h2v-4h4z M6 34h2v2h2v2h2v2h2v2h2v4h20v-4h2v-2h2v-2h2v-2h2v-2h2v-16h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-20v4h-2v2h-2v2h-2v2h-2v2h-2z" />
+      <path id="tower-window-1-mint" fill="#8fe3d0" fill-rule="evenodd" d="M16 6h20v4h2v2h2v2h2v2h2v2h2v16h-2v2h-2v2h-2v2h-2v2h-2v4h-20v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-16h2v-2h2v-2h2v-2h2v-2h2z" />
+    </g>
+    <g id="tower-window-2" inkscape:label="Mint window 2" transform="translate(190 906)">
+      <path id="tower-window-2-outline" fill="#14120e" fill-rule="evenodd" d="M16 0h20v2h4v4h2v2h2v2h2v2h2v2h2v4h2v16h-2v4h-2v2h-2v2h-2v2h-2v2h-2v4h-4v2h-20v-2h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-16h2v-4h2v-2h2v-2h2v-2h2v-2h2v-4h4z M6 34h2v2h2v2h2v2h2v2h2v4h20v-4h2v-2h2v-2h2v-2h2v-2h2v-16h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-20v4h-2v2h-2v2h-2v2h-2v2h-2z" />
+      <path id="tower-window-2-mint" fill="#8fe3d0" fill-rule="evenodd" d="M16 6h20v4h2v2h2v2h2v2h2v2h2v16h-2v2h-2v2h-2v2h-2v2h-2v4h-20v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-16h2v-2h2v-2h2v-2h2v-2h2z" />
+    </g>
+  </g>
+  <g id="ground-crystals" inkscape:label="08 · Four ground crystals" inkscape:groupmode="layer">
+    <g id="left-small-crystal" inkscape:label="Small crystal left of tower" transform="translate(70 1030)">
+      <path id="left-small-crystal-outline" fill="#14120e" fill-rule="evenodd" d="M20 0h6v2h2v4h8v2h2v2h2v4h2v4h2v12h2v12h2v8h-8v-8h-2v-12h-2v-6h-2v-4h-4v2h-2v2h-2v2h-4v2h-6v-2h-4v-2h-4v8h2v8h2v4h2v4h2v2h-8v-2h-2v-4h-2v-6h-2v-2h-2v-22h2v-2h2v-4h6v-2h2v-2h2v-2h6z M28 16h2v-2h-4v-2h-2v-2h-4v-2h-2v2h-2v2h-2v2h-2v8h4v2h6v-2h2v-2h2v-2h2z" />
+      <path id="left-small-crystal-mint" fill="#8fe3d0" fill-rule="evenodd" d="M18 8h2v2h4v2h2v2h4v2h-2v2h-2v2h-2v2h-2v2h-6v-2h-4v-8h2v-2h2v-2h2z M30 20h4v4h2v6h2v12h2v8h-24v-2h-2v-4h-2v-4h-2v-8h-2v-8h4v2h4v2h6v-2h4v-2h2v-2h2z" />
+    </g>
+    <g id="left-tall-crystal" inkscape:label="Tall crystal left of tower" transform="translate(100 986)">
+      <path id="left-tall-crystal-outline" fill="#14120e" fill-rule="evenodd" d="M26 0h6v2h2v2h2v2h2v2h2v2h2v-2h2v4h2v4h2v2h2v2h2v2h4v6h2v12h2v18h-2v6h-10v20h-2v2h-2v8h-10v-14h-2v-10h-2v-16h-2v-14h-2v-2h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-4v30h2v2h2v14h2v12h2v8h-8v-8h-2v-12h-2v-6h-2v-6h-2v-4h-2v-8h2v-20h2v-6h2v-6h2v-4h2v2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2z M40 26h2v-4h-2v-2h-2v-2h-2v-4h-2v-2h-2v-2h-2v-2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v8h4v2h2v2h2v2h2v2h6v-2h2v-2h2v-2h2v-2h2z M32 52h2v10h2v10h2v2h2v-2h2v-14h8v-18h-2v-10h-6v2h-2v2h-2v2h-2v2h-2v2h-2z" />
+      <path id="left-tall-crystal-mint" fill="#8fe3d0" fill-rule="evenodd" d="M28 8h2v2h2v2h2v2h2v4h2v2h2v2h2v4h-2v2h-2v2h-2v2h-2v2h-2v2h-6v-2h-2v-2h-2v-2h-2v-2h-4v-8h2v-2h2v-2h2v-2h2v-2h2v-2h2z M10 28h4v2h2v2h2v2h2v2h4v2h2v2h2v14h2v16h2v10h2v14h-16v-8h-2v-12h-2v-14h-2v-2h-2z M42 30h6v10h2v18h-8v14h-2v2h-2v-2h-2v-10h-2v-10h-2v-12h2v-2h2v-2h2v-2h2v-2h2z" />
+    </g>
+    <g id="right-tall-crystal" inkscape:label="Tall crystal right of tower" transform="translate(274 978)">
+      <path id="right-tall-crystal-outline" fill="#14120e" fill-rule="evenodd" d="M28 0h6v4h2v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h4v36h2v-2h2v12h-4v14h-4v6h-2v14h-6v-24h4v-6h2v-44h-6v4h-2v2h-2v2h-2v2h-4v2h-2v12h-2v10h-2v10h-2v6h-2v18h2v6h-10v-6h-2v-4h-2v-2h-2v-18h-8v-6h-2v-18h2v-20h2v-6h4v-2h2v-2h2v-2h2v-2h2v-2h4v-2h2v-2h2v-4h4z M18 24h2v4h4v2h2v4h2v2h6v-2h2v-4h2v-2h2v-2h2v-8h-2v-2h-2v-2h-2v-2h-2v-2h-6v2h-2v2h-2v2h-2v2h-2v2h-2z M26 50h2v-12h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-4v22h-2v18h8v14h2v-4h2v-12h2v-2h2z" />
+      <path id="right-tall-crystal-mint" fill="#8fe3d0" fill-rule="evenodd" d="M28 10h6v2h2v2h2v2h2v2h2v8h-2v2h-2v2h-2v4h-2v2h-6v-2h-2v-4h-2v-2h-4v-4h-2v-4h2v-2h2v-2h2v-2h2v-2h2z M12 26h4v2h2v2h2v2h2v2h2v2h2v2h2v12h-2v12h-2v2h-2v12h-2v4h-2v-14h-8v-18h2z M44 28h6v44h-2v6h-4v24h-18v-6h-2v-18h2v-6h2v-10h2v-10h2v-12h2v-2h4v-2h2v-2h2v-2h2z" />
+    </g>
+    <g id="right-small-crystal" inkscape:label="Small crystal right of tower" transform="translate(318 1024)">
+      <path id="right-small-crystal-outline" fill="#14120e" fill-rule="evenodd" d="M26 0h6v2h2v4h2v2h2v2h2v2h4v2h2v2h2v2h2v2h2v12h2v6h-4v2h-2v6h-2v2h-2v8h-6v-10h2v-6h4v-14h-6v2h-2v2h-4v2h-4v12h-2v6h-2v6h-6v-2h2v-4h2v-8h2v-12h-4v-4h-2v-2h-2v-2h-4v14h-4v6h-2v14h-6v-24h4v-6h2v-12h2v-2h2v-2h2v2h2v-2h2v-2h4v-2h2v-2h2v-2h2z M18 22h2v2h2v2h2v2h6v-2h4v-2h4v-8h-2v-2h-2v-2h-2v-2h-2v-2h-4v2h-2v2h-2v2h-2v2h-2z" />
+      <path id="right-small-crystal-mint" fill="#8fe3d0" fill-rule="evenodd" d="M26 8h4v2h2v2h2v2h2v2h2v8h-4v2h-4v2h-6v-2h-2v-2h-2v-2h-2v-6h2v-2h2v-2h2v-2h2z M12 22h4v2h2v2h2v4h4v12h-2v8h-2v4h-2v2h-12v-14h2v-6h4z M38 26h6v14h-4v6h-2v10h-14v-6h2v-6h2v-12h4v-2h4v-2h2z" />
+    </g>
+  </g>
+  <g id="mushrooms" inkscape:label="09 · Three mushrooms" inkscape:groupmode="layer">
+    <g id="large-mushroom" inkscape:label="Large curled mushroom" transform="translate(518 802)">
+      <path id="large-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M120 0h40v2h2v2h2v2h6v2h2v4h2v2h4v20h-2v2h-4v2h-2v-4h-2v-2h-2v-2h-2v-2h-8v2h-2v2h-2v6h2v2h2v2h2v2h4v2h2v2h2v2h4v2h2v2h2v2h6v2h2v2h2v4h4v4h2v2h4v2h2v2h2v2h2v2h4v2h2v2h4v4h2v2h4v2h2v4h2v2h4v2h2v4h4v2h2v4h4v2h2v4h2v2h2v4h4v2h2v4h2v2h-4v16h-2v4h-4v2h-2v2h-4v4h-2v2h-2v2h-6v2h-2v-2h-6v2h-12v2h-8v2h-8v2h-2v2h-6v2h-8v-2h2v-2h-12v12h2v16h-2v6h2v10h-2v12h2v2h2v6h2v2h2v24h-4v20h-10v-6h2v-6h2v-32h-2v-4h-2v-2h-2v-76h-2v-2h-6v-2h-36v2h-6v6h2v44h-4v8h-2v10h-2v6h-2v8h-2v12h-4v24h2v4h2v6h-10v-4h-2v-6h-2v-22h2v4h2v-14h4v-18h2v-10h2v2h4v-16h2v-2h2v-24h-28v-2h-12v-2h-12v-2h-8v-2h-10v-2h-6v-2h-4v-2h-6v-2h-4v-2h-2v-2h-2v-4h-2v-6h-4v-22h4v-2h2v-6h4v-4h2v-2h4v-2h2v-4h4v-4h4v-2h2v-4h4v-4h2v-2h2v-2h2v-2h2v-2h2v-2h4v-4h2v-2h2v-2h2v-2h2v-4h4v-2h2v-2h2v-4h4v-6h4v-4h2v-2h4v-2h2v-4h2v-2h2v-2h2v-2h4v-4h2v-2h4v-2h2v-4h2v-2h6v-2h2v-2h2v-2h8v-2h2v-2h2z M154 20h10v2h2v2h6v-2h-2v-4h-2v-2h-2v-2h-6v-4h-2v-2h-32v2h-6v4h-8v2h-2v2h-2v2h-4v2h-4v4h-4v2h-2v4h-4v2h-2v2h-2v4h-4v6h-4v2h-2v2h-2v2h-2v4h-2v2h-4v6h-2v2h-4v4h-4v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h-4v2h-2v4h-2v2h-2v2h-2v10h2v2h2v4h2v2h2v2h2v2h2v2h2v2h6v-2h-2v-4h-2v-8h2v-4h2v-2h2v-2h2v-2h2v-2h4v-2h2v-2h4v-2h4v-2h2v-2h4v-2h4v-2h6v-2h6v-2h4v-2h8v-2h10v-2h6v-2h56v2h2v2h14v2h4v2h4v2h6v2h6v2h4v2h6v2h2v2h6v2h2v2h4v2h2v2h4v2h2v2h2v2h2v2h2v4h2v8h-2v4h4v-2h4v-2h2v-2h2v-4h2v-12h-2v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-4v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-2h-2v-2h-4v-4h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-2h-2v-2h-4v-2h-2v-4h-2v-2h-6v-4h-2v-2h-4v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-10h2v-4h2v-2h2v-2h4z M92 110h2v4h2v4h2v4h2v4h2v2h2v4h2v4h2v4h2v2h36v-2h2v-2h2v-4h2v-4h2v-4h2v-4h2v-4h2v-2h2v-8h-2v-2h-10v-2h-52v2h-6z M48 124h2v2h4v2h4v2h6v2h4v2h2v2h4v2h4v2h4v2h6v2h6v2h6v-2h2v-4h-2v-4h-2v-6h-2v-2h-2v-4h-2v-2h-2v-6h-2v-2h-2v-6h-6v2h-8v2h-4v2h-6v2h-6v2h-4v2h-4z M196 128h4v-6h-4v-2h-2v-2h-6v-2h-4v-2h-6v-2h-4v-2h-4v4h-2v2h-2v6h-2v2h-2v4h-2v4h-2v4h-2v4h-2v4h4v2h6v-2h4v-2h4v-2h4v-2h6v-2h4v-2h2v-2h4v-2h4z M30 142h2v2h2v2h2v2h2v2h4v2h4v2h18v-2h10v-2h8v-4h-6v-2h-4v-2h-6v-2h-2v-2h-6v-2h-4v-2h-2v-2h-4v-2h-4v-2h-8v2h-2v2h-2v2h-2z M218 146h2v-10h-2v-2h-2v-2h-2v-2h-6v2h-4v2h-4v2h-4v2h-4v2h-4v2h-4v2h-4v2h-6v6h6v2h8v2h14v-2h8v-2h4v-2h2v-2h2z M72 160h8v2h18v-8h-12v2h-8v2h-6z M160 162h20v-4h-6v-2h-8v-2h-6z" />
+      <path id="large-mushroom-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M98 104h52v2h10v2h2v8h-2v2h-2v4h-2v4h-2v4h-2v4h-2v4h-2v2h-2v2h-36v-2h-2v-4h-2v-4h-2v-4h-2v-2h-2v-4h-2v-4h-2v-4h-2v-4h-2v-4h6z M80 108h6v6h2v2h2v6h2v2h2v4h2v2h2v6h2v4h2v4h-2v2h-6v-2h-6v-2h-6v-2h-4v-2h-4v-2h-4v-2h-2v-2h-4v-2h-6v-2h-4v-2h-4v-2h-2v-4h4v-2h4v-2h6v-2h6v-2h4v-2h8z M170 110h4v2h4v2h6v2h4v2h6v2h2v2h4v6h-4v2h-4v2h-4v2h-2v2h-4v2h-6v2h-4v2h-4v2h-4v2h-6v-2h-4v-4h2v-4h2v-4h2v-4h2v-4h2v-2h2v-6h2v-2h2z M36 128h8v2h4v2h4v2h2v2h4v2h6v2h2v2h6v2h4v2h6v4h-8v2h-10v2h-18v-2h-4v-2h-4v-2h-2v-2h-2v-2h-2v-2h-2v-8h2v-2h2v-2h2z M208 130h6v2h2v2h2v2h2v10h-2v2h-2v2h-2v2h-4v2h-8v2h-14v-2h-8v-2h-6v-6h6v-2h4v-2h4v-2h4v-2h4v-2h4v-2h4v-2h4z M110 148h36v2h6v2h2v76h2v2h2v4h2v32h-2v6h-2v6h-62v-6h-2v-4h-2v-24h4v-12h2v-8h2v-6h2v-10h2v-8h4v-44h-2v-6h6z M86 154h12v8h-18v-2h-8v-2h6v-2h8z M160 154h6v2h8v2h6v4h-20z" />
+      <path id="large-mushroom-gold" fill="#f0a93c" fill-rule="evenodd" d="M126 8h32v2h2v4h6v2h2v2h2v4h2v2h-6v-2h-2v-2h-10v2h-4v2h-2v2h-2v4h-2v10h2v2h2v2h2v2h2v2h2v2h4v2h2v4h6v2h2v4h2v2h4v2h2v2h2v2h4v2h2v2h2v2h2v2h4v2h2v4h4v2h2v2h2v2h4v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h4v4h2v2h2v2h2v2h2v2h2v2h2v4h2v12h-2v4h-2v2h-2v2h-4v2h-4v-4h2v-8h-2v-4h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-2v-2h-4v-2h-2v-2h-6v-2h-2v-2h-6v-2h-4v-2h-6v-2h-6v-2h-4v-2h-4v-2h-14v-2h-2v-2h-56v2h-6v2h-10v2h-8v2h-4v2h-6v2h-6v2h-4v2h-4v2h-2v2h-4v2h-4v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v4h-2v8h2v4h2v2h-6v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-2h-2v-10h2v-2h2v-2h2v-4h2v-2h4v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h4v-4h4v-2h2v-6h4v-2h2v-4h2v-2h2v-2h2v-2h4v-6h4v-4h2v-2h2v-2h4v-4h2v-2h4v-4h4v-2h4v-2h2v-2h2v-2h8v-4h6z" />
+    </g>
+    <g id="left-mushroom" inkscape:label="Small left mushroom" transform="translate(502 968)">
+      <path id="left-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M36 0h32v2h2v2h6v2h8v4h2v2h4v2h2v2h2v2h2v2h2v2h4v8h2v2h2v6h2v6h2v8h-2v6h-2v2h-6v4h-2v2h-2v2h-2v2h-2v4h2v2h2v4h4v4h2v8h2v6h2v14h-10v-14h-2v-4h-2v-10h-2v-2h-2v-4h-2v-6h-2v-2h-2v-4h-2v-2h-4v-2h-4v-2h-12v2h-6v2h-4v2h-2v2h-2v2h-2v6h2v6h2v24h-2v6h-8v-6h2v-6h2v-8h-2v-6h-2v-2h-2v2h-8v-2h-4v-2h-2v-2h-8v-4h-6v-4h-2v-4h-2v-2h-4v-22h4v-2h2v-10h2v-2h2v-2h2v-6h2v-2h2v-2h2v-2h2v-4h2v-2h4v-4h6v-2h4z M98 52h2v-14h-2v-2h-2v-6h-2v-2h-2v-4h-4v-2h-2v-4h-4v-2h-2v-2h-4v-2h-6v-2h-4v-2h-26v2h-4v2h-4v2h-2v2h-2v2h-2v2h-2v4h-2v2h-2v2h-2v6h-2v2h-2v2h-2v10h-2v2h-2v10h2v4h2v4h2v2h4v2h2v2h8v2h8v-6h2v-4h2v-2h2v-2h2v-2h2v-2h4v-2h6v-2h22v2h2v2h4v2h2v4h4v-2h2v-2h2v-2h2v-4h2z" />
+      <path id="left-mushroom-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M60 60h12v2h4v2h4v2h2v4h2v2h2v6h2v4h2v2h2v10h2v4h2v14h-50v-6h2v-24h-2v-6h-2v-6h2v-2h2v-2h2v-2h4v-2h6z" />
+      <path id="left-mushroom-gold" fill="#f0a93c" fill-rule="evenodd" d="M40 8h26v2h4v2h6v2h4v2h2v2h4v4h2v2h4v4h2v2h2v6h2v2h2v14h-2v2h-2v4h-2v2h-2v2h-2v2h-4v-4h-2v-2h-4v-2h-2v-2h-22v2h-6v2h-4v2h-2v2h-2v2h-2v2h-2v4h-2v6h-8v-2h-8v-2h-2v-2h-4v-2h-2v-4h-2v-4h-2v-10h2v-2h2v-10h2v-2h2v-2h2v-6h2v-2h2v-2h2v-4h2v-2h2v-2h2v-2h2v-2h4v-2h4z" />
+    </g>
+    <g id="right-mushroom" inkscape:label="Small right mushroom" transform="translate(672 954)">
+      <path id="right-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M56 0h14v2h6v2h4v4h6v4h4v2h2v2h2v2h2v2h2v2h2v4h2v4h2v4h2v6h4v12h2v20h-2v6h-4v4h-2v2h-2v2h-2v2h-2v2h-4v2h-4v2h-6v2h-4v2h-2v2h-6v-2h-16v2h-2v2h-2v16h2v8h-8v-6h-2v-22h2v-6h-2v-2h-2v-2h-2v-2h-6v-2h-12v4h-2v2h-2v6h-2v10h-4v20h-10v-6h2v-6h2v-18h2v-6h2v-2h-4v-6h-2v-4h-2v-2h-2v-38h2v-4h2v-4h2v-2h6v-4h2v-2h2v-2h2v-6h4v-2h2v-2h4v-2h4v-2h4v-2h12v-2h8z M28 42h24v2h2v2h8v2h6v2h2v2h6v2h2v2h2v2h4v2h4v2h2v2h2v2h2v2h2v2h2v4h4v-2h2v-18h-2v-8h-2v-8h-2v-4h-2v-4h-2v-2h-2v-4h-2v-2h-2v-2h-2v-2h-4v-2h-4v-2h-2v-2h-6v-2h-20v2h-8v2h-4v2h-4v2h-4v2h-2v2h-4v2h-2v2h-2v2h-2v2h-2v4h-2v2h-2v4h-2v4h-2v4h6v-2h6v-2h8z M50 58h2v-8h-20v2h-2v10h-2v16h8v2h4v-2h2v-6h2v-4h2v-4h2v-2h2z M22 64h2v-12h-8v2h-4v4h-2v2h-2v12h2v2h2v6h8v-2h2z M74 68h2v-6h-2v-2h-4v-2h-4v-2h-2v-2h-6v6h-2v4h-2v4h-2v6h-2v2h-2v2h-2v6h2v2h2v2h2v2h4v-2h2v-4h2v-2h2v-2h2v-2h2v-4h2v-2h2v-2h4z M92 82h2v-6h-2v-2h-2v-4h-12v4h-2v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h14v-2h6v-2h4v-2h4z" />
+      <path id="right-mushroom-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M32 50h20v8h-2v4h-2v2h-2v4h-2v4h-2v6h-2v2h-4v-2h-8v-16h2v-10h2z M16 52h8v12h-2v14h-2v2h-8v-6h-2v-2h-2v-12h2v-2h2v-4h4z M58 54h6v2h2v2h4v2h4v2h2v6h-2v2h-4v2h-2v2h-2v4h-2v2h-2v2h-2v2h-2v4h-2v2h-4v-2h-2v-2h-2v-2h-2v-6h2v-2h2v-2h2v-6h2v-4h2v-4h2z M78 70h12v4h2v2h2v6h-2v2h-4v2h-4v2h-6v2h-14v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2z M22 84h12v2h6v2h2v2h2v2h2v6h-2v22h2v6h-34v-20h4v-10h2v-6h2v-2h2z" />
+      <path id="right-mushroom-gold" fill="#f0a93c" fill-rule="evenodd" d="M50 10h20v2h6v2h2v2h4v2h4v2h2v2h2v2h2v4h2v2h2v4h2v4h2v8h2v8h2v18h-2v2h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-4v-2h-4v-2h-2v-2h-2v-2h-6v-2h-2v-2h-6v-2h-8v-2h-2v-2h-24v2h-8v2h-6v2h-6v-4h2v-4h2v-4h2v-2h2v-4h2v-2h2v-2h2v-2h2v-2h4v-2h2v-2h4v-2h4v-2h4v-2h8z" />
+    </g>
+  </g>
+  <g id="level-ground" inkscape:label="10 · Open level foreground" inkscape:groupmode="layer">
+    <rect id="violet-ground" x="0" y="1086" width="864" height="786" fill="#9a7cc8" />
+    <rect id="straight-ground-outline" x="0" y="1080" width="864" height="6" fill="#14120e" />
+  </g>
+  <g id="gold-flowers" inkscape:label="11 · Three identical flowers" inkscape:groupmode="layer">
+    <g id="flower-1" inkscape:label="Gold flower 1" transform="translate(34 1112)">
+      <path id="flower-1-outline" fill="#14120e" fill-rule="evenodd" d="M20 0h16v2h2v2h2v4h10v2h2v2h2v2h2v2h2v2h2v14h-2v2h-4v6h2v10h-2v2h-2v2h-2v2h-4v4h-14v-4h-6v4h-14v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-10h2v-2h2v-4h-4v-2h-2v-14h2v-2h2v-2h2v-2h2v-2h2v-2h8v-4h2z M6 28h2v2h2v2h4v6h-4v10h2v4h2v2h8v-2h4v-4h2v-2h2v2h2v4h2v2h10v-2h2v-4h4v-6h-2v-2h-2v-2h-2v-6h6v-2h2v-10h-2v-2h-2v-2h-8v2h-4v-8h-2v-2h-2v-2h-6v2h-4v10h-4v-2h-8v2h-2v8h-2z" />
+      <path id="flower-1-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M24 26h12v12h-12z" />
+      <path id="flower-1-gold" fill="#f0a93c" fill-rule="evenodd" d="M26 6h6v2h2v2h2v8h4v-2h8v2h2v2h2v10h-2v2h-6v6h2v2h2v2h2v6h-4v4h-2v2h-10v-2h-2v-4h-2v-2h-2v2h-2v4h-4v2h-8v-2h-2v-4h-2v-10h4v-6h-4v-2h-2v-2h-2v-2h2v-8h2v-2h8v2h4v-10h4z M24 38h12v-12h-12z" />
+    </g>
+    <g id="flower-2" inkscape:label="Gold flower 2" transform="translate(770 1148)">
+      <path id="flower-2-outline" fill="#14120e" fill-rule="evenodd" d="M20 0h16v2h2v2h2v4h10v2h2v2h2v2h2v2h2v2h2v14h-2v2h-4v6h2v10h-2v2h-2v2h-2v2h-4v4h-14v-4h-6v4h-14v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-10h2v-2h2v-4h-4v-2h-2v-14h2v-2h2v-2h2v-2h2v-2h2v-2h8v-4h2z M6 28h2v2h2v2h4v6h-4v10h2v4h2v2h8v-2h4v-4h2v-2h2v2h2v4h2v2h10v-2h2v-4h4v-6h-2v-2h-2v-2h-2v-6h6v-2h2v-10h-2v-2h-2v-2h-8v2h-4v-8h-2v-2h-2v-2h-6v2h-4v10h-4v-2h-8v2h-2v8h-2z" />
+      <path id="flower-2-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M24 26h12v12h-12z" />
+      <path id="flower-2-gold" fill="#f0a93c" fill-rule="evenodd" d="M26 6h6v2h2v2h2v8h4v-2h8v2h2v2h2v10h-2v2h-6v6h2v2h2v2h2v6h-4v4h-2v2h-10v-2h-2v-4h-2v-2h-2v2h-2v4h-4v2h-8v-2h-2v-4h-2v-10h4v-6h-4v-2h-2v-2h-2v-2h2v-8h2v-2h8v2h4v-10h4z M24 38h12v-12h-12z" />
+    </g>
+    <g id="flower-3" inkscape:label="Gold flower 3" transform="translate(110 1188)">
+      <path id="flower-3-outline" fill="#14120e" fill-rule="evenodd" d="M20 0h16v2h2v2h2v4h10v2h2v2h2v2h2v2h2v2h2v14h-2v2h-4v6h2v10h-2v2h-2v2h-2v2h-4v4h-14v-4h-6v4h-14v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-10h2v-2h2v-4h-4v-2h-2v-14h2v-2h2v-2h2v-2h2v-2h2v-2h8v-4h2z M6 28h2v2h2v2h4v6h-4v10h2v4h2v2h8v-2h4v-4h2v-2h2v2h2v4h2v2h10v-2h2v-4h4v-6h-2v-2h-2v-2h-2v-6h6v-2h2v-10h-2v-2h-2v-2h-8v2h-4v-8h-2v-2h-2v-2h-6v2h-4v10h-4v-2h-8v2h-2v8h-2z" />
+      <path id="flower-3-off-white" fill="#f6f0dc" fill-rule="evenodd" d="M24 26h12v12h-12z" />
+      <path id="flower-3-gold" fill="#f0a93c" fill-rule="evenodd" d="M26 6h6v2h2v2h2v8h4v-2h8v2h2v2h2v10h-2v2h-6v6h2v2h2v2h2v6h-4v4h-2v2h-10v-2h-2v-4h-2v-2h-2v2h-2v4h-4v2h-8v-2h-2v-4h-2v-10h4v-6h-4v-2h-2v-2h-2v-2h2v-8h2v-2h8v2h4v-10h4z M24 38h12v-12h-12z" />
+    </g>
+  </g>
+</svg>

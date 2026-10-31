@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="770"
+   height="841"
+   viewBox="0 0 770 841"
+   shape-rendering="crispEdges"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="penguin-compact.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="0.67851982"
+     inkscape:cx="250.54537"
+     inkscape:cy="431.08541"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <title
+     id="title1">Penguin - compact body</title>
+  <desc
+     id="desc1">Six editable color paths. Transparent background. Horizontal and vertical edges only.</desc>
+  <path
+     id="silhouette"
+     fill="#120f0a"
+     fill-rule="evenodd"
+     d="m 380,10 h 180 v 20 h 60 v 20 h 30 v 20 h 20 v 30 h 20 20 v 30 70 h 20 v 10 20 10 10 90 h -10 v 30 h -20 v 30 h -30 v 20 10 h 10 20 v 30 h 20 v 40 h 20 v 50 h 20 v 110 h -20 v 20 h -50 v 30 h -20 v 30 h -20 v 30 h 20 v 50 h -20 v 10 H 500 v -10 -10 h -10 -90 v 20 H 210 V 800 H 170 V 780 H 150 V 750 H 130 V 710 H 110 V 680 H 10 V 570 h 20 v -40 h 20 v -50 h 20 v -20 -10 h 10 20 v -40 h 20 v -20 h 20 v -30 h 20 v -40 h 20 V 220 210 h 10 20 v -60 h 20 v -40 h 20 V 90 h 30 V 70 h 20 V 50 h 20 V 30 h 60 z"
+     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="navy-feathers"
+     fill="#283d5c"
+     fill-rule="evenodd"
+     d="m 400,30 h 140 v 20 h 60 v 30 h 30 v 20 h 20 v 30 h 20 20 v 20 50 h -20 v -30 h -10 v -20 h -50 v 20 h -20 v 20 h -10 v 10 h -10 v 30 h -80 v -30 h -10 v -10 h -10 v -20 h -30 v -20 h -80 v 20 h -30 v 30 h -20 v 40 h -20 v 80 h 20 v 40 h 30 v 20 h 30 v 40 h -20 v 40 h -20 v 70 h -20 v 40 h -30 v 60 h -20 v 60 h 20 v 50 h -20 v 30 h -80 v -30 -10 h -10 -20 v -70 h 20 v -20 h 20 v -30 h 30 v -30 h 20 v -30 h 20 v -60 h -30 v 40 h -20 v 30 h -20 v 30 h -20 v 20 h -20 v 30 h -20 v 20 H 40 v -70 h 20 v -40 h 20 v -50 h 20 v -30 h 20 v -30 h 30 v -40 h 20 v -20 h 20 v -40 h 20 V 240 h 20 v -70 h 30 v -30 h 20 v -40 h 30 V 80 h 30 10 V 70 50 h 50 z m 220,370 h 20 v 20 h 10 v 20 h 20 v 30 h 20 v 30 h 20 v 60 h 20 V 660 H 710 V 640 H 690 V 530 h -50 v -80 h -20 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="blue-gray-flippers"
+     fill="#516582"
+     fill-rule="evenodd"
+     d="m 160,430 h 60 v 10 h 20 v 50 h -10 v 40 h -20 v 30 h -20 v 30 h -20 v 20 h -20 v 30 h -20 v 20 H 40 v -70 h 20 v -40 h 20 v -50 h 20 v -30 h 20 v -30 h 40 z m 530,80 h 20 v 50 h 20 v 100 h -20 v -20 h -20 z"
+     style="display:none" />
+  <path
+     id="cream-face-and-belly"
+     fill="#ffedc8"
+     fill-rule="evenodd"
+     d="m 360,150 h 80 v 20 h 30 v 20 h 10 10 v 10 30 h 80 v -30 -10 h 10 10 v -20 h 20 v -20 h 50 v 20 h 10 v 30 h 20 v 20 h 10 v 110 h -20 v 30 h -20 v 20 h -20 v 20 h -20 v 50 h 20 v 80 h 20 v 150 h -20 v 40 h -20 v 20 h -60 v 15 h -20 v 15 h -20 v 20 H 400 v -20 h -40 v -10 h -40 v -20 h -40 v -50 h -20 v -60 h 20 v -60 h 30 v -40 h 20 v -70 h 20 v -40 h 20 v -40 h -30 v -20 h -30 v -40 h -20 v -80 h 20 v -40 h 20 v -30 h 30 z m 20,70 v 70 h 40 v -70 z m 230,0 v 70 h 40 v -70 z m -110,40 v 10 h -20 v 20 0 10 0 20 h 20 v 20 h 60 v -20 h 20 v -30 h -10 v -20 h -10 v -10 z"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="orange-beak-and-feet"
+     fill="#ffa11c"
+     fill-rule="evenodd"
+     d="m 500,260 h 60 v 10 h 20 v 40 H 480 v -10 -10 -20 h 20 z M 280,760 h 60 v 20 10 h 10 20 v 20 H 240 v -20 h 20 20 v -20 z m 270,0 h 70 v 30 h 20 v 20 H 520 v -20 h 20 10 v -10 z"
+     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="orange-shading"
+     fill="#c76a09"
+     fill-rule="evenodd"
+     d="m 580,310 v 10 h -20 v 20 h -60 v -20 h -20 v -10 h 90 z"
+     sodipodi:nodetypes="cccccccccc" />
+</svg>

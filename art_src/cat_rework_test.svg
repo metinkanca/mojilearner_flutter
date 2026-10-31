@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="330" height="331" viewBox="0 0 330 331" shape-rendering="crispEdges" version="1.1">
+  <title>Cat rework test - editable vector</title>
+  <desc>Aligned to dog_rework_test_2.svg: 330 by 331 canvas; crown y=4; eye boxes 168,84..184,116 and 244,84..260,116; nose center x=228; mouth y=140..156; shared body and foot baseline y=328. Solid fur behind independent facial layers.</desc>
+  <g id="cat-base" inkscape:groupmode="layer" inkscape:label="Body and coat">
+    <path id="cat-tail-outline" fill="#16130e" d="M 24,176 H 56 V 184 H 68 V 212 H 56 V 224 H 60 V 232 H 80 V 276 H 68 V 296 H 52 V 288 H 40 V 280 H 28 V 272 H 20 V 264 H 12 V 248 H 4 V 196 H 12 V 184 H 24 Z" />
+    <path id="cat-tail-coat" fill="#777a65" d="M 24,188 H 52 V 192 H 56 V 204 H 48 V 212 H 44 V 228 H 48 V 240 H 68 V 268 H 56 V 280 H 44 V 272 H 32 V 260 H 24 V 244 H 16 V 200 H 24 Z" />
+    <path id="cat-body-outline" fill="#16130e" d="M 116,156 H 248 V 196 H 256 V 280 H 260 V 288 H 268 V 328 H 68 V 316 H 60 V 304 H 48 V 256 H 60 V 228 H 72 V 216 H 92 V 196 H 104 V 184 H 112 V 172 H 116 Z" />
+    <path id="cat-head-outline" fill="#16130e" d="M 88,4 H 108 V 12 H 124 V 24 H 144 V 12 H 156 V 4 H 240 V 12 H 252 V 24 H 272 V 12 H 288 V 4 H 308 V 108 H 316 V 120 H 328 V 132 H 304 V 140 H 328 V 152 H 304 V 160 H 280 V 172 H 264 V 184 H 144 V 176 H 128 V 168 H 112 V 156 H 88 V 148 H 68 V 136 H 92 V 128 H 68 V 116 H 88 Z" />
+    <path id="cat-body-coat" fill="#969680" d="M 104,196 h 12 v -12 h 4 4 v -8 h 8 v -12 h 4 v 8 h 8 v 4 h 112 -72 v 0 49 h 11 v 19 h 5 v 48 h 8 v 24 h -40 v -16 h -4 -4 v -4 -8 h -4 v -32 -4 h -4 -8 v -8 h -12 v 8 4 h 8 4 v 28 h -12 v 4 4 4 h 16 v 4 4 h 4 4 v 8 4 H 152 72 V 304 H 60 v -48 h 12 v -24 h 8 v -12 h 12 v -12 h 12 z m 140,0 v 60 32 4 h 4 12 v 20 4 h -4 -36 v -24 h -8 v -8 h -4 v -40 h -13 v -19 h -11 v -49 h 56 v 7 7 6 z" />
+    <path id="cat-head-coat" fill="#969680" d="M 96,12 H 104 V 20 H 120 V 32 H 152 V 20 H 160 V 12 H 240 V 24 H 248 V 32 H 276 V 20 H 292 V 12 H 300 V 112 H 304 V 120 H 296 V 132 H 288 V 140 H 296 V 152 H 280 V 160 H 264 V 172 H 152 V 168 H 136 V 160 H 120 V 148 H 104 V 140 H 112 V 128 H 104 V 120 H 96 Z" />
+    <path id="cat-ear-insets" fill="#eca895" d="M 104,28 H 112 V 36 H 124 V 44 H 136 V 60 H 104 Z M 284,36 H 292 V 64 H 264 V 48 H 276 V 40 H 284 Z" />
+    <path id="cat-muzzle" fill="#efe0b7" d="M 208,116 H 244 V 124 H 252 V 132 H 260 V 144 H 268 V 164 H 256 V 172 H 184 V 164 H 172 V 144 H 184 V 132 H 196 V 124 H 208 Z" />
+  </g>
+  <g id="cat-nose" inkscape:groupmode="layer" inkscape:label="Nose">
+    <path id="cat-nose-shape" fill="#16130e" d="M 216,116 H 240 V 128 H 236 V 132 H 232 V 140 H 224 V 132 H 220 V 128 H 216 Z" />
+  </g>
+  <g id="cat-eyes" inkscape:groupmode="layer" inkscape:label="Eyes - blink">
+    <path id="cat-eye-left" fill="#16130e" d="M 168,84 H 184 V 116 H 168 Z" />
+    <path id="cat-eye-right" fill="#16130e" d="M 244,84 H 260 V 116 H 244 Z" />
+  </g>
+  <g id="cat-mouth" inkscape:groupmode="layer" inkscape:label="Mouth - eat">
+    <path id="cat-mouth-shape" fill="#16130e" d="M 224,140 H 232 V 144 H 236 V 148 H 248 V 144 H 256 V 156 H 232 V 152 H 224 V 156 H 196 V 144 H 204 V 148 H 220 V 144 H 224 Z" />
+  </g>
+</svg>

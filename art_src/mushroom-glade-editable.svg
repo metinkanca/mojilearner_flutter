@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="864" height="1872" viewBox="0 0 864 1872" version="1.1" shape-rendering="crispEdges">
+  <title>Mushroom Glade — selected, cleaned design</title>
+  <desc>Editable 864 by 1872 mushroom glade. Small outline spurs and shallow accidental notches have been cleaned while preserving deliberate pixel steps, the composition, all seven mushrooms and twenty-three spots. Eleven named layers, five flat colours, a two-pixel grid, and editable vector geometry only. No embedded bitmap or external asset.</desc>
+  <g id="sky" inkscape:label="01 · Plain sky" inkscape:groupmode="layer">
+    <rect id="sky-fill" width="864" height="1872" fill="#a8dcef" />
+  </g>
+  <g id="ground" inkscape:label="02 · Level foreground and horizon" inkscape:groupmode="layer">
+    <rect id="moss-ground-fill" x="0" y="1096" width="864" height="776" fill="#5db89a" />
+    <rect id="straight-ground-outline" x="0" y="1096" width="864" height="6" fill="#14120e" />
+    <path id="visible-ground-edge" fill="#14120e" fill-rule="evenodd" d="M0 1096h84v4h-2v2h-82z M240 1096h332v6h-336v-2h2v-2h2z M814 1096h50v6h-54v-2h2v-2h2z" />
+  </g>
+  <g id="edge-moss" inkscape:label="03 · Moss at the edges" inkscape:groupmode="layer">
+    <g id="left-moss" inkscape:label="Left moss clumps">
+      <path id="left-moss-fill" fill="#5db89a" fill-rule="evenodd" d="M40 1018h12v2h6v4h4v2h4v4h4v4h2v2h8v-2h2v-4h4v-2h2v-2h6v-2h4v-4h4v-2h6v2h6v12h-14v4h-8v2h-2v2h-2v2h-4v4h-2v2h-2v2h-2v2h-2v2h-2v8h-4v8h-8v4h-2v2h-2v4h-4v6h-2v10h-52v-40h8v-4h2v-4h2v-6h2v-2h2v-4h2v-2h2v-4h4v-2h2v-2h6v-2h2v-4h6z M238 1024h8v2h2v2h6v2h2v6h2v2h14v6h6v4h2v4h4v6h4v6h18v4h4v2h2v2h2v4h4v8h2v12h-54v-6h-4v-6h-2v-2h-2v-2h-4v-2h-2v-4h-18v-40h-2v-8h6z M66 1078h4v8h2v2h2v2h14v4h-2v2h-28v-6h2v-4h2v-2h2v-4h2z M238 1080h8v4h4v2h6v10h-18z" />
+      <path id="left-moss-outline" fill="#14120e" fill-rule="evenodd" d="M38 1012h18v2h4v4h6v2h4v4h12v-4h8v-2h4v-2h2v-4h6v2h10v6h-4v-2h-6v2h-4v4h-4v2h-6v2h-2v2h-4v4h-2v2h-8v-2h-2v-4h-4v-4h-4v-2h-4v-4h-6v-2h-12v2h-6v4h-2v2h-6v2h-2v2h-4v4h-2v2h-2v4h-2v2h-2v6h-2v4h-2v4h-8v-8h4v-6h2v-2h2v-6h2v-2h2v-2h2v-4h4v-2h2v-4h8v-2h2v-4h8z M236 1018h14v2h4v4h6v2h2v4h2v2h12v4h2v2h4v4h4v4h2v2h2v6h2v4h18v4h6v4h2v2h2v2h2v2h2v8h4v16h-8v-12h-2v-8h-4v-4h-2v-2h-2v-2h-4v-4h-18v-6h-4v-6h-4v-4h-2v-4h-6v-6h-14v-2h-2v-6h-2v-2h-6v-2h-2v-2h-8v2h-2z M232 1024h2v2h-2z M62 1070h4v10h-2v4h-2v2h-2v4h-2v6h-6v-10h2v-6h4v-4h2v-2h2z M236 1074h16v4h2v2h4v2h2v2h2v6h4v6h-10v-10h-6v-2h-4v-4h-6v-2h-2v-2h-2z" />
+    </g>
+    <g id="right-moss" inkscape:label="Right moss clumps">
+      <path id="right-moss-fill" fill="#5db89a" fill-rule="evenodd" d="M778 986h6v2h12v6h10v4h6v2h2v2h2v2h2v2h2v2h2v4h4v4h2v4h4v6h2v2h2v8h18v6h4v2h2v4h4v48h-30v-10h-4v-6h-2v-2h-4v-4h-6v-4h-12v-2h-4v-2h-2v-2h-2v-2h-6v-4h-10v-40h-4z M570 1030h8v22h-4v16h-6v2h-2v4h-6v4h-4v2h-2v6h-4v10h-40v-12h2v-2h2v-4h2v-4h2v-6h6v-4h16v-8h2v-2h2v-4h2v-2h2v-2h2v-4h4v-2h4v-2h2v-2h6v-2h4z M570 1076h4v20h-18v-6h4v-6h4v-4h6z M812 1078h4v2h4v4h4v6h4v4h-2v2h-14z" />
+      <path id="right-moss-outline" fill="#14120e" fill-rule="evenodd" d="M612 876h2v2h-2z M782 980h6v2h2v2h12v4h8v4h6v2h4v2h2v2h2v4h2v2h4v6h2v2h2v2h4v8h4v8h16v4h2v2h4v12h-4v-4h-2v-2h-4v-6h-18v-8h-2v-2h-2v-6h-4v-4h-2v-4h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-6v-4h-10v-6h-12v-2h-2z M566 1024h8v6h-4v4h-4v2h-6v2h-2v2h-4v2h-4v4h-2v2h-2v2h-2v4h-2v2h-2v8h-16v4h-6v6h-2v4h-2v4h-2v2h-2v12h-6v-18h4v-6h2v-2h2v-6h2v-2h6v-4h14v-6h2v-2h2v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h4v-2h6v-2h2v-2h2z M568 1068h2v12h-6v4h-4v6h-4v6h-6v-10h4v-6h2v-2h4v-4h6v-4h2z M810 1070h8v4h6v4h4v2h2v6h4v10h-8v-2h2v-4h-4v-6h-4v-4h-4v-2h-2v-2h-2v-2h-2z" />
+    </g>
+  </g>
+  <g id="mushrooms" inkscape:label="04 · Seven individual mushrooms" inkscape:groupmode="layer">
+    <g id="tall-right-mushroom" inkscape:label="01 · Tall mushroom · back right" inkscape:groupmode="layer">
+      <path id="tall-right-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M678 698h62v6h14v4h10v6h8v4h10v6h6v4h4v4h2v2h2v2h2v2h2v2h2v2h4v4h4v6h2v2h2v2h2v4h2v2h4v10h4v2h2v2h2v8h6v10h4v12h6v40h-6v8h-2v2h-2v2h-2v2h-2v2h-2v2h-6v4h-8v4h-6v2h-4v2h-6v2h-4v2h-28v2h-2v8h4v46h4v34h4v10h4v6h-4v32h4v40h2v6h-20v4h-6v4h-2v2h-4v4h-2v4h-4v12h4v2h8v6h-2v12h-6v-2h-36v2h-6v-14h-2v-6h-2v-10h18v-2h2v-2h4v-14h-2v-2h-2v-8h-4v-4h-4v-6h-2v-2h-2v-2h-2v-2h-4v-4h-2v-2h-6v-4h-10v-4h-16v4h-10v2h-6v-2h-2v-32h2v-2h2v2h12v-2h2v-2h-2v-2h20v-4h6v-4h2v-20h-4v-8h-2v-8h-2v-2h-4v-6h-4v-4h-4v-4h-4v-4h-2v-2h-2v-4h-4v-4h-2v-2h-6v-4h-10v-6h-6v-4h2v-2h2v-10h2v-8h-2v-2h-4v2h-8v-2h-12v2h-4v-4h-4v-2h-4v-2h-6v-2h-6v-4h-8v-4h-6v-4h-4v-4h-2v-2h-4v-8h-4v-40h4v-12h4v-10h4v-2h2v-6h2v-2h2v-2h2v-6h2v-2h2v-2h4v-2h2v-4h2v-2h2v-4h2v-2h2v-2h4v-4h2v-2h4v-4h4v-2h2v-4h4v-2h2v-4h6v-6h10v-4h6v-6h10v-4h16z M576 840h4v8h4v4h2v2h2v2h6v6h8v2h2v2h14v-4h12v-4h2v-2h16v-4h18v-2h2v-4h78v6h20v4h16v4h2v2h10v4h18v-4h8v-4h6v-2h2v-4h4v-4h4v-8h4v-26h-4v-2h-2v-12h-4v-10h-4v-8h-4v-6h-6v-10h-4v-6h-6v-2h-2v-6h-2v-2h-2v-2h-4v-6h-4v-2h-4v-6h-6v-4h-6v-6h-8v-4h-2v-2h-6v-4h-10v-4h-2v-2h-14v-4h-52v4h-14v6h-10v4h-6v6h-10v4h-2v2h-6v4h-4v4h-2v2h-4v2h-2v4h-4v6h-6v6h-2v2h-4v6h-6v2h-2v2h-2v6h-2v2h-2v4h-4v6h-4v10h-4v16h-4z M622 876h26v-14h-4v2h-10v2h-10v2h-2z M766 876h26v-4h-2v-4h-2v-2h-10v-2h-2v-2h-4v2h-6z M652 906h10v2h2v4h6v2h2v2h2v2h2v2h2v4h2v2h2v2h2v2h4v4h4v6h4v10h4v2h2v8h4v28h-4v2h-2v4h-6v4h-12v2h-6v2h-2v2h-12v20h4v-2h2v-2h26v4h8v4h2v2h6v2h2v2h2v2h2v2h2v2h2v2h2v4h4v6h4v8h4v26h-6v4h-16v6h2v10h36v-4h-6v-2h-4v-22h2v-4h4v-4h2v-2h2v-2h2v-2h2v-2h6v-4h16v-34h-4v-50h-4v-34h-4v-46h-4v-38h-20v-4h-68v4h-18v38h-2z" />
+      <g id="tall-right-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="tall-right-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M672 852h68v4h20v38h4v46h4v34h4v50h4v34h-16v4h-6v2h-2v2h-2v2h-2v2h-2v4h-4v4h-2v22h4v2h6v4h-36v-10h-2v-6h16v-4h6v-26h-4v-8h-4v-6h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-6v-2h-2v-4h-8v-4h-26v2h-2v2h-4v-20h12v-2h2v-2h6v-2h12v-4h6v-4h2v-2h4v-28h-4v-8h-2v-2h-4v-10h-4v-6h-4v-4h-4v-2h-2v-2h-2v-2h-2v-4h-2v-2h-2v-2h-2v-2h-2v-2h-6v-4h-2v-2h-10v-12h2v-38h18z" />
+        <path id="tall-right-mushroom-underside-1" fill="#f6f0dc" fill-rule="evenodd" d="M644 862h4v14h-26v-8h2v-2h10v-2h10z" />
+        <path id="tall-right-mushroom-underside-2" fill="#f6f0dc" fill-rule="evenodd" d="M772 862h4v2h2v2h10v2h2v4h2v4h-26v-12h6z" />
+      </g>
+      <g id="tall-right-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="tall-right-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M682 704h52v4h14v2h2v4h10v4h6v2h2v4h8v6h6v4h6v6h4v2h4v6h4v2h2v2h2v6h2v2h6v6h4v10h6v6h4v8h4v10h4v12h2v2h4v26h-4v8h-4v4h-4v4h-2v2h-6v4h-8v4h-18v-4h-10v-2h-2v-4h-16v-4h-20v-6h-78v4h-2v2h-18v4h-16v2h-2v4h-12v4h-14v-2h-2v-2h-8v-6h-6v-2h-2v-2h-2v-4h-4v-8h-4v-26h4v-16h4v-10h4v-6h4v-4h2v-2h2v-6h2v-2h2v-2h6v-6h4v-2h2v-6h6v-6h4v-4h2v-2h4v-2h2v-4h4v-4h6v-2h2v-4h10v-6h6v-4h10v-6h14z" />
+        <g id="tall-right-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="tall-right-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M722 730h10v2h6v2h2v2h2v2h2v2h2v2h2v6h2v10h-2v6h-2v2h-2v2h-2v2h-2v2h-2v2h-6v2h-10v-2h-6v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-6h-2v-10h2v-6h2v-2h2v-2h2v-2h2v-2h2v-2h6z" />
+          <path id="tall-right-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M642 766h10v2h6v2h4v2h2v2h2v2h2v4h2v6h2v10h-2v6h-2v4h-2v2h-2v2h-2v2h-4v2h-6v2h-10v-2h-6v-2h-4v-2h-2v-2h-2v-2h-2v-4h-2v-6h-2v-10h2v-6h2v-4h2v-2h2v-2h2v-2h4v-2h6z" />
+          <path id="tall-right-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M786 788h10v2h6v2h4v2h2v2h2v2h2v4h2v6h2v10h-2v6h-2v4h-2v2h-2v2h-2v2h-4v2h-6v2h-10v-2h-6v-2h-4v-2h-2v-2h-2v-2h-2v-4h-2v-6h-2v-10h2v-6h2v-4h2v-2h2v-2h2v-2h4v-2h6z" />
+          <path id="tall-right-mushroom-spot-04" fill="#f6f0dc" fill-rule="evenodd" d="M602 822h6v2h4v2h2v2h2v4h2v6h-2v4h-2v2h-2v2h-4v2h-6v-2h-4v-2h-2v-2h-2v-4h-2v-6h2v-4h2v-2h2v-2h4z" />
+        </g>
+      </g>
+    </g>
+    <g id="large-left-mushroom" inkscape:label="02 · Broad mushroom · left" inkscape:groupmode="layer">
+      <path id="large-left-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M154 814h60v6h16v4h14v6h10v4h8v6h6v4h2v2h6v4h6v6h6v6h2v2h4v4h2v2h4v4h2v2h4v4h4v6h2v2h4v4h4v6h2v2h2v6h4v2h2v8h2v10h2v2h4v36h-4v2h-2v6h-4v2h-2v4h-2v2h-4v4h-10v4h-10v4h-20v2h-6v4h-42v20h4v8h-2v-2h-2v10h2v42h-6v2h-2v-4h-4v-2h-2v-2h-4v-2h-22v2h-6v4h-4v4h-2v2h-2v4h-2v10h2v2h4v-2h2v2h2v2h2v4h-2v12h-6v-2h-32v2h-6v-14h-2v-6h-2v-10h18v-2h2v-2h2v-14h-4v-10h-4v-4h-4v-4h-4v-4h-2v-2h-10v-4h-22v-6h2v-12h-2v-6h6v-16h-40v-4h-6v-2h-18v-4h-10v-4h-8v-4h-2v-2h-2v-2h-2v-2h-4v-10h-6v-36h2v-2h4v-10h4v-10h4v-6h6v-8h4v-4h2v-2h6v-6h4v-4h6v-6h6v-6h2v-2h4v-4h2v-2h4v-4h6v-2h2v-4h6v-2h2v-4h8v-4h2v-2h6v-4h12v-6h14v-4h16z M26 958h4v2h2v8h4v4h2v2h4v4h8v4h8v2h2v2h14v-4h10v-4h16v-4h18v-6h16v-4h2v-2h80v6h16v6h18v4h16v4h10v4h20v-2h2v-2h8v-4h10v-4h4v-6h6v-2h2v-6h2v-2h2v-26h-4v-10h-4v-10h-4v-2h-2v-8h-4v-2h-2v-2h-2v-6h-4v-6h-6v-6h-6v-6h-6v-6h-4v-4h-6v-2h-2v-6h-6v-4h-6v-6h-8v-6h-8v-4h-10v-6h-12v-4h-2v-2h-16v-4h-48v4h-18v6h-14v6h-10v4h-10v6h-6v4h-2v2h-6v4h-8v6h-2v2h-6v6h-4v4h-6v6h-6v4h-2v2h-4v6h-4v2h-2v4h-2v2h-4v4h-4v8h-4v8h-2v2h-4v10h-2v2h-2z M82 992h36v-12h-14v4h-16v4h-6z M232 992h38v-4h-8v-2h-2v-2h-14v-4h-14z M120 1032h18v4h10v2h2v2h2v2h2v2h2v2h2v2h2v4h4v8h2v2h2v24h-4v2h-2v2h-14v6h2v10h30v-4h-4v-2h-4v-22h2v-4h2v-2h2v-2h2v-2h4v-2h2v-2h4v-2h30v2h2v2h6v-30h-2v-62h-16v-6h-70v6h-16v46h-4z" />
+      <g id="large-left-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="large-left-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M140 968h70v6h16v62h2v30h-6v-2h-2v-2h-30v2h-4v2h-2v2h-4v2h-2v2h-2v2h-2v4h-2v22h4v2h4v4h-30v-10h-2v-6h14v-2h2v-2h4v-24h-2v-2h-2v-8h-4v-4h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-2v-2h-10v-4h-18v-12h4v-46h16z" />
+        <path id="large-left-mushroom-underside-1" fill="#f6f0dc" fill-rule="evenodd" d="M232 980h14v4h14v2h2v2h8v4h-38z" />
+        <path id="large-left-mushroom-underside-2" fill="#f6f0dc" fill-rule="evenodd" d="M104 980h14v12h-36v-4h6v-4h16z" />
+      </g>
+      <g id="large-left-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="large-left-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M160 820h48v4h16v2h2v4h12v6h10v4h8v6h8v6h6v4h6v6h2v2h6v4h4v6h6v6h6v6h6v6h4v6h2v2h2v2h4v8h2v2h4v10h4v10h4v26h-2v2h-2v6h-2v2h-6v6h-4v4h-10v4h-8v2h-2v2h-20v-4h-10v-4h-16v-4h-18v-6h-16v-6h-80v2h-2v4h-16v6h-18v4h-16v4h-10v4h-14v-2h-2v-2h-8v-4h-8v-4h-4v-2h-2v-4h-4v-8h-2v-2h-4v-24h2v-2h2v-10h4v-2h2v-8h4v-8h4v-4h4v-2h2v-4h2v-2h4v-6h4v-2h2v-4h6v-6h6v-4h4v-6h6v-2h2v-6h8v-4h6v-2h2v-4h6v-6h10v-4h10v-6h14v-6h18z" />
+        <g id="large-left-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="large-left-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M190 838h10v2h6v2h4v2h4v2h2v2h2v4h2v4h2v6h2v10h-2v6h-2v4h-2v4h-2v2h-2v2h-4v2h-4v2h-6v2h-10v-2h-6v-2h-4v-2h-4v-2h-2v-2h-2v-4h-2v-4h-2v-6h-2v-10h2v-6h2v-4h2v-4h2v-2h2v-2h4v-2h4v-2h6z" />
+          <path id="large-left-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M136 874h6v2h4v2h2v4h2v6h-2v4h-2v2h-4v2h-6v-2h-4v-2h-2v-4h-2v-6h2v-4h2v-2h4z" />
+          <path id="large-left-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M82 900h10v2h6v2h4v2h2v2h2v2h2v2h2v4h2v6h2v10h-2v6h-2v4h-2v2h-2v2h-2v2h-2v2h-4v2h-6v2h-10v-2h-6v-2h-4v-2h-2v-2h-2v-2h-2v-2h-2v-4h-2v-6h-2v-10h2v-6h2v-4h2v-2h2v-2h2v-2h2v-2h4v-2h6z" />
+          <path id="large-left-mushroom-spot-04" fill="#f6f0dc" fill-rule="evenodd" d="M276 908h10v2h6v2h4v2h2v2h2v2h2v4h2v6h2v10h-2v6h-2v4h-2v2h-2v2h-2v2h-4v2h-6v2h-10v-2h-6v-2h-4v-2h-2v-2h-2v-2h-2v-4h-2v-6h-2v-10h2v-6h2v-4h2v-2h2v-2h2v-2h4v-2h6z" />
+        </g>
+      </g>
+    </g>
+    <g id="middle-right-mushroom" inkscape:label="03 · Medium mushroom · right" inkscape:groupmode="layer">
+      <path id="middle-right-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M600 896h42v4h4v-4h2v2h4v8h10v2h2v4h6v2h2v2h2v2h2v2h2v4h2v2h2v2h2v2h4v4h4v6h4v10h4v2h2v8h4v28h-4v2h-2v4h-6v4h-12v2h-6v2h-2v2h-12v20h2v6h-2v4h-2v2h-8v6h-4v2h-2v2h-2v2h-2v4h-4v4h-4v8h-2v2h-2v12h2v2h2v4h-2v4h-4v8h2v6h-58v-6h2v-20h-4v-8h4v-16h4v-22h-4v-6h4v-20h-14v-2h-2v-2h-6v-2h-14v-4h-6v-6h-6v-28h4v-10h6v-10h4v-4h2v-2h2v-2h4v-6h6v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h4v-4h6v-2h8v-4h6v-2h6z M536 982h2v2h2v4h6v4h16v-2h2v-2h20v-4h70v2h2v2h20v4h14v-4h6v-4h2v-20h-4v-8h-2v-8h-2v-2h-4v-6h-4v-4h-4v-4h-4v-4h-2v-2h-2v-4h-4v-4h-2v-2h-6v-4h-10v-6h-12v-4h-30v4h-6v2h-6v2h-2v2h-8v4h-6v2h-4v4h-4v6h-6v4h-6v2h-2v2h-2v4h-4v6h-4v4h-2v6h-4v8h-4z M670 996h2v-2h-14v4h12z M568 998h12v-4h-12z M648 1030h6v-26h-2v-10h-2v-6h-60v4h-2v2h-2v10h-2v50h-2v2h-2v40h42v-12h2v-22h2v-2h2v-8h4v-4h2v-2h2v-4h2v-2h2v-2h2v-2h4v-2h2z" />
+      <g id="middle-right-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="middle-right-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M590 988h60v6h2v10h2v26h-6v4h-2v2h-4v2h-2v2h-2v2h-2v4h-2v2h-2v4h-4v8h-2v2h-2v22h-2v12h-42v-40h2v-2h2v-50h2v-10h2v-2h2z" />
+        <path id="middle-right-mushroom-underside-1" fill="#f6f0dc" fill-rule="evenodd" d="M658 994h14v2h-2v2h-12z" />
+        <path id="middle-right-mushroom-underside-2" fill="#f6f0dc" fill-rule="evenodd" d="M568 994h12v4h-12z" />
+      </g>
+      <g id="middle-right-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="middle-right-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M606 902h30v4h12v6h10v4h6v2h2v4h4v4h2v2h2v4h4v4h4v4h4v6h4v2h2v8h2v8h4v20h-2v4h-6v4h-14v-4h-20v-2h-2v-2h-70v4h-20v2h-2v2h-16v-4h-6v-4h-2v-2h-2v-18h4v-8h4v-6h2v-4h4v-6h4v-4h2v-2h2v-2h6v-4h6v-6h4v-4h4v-2h6v-4h8v-2h2v-2h6v-2h6z" />
+        <g id="middle-right-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="middle-right-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M624 916h6v2h4v2h2v2h2v4h2v6h-2v4h-2v2h-2v2h-4v2h-6v-2h-4v-2h-2v-2h-2v-4h-2v-6h2v-4h2v-2h2v-2h4z" />
+          <path id="middle-right-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M568 946h10v2h4v2h2v2h2v2h2v4h2v10h-2v4h-2v2h-2v2h-2v2h-4v2h-10v-2h-4v-2h-2v-2h-2v-2h-2v-4h-2v-10h2v-4h2v-2h2v-2h2v-2h4z" />
+          <path id="middle-right-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M668 952h6v2h4v2h2v2h2v4h2v6h-2v4h-2v2h-2v2h-4v2h-6v-2h-4v-2h-2v-2h-2v-4h-2v-6h2v-4h2v-2h2v-2h4z" />
+        </g>
+      </g>
+    </g>
+    <g id="front-right-mushroom" inkscape:label="04 · Small mushroom · front right" inkscape:groupmode="layer">
+      <path id="front-right-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M668 1020h26v4h8v4h2v2h6v2h2v2h2v2h2v2h2v2h2v2h2v4h4v6h4v8h4v26h-6v4h-16v6h2v10h4v6h-4v8h-4v4h-2v2h-2v2h-52v-2h-4v-6h-4v-18h-26v-6h2v-12h2v-22h2v-2h2v-8h4v-4h2v-2h2v-4h2v-2h2v-2h2v-2h4v-2h2v-4h6v-6h2v-2h6v2h4v-2h2z M630 1078h2v2h2v2h4v2h84v-2h2v-2h4v-14h-2v-2h-2v-8h-4v-4h-4v-6h-2v-2h-2v-2h-2v-2h-4v-4h-2v-2h-6v-4h-10v-4h-16v4h-10v4h-2v2h-8v6h-4v2h-2v2h-2v2h-2v4h-4v4h-4v8h-2v2h-2z M628 1096h20v-6h-16v-2h-4z M652 1114h2v4h2v2h2v2h42v-2h2v-2h2v-2h2v-2h2v-14h-2v-6h-2v-4h-46v4h-4v6h-2z" />
+      <g id="front-right-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="front-right-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M658 1090h46v4h2v6h2v14h-2v2h-2v2h-2v2h-2v2h-42v-2h-2v-2h-2v-4h-2v-14h2v-6h4z" />
+        <path id="front-right-mushroom-underside-1" fill="#f6f0dc" fill-rule="evenodd" d="M628 1088h4v2h16v6h-20z" />
+      </g>
+      <g id="front-right-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="front-right-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M672 1026h16v4h10v4h6v2h2v4h4v2h2v2h2v2h2v6h4v4h4v8h2v2h2v14h-4v2h-2v2h-84v-2h-4v-2h-2v-2h-2v-12h2v-2h2v-8h4v-4h4v-4h2v-2h2v-2h2v-2h4v-6h8v-2h2v-4h10z" />
+        <g id="front-right-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="front-right-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M680 1034h6v2h4v2h2v4h2v6h-2v4h-2v2h-4v2h-6v-2h-4v-2h-2v-4h-2v-6h2v-4h2v-2h4z" />
+          <path id="front-right-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M652 1060h6v2h4v2h2v4h2v6h-2v4h-2v2h-4v2h-6v-2h-4v-2h-2v-4h-2v-6h2v-4h2v-2h4z" />
+          <path id="front-right-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M708 1060h6v2h4v2h2v4h2v6h-2v4h-2v2h-4v2h-6v-2h-4v-2h-2v-4h-2v-6h2v-4h2v-2h4z" />
+        </g>
+      </g>
+    </g>
+    <g id="front-left-mushroom" inkscape:label="05 · Small mushroom · front left" inkscape:groupmode="layer">
+      <path id="front-left-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M114 1028h6v4h18v4h10v2h2v2h2v2h2v2h2v2h2v2h2v4h4v8h2v2h2v24h-4v2h-2v2h-14v6h2v10h4v6h-4v4h-2v4h-4v2h-50v-2h-4v-2h-2v-4h-2v-12h-4v-2h2v-4h2v-2h2v-4h-14v-2h-2v-2h-2v-8h-4v-8h4v-8h4v-8h2v-2h2v-2h2v-2h2v-2h2v-4h4v-2h2v-2h2v-2h8v-4h14z M76 1080h2v2h2v2h78v-2h2v-2h2v-14h-4v-10h-4v-4h-4v-4h-4v-4h-2v-2h-10v-4h-30v4h-8v2h-2v2h-2v2h-2v2h-2v2h-2v2h-2v4h-4v8h-4z M92 1110h2v4h4v4h40v-4h4v-2h2v-12h-2v-6h-2v-4h-44v4h-2v6h-2z" />
+      <g id="front-left-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="front-left-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M96 1090h44v4h2v6h2v12h-2v2h-4v4h-40v-4h-4v-4h-2v-10h2v-6h2z" />
+      </g>
+      <g id="front-left-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="front-left-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M104 1038h30v4h10v2h2v4h4v4h4v4h4v10h4v14h-2v2h-2v2h-78v-2h-2v-2h-2v-14h4v-8h4v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h8z" />
+        <g id="front-left-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="front-left-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M118 1040h6v2h4v4h2v6h-2v4h-4v2h-6v-2h-4v-4h-2v-6h2v-4h4z" />
+          <path id="front-left-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M92 1060h6v2h4v2h2v4h2v6h-2v4h-2v2h-4v2h-6v-2h-4v-2h-2v-4h-2v-6h2v-4h2v-2h4z" />
+          <path id="front-left-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M146 1062h6v2h4v4h2v6h-2v4h-4v2h-6v-2h-4v-4h-2v-6h2v-4h4z" />
+        </g>
+      </g>
+    </g>
+    <g id="tiny-right-mushroom" inkscape:label="06 · Tiny mushroom · far right" inkscape:groupmode="layer">
+      <path id="tiny-right-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M776 1054h6v4h10v4h6v2h2v2h2v2h4v2h4v4h2v2h2v2h-2v18h2v2h-2v2h-2v2h-8v18h-2v4h-2v2h-2v2h-42v-2h-2v-2h-2v-12h-4v-6h4v-4h-6v-2h-4v-22h2v-4h4v-4h2v-2h2v-2h2v-2h2v-2h6v-4h16z M804 1092h2v-10h-2v-2h-2v-6h-6v-6h-8v-4h-24v4h-6v4h-2v2h-4v4h-2v4h-4v12h4v2h52v-2h2z M794 1116h2v-10h-2v-4h-2v-2h-32v2h-4v16h2v2h2v2h32v-4h2z" />
+      <g id="tiny-right-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="tiny-right-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M760 1100h32v2h2v4h2v10h-2v2h-2v4h-32v-2h-2v-2h-2v-16h4z" />
+      </g>
+      <g id="tiny-right-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="tiny-right-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M764 1064h24v4h8v6h6v6h2v2h2v10h-2v2h-2v2h-52v-2h-4v-12h4v-4h2v-4h4v-2h2v-4h6z" />
+        <g id="tiny-right-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="tiny-right-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M772 1068h6v2h2v2h2v6h-2v2h-2v2h-6v-2h-2v-2h-2v-6h2v-2h2z" />
+          <path id="tiny-right-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M752 1084h6v2h2v6h-2v2h-6v-2h-2v-6h2z" />
+          <path id="tiny-right-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M794 1084h6v2h2v6h-2v2h-6v-2h-2v-6h2z" />
+        </g>
+      </g>
+    </g>
+    <g id="tiny-left-mushroom" inkscape:label="07 · Tiny mushroom · left" inkscape:groupmode="layer">
+      <path id="tiny-left-mushroom-outline" fill="#14120e" fill-rule="evenodd" d="M190 1062h30v2h2v2h4v2h2v-2h4v2h2v6h2v2h2v2h2v2h-2v16h2v2h-2v2h-2v2h-8v14h-2v4h-2v2h-6v2h-10v-2h-24v-2h-2v-8h-4v-6h4v-2h-2v-2h-4v-2h-4v-22h2v-4h2v-2h2v-2h2v-2h4v-2h2v-2h4z M230 1092h2v-8h-2v-2h-2v-4h-2v-4h-4v-2h-2v-2h-4v-2h-22v2h-6v4h-4v4h-2v2h-2v4h-2v10h2v2h4v-2h40v2h4v-2h2z M220 1112h2v-10h-4v-4h-28v4h-2v12h2v4h28v-4h2z" />
+      <g id="tiny-left-mushroom-stem-and-underside" inkscape:label="Cream stem and underside">
+        <path id="tiny-left-mushroom-stem" fill="#f6f0dc" fill-rule="evenodd" d="M190 1098h28v4h4v10h-2v2h-2v4h-28v-4h-2v-12h2z" />
+      </g>
+      <g id="tiny-left-mushroom-cap" inkscape:label="Red cap and separate spots">
+        <path id="tiny-left-mushroom-red-cap" fill="#e8766a" fill-rule="evenodd" d="M194 1068h22v2h4v2h2v2h4v4h2v4h2v2h2v8h-2v2h-2v2h-4v-2h-40v2h-4v-2h-2v-10h2v-4h2v-2h2v-4h4v-4h6z" />
+        <g id="tiny-left-mushroom-spots" inkscape:label="Individual cream spots">
+          <path id="tiny-left-mushroom-spot-01" fill="#f6f0dc" fill-rule="evenodd" d="M202 1070h6v2h2v2h2v6h-2v2h-2v2h-6v-2h-2v-2h-2v-6h2v-2h2z" />
+          <path id="tiny-left-mushroom-spot-02" fill="#f6f0dc" fill-rule="evenodd" d="M184 1082h6v2h2v6h-2v2h-6v-2h-2v-6h2z" />
+          <path id="tiny-left-mushroom-spot-03" fill="#f6f0dc" fill-rule="evenodd" d="M220 1082h6v2h2v6h-2v2h-6v-2h-2v-6h2z" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

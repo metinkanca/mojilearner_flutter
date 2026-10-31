@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="330"
+   height="331"
+   viewBox="0 0 330 331"
+   shape-rendering="crispEdges"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="dog_rework_test.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="1.7612197"
+     inkscape:cx="222.57303"
+     inkscape:cy="146.77329"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <title
+     id="title1">Dog editable vector</title>
+  <!-- Facial fills are continuous underneath the independent animation layers. -->
+  <g id="dog-base" inkscape:groupmode="layer" inkscape:label="Body and coat">
+  <path
+     id="dog-silhouette"
+     fill="#16130e"
+     fill-rule="evenodd"
+     d="m 156,4 h 84 v 8 h 12 v 8 h 28 v 8 h 12 v 12 h 12 v 8 h 8 v 12 h 8 v 12 h 8 v 64 h -8 v 8 h -4 v 4 h -8 v 8 h -28 v 12 h -8 v 8 h -4 v 4 h -8 v 8 h -8 v 8 h 4 v 84 h 4 v 8 h 8 v 40 H 72 68 v -4 -8 H 60 V 304 H 48 V 280 H 36 v -8 H 24 V 260 H 12 V 236 H 4 v -60 h 8 v -16 h 12 v -8 h 28 v 8 h 8 4 v 4 8 h 8 v 24 4 h -8 v 8 h 8 v 8 h 8 v -8 h 12 v -12 h 12 v -12 h 8 v -12 h 4 v -8 h -8 v -8 H 72 V 144 H 60 V 132 H 48 V 120 H 40 V 72 h 8 V 60 H 60 V 48 H 72 V 40 H 84 V 28 h 24 v -4 h 4 v -8 h 32 v -4 h 12 z"
+     style="display:inline" />
+  <path
+     id="dog-fill-1"
+     fill="#ffb944"
+     fill-rule="evenodd"
+     d="m 160,12 h 80 v 12 h 12 v 12 h 8 v 12 h 8 v 24 h 8 v 80 h -4 v 4 h -4 v -24 h -4 v -4 -4 h -8 -12 v -8 h -32 v 4 h -4 -8 v 0 h -4 v 4 h -8 v 4 4 h -8 -4 v 4 h -4 v 28 h 4 v 4 h 4 v 8 h -36 v -4 h -4 v -4 h -4 v -4 h -8 v -8 h -4 v -4 h -4 v -4 -4 h 4 v -8 h 8 V 76 h 4 v -4 h 8 V 60 h 4 v -8 h 8 V 40 h -4 v -4 h -4 v -8 h -4 v -4 h 12 v -8 h 4 z M 104,196 h 12 v 4 h 4 v 4 h 8 v 4 h 32 v -8 h 4 v -4 h 8 v 12 h 12 v 16 h 4 v 8 h 8 v 12 h 4 v 48 h 8 v 24 h -40 v -16 h -4 v -4 h -4 v -8 h -4 v -32 h -4 v -4 h -8 v -8 h -12 v 8 h 8 v 4 h 4 v 28 h -12 v 4 4 4 h 16 v 4 h 4 v 4 h 4 v 8 4 H 152 72 V 304 H 60 v -48 h 12 v -24 h 8 v -12 h 12 v -12 h 12 z m 116,60 h 24 v 32 h 4 v 4 h 12 v 20 4 h -4 -36 v -24 h -8 v -8 h -4 v -20 h 4 v 4 h 8 z" />
+  <path
+     id="dog-fill-2"
+     fill="#cd822a"
+     fill-rule="evenodd"
+     d="m 112,28 h 24 v 4 h 4 v 8 h 8 v 20 h -4 v 4 h -4 -4 -4 v 8 h -8 v 60 h -4 v 4 h -8 v 8 H 76 v -4 h -4 v -8 H 60 V 116 H 48 V 72 H 60 V 60 H 76 V 48 h 12 v -8 h 20 v -4 h 4 z m 152,0 h 12 v 4 h 4 v 8 h 12 v 8 h 8 v 12 h 4 v 4 h 4 v 8 h 8 v 60 h -4 v 4 h -8 v 8 H 288 V 72 h -8 V 60 h -4 V 48 h -8 v -8 h -8 v -8 h 4 z M 24,164 h 28 v 8 h 4 4 v 4 20 h -8 v 12 h 8 v 12 h 8 v 12 0 4 h -8 v 20 h -8 v 12 h -4 v 0 h -8 -4 v -8 H 24 V 236 H 12 v -56 h 8 v -4 h 4 z m 108,0 h 4 v 4 h 4 v 4 h 4 v 4 h 40 v 12 h -8 v 8 h -12 v 4 h -4 v 8 h -32 v -4 h -8 v -4 h -4 v -12 h 4 v -4 h 4 v -8 h 8 z" />
+  <path
+     id="dog-fill-3"
+     fill="#ffe1a4"
+     fill-rule="evenodd"
+     d="m 208,120 h 4 v -4 h 32 v 4 h 12 v 4 h 8 v 4 4 h 4 v 36 h -8 v 4 h -4 v 4 h -16 v 20 h 4 v 4 0 32 12 12 h -24 v 12 h -8 v -4 h -4 v -20 h -12 v -12 h -8 v -8 h -4 v -16 h -12 v -12 h 4 v -8 h 8 v -12 h -4 v -8 h -4 v -4 h -4 v -28 -4 h 4 4 8 v -4 -4 h 8 v -4 h 4 z" />
+  </g>
+  <g id="dog-nose" inkscape:groupmode="layer" inkscape:label="Nose" fill="#16130e">
+    <path id="dog-nose-shape" d="M 212,116 H 244 V 136 H 240 V 140 H 220 V 136 H 216 V 132 H 212 Z" />
+  </g>
+  <g id="dog-eyes" inkscape:groupmode="layer" inkscape:label="Eyes - blink" fill="#16130e">
+    <path id="dog-eye-left" d="M 168,84 H 184 V 116 H 168 Z" />
+    <path id="dog-eye-right" d="M 244,84 H 260 V 116 H 244 Z" />
+  </g>
+  <g id="dog-mouth" inkscape:groupmode="layer" inkscape:label="Mouth - eat" fill="#16130e">
+    <path id="dog-mouth-shape" d="M 224,140 H 232 V 144 H 236 V 148 H 248 V 144 H 256 V 152 H 252 V 156 H 232 V 152 H 224 V 156 H 204 V 152 H 196 V 144 H 204 V 148 H 220 V 144 H 224 Z" />
+  </g>
+</svg>

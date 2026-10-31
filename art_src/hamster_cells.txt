@@ -1,0 +1,39 @@
+# Hamster cell map -- one character per art cell, built from the pixel-art
+# reference roster (art_src/pets_reference.jpeg).
+# Edit this file, then re-run gen_hamster.py. Never hand-edit the generated SVGs.
+#
+#   .  background      K  outline        M  coat (main -- belly, face, paws)
+#   S  coat shade (the darker back and flanks)
+#   P  paw pad / inner ear -- folded into the main coat, kept as its own
+#      letter so the detail can be given a tone of its own later
+#   N  paw crease -- folded into the outline
+....KKK..........KKK....
+...KSSSK........KSSSK...
+...KPMSKKKKKKKKKKSMPK...
+...KPPSSSSSSSSSSSSPPK...
+....KSSSSSSSSSSSSSSK....
+....KSSSSSSSSSSSSSSK....
+....KSSSSSSSSSSSSSSK....
+...KSSSSSSSSSSSSSSSSK...
+...KSSSSEESSSSSSEESSK...
+..KSSSSSEESSSSSSEESSSK..
+.KSSSSSSSSSSSSSSSSSSSSK.
+.KSMMMMSSSSSPPPSSSSMMMK.
+.KSMMMMMMMMMMPMMMMMMMMK.
+.KSMMMMMMMKMMKMKMMMMMMK.
+.KSMMMMMMMMKKMKMMMMMMMK.
+.KKSMMMMMMMMMMMMMMMMMKK.
+.KSSSSMMMMMMMMMMMMMSSSK.
+KSSSSMMKKMMMMMMMKKMMSSSK
+KSSSMMMMMKMMMMMKMMMMMSSK
+KSSSMMMMMPKMMMKPMMMMMSSK
+KSSSMNNMPPKMMMKPPMNNMSSK
+KSSSMMKKPPKMMMKPPKKMMSSK
+KSSSMMMMKKMMMMMKKMMMMSSK
+KSSSSMMMMMMMMMMMMMMMSSSK
+KSSSSMMMMMMMMMMMMMMMSSSK
+.KSSSSMMMMMMMMMMMMMSSSK.
+.KSSSKKMMMMMMMMMMMKKSSK.
+..KKKPPKKMMMMMMMMKPPKK..
+...KPPPPKKKKKKKKKPPPPK..
+....KKKKK.......KKKKK...

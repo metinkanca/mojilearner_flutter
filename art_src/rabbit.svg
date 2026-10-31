@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="255"
+   height="358"
+   viewBox="0 0 255 358"
+   shape-rendering="crispEdges"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="rabbit.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="1.127095"
+     inkscape:cx="4.4361834"
+     inkscape:cy="55.452292"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <title
+     id="title1">Rabbit editable vector</title>
+  <path
+     id="rabbit-silhouette"
+     fill="#16130e"
+     fill-rule="evenodd"
+     d="m 192,4 h 40 v 12 h 8 v 12 h 12 v 68 h -12 4 v 4 8 h -4 v 4 4 h -4 -4 v 12 h -8 v 8 h 4 4 v 4 8 h 4 v 20 h 12 v 56 h -12 v 12 h -8 v 8 4 h -4 -12 v 40 h 8 v 28 h 4 v 8 h 12 v 28 h -20 -4 -20 -16 -36 -4 -4 -4 -8 -8 -64 v -8 h -4 v -4 H 24 V 328 H 12 V 316 H 4 v -36 h 8 v -12 h 12 v -12 h 28 v 8 h 4 v -8 h 8 4 v -4 -8 h 8 v -8 H 68 V 224 H 56 v -56 h 8 4 v -4 -20 h 4 v -8 H 64 V 124 H 52 V 112 H 44 V 100 96 H 40 32 V 32 h 8 4 V 28 16 h 8 V 8 h 40 v 8 h 12 v 12 h 8 4 v 4 8 h 8 v 8 h 4 v 24 h 8 v 32 h 24 V 40 h 12 V 24 h 8 v -8 h 12 z"
+     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="rabbit-fill-1"
+     fill="#dcb47b"
+     fill-rule="evenodd"
+     d="m 52,16 h 40 v 12 h 8 v 8 4 h 4 8 v 12 h 4 v 20 h 8 v 44 h 48 V 44 h 8 V 28 h 12 V 16 h 28 12 v 12 h 8 v 68 h -8 v 12 4 h -4 -8 v 12 h -8 v 16 h 8 v 8 8 h 4 4 v 12 h 8 v 52 h -8 v -8 h -4 v -12 h -12 v -32 h -16 v 32 h 16 12 v 12 h 4 v 8 h -4 v 4 12 h -12 v 8 h -12 v 36 h -4 v 12 h -8 v 8 h -8 v 12 h -8 v -12 h -8 l -12,-20 -8,-56 h 8 v 4 h 12 v -4 h 8 v 4 h 16 v -4 h 4 v -8 h -8 v 4 h -8 v -4 h -4 v -8 h 7 v -12 h -22 v 12 h 7 v 8 h -4 v 4 h -8 v -4 h -8 v 8 l 8,56 h -12 v -32 h -24 v -4 -44 h 16 v -28 -4 h -4 -12 v 76 H 92 v -8 -4 h -8 -8 v -12 h -8 v -52 h 8 v -20 h 8 V 136 H 76 V 124 H 64 V 112 H 56 52 V 108 96 H 44 V 32 h 8 z m 40,232 v -4 h 24 v 4 h 24 v 32 h 12 l 12,20 v 0 28 h 8 v 16 h -32 -4 v -4 -16 h -4 v -4 -4 h -4 -4 v -16 h -8 v 28 h 8 v 16 H 60 v -4 H 48 v -48 h 8 v -16 h 4 v -8 h 8 v -12 h 8 4 v -4 -4 h 8 z m -68,20 h 24 v 20 h -4 v 4 h -8 v 36 H 24 v -12 h -8 v -4 h -4 v -28 h 4 v -4 h 8 z m 172,12 h 4 v 8 h 4 4 v 4 28 4 h 4 8 4 v 4 12 4 h -4 -32 -4 v -4 -12 h -4 v -8 -4 h -4 -4 v -4 h 8 v -12 h 8 v -8 h 8 z"
+     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  <path
+     id="rabbit-fill-2"
+     fill="#c39b68"
+     fill-rule="evenodd"
+     d="m 92,64 h 4 v 8 h 4 v 4 h 4 v 48 h -4 v 4 h -8 z"
+     style="display:none" />
+  <path
+     id="rabbit-fill-3"
+     fill="#ffe1af"
+     fill-rule="evenodd"
+     d="m 220,16 h 12 v 12 h 8 v 68 h -8 v 12 h -4 v 4 h -8 v 12 h -8 v 4 h -4 v -16 h 4 v -4 h 4 v -8 h 4 V 88 h 4 v -4 h 4 v -8 h 4 V 48 h -4 V 40 H 208 V 28 h 12 z M 56,28 h 20 v 4 h 4 v 8 H 64 v 12 h -8 v 32 h 8 v 12 h 4 v 12 h 8 v 4 h 4 v 8 h 8 v 16 H 76 V 124 H 64 v -12 h -8 v -4 H 52 V 96 H 44 V 32 h 12 z m 100,156 h 20 v 4 h 12 v 4 h 4 v 4 h 20 v 4 h 12 v 12 h 4 v 12 h -4 v 12 h -12 v 8 h -16 v 12 h 4 v 24 h -4 v 12 h -8 v 8 h -8 v 12 h -8 v -12 h -12 v -8 h -8 v -4 h -4 v -4 h 4 v -4 h -12 v -32 h -24 v -4 H 92 v -8 h -8 v -4 h -8 v -20 h 4 v -4 h 24 v -8 h 12 v -4 h 24 v -4 h 8 v -4 h 8 z m 4,12 v 12 h 4 v 8 h -4 v 4 h -8 v -4 h -8 v 8 h 8 v 4 h 12 v -4 h 8 v 4 h 16 v -4 h 4 v -8 h -8 v 4 h -8 v -4 h -4 v -8 h 4 v -4 h 4 v -8 z"
+     style="display:none" />
+  <path
+     id="rabbit-fill-4"
+     fill="#e8a18d"
+     fill-rule="evenodd"
+     d="M64 40H80V44H84V48H88V64H92V128H88V120H80V112H76V108H68V96H64V84H56V52H64ZM204 40H228V48H232V76H228V84H224V88H220V100H216V108H212V112H208V124H196V52H204Z" />
+</svg>
