@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../constants/coin_packs.dart';
+import '../services/ai_service.dart';
 import '../services/purchase_service.dart';
 import 'user_provider.dart';
 
@@ -95,7 +96,24 @@ class PremiumProvider extends ChangeNotifier {
       notifyListeners();
     });
 
-    unawaited(_service.load().then((_) => notifyListeners()));
+    // The proxy gives the member allowance only to accounts whose receipt it
+    // checked with Google, so every Plus purchase and restore is reported to it.
+    _service.onPlusReceipt ??= (productId, token) async {
+      await AiService.instance
+          .verifyPurchase(productId: productId, purchaseToken: token);
+    };
+
+    unawaited(_service.load().then((_) async {
+      // A member is re-checked on every launch: the server only remembers a
+      // subscription until its expiry (and forgets on restart), so this is what
+      // keeps a renewed subscription current and lets a lapsed one end. Android
+      // only, since an Apple restore can interrupt with a password prompt.
+      if (_user?.isPremium == true &&
+          defaultTargetPlatform == TargetPlatform.android) {
+        await _service.restore(revokeIfLapsed: true);
+      }
+      notifyListeners();
+    }));
   }
 
   Future<void> buy(ProductDetails product) async {

@@ -48,6 +48,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get townSchool => '学校';
 
   @override
+  String get placeCafe => '咖啡馆';
+
+  @override
+  String get placeTownHall => '市政厅';
+
+  @override
+  String get placeGazebo => '凉亭';
+
+  @override
+  String get placeHospital => '医院';
+
+  @override
+  String get placeShop => '商店';
+
+  @override
   String get townTab => '小镇';
 
   @override
@@ -1513,4 +1528,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String topUpThanks(int coins) {
     return '已增加 $coins 金币。';
   }
+
+  @override
+  String get deleteAccountButton => '删除账号';
+
+  @override
+  String get deleteAccountTitle => '删除账号？';
+
+  @override
+  String get deleteAccountWarning => '这将永久删除你的宠物、进度、聊天记录和账号，包括本机和云端的数据，且无法恢复。';
+
+  @override
+  String get deleteAction => '删除';
+
+  @override
+  String get deleteAccountDone => '你的账号和数据已删除。';
+
+  @override
+  String get deleteAccountFailed => '无法删除账号。请检查网络连接后重试。';
+
+  @override
+  String get privacyPolicyButton => '隐私政策';
+
+  @override
+  String get privacyPolicyOpenFailed => '无法打开链接。';
 }

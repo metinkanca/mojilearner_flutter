@@ -13,6 +13,11 @@
   "scenarios": "By",
   "scenariosDesc": "Øv på virkelige samtaler.",
   "townSchool": "Skole",
+  "placeCafe": "Kafé",
+  "placeTownHall": "Rådhus",
+  "placeGazebo": "Paviljong",
+  "placeHospital": "Sykehus",
+  "placeShop": "Butikk",
   "townTab": "By",
   "profile": "Profil",
   "shop": "Butikk",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % mynter",
   "topUpBestValue": "Best verdi",
   "topUpNotOpen": "Myntpakker er ikke åpne ennå.",
-  "topUpThanks": "La til {coins} mynter."
+  "topUpThanks": "La til {coins} mynter.",
+  "deleteAccountButton": "Slett konto",
+  "deleteAccountTitle": "Slette kontoen?",
+  "deleteAccountWarning": "Dette sletter kjæledyret, fremgangen, samtalene og kontoen din for godt, på denne telefonen og i skyen. Det kan ikke angres.",
+  "deleteAction": "Slett",
+  "deleteAccountDone": "Kontoen og dataene dine er slettet.",
+  "deleteAccountFailed": "Kontoen kunne ikke slettes. Sjekk tilkoblingen og prøv igjen.",
+  "privacyPolicyButton": "Personvernerklæring",
+  "privacyPolicyOpenFailed": "Kunne ikke åpne lenken."
 }

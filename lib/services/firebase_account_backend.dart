@@ -159,4 +159,45 @@ class FirebaseAccountBackend implements AccountBackend {
     }
     await _auth.signOut();
   }
+
+  @override
+  Future<void> deleteUser() async {
+    final user = _auth.currentUser;
+    if (user == null) return; // Nothing signed in: nothing to delete.
+    try {
+      await user.delete();
+    } on FirebaseAuthException catch (e) {
+      throw AccountBackendException(e.code, e.message);
+    }
+    // The Google session would otherwise offer the deleted account again.
+    try {
+      await GoogleSignIn.instance.signOut();
+    } catch (_) {}
+  }
+
+  @override
+  Future<void> reauthenticate({String? password}) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw const AccountBackendException('no-current-user');
+    }
+    final providers = user.providerData.map((p) => p.providerId).toSet();
+    try {
+      if (providers.contains('google.com')) {
+        await user.reauthenticateWithCredential(await _googleCredential());
+      } else if (providers.contains('password') && user.email != null) {
+        if (password == null || password.isEmpty) {
+          throw const AccountBackendException('password-required');
+        }
+        await user.reauthenticateWithCredential(
+          EmailAuthProvider.credential(email: user.email!, password: password),
+        );
+      } else {
+        // Anonymous: there is no credential to prove, and no recent-login rule.
+        return;
+      }
+    } on FirebaseAuthException catch (e) {
+      throw AccountBackendException(e.code, e.message);
+    }
+  }
 }

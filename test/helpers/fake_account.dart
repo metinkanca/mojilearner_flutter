@@ -111,6 +111,44 @@ class FakeAccountBackend implements AccountBackend {
     currentEmail = null;
     isAnonymous = true;
   }
+
+  /// Codes `deleteUser` throws, in order, before it finally succeeds.
+  final List<String> deleteFailures = [];
+  int deletes = 0;
+  int reauths = 0;
+  String? reauthPassword;
+
+  /// The password an email account will accept on re-authentication.
+  String correctPassword = 'right';
+
+  @override
+  Future<void> deleteUser() async {
+    deletes++;
+    if (deleteFailures.isNotEmpty) {
+      throw AccountBackendException(deleteFailures.removeAt(0));
+    }
+    // A deleted user is gone; the next sign-in is a new anonymous identity.
+    uid = 'anon-uid-${deletes + 1}';
+    currentEmail = null;
+    isAnonymous = true;
+  }
+
+  @override
+  Future<void> reauthenticate({String? password}) async {
+    reauths++;
+    reauthPassword = password;
+    if (isAnonymous) return;
+    if (googleLinked) return;
+    if (password == null || password.isEmpty) {
+      throw const AccountBackendException('password-required');
+    }
+    if (password != correctPassword) {
+      throw const AccountBackendException('wrong-password');
+    }
+  }
+
+  /// Whether the account re-authenticates through Google (no password needed).
+  bool googleLinked = false;
 }
 
 /// Mirrors the account backend's uid so [CloudSync] follows a sign-in.
@@ -135,5 +173,16 @@ class FakeSyncBackend implements CloudSyncBackend {
   Future<void> upload(String uid, Map<String, dynamic> data) async {
     uploads++;
     _docs[uid] = data;
+  }
+
+  /// Makes `delete` throw, standing in for no connection.
+  bool offline = false;
+  int deletes = 0;
+
+  @override
+  Future<void> delete(String uid) async {
+    deletes++;
+    if (offline) throw Exception('offline');
+    _docs.remove(uid);
   }
 }

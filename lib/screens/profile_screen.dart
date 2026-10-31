@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/theme.dart';
 import '../constants/progression.dart';
 import '../providers/calibration_provider.dart';
 import '../providers/daily_reward_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/user_provider.dart';
+import '../components/account_data_controls.dart';
 import '../components/account_link_tile.dart';
 import '../components/premium_tile.dart';
 import '../components/season_pass_tile.dart';
@@ -340,36 +340,9 @@ class ProfileScreen extends StatelessWidget {
 
   Future<void> _resetApp(BuildContext context) async {
     try {
-      // Clear all SharedPreferences data
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
-      
-      // Show feedback
-      if (context.mounted) {
-        final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: AppTheme.retroPrimary,
-            content: Text(
-              l10n.resetSuccessMessage,
-              textDirection: textDirectionForLocale(Localizations.localeOf(context)),
-              textAlign: textAlignForLocale(Localizations.localeOf(context)),
-              style: AppFonts.pressStart2p(
-                fontSize: 8,
-                color: Colors.white,
-              ),
-            ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-        
-        // Wait a moment then navigate to onboarding
-        await Future.delayed(const Duration(seconds: 1));
-        
-        if (context.mounted) {
-          context.go('/onboarding/welcome');
-        }
-      }
+      // Wipes the phone and the stored copy, then rebuilds the app so every
+      // provider reads the empty state. See components/account_data_controls.dart.
+      await resetAndRestart(context);
     } catch (e) {
       debugPrint('Error resetting app: $e');
     }
@@ -722,6 +695,13 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   
+                    const SizedBox(height: 16),
+
+                    // Permanent removal of the account and every copy of the save.
+                    const DeleteAccountButton(),
+
+                    const PrivacyPolicyLink(),
+
                     const SizedBox(height: 80), // Bottom nav padding
                   ],
                 ),

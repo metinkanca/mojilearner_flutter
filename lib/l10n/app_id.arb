@@ -13,6 +13,11 @@
   "scenarios": "Kota",
   "scenariosDesc": "Latih percakapan nyata.",
   "townSchool": "Sekolah",
+  "placeCafe": "Kafe",
+  "placeTownHall": "Balai Kota",
+  "placeGazebo": "Gazebo",
+  "placeHospital": "Rumah Sakit",
+  "placeShop": "Toko",
   "townTab": "Kota",
   "profile": "Profil",
   "shop": "Toko",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% koin",
   "topUpBestValue": "Paling menguntungkan",
   "topUpNotOpen": "Paket koin belum dibuka.",
-  "topUpThanks": "{coins} koin ditambahkan."
+  "topUpThanks": "{coins} koin ditambahkan.",
+  "deleteAccountButton": "Hapus Akun",
+  "deleteAccountTitle": "Hapus Akun?",
+  "deleteAccountWarning": "Ini akan menghapus hewan peliharaan, kemajuan, obrolan, dan akun Anda secara permanen, di ponsel ini dan di cloud. Tindakan ini tidak dapat dibatalkan.",
+  "deleteAction": "Hapus",
+  "deleteAccountDone": "Akun dan data Anda telah dihapus.",
+  "deleteAccountFailed": "Akun tidak dapat dihapus. Periksa koneksi Anda dan coba lagi.",
+  "privacyPolicyButton": "Kebijakan Privasi",
+  "privacyPolicyOpenFailed": "Tautan tidak dapat dibuka."
 }

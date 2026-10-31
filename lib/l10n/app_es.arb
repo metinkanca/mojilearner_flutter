@@ -13,6 +13,11 @@
   "scenarios": "Pueblo",
   "scenariosDesc": "Practica conversaciones de la vida real.",
   "townSchool": "Escuela",
+  "placeCafe": "Cafetería",
+  "placeTownHall": "Ayuntamiento",
+  "placeGazebo": "Glorieta",
+  "placeHospital": "Hospital",
+  "placeShop": "Tienda",
   "townTab": "Pueblo",
   "profile": "Perfil",
   "shop": "Tienda",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % de monedas",
   "topUpBestValue": "Mejor valor",
   "topUpNotOpen": "Los packs de monedas aún no están disponibles.",
-  "topUpThanks": "Se añadieron {coins} monedas."
+  "topUpThanks": "Se añadieron {coins} monedas.",
+  "deleteAccountButton": "Eliminar cuenta",
+  "deleteAccountTitle": "¿Eliminar cuenta?",
+  "deleteAccountWarning": "Esto elimina de forma permanente tu mascota, tu progreso, tus chats y tu cuenta, en este teléfono y en la nube. No se puede deshacer.",
+  "deleteAction": "Eliminar",
+  "deleteAccountDone": "Tu cuenta y tus datos se han eliminado.",
+  "deleteAccountFailed": "No se pudo eliminar tu cuenta. Revisa tu conexión e inténtalo de nuevo.",
+  "privacyPolicyButton": "Política de privacidad",
+  "privacyPolicyOpenFailed": "No se pudo abrir el enlace."
 }

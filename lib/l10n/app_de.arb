@@ -13,6 +13,11 @@
   "scenarios": "Stadt",
   "scenariosDesc": "Übe echte Gespräche.",
   "townSchool": "Schule",
+  "placeCafe": "Café",
+  "placeTownHall": "Rathaus",
+  "placeGazebo": "Pavillon",
+  "placeHospital": "Krankenhaus",
+  "placeShop": "Laden",
   "townTab": "Stadt",
   "profile": "Profil",
   "shop": "Laden",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % Münzen",
   "topUpBestValue": "Bestes Angebot",
   "topUpNotOpen": "Münzpakete sind noch nicht verfügbar.",
-  "topUpThanks": "{coins} Münzen hinzugefügt."
+  "topUpThanks": "{coins} Münzen hinzugefügt.",
+  "deleteAccountButton": "Konto löschen",
+  "deleteAccountTitle": "Konto löschen?",
+  "deleteAccountWarning": "Dadurch werden dein Haustier, dein Fortschritt, deine Chats und dein Konto dauerhaft gelöscht, auf diesem Handy und in der Cloud. Das lässt sich nicht rückgängig machen.",
+  "deleteAction": "Löschen",
+  "deleteAccountDone": "Dein Konto und deine Daten wurden gelöscht.",
+  "deleteAccountFailed": "Das Konto konnte nicht gelöscht werden. Prüfe deine Verbindung und versuche es erneut.",
+  "privacyPolicyButton": "Datenschutzerklärung",
+  "privacyPolicyOpenFailed": "Der Link konnte nicht geöffnet werden."
 }

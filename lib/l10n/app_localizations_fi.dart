@@ -48,6 +48,21 @@ class AppLocalizationsFi extends AppLocalizations {
   String get townSchool => 'Koulu';
 
   @override
+  String get placeCafe => 'Kahvila';
+
+  @override
+  String get placeTownHall => 'Kaupungintalo';
+
+  @override
+  String get placeGazebo => 'Huvimaja';
+
+  @override
+  String get placeHospital => 'Sairaala';
+
+  @override
+  String get placeShop => 'Kauppa';
+
+  @override
   String get townTab => 'Kaupunki';
 
   @override
@@ -1568,4 +1583,30 @@ class AppLocalizationsFi extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Lisättiin $coins kolikkoa.';
   }
+
+  @override
+  String get deleteAccountButton => 'Poista tili';
+
+  @override
+  String get deleteAccountTitle => 'Poistetaanko tili?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Tämä poistaa pysyvästi lemmikkisi, edistymisesi, keskustelusi ja tilisi sekä tästä puhelimesta että pilvestä. Toimintoa ei voi kumota.';
+
+  @override
+  String get deleteAction => 'Poista';
+
+  @override
+  String get deleteAccountDone => 'Tilisi ja tietosi on poistettu.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Tilin poistaminen epäonnistui. Tarkista yhteytesi ja yritä uudelleen.';
+
+  @override
+  String get privacyPolicyButton => 'Tietosuojakäytäntö';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Linkkiä ei voitu avata.';
 }

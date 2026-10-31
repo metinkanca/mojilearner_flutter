@@ -48,6 +48,21 @@ class AppLocalizationsHu extends AppLocalizations {
   String get townSchool => 'Iskola';
 
   @override
+  String get placeCafe => 'Kávézó';
+
+  @override
+  String get placeTownHall => 'Városháza';
+
+  @override
+  String get placeGazebo => 'Filagória';
+
+  @override
+  String get placeHospital => 'Kórház';
+
+  @override
+  String get placeShop => 'Bolt';
+
+  @override
   String get townTab => 'Város';
 
   @override
@@ -1572,4 +1587,30 @@ class AppLocalizationsHu extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins érme hozzáadva.';
   }
+
+  @override
+  String get deleteAccountButton => 'Fiók törlése';
+
+  @override
+  String get deleteAccountTitle => 'Törlöd a fiókot?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Ez véglegesen törli a kedvencedet, az előrehaladásodat, a beszélgetéseidet és a fiókodat, ezen a telefonon és a felhőben is. Ez nem vonható vissza.';
+
+  @override
+  String get deleteAction => 'Törlés';
+
+  @override
+  String get deleteAccountDone => 'A fiókod és az adataid törölve lettek.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Nem sikerült törölni a fiókot. Ellenőrizd a kapcsolatot, és próbáld újra.';
+
+  @override
+  String get privacyPolicyButton => 'Adatvédelmi irányelvek';
+
+  @override
+  String get privacyPolicyOpenFailed => 'A hivatkozást nem sikerült megnyitni.';
 }

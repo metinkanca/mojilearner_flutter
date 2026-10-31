@@ -226,6 +226,36 @@ abstract class AppLocalizations {
   /// **'School'**
   String get townSchool;
 
+  /// The cafe building in the town. Shown on its card; the go button names what is practised there.
+  ///
+  /// In en, this message translates to:
+  /// **'Café'**
+  String get placeCafe;
+
+  /// The town hall building in the town (where the job interview is).
+  ///
+  /// In en, this message translates to:
+  /// **'Town Hall'**
+  String get placeTownHall;
+
+  /// The gazebo in the town (where the player asks for directions).
+  ///
+  /// In en, this message translates to:
+  /// **'Gazebo'**
+  String get placeGazebo;
+
+  /// The hospital building in the town (where the doctor scene is).
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital'**
+  String get placeHospital;
+
+  /// The shop building in the town (where the shopping scene is).
+  ///
+  /// In en, this message translates to:
+  /// **'Shop'**
+  String get placeShop;
+
   /// Label of the bottom navigation tab that opens the town (the map of buildings, with the school where the quizzes are).
   ///
   /// In en, this message translates to:
@@ -3009,6 +3039,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Added {coins} coins.'**
   String topUpThanks(int coins);
+
+  /// No description provided for @deleteAccountButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountButton;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account?'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your pet, your progress, your chats and your account, on this phone and in the cloud. It cannot be undone.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @deleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteAction;
+
+  /// No description provided for @deleteAccountDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account and data were deleted.'**
+  String get deleteAccountDone;
+
+  /// No description provided for @deleteAccountFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete your account. Check your connection and try again.'**
+  String get deleteAccountFailed;
+
+  /// No description provided for @privacyPolicyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyButton;
+
+  /// No description provided for @privacyPolicyOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the link.'**
+  String get privacyPolicyOpenFailed;
 }
 
 class _AppLocalizationsDelegate

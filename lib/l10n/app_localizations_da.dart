@@ -48,6 +48,21 @@ class AppLocalizationsDa extends AppLocalizations {
   String get townSchool => 'Skole';
 
   @override
+  String get placeCafe => 'Café';
+
+  @override
+  String get placeTownHall => 'Rådhus';
+
+  @override
+  String get placeGazebo => 'Pavillon';
+
+  @override
+  String get placeHospital => 'Hospital';
+
+  @override
+  String get placeShop => 'Butik';
+
+  @override
   String get townTab => 'By';
 
   @override
@@ -1569,4 +1584,30 @@ class AppLocalizationsDa extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Tilføjede $coins mønter.';
   }
+
+  @override
+  String get deleteAccountButton => 'Slet konto';
+
+  @override
+  String get deleteAccountTitle => 'Slet konto?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Dette sletter permanent dit kæledyr, dine fremskridt, dine samtaler og din konto, på denne telefon og i skyen. Det kan ikke fortrydes.';
+
+  @override
+  String get deleteAction => 'Slet';
+
+  @override
+  String get deleteAccountDone => 'Din konto og dine data er slettet.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Kontoen kunne ikke slettes. Tjek din forbindelse, og prøv igen.';
+
+  @override
+  String get privacyPolicyButton => 'Privatlivspolitik';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Linket kunne ikke åbnes.';
 }

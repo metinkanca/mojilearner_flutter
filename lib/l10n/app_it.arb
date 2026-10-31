@@ -13,6 +13,11 @@
   "scenarios": "Città",
   "scenariosDesc": "Pratica conversazioni reali.",
   "townSchool": "Scuola",
+  "placeCafe": "Caffè",
+  "placeTownHall": "Municipio",
+  "placeGazebo": "Gazebo",
+  "placeHospital": "Ospedale",
+  "placeShop": "Negozio",
   "townTab": "Città",
   "profile": "Profilo",
   "shop": "Negozio",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% di monete",
   "topUpBestValue": "Miglior valore",
   "topUpNotOpen": "I pacchetti di monete non sono ancora disponibili.",
-  "topUpThanks": "Aggiunte {coins} monete."
+  "topUpThanks": "Aggiunte {coins} monete.",
+  "deleteAccountButton": "Elimina account",
+  "deleteAccountTitle": "Eliminare l'account?",
+  "deleteAccountWarning": "Questo elimina definitivamente il tuo animale, i tuoi progressi, le tue chat e il tuo account, su questo telefono e nel cloud. Non si può annullare.",
+  "deleteAction": "Elimina",
+  "deleteAccountDone": "Il tuo account e i tuoi dati sono stati eliminati.",
+  "deleteAccountFailed": "Impossibile eliminare l'account. Controlla la connessione e riprova.",
+  "privacyPolicyButton": "Informativa sulla privacy",
+  "privacyPolicyOpenFailed": "Impossibile aprire il link."
 }

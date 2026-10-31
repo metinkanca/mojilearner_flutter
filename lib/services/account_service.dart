@@ -114,6 +114,32 @@ abstract class AccountBackend {
   Future<String?> signInGoogle();
 
   Future<void> signOut();
+
+  /// Permanently deletes the signed-in user from the auth service.
+  ///
+  /// Throws with code `requires-recent-login` when the provider wants the
+  /// player to prove who they are again first; see [reauthenticate].
+  Future<void> deleteUser();
+
+  /// Proves identity again so a sensitive action can go ahead: through Google's
+  /// sheet for a Google account, or with [password] for an email one.
+  ///
+  /// Throws `password-required` when an email account has no [password] yet,
+  /// and `wrong-password` (or the provider's own code) when it does not match.
+  Future<void> reauthenticate({String? password});
+}
+
+/// How [AccountService.deleteAccount] ended.
+enum AccountDeleteStatus {
+  /// The stored save and the account are both gone.
+  deleted,
+
+  /// An email account has to type its password to confirm. Ask, then call again.
+  needsPassword,
+
+  /// Nothing was lost, and nothing is half-done in a way a retry cannot finish:
+  /// no connection, or the provider refused. Safe to try again.
+  failed,
 }
 
 /// Drives [AccountBackend] and keeps the sync layer pointed at the right save.
@@ -223,6 +249,42 @@ class AccountService {
         return const AccountLinkResult(AccountLinkStatus.cancelled);
       }
       return AccountLinkResult(AccountLinkStatus.failed, code: e.code);
+    }
+  }
+
+  /// Deletes the stored save, then the account itself.
+  ///
+  /// The save goes first and has to succeed: Firestore's rules only let a
+  /// signed-in player touch their own document, so once the account is gone
+  /// there is no way left to remove it. A retry after a partial run is safe
+  /// because deleting a document that is already gone succeeds.
+  ///
+  /// Wiping this device is the caller's job (`DataEraser`), because it must
+  /// happen before sync resumes under a new identity.
+  Future<AccountDeleteStatus> deleteAccount({String? password}) async {
+    if (!await _sync.deleteCloudCopy()) {
+      await _sync.resumeAfterErase();
+      return AccountDeleteStatus.failed;
+    }
+
+    try {
+      try {
+        await _backend.deleteUser();
+      } on AccountBackendException catch (e) {
+        if (e.code != 'requires-recent-login') rethrow;
+        await _backend.reauthenticate(password: password);
+        await _backend.deleteUser();
+      }
+      return AccountDeleteStatus.deleted;
+    } on AccountBackendException catch (e) {
+      await _sync.resumeAfterErase();
+      return switch (e.code) {
+        'password-required' ||
+        'wrong-password' ||
+        'invalid-credential' =>
+          AccountDeleteStatus.needsPassword,
+        _ => AccountDeleteStatus.failed,
+      };
     }
   }
 

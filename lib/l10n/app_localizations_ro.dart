@@ -48,6 +48,21 @@ class AppLocalizationsRo extends AppLocalizations {
   String get townSchool => 'Școală';
 
   @override
+  String get placeCafe => 'Cafenea';
+
+  @override
+  String get placeTownHall => 'Primăria';
+
+  @override
+  String get placeGazebo => 'Foișor';
+
+  @override
+  String get placeHospital => 'Spital';
+
+  @override
+  String get placeShop => 'Magazin';
+
+  @override
   String get townTab => 'Oraș';
 
   @override
@@ -1569,4 +1584,30 @@ class AppLocalizationsRo extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'S-au adăugat $coins monede.';
   }
+
+  @override
+  String get deleteAccountButton => 'Șterge contul';
+
+  @override
+  String get deleteAccountTitle => 'Ștergi contul?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Aceasta șterge definitiv animalul tău, progresul, conversațiile și contul, pe acest telefon și în cloud. Nu se poate anula.';
+
+  @override
+  String get deleteAction => 'Șterge';
+
+  @override
+  String get deleteAccountDone => 'Contul și datele tale au fost șterse.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Contul nu a putut fi șters. Verifică conexiunea și încearcă din nou.';
+
+  @override
+  String get privacyPolicyButton => 'Politica de confidențialitate';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Linkul nu a putut fi deschis.';
 }

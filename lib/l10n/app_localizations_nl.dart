@@ -48,6 +48,21 @@ class AppLocalizationsNl extends AppLocalizations {
   String get townSchool => 'School';
 
   @override
+  String get placeCafe => 'Café';
+
+  @override
+  String get placeTownHall => 'Stadhuis';
+
+  @override
+  String get placeGazebo => 'Prieel';
+
+  @override
+  String get placeHospital => 'Ziekenhuis';
+
+  @override
+  String get placeShop => 'Winkel';
+
+  @override
   String get townTab => 'Stad';
 
   @override
@@ -1572,4 +1587,30 @@ class AppLocalizationsNl extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins munten toegevoegd.';
   }
+
+  @override
+  String get deleteAccountButton => 'Account verwijderen';
+
+  @override
+  String get deleteAccountTitle => 'Account verwijderen?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Hiermee worden je huisdier, je voortgang, je chats en je account definitief verwijderd, op deze telefoon en in de cloud. Dit kan niet ongedaan worden gemaakt.';
+
+  @override
+  String get deleteAction => 'Verwijderen';
+
+  @override
+  String get deleteAccountDone => 'Je account en gegevens zijn verwijderd.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Het account kon niet worden verwijderd. Controleer je verbinding en probeer het opnieuw.';
+
+  @override
+  String get privacyPolicyButton => 'Privacybeleid';
+
+  @override
+  String get privacyPolicyOpenFailed => 'De link kon niet worden geopend.';
 }

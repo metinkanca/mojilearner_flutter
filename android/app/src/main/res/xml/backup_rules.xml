@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and older: what Auto Backup may carry to a new phone.
+
+     Everything is backed up except the secure-storage files. They hold data
+     encrypted under a key in the hardware Keystore, and that key never leaves
+     the old phone, so a restored copy is ciphertext nobody can read. The app
+     would find the keys present, fail to decrypt them, and misbehave. The
+     encrypted chats are device-local by design, so nothing is lost by leaving
+     them out; the synced save is restored from the cloud instead. -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="FlutterSecureStorage.xml"/>
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage.xml"/>
+</full-backup-content>

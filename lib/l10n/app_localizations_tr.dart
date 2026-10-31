@@ -48,6 +48,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get townSchool => 'Okul';
 
   @override
+  String get placeCafe => 'Kafe';
+
+  @override
+  String get placeTownHall => 'Belediye';
+
+  @override
+  String get placeGazebo => 'Köşk';
+
+  @override
+  String get placeHospital => 'Hastane';
+
+  @override
+  String get placeShop => 'Dükkân';
+
+  @override
   String get townTab => 'Kasaba';
 
   @override
@@ -1315,7 +1330,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tutorialNavTown =>
-      'Kasaba: bir konuşmayı denemek için binalardan birine gir ya da test için okula uğra.';
+      'Kasaba: konuşma pratiği yapmak için bir binaya gir ya da test için okula uğra.';
 
   @override
   String get tutorialNavChat =>
@@ -1570,4 +1585,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins altın eklendi.';
   }
+
+  @override
+  String get deleteAccountButton => 'Hesabı Sil';
+
+  @override
+  String get deleteAccountTitle => 'Hesap silinsin mi?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Bu işlem evcil hayvanını, ilerlemeni, sohbetlerini ve hesabını hem bu telefondan hem de buluttan kalıcı olarak siler. Geri alınamaz.';
+
+  @override
+  String get deleteAction => 'Sil';
+
+  @override
+  String get deleteAccountDone => 'Hesabın ve verilerin silindi.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Hesap silinemedi. Bağlantını kontrol edip tekrar dene.';
+
+  @override
+  String get privacyPolicyButton => 'Gizlilik Politikası';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Bağlantı açılamadı.';
 }

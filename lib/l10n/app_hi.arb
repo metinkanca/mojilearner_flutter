@@ -13,6 +13,11 @@
   "scenarios": "शहर",
   "scenariosDesc": "वास्तविक जीवन की बातचीत का अभ्यास करें।",
   "townSchool": "स्कूल",
+  "placeCafe": "कैफ़े",
+  "placeTownHall": "नगर भवन",
+  "placeGazebo": "मंडप",
+  "placeHospital": "अस्पताल",
+  "placeShop": "दुकान",
   "townTab": "शहर",
   "profile": "प्रोफ़ाइल",
   "shop": "दुकान",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% सिक्के",
   "topUpBestValue": "सबसे किफ़ायती",
   "topUpNotOpen": "सिक्कों के पैक अभी उपलब्ध नहीं हैं।",
-  "topUpThanks": "{coins} सिक्के जोड़े गए।"
+  "topUpThanks": "{coins} सिक्के जोड़े गए।",
+  "deleteAccountButton": "खाता हटाएँ",
+  "deleteAccountTitle": "खाता हटाएँ?",
+  "deleteAccountWarning": "इससे आपका पालतू, आपकी प्रगति, आपकी चैट और आपका खाता इस फ़ोन और क्लाउड दोनों से हमेशा के लिए हट जाएगा। इसे वापस नहीं किया जा सकता।",
+  "deleteAction": "हटाएँ",
+  "deleteAccountDone": "आपका खाता और डेटा हटा दिया गया है।",
+  "deleteAccountFailed": "खाता नहीं हटाया जा सका। अपना कनेक्शन जाँचें और फिर कोशिश करें।",
+  "privacyPolicyButton": "गोपनीयता नीति",
+  "privacyPolicyOpenFailed": "लिंक नहीं खुल सका।"
 }

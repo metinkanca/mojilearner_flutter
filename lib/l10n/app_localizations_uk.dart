@@ -48,6 +48,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get townSchool => 'Школа';
 
   @override
+  String get placeCafe => 'Кав’ярня';
+
+  @override
+  String get placeTownHall => 'Ратуша';
+
+  @override
+  String get placeGazebo => 'Альтанка';
+
+  @override
+  String get placeHospital => 'Лікарня';
+
+  @override
+  String get placeShop => 'Крамниця';
+
+  @override
   String get townTab => 'Місто';
 
   @override
@@ -1312,7 +1327,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tutorialNavTown =>
-      'Місто: заходь до будівлі, щоб потренувати розмову, або завітай до школи на квіз.';
+      'Місто: заходь до будівлі, щоб потренувати розмову, або завітай до школи, щоб пройти тест.';
 
   @override
   String get tutorialNavChat => 'Чати: довші розмови й рольові сценарії.';
@@ -1566,4 +1581,30 @@ class AppLocalizationsUk extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Додано монет: $coins.';
   }
+
+  @override
+  String get deleteAccountButton => 'Видалити акаунт';
+
+  @override
+  String get deleteAccountTitle => 'Видалити акаунт?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Це назавжди видалить вашого улюбленця, прогрес, чати й акаунт — на цьому телефоні та в хмарі. Це неможливо скасувати.';
+
+  @override
+  String get deleteAction => 'Видалити';
+
+  @override
+  String get deleteAccountDone => 'Ваш акаунт і дані видалено.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Не вдалося видалити акаунт. Перевірте з\'єднання та спробуйте ще раз.';
+
+  @override
+  String get privacyPolicyButton => 'Політика конфіденційності';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Не вдалося відкрити посилання.';
 }

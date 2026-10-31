@@ -34,6 +34,16 @@ class FakeBackend implements CloudSyncBackend {
     uploads++;
     _stored = data;
   }
+
+  bool offline = false;
+  int deletes = 0;
+
+  @override
+  Future<void> delete(String uid) async {
+    deletes++;
+    if (offline) throw Exception('offline');
+    _stored = null;
+  }
 }
 
 void main() {

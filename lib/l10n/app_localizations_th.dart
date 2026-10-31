@@ -48,6 +48,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get townSchool => 'โรงเรียน';
 
   @override
+  String get placeCafe => 'คาเฟ่';
+
+  @override
+  String get placeTownHall => 'ศาลากลาง';
+
+  @override
+  String get placeGazebo => 'ศาลา';
+
+  @override
+  String get placeHospital => 'โรงพยาบาล';
+
+  @override
+  String get placeShop => 'ร้านค้า';
+
+  @override
   String get townTab => 'เมือง';
 
   @override
@@ -1544,4 +1559,30 @@ class AppLocalizationsTh extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'เพิ่ม $coins เหรียญแล้ว';
   }
+
+  @override
+  String get deleteAccountButton => 'ลบบัญชี';
+
+  @override
+  String get deleteAccountTitle => 'ลบบัญชีหรือไม่?';
+
+  @override
+  String get deleteAccountWarning =>
+      'การดำเนินการนี้จะลบสัตว์เลี้ยง ความคืบหน้า แชท และบัญชีของคุณอย่างถาวร ทั้งในโทรศัพท์เครื่องนี้และบนคลาวด์ และไม่สามารถย้อนกลับได้';
+
+  @override
+  String get deleteAction => 'ลบ';
+
+  @override
+  String get deleteAccountDone => 'ลบบัญชีและข้อมูลของคุณแล้ว';
+
+  @override
+  String get deleteAccountFailed =>
+      'ไม่สามารถลบบัญชีได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง';
+
+  @override
+  String get privacyPolicyButton => 'นโยบายความเป็นส่วนตัว';
+
+  @override
+  String get privacyPolicyOpenFailed => 'ไม่สามารถเปิดลิงก์ได้';
 }

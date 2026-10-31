@@ -51,4 +51,9 @@ class FirebaseSyncBackend implements CloudSyncBackend {
     // locally should disappear here too. One document, one write.
     return _firestore.collection(_collection).doc(uid).set(data);
   }
+
+  @override
+  Future<void> delete(String uid) {
+    return _firestore.collection(_collection).doc(uid).delete();
+  }
 }

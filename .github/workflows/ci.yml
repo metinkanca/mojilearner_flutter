@@ -126,3 +126,9 @@ jobs:
 
       - name: Test
         run: npm test
+
+      # High and critical advisories in what the proxy actually ships. The
+      # proxy holds the model key, so a known flaw in its request path is not
+      # something to find out about from an invoice.
+      - name: Audit dependencies
+        run: npm audit --omit=dev --audit-level=high

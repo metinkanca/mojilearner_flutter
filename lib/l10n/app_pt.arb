@@ -13,6 +13,11 @@
   "scenarios": "Cidade",
   "scenariosDesc": "Pratique conversas reais.",
   "townSchool": "Escola",
+  "placeCafe": "Cafeteria",
+  "placeTownHall": "Prefeitura",
+  "placeGazebo": "Gazebo",
+  "placeHospital": "Hospital",
+  "placeShop": "Loja",
   "townTab": "Cidade",
   "profile": "Perfil",
   "shop": "Loja",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% de moedas",
   "topUpBestValue": "Melhor valor",
   "topUpNotOpen": "Os pacotes de moedas ainda não estão abertos.",
-  "topUpThanks": "Adicionadas {coins} moedas."
+  "topUpThanks": "Adicionadas {coins} moedas.",
+  "deleteAccountButton": "Excluir conta",
+  "deleteAccountTitle": "Excluir conta?",
+  "deleteAccountWarning": "Isso exclui permanentemente seu pet, seu progresso, suas conversas e sua conta, neste celular e na nuvem. Não é possível desfazer.",
+  "deleteAction": "Excluir",
+  "deleteAccountDone": "Sua conta e seus dados foram excluídos.",
+  "deleteAccountFailed": "Não foi possível excluir sua conta. Verifique a conexão e tente novamente.",
+  "privacyPolicyButton": "Política de privacidade",
+  "privacyPolicyOpenFailed": "Não foi possível abrir o link."
 }

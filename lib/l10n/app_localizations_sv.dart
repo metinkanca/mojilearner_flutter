@@ -48,6 +48,21 @@ class AppLocalizationsSv extends AppLocalizations {
   String get townSchool => 'Skola';
 
   @override
+  String get placeCafe => 'Kafé';
+
+  @override
+  String get placeTownHall => 'Rådhus';
+
+  @override
+  String get placeGazebo => 'Lusthus';
+
+  @override
+  String get placeHospital => 'Sjukhus';
+
+  @override
+  String get placeShop => 'Affär';
+
+  @override
   String get townTab => 'Stad';
 
   @override
@@ -1568,4 +1583,30 @@ class AppLocalizationsSv extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'La till $coins mynt.';
   }
+
+  @override
+  String get deleteAccountButton => 'Radera konto';
+
+  @override
+  String get deleteAccountTitle => 'Radera kontot?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Det här raderar ditt husdjur, dina framsteg, dina chattar och ditt konto permanent, på den här telefonen och i molnet. Det går inte att ångra.';
+
+  @override
+  String get deleteAction => 'Radera';
+
+  @override
+  String get deleteAccountDone => 'Ditt konto och dina data har raderats.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Kontot kunde inte raderas. Kontrollera anslutningen och försök igen.';
+
+  @override
+  String get privacyPolicyButton => 'Integritetspolicy';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Länken kunde inte öppnas.';
 }

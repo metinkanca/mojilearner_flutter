@@ -13,6 +13,11 @@
   "scenarios": "小镇",
   "scenariosDesc": "练习现实生活对话。",
   "townSchool": "学校",
+  "placeCafe": "咖啡馆",
+  "placeTownHall": "市政厅",
+  "placeGazebo": "凉亭",
+  "placeHospital": "医院",
+  "placeShop": "商店",
   "townTab": "小镇",
   "profile": "个人资料",
   "shop": "商店",
@@ -476,5 +481,13 @@
   "topUpBonus": "金币 +{percent}%",
   "topUpBestValue": "最划算",
   "topUpNotOpen": "金币礼包尚未开售。",
-  "topUpThanks": "已增加 {coins} 金币。"
+  "topUpThanks": "已增加 {coins} 金币。",
+  "deleteAccountButton": "删除账号",
+  "deleteAccountTitle": "删除账号？",
+  "deleteAccountWarning": "这将永久删除你的宠物、进度、聊天记录和账号，包括本机和云端的数据，且无法恢复。",
+  "deleteAction": "删除",
+  "deleteAccountDone": "你的账号和数据已删除。",
+  "deleteAccountFailed": "无法删除账号。请检查网络连接后重试。",
+  "privacyPolicyButton": "隐私政策",
+  "privacyPolicyOpenFailed": "无法打开链接。"
 }

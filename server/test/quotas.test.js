@@ -30,6 +30,7 @@ test('the free and premium tables match the app', () => {
   // The starter words have a small meter of their own, which the app does not
   // show: it is a cost backstop, and a refusal just means no refresh today.
   assert.equal(FREE.words, 3);
+  assert.equal(FREE.sessions, 60);
   assert.equal(PREMIUM.words, 6);
 });
 

@@ -1,4 +1,6 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -32,6 +34,8 @@ import 'utils/security_logger.dart';
 import 'services/account_service.dart';
 import 'services/ai_service.dart';
 import 'services/cloud_sync.dart';
+import 'services/data_eraser.dart';
+import 'components/app_restart.dart';
 import 'services/firebase_account_backend.dart';
 import 'services/firebase_sync_backend.dart';
 import 'firebase_options.dart';
@@ -61,9 +65,20 @@ Future<void> main() async {
   // misconfigured, or blocked is not a reason a pet game cannot open — the
   // local save is untouched and the app behaves exactly as it did before any
   // of this existed.
-  await _startCloudSync();
+  //
+  // Except for a returning player. A device that already holds a save never has
+  // one restored over it, so nothing the providers read can change under them,
+  // and waiting on the network (up to 8 seconds on a bad connection) would only
+  // keep a splash screen up. Those open at once and sync behind the first frame.
+  if (await CloudSync.hasLocalSave()) {
+    cloudStartup = _startCloudSync();
+  } else {
+    await (cloudStartup = _startCloudSync());
+  }
 
-  runApp(MultiProvider(
+  // AppRestart: Reset App and Delete Account wipe storage, and the providers
+  // below only read it when they are created, so those flows rebuild this tree.
+  runApp(AppRestart(child: MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProxyProvider<UserProvider, DailyRewardProvider>(
@@ -140,10 +155,23 @@ Future<void> main() async {
       // Nullable on purpose: when cloud sync could not start there is no
       // account to attach anything to, and the screens that offer signing in
       // hide themselves rather than failing at the tap.
-      Provider<AccountService?>.value(value: accountService),
+      // A holder rather than the value: for a returning player sync is still
+      // starting when this tree is built, and screens must see the account
+      // appear when it does.
+      ValueListenableProvider<AccountService?>.value(
+        value: accountServiceHolder,
+      ),
+      // What Reset App and Delete Account call. Nullable for the same reason.
+      Provider<DataEraser?>.value(
+        value: DataEraser.lazy(
+          sync: () => cloudSync,
+          account: () => accountServiceHolder.value,
+          ready: () => cloudStartup ?? Future<void>.value(),
+        ),
+      ),
     ],
     child: const MojiLearnerApp(),
-  ));
+  )));
 }
 
 /// Held so the flush timer and lifecycle observer outlive [main].
@@ -151,7 +179,11 @@ CloudSync? cloudSync;
 
 /// Null when cloud sync did not start — there is then no uid to upgrade, so
 /// nothing offers to sign in.
-AccountService? accountService;
+final ValueNotifier<AccountService?> accountServiceHolder = ValueNotifier(null);
+
+/// Cloud sync coming up. Awaited before the first frame for a new install, and
+/// left running behind it for a returning player.
+Future<void>? cloudStartup;
 
 /// Brings up Firebase and pulls down a save if this device has none.
 ///
@@ -164,6 +196,7 @@ Future<void> _startCloudSync() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await _startAppCheck();
     final sync = CloudSync(backend: FirebaseSyncBackend());
     // Bounded: a slow network must not hold the splash screen open. Giving up
     // costs one missed restore, and the next launch tries again.
@@ -173,7 +206,7 @@ Future<void> _startCloudSync() async {
       backend: FirebaseAccountBackend(),
       sync: sync,
     );
-    accountService = account;
+    accountServiceHolder.value = account;
 
     // Lets the proxy meter a day's model calls per account. Wired here rather
     // than read inside AiService so a build where cloud sync could not start
@@ -182,6 +215,40 @@ Future<void> _startCloudSync() async {
     AiService.instance.idTokenResolver = account.currentIdToken;
   } catch (e) {
     debugPrint('⚠️ SYNC: cloud save unavailable, running local-only - $e');
+  }
+}
+
+/// Proves to the AI proxy that requests come from a genuine build of this app,
+/// on a real device, so a script cannot mint anonymous accounts to collect a
+/// fresh daily allowance for each. See `server/src/appcheck.js`.
+///
+/// Never throws and never blocks the app: a device that cannot attest simply
+/// sends no token, and what the proxy does about that is its own setting
+/// (count it, or refuse it). Skipped on web, which is a preview target here and
+/// would need a reCAPTCHA key of its own.
+Future<void> _startAppCheck() async {
+  if (kIsWeb) return;
+  try {
+    await FirebaseAppCheck.instance.activate(
+      // The debug providers print a token to the log that has to be registered
+      // in the Firebase console, which is how a debug build or an emulator is
+      // allowed through without weakening the real check.
+      providerAndroid: kReleaseMode
+          ? const AndroidPlayIntegrityProvider()
+          : const AndroidDebugProvider(),
+      providerApple: kReleaseMode
+          ? const AppleAppAttestWithDeviceCheckFallbackProvider()
+          : const AppleDebugProvider(),
+    );
+    AiService.instance.appCheckTokenResolver = () async {
+      try {
+        return await FirebaseAppCheck.instance.getToken();
+      } catch (_) {
+        return null;
+      }
+    };
+  } catch (e) {
+    debugPrint('⚠️ APP CHECK: unavailable, requests go without a token - $e');
   }
 }
 

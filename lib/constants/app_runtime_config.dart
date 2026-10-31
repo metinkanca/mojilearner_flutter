@@ -96,6 +96,15 @@ class AppRuntimeConfig {
   // When AI is unavailable, screens should use local safe fallbacks.
   static const bool forceOnlineAssessment = true;
 
+  /// Where the privacy policy lives, passed as `--dart-define=PRIVACY_POLICY_URL=...`.
+  ///
+  /// Empty until there is a page to point at, and the profile link hides itself
+  /// while it is: a link that opens nothing is worse than none. Play requires
+  /// the same address in the store listing, so set both together.
+  static const String privacyPolicyUrl = String.fromEnvironment(
+    'PRIVACY_POLICY_URL',
+  );
+
   /// The Web OAuth client id, passed to Google Sign-In as `serverClientId`.
   ///
   /// Not a secret: it identifies the project, ships in every build, and is

@@ -48,6 +48,21 @@ class AppLocalizationsId extends AppLocalizations {
   String get townSchool => 'Sekolah';
 
   @override
+  String get placeCafe => 'Kafe';
+
+  @override
+  String get placeTownHall => 'Balai Kota';
+
+  @override
+  String get placeGazebo => 'Gazebo';
+
+  @override
+  String get placeHospital => 'Rumah Sakit';
+
+  @override
+  String get placeShop => 'Toko';
+
+  @override
   String get townTab => 'Kota';
 
   @override
@@ -1563,4 +1578,30 @@ class AppLocalizationsId extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins koin ditambahkan.';
   }
+
+  @override
+  String get deleteAccountButton => 'Hapus Akun';
+
+  @override
+  String get deleteAccountTitle => 'Hapus Akun?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Ini akan menghapus hewan peliharaan, kemajuan, obrolan, dan akun Anda secara permanen, di ponsel ini dan di cloud. Tindakan ini tidak dapat dibatalkan.';
+
+  @override
+  String get deleteAction => 'Hapus';
+
+  @override
+  String get deleteAccountDone => 'Akun dan data Anda telah dihapus.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Akun tidak dapat dihapus. Periksa koneksi Anda dan coba lagi.';
+
+  @override
+  String get privacyPolicyButton => 'Kebijakan Privasi';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Tautan tidak dapat dibuka.';
 }

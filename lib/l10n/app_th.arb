@@ -13,6 +13,11 @@
   "scenarios": "เมือง",
   "scenariosDesc": "ฝึกบทสนทนาจริง",
   "townSchool": "โรงเรียน",
+  "placeCafe": "คาเฟ่",
+  "placeTownHall": "ศาลากลาง",
+  "placeGazebo": "ศาลา",
+  "placeHospital": "โรงพยาบาล",
+  "placeShop": "ร้านค้า",
   "townTab": "เมือง",
   "profile": "โปรไฟล์",
   "shop": "ร้านค้า",
@@ -476,5 +481,13 @@
   "topUpBonus": "เหรียญ +{percent}%",
   "topUpBestValue": "คุ้มที่สุด",
   "topUpNotOpen": "ยังไม่เปิดขายแพ็กเหรียญ",
-  "topUpThanks": "เพิ่ม {coins} เหรียญแล้ว"
+  "topUpThanks": "เพิ่ม {coins} เหรียญแล้ว",
+  "deleteAccountButton": "ลบบัญชี",
+  "deleteAccountTitle": "ลบบัญชีหรือไม่?",
+  "deleteAccountWarning": "การดำเนินการนี้จะลบสัตว์เลี้ยง ความคืบหน้า แชท และบัญชีของคุณอย่างถาวร ทั้งในโทรศัพท์เครื่องนี้และบนคลาวด์ และไม่สามารถย้อนกลับได้",
+  "deleteAction": "ลบ",
+  "deleteAccountDone": "ลบบัญชีและข้อมูลของคุณแล้ว",
+  "deleteAccountFailed": "ไม่สามารถลบบัญชีได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
+  "privacyPolicyButton": "นโยบายความเป็นส่วนตัว",
+  "privacyPolicyOpenFailed": "ไม่สามารถเปิดลิงก์ได้"
 }

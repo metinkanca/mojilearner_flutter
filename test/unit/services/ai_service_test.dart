@@ -96,6 +96,67 @@ AI_PROXY_TOKEN=secret-token
       expect(body['model'], isNotEmpty);
     });
 
+    test('requests carry the App Check token, and survive its absence',
+        () async {
+      final seen = <Map<String, String>>[];
+      final client = MockClient((request) async {
+        seen.add(request.headers);
+        return http.Response(json.encode({'text': 'ok'}), 200);
+      });
+      Future<String> ask() => http.runWithClient(
+            () => AiService.instance.generateText(
+              spec: AiPromptSpec.quiz(
+                  targetCode: 'es', nativeCode: 'en', level: 'beginner'),
+              source: 'test',
+            ),
+            () => client,
+          );
+
+      AiService.instance.appCheckTokenResolver = () async => 'attested';
+      await ask();
+      expect(seen.last['X-Firebase-AppCheck'], 'attested');
+
+      // A device that cannot attest sends no token and the call still goes.
+      AiService.instance.appCheckTokenResolver = () async => null;
+      expect(await ask(), 'ok');
+      expect(seen.last.containsKey('X-Firebase-AppCheck'), isFalse);
+
+      // A resolver that throws must not take the request down with it.
+      AiService.instance.appCheckTokenResolver = () async => throw 'boom';
+      expect(await ask(), 'ok');
+      expect(seen.last.containsKey('X-Firebase-AppCheck'), isFalse);
+
+      AiService.instance.appCheckTokenResolver = null;
+    });
+
+    test('verifyPurchase sends the receipt to the proxy and never throws',
+        () async {
+      late http.Request captured;
+      var reply = http.Response(json.encode({'premium': true}), 200);
+      final client = MockClient((request) async {
+        captured = request;
+        return reply;
+      });
+      Future<bool> verify() => http.runWithClient(
+            () => AiService.instance
+                .verifyPurchase(productId: 'plus_monthly', purchaseToken: 'tok'),
+            () => client,
+          );
+
+      expect(await verify(), isTrue);
+      expect(captured.url.toString(), 'https://backend.test/v1/entitlement');
+      expect(json.decode(captured.body),
+          {'productId': 'plus_monthly', 'purchaseToken': 'tok'});
+      expect(captured.headers['Authorization'], 'Bearer secret-token');
+
+      reply = http.Response(json.encode({'premium': false}), 200);
+      expect(await verify(), isFalse);
+      reply = http.Response('down', 502);
+      expect(await verify(), isFalse);
+      reply = http.Response('not json', 200);
+      expect(await verify(), isFalse);
+    });
+
     test('generateText throws StateError on non-2xx status', () async {
       final client = MockClient((_) async => http.Response('nope', 500));
       expect(

@@ -1,5 +1,5 @@
 import express from 'express';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, timingSafeEqual } from 'node:crypto';
 
 import { MemorySessionStore, newSessionId } from './sessions.js';
 import { PromptRequestError, buildPrompt, buildSystemInstruction } from './prompts.js';
@@ -7,7 +7,9 @@ import { PromptRequestError, buildPrompt, buildSystemInstruction } from './promp
 import { SpendLedger, clientKey } from './limits.js';
 import { AccountQuotas, meterForBody } from './quotas.js';
 import { TokenCerts, idTokenFrom, verifyIdToken } from './identity.js';
+import { AppCheckKeys, appCheckTokenFrom, verifyAppCheckToken } from './appcheck.js';
 import { costOf } from './pricing.js';
+import { EntitlementStore } from './entitlements.js';
 
 /**
  * The three endpoints `lib/services/ai_service.dart` calls, and nothing else.
@@ -68,6 +70,20 @@ export function createApp({
   quotas = null,
   firebaseProjectId = null,
   certs = new TokenCerts(),
+  // Firebase App Check: proof the request comes from a genuine build of the
+  // app, which is what stops a script minting anonymous accounts to collect a
+  // fresh allowance each. `appCheckProjectNumber` turns it on; `appCheckEnforce`
+  // decides whether a request without a valid token is refused (true) or only
+  // counted (false, "monitor"). See `appcheck.js`.
+  // Google Play receipt checking. `verifier` (a PlayVerifier) answers whether a
+  // purchase token is a live Plus subscription; `entitlements` remembers who
+  // proved it. Without a verifier nobody is ever a member server-side, which is
+  // the free tier: the safe direction to be wrong in.
+  verifier = null,
+  entitlements = new EntitlementStore(),
+  appCheckProjectNumber = null,
+  appCheckEnforce = false,
+  appCheckKeys = new AppCheckKeys(),
   trustProxy = false,
   chatGenerationConfig = DEFAULT_CHAT_GENERATION_CONFIG,
   maxOutputTokensCap = DEFAULT_MAX_OUTPUT_TOKENS_CAP,
@@ -120,10 +136,50 @@ export function createApp({
     if (!authToken) return next();
     const header = req.get('authorization') ?? '';
     const presented = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
-    if (presented !== authToken) {
+    if (!sameSecret(presented, authToken)) {
       return res.status(401).json({ error: 'unauthorized' });
     }
     return next();
+  }
+
+  /**
+   * Constant-time comparison, so response timing cannot be used to recover the
+   * shared token one character at a time.
+   */
+  function sameSecret(presented, expected) {
+    const a = Buffer.from(presented);
+    const b = Buffer.from(expected);
+    return a.length === b.length && timingSafeEqual(a, b);
+  }
+
+  /**
+   * App Check: is the caller a genuine copy of the app?
+   *
+   * Runs after `meter`, so an address already being rate-limited never costs a
+   * signature check. In monitor mode a failure is counted and let through, so
+   * the operator can see how many real clients would be refused before
+   * enforcing; in enforce mode it is a 401.
+   */
+  const appCheckStats = { valid: 0, missing: 0, invalid: 0 };
+
+  async function checkApp(req, res, next) {
+    if (!appCheckProjectNumber) return next();
+
+    const token = appCheckTokenFrom(req);
+    const claims = await verifyAppCheckToken(token, {
+      projectNumber: appCheckProjectNumber,
+      keys: appCheckKeys,
+    });
+    if (claims) {
+      appCheckStats.valid += 1;
+      return next();
+    }
+
+    appCheckStats[token ? 'invalid' : 'missing'] += 1;
+    if (!appCheckEnforce) return next();
+
+    record(req, Date.now(), 401, ` refused=app_check ${token ? 'invalid' : 'missing'}`);
+    return res.status(401).json({ error: 'app_check_failed' });
   }
 
   /**
@@ -181,12 +237,12 @@ export function createApp({
       });
       const uid = claims?.sub ?? `anon:${clientKey(req, { trustProxy })}`;
 
-      // Premium is deliberately not read from the token. A custom claim would
-      // have to be written by a trusted process that has already verified a
-      // store receipt, and until that exists every account is metered at the
-      // free tier — which is the safe direction to be wrong in. See the note
-      // on the entitlement cache in `lib/services/purchase_service.dart`.
-      const verdict = quotas.check(uid, meterName, false);
+      // Premium is not read from the token or from anything the app says. It is
+      // whoever proved a live Google Play subscription to `/v1/entitlement`,
+      // which this service checked with Google itself. An unverified identity
+      // (`anon:`) is never a member.
+      const isPremium = claims ? entitlements.isPremium(uid) : false;
+      const verdict = quotas.check(uid, meterName, isPremium);
       if (!verdict.allowed) {
         record(req, Date.now(), 429, ` refused=quota meter=${meterName}`);
         return res.status(429).json({ error: 'daily_quota_exhausted' });
@@ -293,6 +349,12 @@ export function createApp({
       sessions: sessions.size,
       budget: spend.snapshot(),
       ...(quotas ? { quotas: quotas.snapshot() } : {}),
+      ...(verifier ? { entitlements: entitlements.snapshot() } : {}),
+      // How many calls carried a valid App Check token. Watch `missing` and
+      // `invalid` in monitor mode: they are the real clients enforcing would lock out.
+      ...(appCheckProjectNumber
+        ? { appCheck: { mode: appCheckEnforce ? 'enforce' : 'monitor', ...appCheckStats } }
+        : {}),
       // Only present when a fallback pair is configured. Watch `fallback`: a
       // number that climbs means the cheap primary is failing and every request
       // is quietly costing backup prices.
@@ -300,7 +362,53 @@ export function createApp({
     });
   });
 
-  app.post('/v1/ai/generate', requireAuth, meter, accountQuota(), async (req, res) => {
+  /**
+   * A player proves their Plus subscription.
+   *
+   * Needs a verified Firebase identity: membership is per account, so there is
+   * nobody to attach it to without one. The app sends the Play purchase token;
+   * this asks Google whether it is live and, if so, remembers the account as a
+   * member until the subscription's own expiry. Called after a purchase, after a
+   * restore, and on launch, so a lapsed subscription ages out on its own.
+   */
+  app.post('/v1/entitlement', requireAuth, meter, checkApp, async (req, res) => {
+    const started = Date.now();
+    if (!verifier || !firebaseProjectId) {
+      record(req, started, 501, ' entitlement=unavailable');
+      return res.status(501).json({ error: 'entitlements_not_configured' });
+    }
+
+    const claims = await verifyIdToken(idTokenFrom(req), { projectId: firebaseProjectId, certs });
+    if (!claims) {
+      record(req, started, 401, ' entitlement=no_identity');
+      return res.status(401).json({ error: 'sign_in_required' });
+    }
+
+    const { productId, purchaseToken } = req.body ?? {};
+    try {
+      const result = await verifier.verify({ productId, purchaseToken });
+      if (!result.valid) {
+        // A lapsed or refunded subscription: take Plus off the account that
+        // presented it, rather than letting the old expiry run out.
+        if (result.reason === 'not_active' || result.reason === 'expired') {
+          entitlements.revoke(claims.sub);
+        }
+        record(req, started, 200, ` entitlement=${result.reason}`);
+        return res.json({ premium: false, reason: result.reason });
+      }
+      entitlements.grant(claims.sub, purchaseToken, result.expiresAt);
+      record(req, started, 200, ' entitlement=granted');
+      return res.json({ premium: true, expiresAt: new Date(result.expiresAt).toISOString() });
+    } catch (err) {
+      // Google unreachable or misconfigured: the app keeps what it has and
+      // asks again later. Not "you are not a member".
+      record(req, started, 502, ' entitlement=lookup_failed');
+      logger.error?.(`entitlement lookup failed: ${err.message}`);
+      return res.status(502).json({ error: 'verification_unavailable' });
+    }
+  });
+
+  app.post('/v1/ai/generate', requireAuth, meter, checkApp, accountQuota(), async (req, res) => {
     const started = Date.now();
     const model = resolveModel(req, res);
     if (!model) return;
@@ -334,7 +442,7 @@ export function createApp({
     }
   });
 
-  app.post('/v1/ai/chat/start', requireAuth, meter, (req, res) => {
+  app.post('/v1/ai/chat/start', requireAuth, meter, checkApp, accountQuota('sessions'), (req, res) => {
     const started = Date.now();
     const model = resolveModel(req, res);
     if (!model) return;
@@ -364,7 +472,7 @@ export function createApp({
     res.json({ sessionId });
   });
 
-  app.post('/v1/ai/chat/send', requireAuth, meter, accountQuota('message'),
+  app.post('/v1/ai/chat/send', requireAuth, meter, checkApp, accountQuota('message'),
     async (req, res) => {
     const started = Date.now();
     const model = resolveModel(req, res);

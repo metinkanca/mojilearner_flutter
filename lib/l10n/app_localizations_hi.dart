@@ -48,6 +48,21 @@ class AppLocalizationsHi extends AppLocalizations {
   String get townSchool => 'स्कूल';
 
   @override
+  String get placeCafe => 'कैफ़े';
+
+  @override
+  String get placeTownHall => 'नगर भवन';
+
+  @override
+  String get placeGazebo => 'मंडप';
+
+  @override
+  String get placeHospital => 'अस्पताल';
+
+  @override
+  String get placeShop => 'दुकान';
+
+  @override
   String get townTab => 'शहर';
 
   @override
@@ -1560,4 +1575,30 @@ class AppLocalizationsHi extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins सिक्के जोड़े गए।';
   }
+
+  @override
+  String get deleteAccountButton => 'खाता हटाएँ';
+
+  @override
+  String get deleteAccountTitle => 'खाता हटाएँ?';
+
+  @override
+  String get deleteAccountWarning =>
+      'इससे आपका पालतू, आपकी प्रगति, आपकी चैट और आपका खाता इस फ़ोन और क्लाउड दोनों से हमेशा के लिए हट जाएगा। इसे वापस नहीं किया जा सकता।';
+
+  @override
+  String get deleteAction => 'हटाएँ';
+
+  @override
+  String get deleteAccountDone => 'आपका खाता और डेटा हटा दिया गया है।';
+
+  @override
+  String get deleteAccountFailed =>
+      'खाता नहीं हटाया जा सका। अपना कनेक्शन जाँचें और फिर कोशिश करें।';
+
+  @override
+  String get privacyPolicyButton => 'गोपनीयता नीति';
+
+  @override
+  String get privacyPolicyOpenFailed => 'लिंक नहीं खुल सका।';
 }

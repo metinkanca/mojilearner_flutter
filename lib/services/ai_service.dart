@@ -123,6 +123,13 @@ class AiService {
   /// could not start. See `main.dart`.
   Future<String?> Function()? idTokenResolver;
 
+  /// Supplies a Firebase App Check token: proof, from Play Integrity or App
+  /// Attest, that this is a genuine build of the app on a real device. The
+  /// shared `AI_PROXY_TOKEN` and an anonymous account can both be produced by a
+  /// script; this cannot. Wired in `main.dart`; null where attestation is not
+  /// available, and the proxy decides what an absent one means.
+  Future<String?> Function()? appCheckTokenResolver;
+
   /// The headers every proxy request carries.
   ///
   /// Two tokens, doing different jobs. `Authorization` is the shared
@@ -152,7 +159,51 @@ class AiService {
       // rather than failing here.
     }
 
+    try {
+      final appCheck = await appCheckTokenResolver?.call();
+      if (appCheck != null && appCheck.isNotEmpty) {
+        headers['X-Firebase-AppCheck'] = appCheck;
+      }
+    } catch (_) {
+      // As above: no token is a state the proxy already has an answer for.
+    }
+
     return headers;
+  }
+
+  /// Tells the proxy about a Google Play subscription so the *server* can give
+  /// this account the member allowance. The proxy asks Google whether the
+  /// purchase token is a live subscription; nothing the app says about itself is
+  /// believed. See `server/src/entitlements.js`.
+  ///
+  /// Returns true only when the proxy confirmed Plus. Never throws: a proxy
+  /// that is unreachable or not configured simply leaves the account on the
+  /// free allowance, and the next launch asks again.
+  Future<bool> verifyPurchase({
+    required String productId,
+    required String purchaseToken,
+  }) async {
+    final baseUrl = _getConfigValue('AI_PROXY_BASE_URL')?.trim();
+    if (baseUrl == null || baseUrl.isEmpty) return false;
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$baseUrl/v1/entitlement'),
+            headers: await _proxyHeaders(),
+            body: json.encode({
+              'productId': productId,
+              'purchaseToken': purchaseToken,
+            }),
+          )
+          .timeout(_requestTimeout);
+      if (response.statusCode != 200) return false;
+      final decoded = json.decode(response.body);
+      return decoded is Map<String, dynamic> && decoded['premium'] == true;
+    } catch (e) {
+      debugPrint('⚠️ ENTITLEMENT: could not verify with the proxy - $e');
+      return false;
+    }
   }
 
   String? _getConfigValue(String key) {

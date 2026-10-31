@@ -13,6 +13,11 @@
   "scenarios": "Kaupunki",
   "scenariosDesc": "Harjoittele oikeita keskusteluja.",
   "townSchool": "Koulu",
+  "placeCafe": "Kahvila",
+  "placeTownHall": "Kaupungintalo",
+  "placeGazebo": "Huvimaja",
+  "placeHospital": "Sairaala",
+  "placeShop": "Kauppa",
   "townTab": "Kaupunki",
   "profile": "Profiili",
   "shop": "Kauppa",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % kolikoita",
   "topUpBestValue": "Paras tarjous",
   "topUpNotOpen": "Kolikkopaketit eivät ole vielä auki.",
-  "topUpThanks": "Lisättiin {coins} kolikkoa."
+  "topUpThanks": "Lisättiin {coins} kolikkoa.",
+  "deleteAccountButton": "Poista tili",
+  "deleteAccountTitle": "Poistetaanko tili?",
+  "deleteAccountWarning": "Tämä poistaa pysyvästi lemmikkisi, edistymisesi, keskustelusi ja tilisi sekä tästä puhelimesta että pilvestä. Toimintoa ei voi kumota.",
+  "deleteAction": "Poista",
+  "deleteAccountDone": "Tilisi ja tietosi on poistettu.",
+  "deleteAccountFailed": "Tilin poistaminen epäonnistui. Tarkista yhteytesi ja yritä uudelleen.",
+  "privacyPolicyButton": "Tietosuojakäytäntö",
+  "privacyPolicyOpenFailed": "Linkkiä ei voitu avata."
 }

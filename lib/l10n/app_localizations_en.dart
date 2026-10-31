@@ -49,6 +49,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get townSchool => 'School';
 
   @override
+  String get placeCafe => 'Café';
+
+  @override
+  String get placeTownHall => 'Town Hall';
+
+  @override
+  String get placeGazebo => 'Gazebo';
+
+  @override
+  String get placeHospital => 'Hospital';
+
+  @override
+  String get placeShop => 'Shop';
+
+  @override
   String get townTab => 'Town';
 
   @override
@@ -1566,4 +1581,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Added $coins coins.';
   }
+
+  @override
+  String get deleteAccountButton => 'Delete Account';
+
+  @override
+  String get deleteAccountTitle => 'Delete Account?';
+
+  @override
+  String get deleteAccountWarning =>
+      'This permanently deletes your pet, your progress, your chats and your account, on this phone and in the cloud. It cannot be undone.';
+
+  @override
+  String get deleteAction => 'Delete';
+
+  @override
+  String get deleteAccountDone => 'Your account and data were deleted.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Couldn\'t delete your account. Check your connection and try again.';
+
+  @override
+  String get privacyPolicyButton => 'Privacy Policy';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Couldn\'t open the link.';
 }

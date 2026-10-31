@@ -13,6 +13,11 @@
   "scenarios": "Ville",
   "scenariosDesc": "Pratique des conversations réelles.",
   "townSchool": "École",
+  "placeCafe": "Café",
+  "placeTownHall": "Mairie",
+  "placeGazebo": "Kiosque",
+  "placeHospital": "Hôpital",
+  "placeShop": "Boutique",
   "townTab": "Ville",
   "profile": "Profil",
   "shop": "Boutique",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % de pièces",
   "topUpBestValue": "Meilleure offre",
   "topUpNotOpen": "Les lots de pièces ne sont pas encore ouverts.",
-  "topUpThanks": "{coins} pièces ajoutées."
+  "topUpThanks": "{coins} pièces ajoutées.",
+  "deleteAccountButton": "Supprimer le compte",
+  "deleteAccountTitle": "Supprimer le compte ?",
+  "deleteAccountWarning": "Cela supprime définitivement ton animal, ta progression, tes discussions et ton compte, sur ce téléphone et dans le cloud. Cette action est irréversible.",
+  "deleteAction": "Supprimer",
+  "deleteAccountDone": "Ton compte et tes données ont été supprimés.",
+  "deleteAccountFailed": "Impossible de supprimer ton compte. Vérifie ta connexion et réessaie.",
+  "privacyPolicyButton": "Politique de confidentialité",
+  "privacyPolicyOpenFailed": "Impossible d'ouvrir le lien."
 }

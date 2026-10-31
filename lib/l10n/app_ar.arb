@@ -13,6 +13,11 @@
   "scenarios": "المدينة",
   "scenariosDesc": "تدرّب على محادثات واقعية مثل طلب القهوة أو مقابلات العمل.",
   "townSchool": "المدرسة",
+  "placeCafe": "المقهى",
+  "placeTownHall": "دار البلدية",
+  "placeGazebo": "الجازيبو",
+  "placeHospital": "المستشفى",
+  "placeShop": "المتجر",
   "townTab": "المدينة",
   "profile": "الملف الشخصي",
   "shop": "المتجر",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% عملات",
   "topUpBestValue": "أفضل قيمة",
   "topUpNotOpen": "حزم العملات ليست متاحة بعد.",
-  "topUpThanks": "تمت إضافة {coins} عملة."
+  "topUpThanks": "تمت إضافة {coins} عملة.",
+  "deleteAccountButton": "حذف الحساب",
+  "deleteAccountTitle": "حذف الحساب؟",
+  "deleteAccountWarning": "سيؤدي هذا إلى حذف حيوانك وتقدمك ومحادثاتك وحسابك نهائيًا، على هذا الهاتف وفي السحابة. لا يمكن التراجع عن ذلك.",
+  "deleteAction": "حذف",
+  "deleteAccountDone": "تم حذف حسابك وبياناتك.",
+  "deleteAccountFailed": "تعذّر حذف حسابك. تحقق من اتصالك وحاول مجددًا.",
+  "privacyPolicyButton": "سياسة الخصوصية",
+  "privacyPolicyOpenFailed": "تعذّر فتح الرابط."
 }

@@ -48,6 +48,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get townSchool => '학교';
 
   @override
+  String get placeCafe => '카페';
+
+  @override
+  String get placeTownHall => '시청';
+
+  @override
+  String get placeGazebo => '정자';
+
+  @override
+  String get placeHospital => '병원';
+
+  @override
+  String get placeShop => '가게';
+
+  @override
   String get townTab => '마을';
 
   @override
@@ -1516,4 +1531,29 @@ class AppLocalizationsKo extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins 코인을 넣었어요.';
   }
+
+  @override
+  String get deleteAccountButton => '계정 삭제';
+
+  @override
+  String get deleteAccountTitle => '계정을 삭제할까요?';
+
+  @override
+  String get deleteAccountWarning =>
+      '이 휴대폰과 클라우드에서 펫, 진행 상황, 채팅, 계정이 영구적으로 삭제됩니다. 되돌릴 수 없습니다.';
+
+  @override
+  String get deleteAction => '삭제';
+
+  @override
+  String get deleteAccountDone => '계정과 데이터가 삭제되었습니다.';
+
+  @override
+  String get deleteAccountFailed => '계정을 삭제하지 못했습니다. 연결을 확인하고 다시 시도하세요.';
+
+  @override
+  String get privacyPolicyButton => '개인정보 처리방침';
+
+  @override
+  String get privacyPolicyOpenFailed => '링크를 열 수 없습니다.';
 }

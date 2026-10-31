@@ -5,6 +5,8 @@ import { SlidingWindowLimiter, SpendLedger } from './limits.js';
 import { AccountQuotas } from './quotas.js';
 import { OpenRouterProvider } from './openrouter.js';
 import { FallbackProvider } from './fallback.js';
+import { PlayVerifier } from './entitlements.js';
+import { readFileSync } from 'node:fs';
 
 /**
  * Boot: read config from the environment, refuse to start misconfigured, then
@@ -30,6 +32,13 @@ const {
   DEFAULT_THINKING_BUDGET = '0',
   TRUST_PROXY,
   FIREBASE_PROJECT_ID,
+  FIREBASE_PROJECT_NUMBER,
+  APP_CHECK_ENFORCE,
+  ALLOW_NO_BUDGET,
+  PLAY_SERVICE_ACCOUNT_JSON,
+  PLAY_SERVICE_ACCOUNT_FILE,
+  PLAY_PACKAGE_NAME = 'com.mimikin.app',
+  PLUS_PRODUCT_IDS = '',
   OPENROUTER_API_KEY,
   OPENROUTER_MODEL,
   OPENROUTER_TIMEOUT_MS = '8000',
@@ -59,15 +68,22 @@ const allowedModels = (ALLOWED_MODELS ?? DEFAULT_MODEL)
 const dailyBudgetUsd = Number(DAILY_BUDGET_USD);
 const ratePerMinute = Number(RATE_LIMIT_PER_MINUTE);
 
-// Loud rather than fatal. An unbudgeted proxy is the state this service has
-// always shipped in, so refusing to start would break existing deployments on
-// upgrade — but it is not a state anyone should reach by accident.
+// Fatal unless opted out. It used to only warn, to avoid breaking deployments
+// on upgrade; nothing is hosted yet, so an uncapped proxy can simply never be
+// started by accident.
 if (!(dailyBudgetUsd > 0)) {
-  console.warn(
-    'DAILY_BUDGET_USD is not set, so there is no ceiling on what this service can spend. ' +
-    'The token is shared by every install and can be extracted from the APK; without a ' +
-    'ceiling, one caller who finds it can run the bill up until you notice by other means.',
-  );
+  // Refused rather than warned about. AI_PROXY_TOKEN is shared by every install
+  // and can be read out of the APK, and anonymous sign-in is open to anyone, so
+  // the per-account allowances alone do not bound the bill: this ceiling is the
+  // only thing that does. Starting without one is a choice to be made on purpose.
+  if (ALLOW_NO_BUDGET !== 'true') {
+    console.error(
+      'DAILY_BUDGET_USD is not set, so nothing caps what this service can spend in a day. ' +
+      'Set it (for example 5), or set ALLOW_NO_BUDGET=true for a throwaway local run.',
+    );
+    process.exit(1);
+  }
+  console.warn('DAILY_BUDGET_USD is not set and ALLOW_NO_BUDGET=true: spend is uncapped.');
 }
 
 // Belt to the ledger's braces, and the only one of the two that survives an
@@ -82,6 +98,17 @@ const limiter = ratePerMinute > 0
 // Firebase ID token is verified against; without one there is no identity to
 // meter and this stays off. See quotas.js and identity.js.
 const quotas = FIREBASE_PROJECT_ID ? new AccountQuotas() : null;
+
+// App Check proves a request comes from a genuine build of the app, which is
+// what stops anonymous accounts being minted by script to collect a fresh
+// allowance each. Monitor first (count, refuse nothing), enforce once the
+// counts in /healthz show real clients all carry a token.
+if (!FIREBASE_PROJECT_NUMBER) {
+  console.warn(
+    'FIREBASE_PROJECT_NUMBER is not set, so App Check is off: nothing stops a script ' +
+    'creating anonymous accounts to collect a fresh daily allowance for each.',
+  );
+}
 
 if (!quotas) {
   console.warn(
@@ -101,6 +128,35 @@ if (!quotas) {
 const defaultThinkingBudget = DEFAULT_THINKING_BUDGET.trim().toLowerCase() === 'none'
   ? null
   : Number(DEFAULT_THINKING_BUDGET);
+
+// Google Play receipt checking: what lets the server, not the app, decide who
+// is a Plus member. Needs a Play Console service account with access to the app.
+let verifier = null;
+const plusProductIds = PLUS_PRODUCT_IDS.split(',').map((id) => id.trim()).filter(Boolean);
+if (PLAY_SERVICE_ACCOUNT_JSON || PLAY_SERVICE_ACCOUNT_FILE) {
+  try {
+    const serviceAccount = JSON.parse(
+      PLAY_SERVICE_ACCOUNT_JSON || readFileSync(PLAY_SERVICE_ACCOUNT_FILE, 'utf8'),
+    );
+    if (!serviceAccount.client_email || !serviceAccount.private_key) {
+      throw new Error('missing client_email or private_key');
+    }
+    if (!plusProductIds.length) throw new Error('PLUS_PRODUCT_IDS is empty');
+    verifier = new PlayVerifier({
+      serviceAccount,
+      packageName: PLAY_PACKAGE_NAME,
+      productIds: plusProductIds,
+    });
+  } catch (err) {
+    console.error(`Play receipt checking is NOT enabled: ${err.message}`);
+    process.exit(1);
+  }
+} else {
+  console.warn(
+    'No Play service account configured, so every account is metered at the free tier ' +
+    'and paying members do not get the larger server allowance.',
+  );
+}
 
 const gemini = new GeminiProvider({ apiKey: GEMINI_API_KEY });
 
@@ -144,6 +200,9 @@ const app = createApp({
   spend: new SpendLedger({ dailyBudgetUsd }),
   quotas,
   firebaseProjectId: FIREBASE_PROJECT_ID || null,
+  verifier,
+  appCheckProjectNumber: FIREBASE_PROJECT_NUMBER || null,
+  appCheckEnforce: APP_CHECK_ENFORCE === 'true',
   trustProxy: TRUST_PROXY === 'true',
   maxOutputTokensCap: Number(MAX_OUTPUT_TOKENS),
   defaultThinkingBudget,

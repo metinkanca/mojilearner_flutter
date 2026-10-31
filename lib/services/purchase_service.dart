@@ -29,10 +29,31 @@ import '../constants/season_pass.dart';
 ///   the same stream: `in_app_purchase` reports the current set on restore,
 ///   and anything not in it is no longer owned.
 class PurchaseService {
-  PurchaseService({InAppPurchase? store})
-      : _store = store ?? InAppPurchase.instance;
+  PurchaseService({
+    InAppPurchase? store,
+    List<String>? plusProductIds,
+    Duration restoreSettle = const Duration(seconds: 4),
+  })  : _store = store ?? InAppPurchase.instance,
+        _plusProductIds = plusProductIds ?? AppRuntimeConfig.plusProductIds,
+        _restoreSettle = restoreSettle;
+
+  final List<String> _plusProductIds;
+
+  /// How long a restore is given to deliver its purchases before the answer
+  /// "none" is believed. They arrive on the purchase stream, not as the return
+  /// value of the call that asked for them.
+  final Duration _restoreSettle;
+
+  /// Whether a Plus purchase has come through since the current restore began.
+  bool _plusSeenInRestore = false;
 
   final InAppPurchase _store;
+
+  /// Hands a Plus subscription's Google Play purchase token to the proxy, which
+  /// checks it with Google. Wired in `main.dart`; null in tests and wherever
+  /// there is no proxy. Android only: Apple receipts are a different check the
+  /// proxy does not make yet, so iOS members stay on the free server allowance.
+  Future<void> Function(String productId, String purchaseToken)? onPlusReceipt;
 
   StreamSubscription<List<PurchaseDetails>>? _subscription;
 
@@ -188,10 +209,23 @@ class PurchaseService {
   ///
   /// The results arrive through the same stream as a fresh purchase, so a
   /// restore and a purchase are the same code path from here on.
-  Future<void> restore() async {
+  ///
+  /// With [revokeIfLapsed], a restore that finds no Plus subscription reports
+  /// that Plus has ended. Without this the entitlement could only ever be
+  /// switched on: a subscriber who cancelled, was refunded, or whose card failed
+  /// kept the member perks for good. It is only used for the automatic check at
+  /// launch, never for the player's own "restore" button, and a restore that
+  /// *errors* never revokes: not hearing from the store is not the store saying
+  /// the subscription ended.
+  Future<void> restore({bool revokeIfLapsed = false}) async {
     if (!isAvailable) return;
+    _plusSeenInRestore = false;
     try {
       await _store.restorePurchases();
+      if (revokeIfLapsed) {
+        await Future<void>.delayed(_restoreSettle);
+        if (!_plusSeenInRestore) _entitlementController.add(false);
+      }
     } catch (e) {
       debugPrint('⚠️ Restore failed: $e');
     }
@@ -212,7 +246,11 @@ class PurchaseService {
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
           _purchasePending = false;
-          if (_isPlus(purchase)) _entitlementController.add(true);
+          if (_isPlus(purchase)) {
+            _plusSeenInRestore = true;
+            _entitlementController.add(true);
+            _reportReceipt(purchase);
+          }
           final passId = _passIdFor(purchase);
           if (passId != null) _passController.add(passId);
           // Coins only on a real purchase. A restore replays everything the
@@ -235,8 +273,20 @@ class PurchaseService {
     }
   }
 
+  /// Fire and forget: the receipt check is for the server's benefit and must
+  /// never hold up, or fail, the purchase the player just made.
+  void _reportReceipt(PurchaseDetails purchase) {
+    final report = onPlusReceipt;
+    if (report == null || defaultTargetPlatform != TargetPlatform.android) return;
+    final token = purchase.verificationData.serverVerificationData;
+    if (token.isEmpty) return;
+    unawaited(report(purchase.productID, token).catchError((Object e) {
+      debugPrint('⚠️ Receipt report failed: $e');
+    }));
+  }
+
   bool _isPlus(PurchaseDetails purchase) =>
-      AppRuntimeConfig.plusProductIds.contains(purchase.productID);
+      _plusProductIds.contains(purchase.productID);
 
   /// The pass this purchase is for, or null when it is not a pass at all.
   String? _passIdFor(PurchaseDetails purchase) {

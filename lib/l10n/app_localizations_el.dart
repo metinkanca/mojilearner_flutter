@@ -48,6 +48,21 @@ class AppLocalizationsEl extends AppLocalizations {
   String get townSchool => 'Σχολείο';
 
   @override
+  String get placeCafe => 'Καφετέρια';
+
+  @override
+  String get placeTownHall => 'Δημαρχείο';
+
+  @override
+  String get placeGazebo => 'Κιόσκι';
+
+  @override
+  String get placeHospital => 'Νοσοκομείο';
+
+  @override
+  String get placeShop => 'Μαγαζί';
+
+  @override
   String get townTab => 'Πόλη';
 
   @override
@@ -1577,4 +1592,32 @@ class AppLocalizationsEl extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Προστέθηκαν $coins νομίσματα.';
   }
+
+  @override
+  String get deleteAccountButton => 'Διαγραφή λογαριασμού';
+
+  @override
+  String get deleteAccountTitle => 'Διαγραφή λογαριασμού;';
+
+  @override
+  String get deleteAccountWarning =>
+      'Αυτό διαγράφει οριστικά το κατοικίδιό σας, την πρόοδό σας, τις συνομιλίες σας και τον λογαριασμό σας, σε αυτό το τηλέφωνο και στο cloud. Δεν μπορεί να αναιρεθεί.';
+
+  @override
+  String get deleteAction => 'Διαγραφή';
+
+  @override
+  String get deleteAccountDone =>
+      'Ο λογαριασμός και τα δεδομένα σας διαγράφηκαν.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Δεν ήταν δυνατή η διαγραφή του λογαριασμού. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.';
+
+  @override
+  String get privacyPolicyButton => 'Πολιτική απορρήτου';
+
+  @override
+  String get privacyPolicyOpenFailed =>
+      'Δεν ήταν δυνατό το άνοιγμα του συνδέσμου.';
 }

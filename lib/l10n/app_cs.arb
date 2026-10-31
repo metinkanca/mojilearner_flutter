@@ -16,6 +16,11 @@
   "scenarios": "Město",
   "scenariosDesc": "Procvičuj reálné konverzace.",
   "townSchool": "Škola",
+  "placeCafe": "Kavárna",
+  "placeTownHall": "Radnice",
+  "placeGazebo": "Altán",
+  "placeHospital": "Nemocnice",
+  "placeShop": "Obchod",
   "townTab": "Město",
   "profile": "Profil",
   "shop": "Obchod",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % mincí",
   "topUpBestValue": "Nejvýhodnější",
   "topUpNotOpen": "Balíčky mincí zatím nejsou dostupné.",
-  "topUpThanks": "Přidáno {coins} mincí."
+  "topUpThanks": "Přidáno {coins} mincí.",
+  "deleteAccountButton": "Smazat účet",
+  "deleteAccountTitle": "Smazat účet?",
+  "deleteAccountWarning": "Tímto trvale smažete svého mazlíčka, postup, konverzace i účet, na tomto telefonu i v cloudu. Nelze to vrátit zpět.",
+  "deleteAction": "Smazat",
+  "deleteAccountDone": "Váš účet a data byly smazány.",
+  "deleteAccountFailed": "Účet se nepodařilo smazat. Zkontrolujte připojení a zkuste to znovu.",
+  "privacyPolicyButton": "Zásady ochrany osobních údajů",
+  "privacyPolicyOpenFailed": "Odkaz se nepodařilo otevřít."
 }

@@ -13,6 +13,11 @@
   "scenarios": "Thị trấn",
   "scenariosDesc": "Thực hành hội thoại thực tế.",
   "townSchool": "Trường học",
+  "placeCafe": "Quán cà phê",
+  "placeTownHall": "Tòa thị chính",
+  "placeGazebo": "Nhà chòi",
+  "placeHospital": "Bệnh viện",
+  "placeShop": "Cửa hàng",
   "townTab": "Thị trấn",
   "profile": "Hồ sơ",
   "shop": "Cửa hàng",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% xu",
   "topUpBestValue": "Đáng tiền nhất",
   "topUpNotOpen": "Gói xu chưa mở bán.",
-  "topUpThanks": "Đã thêm {coins} xu."
+  "topUpThanks": "Đã thêm {coins} xu.",
+  "deleteAccountButton": "Xóa tài khoản",
+  "deleteAccountTitle": "Xóa tài khoản?",
+  "deleteAccountWarning": "Thao tác này xóa vĩnh viễn thú cưng, tiến trình, cuộc trò chuyện và tài khoản của bạn, trên điện thoại này và trên đám mây. Không thể hoàn tác.",
+  "deleteAction": "Xóa",
+  "deleteAccountDone": "Tài khoản và dữ liệu của bạn đã được xóa.",
+  "deleteAccountFailed": "Không thể xóa tài khoản. Hãy kiểm tra kết nối và thử lại.",
+  "privacyPolicyButton": "Chính sách quyền riêng tư",
+  "privacyPolicyOpenFailed": "Không thể mở liên kết."
 }

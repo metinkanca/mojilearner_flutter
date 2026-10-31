@@ -50,9 +50,16 @@ looking exactly like success.
       ids in `coin_packs.dart`, season pass `com.mimikin.app.pass.season1` as a
       non-consumable
 - [ ] Release build passes `IAP_PLUS_MONTHLY` / `IAP_PLUS_ANNUAL`
-- [ ] **Server-side receipt validation.** The one unfinished link: until it
-      exists the proxy meters every account at the free tier, so a subscriber
-      gets the app's larger allowance but not the server's
+- [x] **Server-side receipt validation (built 2026-10-31, untested against
+      real Play).** `server/src/entitlements.js` + `POST /v1/entitlement`: the app
+      sends the Play purchase token after a purchase, a restore and on every
+      launch for members; the proxy asks the Play Developer API, and gives that
+      account the member allowance until the subscription's own expiry. One
+      token serves one account at a time. Tested against a fake Google only.
+      Still needed from the owner: a Play Console service account (Setup > API
+      access), then `PLAY_SERVICE_ACCOUNT_FILE` and `PLUS_PRODUCT_IDS` on the
+      proxy (see `server/.env.example`). Apple receipts are not checked, so iOS
+      members stay on the free server allowance until that is built
 - [ ] Real AdMob app and unit ids (checklist in `ADS.md`, "Before release")
 - [ ] Proxy hosted, with `FIREBASE_PROJECT_ID` set so per-account quotas turn on
 - [ ] Margin check before the regional prices are final: cost of a Plus member
@@ -232,6 +239,51 @@ Thin, and it should be read that way:
   the US price. No usable figures for India, Brazil or Indonesia were found.
 - Google takes 15% of subscription revenue (from memory, not checked in this
   research; confirm in Play Console).
+
+## 1b. Security and data rights (built 2026-10-31)
+
+Done in code, from the audit of the same date. Each line says what is left for
+the owner, since several need a console.
+
+- [x] **Reset App now resets.** It used to clear only SharedPreferences: the
+      encrypted chats stayed, the cloud copy stayed, and the next launch restored
+      the old save. It now deletes the cloud copy, wipes both stores, cancels
+      reminders and rebuilds the app (`DataEraser`, `AppRestart`). Offline, it
+      still wipes the phone and finishes the cloud delete on a later launch
+- [x] **Delete Account** on the profile screen: deletes the stored save, the
+      Firebase account (re-verifying with Google or a password if asked) and the
+      phone data, then carries on under a new anonymous identity. Needs a
+      connection, and says so
+- [ ] **Play Data Safety form:** declare the in-app deletion, and give Play a
+      web address where a player can ask for deletion without the app (a page
+      with a contact address is enough to start)
+- [ ] **Privacy policy:** write it and host it, then build with
+      `--dart-define=PRIVACY_POLICY_URL=https://...`. The profile link stays
+      hidden until that is set, and Play needs the same address in the listing
+- [x] **App Check on the proxy** (monitor or enforce) and in the app (Play
+      Integrity in release, a debug provider otherwise). This is what stops a
+      script minting anonymous accounts for a fresh allowance each. To switch on:
+      1. Firebase console > App Check: register the Android app with Play
+         Integrity; link the Play Console app when it exists
+      2. Debug builds print a debug token in the log; add it under App Check >
+         Apps > Manage debug tokens, or debug builds are not attested
+      3. Set `FIREBASE_PROJECT_NUMBER=592310164564` on the proxy (monitor mode)
+      4. Ship a build, watch `/healthz` `appCheck` until `missing` and `invalid`
+         stop growing for current builds
+      5. Set `APP_CHECK_ENFORCE=true`. Doing this earlier locks out old builds
+      6. Optionally turn on App Check enforcement for Firestore and Auth in the
+         console, once the same watch shows the app is sending tokens
+- [x] **Proxy refuses to start without `DAILY_BUDGET_USD`** (`ALLOW_NO_BUDGET`
+      to override for a local run), compares the bearer token in constant time,
+      and has no known vulnerable dependencies (`npm audit` clean; CI now fails
+      on high or critical)
+- [ ] **Not done, needs a decision:** crash reporting and analytics (step 2
+      below). Adding them changes what the Data Safety form must declare and
+      what the under-13 path may collect, so it is not slipped in as a fix
+- [ ] Two small proxy limits left alone on purpose: session creation
+      (`/chat/start`) is not charged to the daily quota, and all server state
+      (sessions, quotas, spend, members) is in memory, so run exactly one
+      instance
 
 ## 2. Measure it
 

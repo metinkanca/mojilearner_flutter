@@ -46,6 +46,9 @@ class LocalSnapshot {
   static const Set<String> syncBookkeepingPrefs = {
     'sync_last_hash',
     'sync_revision',
+    // "The cloud copy still has to be deleted". Device-local by nature: syncing
+    // it would put the very note about deleting a save inside that save.
+    'sync_pending_erase',
   };
 
   /// The encrypted blobs worth carrying.

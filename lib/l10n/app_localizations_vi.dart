@@ -48,6 +48,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get townSchool => 'Trường học';
 
   @override
+  String get placeCafe => 'Quán cà phê';
+
+  @override
+  String get placeTownHall => 'Tòa thị chính';
+
+  @override
+  String get placeGazebo => 'Nhà chòi';
+
+  @override
+  String get placeHospital => 'Bệnh viện';
+
+  @override
+  String get placeShop => 'Cửa hàng';
+
+  @override
   String get townTab => 'Thị trấn';
 
   @override
@@ -1567,4 +1582,30 @@ class AppLocalizationsVi extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Đã thêm $coins xu.';
   }
+
+  @override
+  String get deleteAccountButton => 'Xóa tài khoản';
+
+  @override
+  String get deleteAccountTitle => 'Xóa tài khoản?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Thao tác này xóa vĩnh viễn thú cưng, tiến trình, cuộc trò chuyện và tài khoản của bạn, trên điện thoại này và trên đám mây. Không thể hoàn tác.';
+
+  @override
+  String get deleteAction => 'Xóa';
+
+  @override
+  String get deleteAccountDone => 'Tài khoản và dữ liệu của bạn đã được xóa.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Không thể xóa tài khoản. Hãy kiểm tra kết nối và thử lại.';
+
+  @override
+  String get privacyPolicyButton => 'Chính sách quyền riêng tư';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Không thể mở liên kết.';
 }

@@ -13,6 +13,11 @@
   "scenarios": "Πόλη",
   "scenariosDesc": "Εξάσκηση πραγματικών συνομιλιών.",
   "townSchool": "Σχολείο",
+  "placeCafe": "Καφετέρια",
+  "placeTownHall": "Δημαρχείο",
+  "placeGazebo": "Κιόσκι",
+  "placeHospital": "Νοσοκομείο",
+  "placeShop": "Μαγαζί",
   "townTab": "Πόλη",
   "profile": "Προφίλ",
   "shop": "Κατάστημα",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% νομίσματα",
   "topUpBestValue": "Καλύτερη αξία",
   "topUpNotOpen": "Τα πακέτα νομισμάτων δεν είναι ακόμα διαθέσιμα.",
-  "topUpThanks": "Προστέθηκαν {coins} νομίσματα."
+  "topUpThanks": "Προστέθηκαν {coins} νομίσματα.",
+  "deleteAccountButton": "Διαγραφή λογαριασμού",
+  "deleteAccountTitle": "Διαγραφή λογαριασμού;",
+  "deleteAccountWarning": "Αυτό διαγράφει οριστικά το κατοικίδιό σας, την πρόοδό σας, τις συνομιλίες σας και τον λογαριασμό σας, σε αυτό το τηλέφωνο και στο cloud. Δεν μπορεί να αναιρεθεί.",
+  "deleteAction": "Διαγραφή",
+  "deleteAccountDone": "Ο λογαριασμός και τα δεδομένα σας διαγράφηκαν.",
+  "deleteAccountFailed": "Δεν ήταν δυνατή η διαγραφή του λογαριασμού. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
+  "privacyPolicyButton": "Πολιτική απορρήτου",
+  "privacyPolicyOpenFailed": "Δεν ήταν δυνατό το άνοιγμα του συνδέσμου."
 }

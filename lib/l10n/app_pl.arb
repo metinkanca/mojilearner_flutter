@@ -13,6 +13,11 @@
   "scenarios": "Miasto",
   "scenariosDesc": "Ćwicz prawdziwe rozmowy.",
   "townSchool": "Szkoła",
+  "placeCafe": "Kawiarnia",
+  "placeTownHall": "Ratusz",
+  "placeGazebo": "Altana",
+  "placeHospital": "Szpital",
+  "placeShop": "Sklep",
   "townTab": "Miasto",
   "profile": "Profil",
   "shop": "Sklep",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% monet",
   "topUpBestValue": "Najlepsza wartość",
   "topUpNotOpen": "Pakiety monet nie są jeszcze dostępne.",
-  "topUpThanks": "Dodano {coins} monet."
+  "topUpThanks": "Dodano {coins} monet.",
+  "deleteAccountButton": "Usuń konto",
+  "deleteAccountTitle": "Usunąć konto?",
+  "deleteAccountWarning": "To trwale usunie twojego zwierzaka, postępy, czaty i konto, na tym telefonie i w chmurze. Tej operacji nie można cofnąć.",
+  "deleteAction": "Usuń",
+  "deleteAccountDone": "Twoje konto i dane zostały usunięte.",
+  "deleteAccountFailed": "Nie udało się usunąć konta. Sprawdź połączenie i spróbuj ponownie.",
+  "privacyPolicyButton": "Polityka prywatności",
+  "privacyPolicyOpenFailed": "Nie udało się otworzyć linku."
 }

@@ -39,11 +39,19 @@ export const METER_BY_MODE = {
   starter: 'words',
 };
 
-/** The free tier. Mirrors `EntitlementConstants.free`. */
-export const FREE = { quiz: 3, message: 80, words: 3 };
+/**
+ * The free tier. Mirrors `EntitlementConstants.free`.
+ *
+ * `sessions` is not shown to the player: it caps how many chats an account can
+ * open in a day. Opening one costs the proxy memory, and an unlimited number
+ * would let one caller push everyone else's live chats out of the capped
+ * session store. Generous, since the app opens one per chat, scenario and
+ * assessment; it only has to stop a script.
+ */
+export const FREE = { quiz: 3, message: 80, words: 3, sessions: 60 };
 
 /** What Mimikin Plus buys. Mirrors `EntitlementConstants.premium`. */
-export const PREMIUM = { quiz: 10, message: 300, words: 6 };
+export const PREMIUM = { quiz: 10, message: 300, words: 6, sessions: 150 };
 
 /**
  * The most extra quizzes rewarded ads can add in a day.

@@ -19,6 +19,10 @@ abstract class CloudSyncBackend {
 
   /// Writes the whole document. One call, one billed write.
   Future<void> upload(String uid, Map<String, dynamic> data);
+
+  /// Removes the stored document. Deleting one that is not there succeeds, so
+  /// a retry after a half-finished erase is safe.
+  Future<void> delete(String uid);
 }
 
 /// Keeps local progress mirrored to a backend, cheaply.
@@ -66,9 +70,31 @@ class CloudSync with WidgetsBindingObserver {
   /// The same number on the stored document.
   static const String _revisionField = 'revision';
 
+  /// Set when a player erased their data but the cloud copy could not be
+  /// reached (offline). Survives `SharedPreferences.clear()` because it is
+  /// written *after* it, and makes the next [start] delete the stored save
+  /// before anything is allowed to restore it. Without this an offline reset
+  /// would be undone by the next launch.
+  static const String _pendingEraseKey = 'sync_pending_erase';
+
+  /// Whether this device has been played on, i.e. already holds a save.
+  ///
+  /// Decides how startup may treat sync: a device with a save never has one
+  /// restored over it, so it can open straight away and sync in the background.
+  /// A device without one has to wait, because a restore rewrites the storage
+  /// the providers are about to read.
+  static Future<bool> hasLocalSave() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_revisionPrefsKey) != null;
+  }
+
   String? _uid;
   Timer? _timer;
   bool _flushing = false;
+
+  /// While true nothing uploads. Held for the length of an erase, so the timer
+  /// cannot re-upload the save that is being deleted.
+  bool _paused = false;
 
   bool get isSignedIn => _uid != null;
 
@@ -81,6 +107,7 @@ class CloudSync with WidgetsBindingObserver {
     _uid = await _backend.signIn();
     if (_uid == null) return;
 
+    await _finishPendingErase();
     await restoreIfRemoteIsAhead();
 
     WidgetsBinding.instance.addObserver(this);
@@ -91,6 +118,57 @@ class CloudSync with WidgetsBindingObserver {
     _timer?.cancel();
     _timer = null;
     WidgetsBinding.instance.removeObserver(this);
+  }
+
+  /// Deletes the stored save if an earlier erase could not reach it.
+  ///
+  /// If it still cannot, the marker stays and [restoreIfRemoteIsAhead] refuses
+  /// to restore while it is set, so the erased save is never pulled back down.
+  Future<void> _finishPendingErase() async {
+    final uid = _uid;
+    if (uid == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(_pendingEraseKey) != true) return;
+    try {
+      await _backend.delete(uid);
+      await prefs.remove(_pendingEraseKey);
+    } catch (e) {
+      debugPrint('⚠️ SYNC: pending erase still cannot reach the cloud - $e');
+    }
+  }
+
+  /// Stops uploads and deletes the stored save, ahead of wiping the device.
+  ///
+  /// Returns whether the cloud copy is gone. A false is not an error to show:
+  /// the caller wipes the device anyway and calls [rememberPendingErase], so
+  /// the delete is retried on a later launch rather than the reset being
+  /// refused because the phone is offline.
+  Future<bool> deleteCloudCopy() async {
+    _paused = true;
+    final uid = _uid;
+    if (uid == null) return true;
+    try {
+      await _backend.delete(uid);
+      return true;
+    } catch (e) {
+      debugPrint('⚠️ SYNC: could not delete the cloud copy - $e');
+      return false;
+    }
+  }
+
+  /// Leaves a note, after the device has been wiped, that the cloud copy
+  /// survived. Must run after `SharedPreferences.clear()` or it is cleared too.
+  Future<void> rememberPendingErase() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_pendingEraseKey, true);
+  }
+
+  /// Picks sync back up after an erase, under whatever identity is signed in
+  /// now. After an account deletion that is a brand-new anonymous one, so the
+  /// player who deleted their account can keep using the app.
+  Future<void> resumeAfterErase() async {
+    _uid = await _backend.signIn();
+    _paused = false;
   }
 
   /// Pulls the stored save down when this device has nothing of its own.
@@ -108,6 +186,9 @@ class CloudSync with WidgetsBindingObserver {
     final prefs = await SharedPreferences.getInstance();
     final localRevision = prefs.getInt(_revisionPrefsKey);
     if (localRevision != null) return; // Played on. Leave it alone.
+    // An erase the cloud has not heard about yet: what is stored there is what
+    // the player asked to have deleted, not a save to bring back.
+    if (prefs.getBool(_pendingEraseKey) == true) return;
 
     final remote = await _backend.fetch(uid);
     if (remote == null) return; // Nothing stored; nothing to restore.
@@ -158,7 +239,7 @@ class CloudSync with WidgetsBindingObserver {
   /// nothing at all.
   Future<bool> flush() async {
     final uid = _uid;
-    if (uid == null || _flushing) return false;
+    if (uid == null || _flushing || _paused) return false;
     _flushing = true;
 
     try {
@@ -177,6 +258,10 @@ class CloudSync with WidgetsBindingObserver {
 
       await prefs.setInt(_revisionPrefsKey, revision);
       await prefs.setString(_lastSyncedHashKey, hash);
+      // The upload replaced the document, so the save that was waiting to be
+      // deleted is gone, and deleting "the cloud copy" on the next launch would
+      // now delete what the player has built since.
+      await prefs.remove(_pendingEraseKey);
       return true;
     } catch (e) {
       // A failed sync is not a failed app. The local save is untouched and

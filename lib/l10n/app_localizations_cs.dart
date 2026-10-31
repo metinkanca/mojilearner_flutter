@@ -48,6 +48,21 @@ class AppLocalizationsCs extends AppLocalizations {
   String get townSchool => 'Škola';
 
   @override
+  String get placeCafe => 'Kavárna';
+
+  @override
+  String get placeTownHall => 'Radnice';
+
+  @override
+  String get placeGazebo => 'Altán';
+
+  @override
+  String get placeHospital => 'Nemocnice';
+
+  @override
+  String get placeShop => 'Obchod';
+
+  @override
   String get townTab => 'Město';
 
   @override
@@ -1561,4 +1576,30 @@ class AppLocalizationsCs extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Přidáno $coins mincí.';
   }
+
+  @override
+  String get deleteAccountButton => 'Smazat účet';
+
+  @override
+  String get deleteAccountTitle => 'Smazat účet?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Tímto trvale smažete svého mazlíčka, postup, konverzace i účet, na tomto telefonu i v cloudu. Nelze to vrátit zpět.';
+
+  @override
+  String get deleteAction => 'Smazat';
+
+  @override
+  String get deleteAccountDone => 'Váš účet a data byly smazány.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Účet se nepodařilo smazat. Zkontrolujte připojení a zkuste to znovu.';
+
+  @override
+  String get privacyPolicyButton => 'Zásady ochrany osobních údajů';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Odkaz se nepodařilo otevřít.';
 }

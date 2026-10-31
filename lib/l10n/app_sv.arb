@@ -13,6 +13,11 @@
   "scenarios": "Stad",
   "scenariosDesc": "Öva verkliga samtal.",
   "townSchool": "Skola",
+  "placeCafe": "Kafé",
+  "placeTownHall": "Rådhus",
+  "placeGazebo": "Lusthus",
+  "placeHospital": "Sjukhus",
+  "placeShop": "Affär",
   "townTab": "Stad",
   "profile": "Profil",
   "shop": "Butik",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent} % mynt",
   "topUpBestValue": "Bäst värde",
   "topUpNotOpen": "Myntpaket är inte öppna ännu.",
-  "topUpThanks": "La till {coins} mynt."
+  "topUpThanks": "La till {coins} mynt.",
+  "deleteAccountButton": "Radera konto",
+  "deleteAccountTitle": "Radera kontot?",
+  "deleteAccountWarning": "Det här raderar ditt husdjur, dina framsteg, dina chattar och ditt konto permanent, på den här telefonen och i molnet. Det går inte att ångra.",
+  "deleteAction": "Radera",
+  "deleteAccountDone": "Ditt konto och dina data har raderats.",
+  "deleteAccountFailed": "Kontot kunde inte raderas. Kontrollera anslutningen och försök igen.",
+  "privacyPolicyButton": "Integritetspolicy",
+  "privacyPolicyOpenFailed": "Länken kunde inte öppnas."
 }

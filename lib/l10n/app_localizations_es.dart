@@ -48,6 +48,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get townSchool => 'Escuela';
 
   @override
+  String get placeCafe => 'Cafetería';
+
+  @override
+  String get placeTownHall => 'Ayuntamiento';
+
+  @override
+  String get placeGazebo => 'Glorieta';
+
+  @override
+  String get placeHospital => 'Hospital';
+
+  @override
+  String get placeShop => 'Tienda';
+
+  @override
   String get townTab => 'Pueblo';
 
   @override
@@ -1575,4 +1590,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Se añadieron $coins monedas.';
   }
+
+  @override
+  String get deleteAccountButton => 'Eliminar cuenta';
+
+  @override
+  String get deleteAccountTitle => '¿Eliminar cuenta?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Esto elimina de forma permanente tu mascota, tu progreso, tus chats y tu cuenta, en este teléfono y en la nube. No se puede deshacer.';
+
+  @override
+  String get deleteAction => 'Eliminar';
+
+  @override
+  String get deleteAccountDone => 'Tu cuenta y tus datos se han eliminado.';
+
+  @override
+  String get deleteAccountFailed =>
+      'No se pudo eliminar tu cuenta. Revisa tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get privacyPolicyButton => 'Política de privacidad';
+
+  @override
+  String get privacyPolicyOpenFailed => 'No se pudo abrir el enlace.';
 }

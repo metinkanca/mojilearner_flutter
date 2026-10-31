@@ -13,12 +13,32 @@
   "scenarios": "Town",
   "scenariosDesc": "Practice real-life conversations like ordering coffee or job interviews.",
   "townSchool": "School",
+  "placeCafe": "Café",
+  "placeTownHall": "Town Hall",
+  "placeGazebo": "Gazebo",
+  "placeHospital": "Hospital",
+  "placeShop": "Shop",
   "townTab": "Town",
   "@townTab": {
     "description": "Label of the bottom navigation tab that opens the town (the map of buildings, with the school where the quizzes are)."
   },
   "@townSchool": {
     "description": "The school building in the town: where the quizzes are. Shown on its card and under it."
+  },
+  "@placeCafe": {
+    "description": "The cafe building in the town. Shown on its card; the go button names what is practised there."
+  },
+  "@placeTownHall": {
+    "description": "The town hall building in the town (where the job interview is)."
+  },
+  "@placeGazebo": {
+    "description": "The gazebo in the town (where the player asks for directions)."
+  },
+  "@placeHospital": {
+    "description": "The hospital building in the town (where the doctor scene is)."
+  },
+  "@placeShop": {
+    "description": "The shop building in the town (where the shopping scene is)."
   },
   "profile": "Profile",
   "shop": "Shop",
@@ -761,5 +781,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "deleteAccountButton": "Delete Account",
+  "deleteAccountTitle": "Delete Account?",
+  "deleteAccountWarning": "This permanently deletes your pet, your progress, your chats and your account, on this phone and in the cloud. It cannot be undone.",
+  "deleteAction": "Delete",
+  "deleteAccountDone": "Your account and data were deleted.",
+  "deleteAccountFailed": "Couldn't delete your account. Check your connection and try again.",
+  "privacyPolicyButton": "Privacy Policy",
+  "privacyPolicyOpenFailed": "Couldn't open the link."
 }

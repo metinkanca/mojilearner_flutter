@@ -60,6 +60,8 @@ dependencies:
   # Play Billing and StoreKit behind one API; the product ids arrive at build
   # time through --dart-define, see `constants/app_runtime_config.dart`.
   in_app_purchase: ^3.2.0
+  url_launcher: ^6.3.3
+  firebase_app_check: ^0.4.9
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +77,11 @@ flutter:
   
   assets:
     - assets/svgs/
+    - assets/images/
+    # Inter, which the Material text theme asks google_fonts for. Bundled so the
+    # package finds it here instead of fetching it over the network on first use
+    # (a launch cost, and a flash of the fallback face while it arrives).
+    - assets/google_fonts/
   
   fonts:
     - family: PressStart2P

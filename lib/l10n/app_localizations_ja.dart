@@ -48,6 +48,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get townSchool => '学校';
 
   @override
+  String get placeCafe => 'カフェ';
+
+  @override
+  String get placeTownHall => '市役所';
+
+  @override
+  String get placeGazebo => 'あずまや';
+
+  @override
+  String get placeHospital => '病院';
+
+  @override
+  String get placeShop => 'お店';
+
+  @override
   String get townTab => 'まち';
 
   @override
@@ -1516,4 +1531,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String topUpThanks(int coins) {
     return '$coins コインを追加しました。';
   }
+
+  @override
+  String get deleteAccountButton => 'アカウントを削除';
+
+  @override
+  String get deleteAccountTitle => 'アカウントを削除しますか？';
+
+  @override
+  String get deleteAccountWarning =>
+      'ペット、進行状況、チャット、アカウントが、この端末とクラウドから完全に削除されます。元に戻すことはできません。';
+
+  @override
+  String get deleteAction => '削除';
+
+  @override
+  String get deleteAccountDone => 'アカウントとデータを削除しました。';
+
+  @override
+  String get deleteAccountFailed => 'アカウントを削除できませんでした。接続を確認してもう一度お試しください。';
+
+  @override
+  String get privacyPolicyButton => 'プライバシーポリシー';
+
+  @override
+  String get privacyPolicyOpenFailed => 'リンクを開けませんでした。';
 }

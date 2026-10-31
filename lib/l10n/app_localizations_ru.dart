@@ -48,6 +48,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get townSchool => 'Школа';
 
   @override
+  String get placeCafe => 'Кафе';
+
+  @override
+  String get placeTownHall => 'Ратуша';
+
+  @override
+  String get placeGazebo => 'Беседка';
+
+  @override
+  String get placeHospital => 'Больница';
+
+  @override
+  String get placeShop => 'Магазин';
+
+  @override
   String get townTab => 'Город';
 
   @override
@@ -1312,7 +1327,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tutorialNavTown =>
-      'Город: заходи в здание, чтобы потренировать разговор, или загляни в школу на квиз.';
+      'Город: заходи в здание, чтобы потренировать разговор, или загляни в школу, чтобы пройти тест.';
 
   @override
   String get tutorialNavChat => 'Чаты: разговоры подлиннее и ролевые сценарии.';
@@ -1565,4 +1580,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'Добавлено монет: $coins.';
   }
+
+  @override
+  String get deleteAccountButton => 'Удалить аккаунт';
+
+  @override
+  String get deleteAccountTitle => 'Удалить аккаунт?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Это навсегда удалит вашего питомца, прогресс, чаты и аккаунт — на этом телефоне и в облаке. Отменить это нельзя.';
+
+  @override
+  String get deleteAction => 'Удалить';
+
+  @override
+  String get deleteAccountDone => 'Ваш аккаунт и данные удалены.';
+
+  @override
+  String get deleteAccountFailed =>
+      'Не удалось удалить аккаунт. Проверьте подключение и повторите попытку.';
+
+  @override
+  String get privacyPolicyButton => 'Политика конфиденциальности';
+
+  @override
+  String get privacyPolicyOpenFailed => 'Не удалось открыть ссылку.';
 }

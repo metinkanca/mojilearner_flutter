@@ -16,6 +16,11 @@
   "scenarios": "Város",
   "scenariosDesc": "Gyakorolj valós párbeszédeket.",
   "townSchool": "Iskola",
+  "placeCafe": "Kávézó",
+  "placeTownHall": "Városháza",
+  "placeGazebo": "Filagória",
+  "placeHospital": "Kórház",
+  "placeShop": "Bolt",
   "townTab": "Város",
   "profile": "Profil",
   "profileDesc": "Statisztikák és beállítások.",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% érme",
   "topUpBestValue": "A legjobb ajánlat",
   "topUpNotOpen": "Az érmecsomagok még nem érhetők el.",
-  "topUpThanks": "{coins} érme hozzáadva."
+  "topUpThanks": "{coins} érme hozzáadva.",
+  "deleteAccountButton": "Fiók törlése",
+  "deleteAccountTitle": "Törlöd a fiókot?",
+  "deleteAccountWarning": "Ez véglegesen törli a kedvencedet, az előrehaladásodat, a beszélgetéseidet és a fiókodat, ezen a telefonon és a felhőben is. Ez nem vonható vissza.",
+  "deleteAction": "Törlés",
+  "deleteAccountDone": "A fiókod és az adataid törölve lettek.",
+  "deleteAccountFailed": "Nem sikerült törölni a fiókot. Ellenőrizd a kapcsolatot, és próbáld újra.",
+  "privacyPolicyButton": "Adatvédelmi irányelvek",
+  "privacyPolicyOpenFailed": "A hivatkozást nem sikerült megnyitni."
 }

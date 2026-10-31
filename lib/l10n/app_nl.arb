@@ -13,6 +13,11 @@
   "scenarios": "Stad",
   "scenariosDesc": "Oefen echte gesprekken.",
   "townSchool": "School",
+  "placeCafe": "Café",
+  "placeTownHall": "Stadhuis",
+  "placeGazebo": "Prieel",
+  "placeHospital": "Ziekenhuis",
+  "placeShop": "Winkel",
   "townTab": "Stad",
   "profile": "Profiel",
   "shop": "Winkel",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% munten",
   "topUpBestValue": "Beste deal",
   "topUpNotOpen": "Muntpakketten zijn nog niet beschikbaar.",
-  "topUpThanks": "{coins} munten toegevoegd."
+  "topUpThanks": "{coins} munten toegevoegd.",
+  "deleteAccountButton": "Account verwijderen",
+  "deleteAccountTitle": "Account verwijderen?",
+  "deleteAccountWarning": "Hiermee worden je huisdier, je voortgang, je chats en je account definitief verwijderd, op deze telefoon en in de cloud. Dit kan niet ongedaan worden gemaakt.",
+  "deleteAction": "Verwijderen",
+  "deleteAccountDone": "Je account en gegevens zijn verwijderd.",
+  "deleteAccountFailed": "Het account kon niet worden verwijderd. Controleer je verbinding en probeer het opnieuw.",
+  "privacyPolicyButton": "Privacybeleid",
+  "privacyPolicyOpenFailed": "De link kon niet worden geopend."
 }

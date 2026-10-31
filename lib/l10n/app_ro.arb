@@ -16,6 +16,11 @@
   "scenarios": "Oraș",
   "scenariosDesc": "Exersează conversații reale.",
   "townSchool": "Școală",
+  "placeCafe": "Cafenea",
+  "placeTownHall": "Primăria",
+  "placeGazebo": "Foișor",
+  "placeHospital": "Spital",
+  "placeShop": "Magazin",
   "townTab": "Oraș",
   "profile": "Profil",
   "profileDesc": "Vezi statistici și setări.",
@@ -476,5 +481,13 @@
   "topUpBonus": "+{percent}% monede",
   "topUpBestValue": "Cea mai bună ofertă",
   "topUpNotOpen": "Pachetele de monede nu sunt încă disponibile.",
-  "topUpThanks": "S-au adăugat {coins} monede."
+  "topUpThanks": "S-au adăugat {coins} monede.",
+  "deleteAccountButton": "Șterge contul",
+  "deleteAccountTitle": "Ștergi contul?",
+  "deleteAccountWarning": "Aceasta șterge definitiv animalul tău, progresul, conversațiile și contul, pe acest telefon și în cloud. Nu se poate anula.",
+  "deleteAction": "Șterge",
+  "deleteAccountDone": "Contul și datele tale au fost șterse.",
+  "deleteAccountFailed": "Contul nu a putut fi șters. Verifică conexiunea și încearcă din nou.",
+  "privacyPolicyButton": "Politica de confidențialitate",
+  "privacyPolicyOpenFailed": "Linkul nu a putut fi deschis."
 }

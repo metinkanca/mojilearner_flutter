@@ -49,6 +49,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get townSchool => 'المدرسة';
 
   @override
+  String get placeCafe => 'المقهى';
+
+  @override
+  String get placeTownHall => 'دار البلدية';
+
+  @override
+  String get placeGazebo => 'الجازيبو';
+
+  @override
+  String get placeHospital => 'المستشفى';
+
+  @override
+  String get placeShop => 'المتجر';
+
+  @override
   String get townTab => 'المدينة';
 
   @override
@@ -1552,4 +1567,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String topUpThanks(int coins) {
     return 'تمت إضافة $coins عملة.';
   }
+
+  @override
+  String get deleteAccountButton => 'حذف الحساب';
+
+  @override
+  String get deleteAccountTitle => 'حذف الحساب؟';
+
+  @override
+  String get deleteAccountWarning =>
+      'سيؤدي هذا إلى حذف حيوانك وتقدمك ومحادثاتك وحسابك نهائيًا، على هذا الهاتف وفي السحابة. لا يمكن التراجع عن ذلك.';
+
+  @override
+  String get deleteAction => 'حذف';
+
+  @override
+  String get deleteAccountDone => 'تم حذف حسابك وبياناتك.';
+
+  @override
+  String get deleteAccountFailed =>
+      'تعذّر حذف حسابك. تحقق من اتصالك وحاول مجددًا.';
+
+  @override
+  String get privacyPolicyButton => 'سياسة الخصوصية';
+
+  @override
+  String get privacyPolicyOpenFailed => 'تعذّر فتح الرابط.';
 }
