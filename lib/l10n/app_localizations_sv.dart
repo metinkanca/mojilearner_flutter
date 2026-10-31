@@ -1609,4 +1609,10 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Länken kunde inte öppnas.';
+
+  @override
+  String get reportReply => 'Rapportera det här svaret';
+
+  @override
+  String get reportReplyFailed => 'Det gick inte att öppna e-postappen.';
 }

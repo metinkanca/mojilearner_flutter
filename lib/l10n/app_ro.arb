@@ -489,5 +489,7 @@
   "deleteAccountDone": "Contul și datele tale au fost șterse.",
   "deleteAccountFailed": "Contul nu a putut fi șters. Verifică conexiunea și încearcă din nou.",
   "privacyPolicyButton": "Politica de confidențialitate",
-  "privacyPolicyOpenFailed": "Linkul nu a putut fi deschis."
+  "privacyPolicyOpenFailed": "Linkul nu a putut fi deschis.",
+  "reportReply": "Raportează acest răspuns",
+  "reportReplyFailed": "Aplicația de e-mail nu a putut fi deschisă."
 }

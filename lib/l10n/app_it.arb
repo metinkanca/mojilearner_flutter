@@ -489,5 +489,7 @@
   "deleteAccountDone": "Il tuo account e i tuoi dati sono stati eliminati.",
   "deleteAccountFailed": "Impossibile eliminare l'account. Controlla la connessione e riprova.",
   "privacyPolicyButton": "Informativa sulla privacy",
-  "privacyPolicyOpenFailed": "Impossibile aprire il link."
+  "privacyPolicyOpenFailed": "Impossibile aprire il link.",
+  "reportReply": "Segnala questa risposta",
+  "reportReplyFailed": "Impossibile aprire l'app di posta."
 }

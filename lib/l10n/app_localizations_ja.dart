@@ -1556,4 +1556,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'リンクを開けませんでした。';
+
+  @override
+  String get reportReply => 'この返信を報告';
+
+  @override
+  String get reportReplyFailed => 'メールアプリを開けませんでした。';
 }

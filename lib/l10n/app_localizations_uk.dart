@@ -1607,4 +1607,10 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Не вдалося відкрити посилання.';
+
+  @override
+  String get reportReply => 'Поскаржитися на цю відповідь';
+
+  @override
+  String get reportReplyFailed => 'Не вдалося відкрити поштовий застосунок.';
 }

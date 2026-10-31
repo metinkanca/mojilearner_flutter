@@ -489,5 +489,7 @@
   "deleteAccountDone": "ลบบัญชีและข้อมูลของคุณแล้ว",
   "deleteAccountFailed": "ไม่สามารถลบบัญชีได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
   "privacyPolicyButton": "นโยบายความเป็นส่วนตัว",
-  "privacyPolicyOpenFailed": "ไม่สามารถเปิดลิงก์ได้"
+  "privacyPolicyOpenFailed": "ไม่สามารถเปิดลิงก์ได้",
+  "reportReply": "รายงานคำตอบนี้",
+  "reportReplyFailed": "ไม่สามารถเปิดแอปอีเมลได้"
 }

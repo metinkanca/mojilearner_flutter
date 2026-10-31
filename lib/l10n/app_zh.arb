@@ -489,5 +489,7 @@
   "deleteAccountDone": "你的账号和数据已删除。",
   "deleteAccountFailed": "无法删除账号。请检查网络连接后重试。",
   "privacyPolicyButton": "隐私政策",
-  "privacyPolicyOpenFailed": "无法打开链接。"
+  "privacyPolicyOpenFailed": "无法打开链接。",
+  "reportReply": "举报此回复",
+  "reportReplyFailed": "无法打开邮件应用。"
 }

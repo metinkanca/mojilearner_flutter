@@ -1613,4 +1613,11 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'A hivatkozást nem sikerült megnyitni.';
+
+  @override
+  String get reportReply => 'Válasz jelentése';
+
+  @override
+  String get reportReplyFailed =>
+      'Nem sikerült megnyitni az e-mail alkalmazást.';
 }

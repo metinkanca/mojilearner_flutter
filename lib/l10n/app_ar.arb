@@ -489,5 +489,7 @@
   "deleteAccountDone": "تم حذف حسابك وبياناتك.",
   "deleteAccountFailed": "تعذّر حذف حسابك. تحقق من اتصالك وحاول مجددًا.",
   "privacyPolicyButton": "سياسة الخصوصية",
-  "privacyPolicyOpenFailed": "تعذّر فتح الرابط."
+  "privacyPolicyOpenFailed": "تعذّر فتح الرابط.",
+  "reportReply": "الإبلاغ عن هذا الرد",
+  "reportReplyFailed": "تعذّر فتح تطبيق البريد الإلكتروني."
 }

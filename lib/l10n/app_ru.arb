@@ -489,5 +489,7 @@
   "deleteAccountDone": "Ваш аккаунт и данные удалены.",
   "deleteAccountFailed": "Не удалось удалить аккаунт. Проверьте подключение и повторите попытку.",
   "privacyPolicyButton": "Политика конфиденциальности",
-  "privacyPolicyOpenFailed": "Не удалось открыть ссылку."
+  "privacyPolicyOpenFailed": "Не удалось открыть ссылку.",
+  "reportReply": "Пожаловаться на этот ответ",
+  "reportReplyFailed": "Не удалось открыть почтовое приложение."
 }

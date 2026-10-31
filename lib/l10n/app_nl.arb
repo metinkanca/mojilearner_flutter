@@ -489,5 +489,7 @@
   "deleteAccountDone": "Je account en gegevens zijn verwijderd.",
   "deleteAccountFailed": "Het account kon niet worden verwijderd. Controleer je verbinding en probeer het opnieuw.",
   "privacyPolicyButton": "Privacybeleid",
-  "privacyPolicyOpenFailed": "De link kon niet worden geopend."
+  "privacyPolicyOpenFailed": "De link kon niet worden geopend.",
+  "reportReply": "Dit antwoord melden",
+  "reportReplyFailed": "De e-mailapp kon niet worden geopend."
 }

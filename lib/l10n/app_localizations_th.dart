@@ -1585,4 +1585,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'ไม่สามารถเปิดลิงก์ได้';
+
+  @override
+  String get reportReply => 'รายงานคำตอบนี้';
+
+  @override
+  String get reportReplyFailed => 'ไม่สามารถเปิดแอปอีเมลได้';
 }

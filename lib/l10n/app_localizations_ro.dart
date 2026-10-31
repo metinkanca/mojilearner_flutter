@@ -1610,4 +1610,10 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Linkul nu a putut fi deschis.';
+
+  @override
+  String get reportReply => 'Raportează acest răspuns';
+
+  @override
+  String get reportReplyFailed => 'Aplicația de e-mail nu a putut fi deschisă.';
 }

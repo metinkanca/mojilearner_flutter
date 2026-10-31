@@ -1608,4 +1608,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Không thể mở liên kết.';
+
+  @override
+  String get reportReply => 'Báo cáo phản hồi này';
+
+  @override
+  String get reportReplyFailed => 'Không thể mở ứng dụng email.';
 }

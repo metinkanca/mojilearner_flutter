@@ -1617,4 +1617,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Impossible d\'ouvrir le lien.';
+
+  @override
+  String get reportReply => 'Signaler cette réponse';
+
+  @override
+  String get reportReplyFailed =>
+      'Impossible d\'ouvrir ton application de messagerie.';
 }

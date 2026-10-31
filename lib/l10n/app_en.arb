@@ -789,5 +789,7 @@
   "deleteAccountDone": "Your account and data were deleted.",
   "deleteAccountFailed": "Couldn't delete your account. Check your connection and try again.",
   "privacyPolicyButton": "Privacy Policy",
-  "privacyPolicyOpenFailed": "Couldn't open the link."
+  "privacyPolicyOpenFailed": "Couldn't open the link.",
+  "reportReply": "Report this reply",
+  "reportReplyFailed": "Couldn't open your email app."
 }

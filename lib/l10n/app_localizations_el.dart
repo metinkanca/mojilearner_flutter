@@ -1620,4 +1620,11 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get privacyPolicyOpenFailed =>
       'Δεν ήταν δυνατό το άνοιγμα του συνδέσμου.';
+
+  @override
+  String get reportReply => 'Αναφορά αυτής της απάντησης';
+
+  @override
+  String get reportReplyFailed =>
+      'Δεν ήταν δυνατό το άνοιγμα της εφαρμογής email.';
 }

@@ -1601,4 +1601,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'लिंक नहीं खुल सका।';
+
+  @override
+  String get reportReply => 'इस जवाब की रिपोर्ट करें';
+
+  @override
+  String get reportReplyFailed => 'आपका ईमेल ऐप नहीं खुल सका।';
 }

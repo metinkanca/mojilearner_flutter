@@ -489,5 +489,7 @@
   "deleteAccountDone": "Sua conta e seus dados foram excluídos.",
   "deleteAccountFailed": "Não foi possível excluir sua conta. Verifique a conexão e tente novamente.",
   "privacyPolicyButton": "Política de privacidade",
-  "privacyPolicyOpenFailed": "Não foi possível abrir o link."
+  "privacyPolicyOpenFailed": "Não foi possível abrir o link.",
+  "reportReply": "Denunciar esta resposta",
+  "reportReplyFailed": "Não foi possível abrir o app de e-mail."
 }

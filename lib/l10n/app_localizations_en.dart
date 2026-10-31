@@ -1607,4 +1607,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Couldn\'t open the link.';
+
+  @override
+  String get reportReply => 'Report this reply';
+
+  @override
+  String get reportReplyFailed => 'Couldn\'t open your email app.';
 }

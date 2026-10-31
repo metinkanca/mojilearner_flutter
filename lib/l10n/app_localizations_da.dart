@@ -1610,4 +1610,10 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Linket kunne ikke åbnes.';
+
+  @override
+  String get reportReply => 'Rapportér dette svar';
+
+  @override
+  String get reportReplyFailed => 'Kunne ikke åbne din mailapp.';
 }

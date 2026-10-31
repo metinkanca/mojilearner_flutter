@@ -489,5 +489,7 @@
   "deleteAccountDone": "आपका खाता और डेटा हटा दिया गया है।",
   "deleteAccountFailed": "खाता नहीं हटाया जा सका। अपना कनेक्शन जाँचें और फिर कोशिश करें।",
   "privacyPolicyButton": "गोपनीयता नीति",
-  "privacyPolicyOpenFailed": "लिंक नहीं खुल सका।"
+  "privacyPolicyOpenFailed": "लिंक नहीं खुल सका।",
+  "reportReply": "इस जवाब की रिपोर्ट करें",
+  "reportReplyFailed": "आपका ईमेल ऐप नहीं खुल सका।"
 }

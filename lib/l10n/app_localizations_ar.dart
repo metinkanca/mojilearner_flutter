@@ -1593,4 +1593,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'تعذّر فتح الرابط.';
+
+  @override
+  String get reportReply => 'الإبلاغ عن هذا الرد';
+
+  @override
+  String get reportReplyFailed => 'تعذّر فتح تطبيق البريد الإلكتروني.';
 }

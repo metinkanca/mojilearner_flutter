@@ -489,5 +489,7 @@
   "deleteAccountDone": "A fiókod és az adataid törölve lettek.",
   "deleteAccountFailed": "Nem sikerült törölni a fiókot. Ellenőrizd a kapcsolatot, és próbáld újra.",
   "privacyPolicyButton": "Adatvédelmi irányelvek",
-  "privacyPolicyOpenFailed": "A hivatkozást nem sikerült megnyitni."
+  "privacyPolicyOpenFailed": "A hivatkozást nem sikerült megnyitni.",
+  "reportReply": "Válasz jelentése",
+  "reportReplyFailed": "Nem sikerült megnyitni az e-mail alkalmazást."
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../constants/theme.dart';
 import '../components/character_sprite.dart';
+import '../components/report_reply_button.dart';
+import '../constants/app_runtime_config.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/rtl_locale.dart';
 import '../../utils/fonts.dart';
@@ -14,6 +16,10 @@ class MessageBubble extends StatefulWidget {
   /// Romanized pronunciation of [text], for non-Latin scripts.
   final String? reading;
 
+  /// Where the flag under an AI reply sends its report. Defaults to the build's
+  /// `SUPPORT_EMAIL`; empty hides the flag.
+  final String reportEmail;
+
   const MessageBubble({
     super.key,
     required this.text,
@@ -21,6 +27,7 @@ class MessageBubble extends StatefulWidget {
     this.translation,
     this.grammarAnalysis,
     this.reading,
+    this.reportEmail = AppRuntimeConfig.supportEmail,
   });
 
   @override
@@ -199,24 +206,33 @@ class _MessageBubbleState extends State<MessageBubble> {
                       )
                     ],
                   ),
-                  // Grammar Button
-                  if (isBot && widget.grammarAnalysis != null)
+                  // Grammar button, and the flag for reporting the reply.
+                  if (isBot)
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
-                      child: InkWell(
-                        onTap: () => _showGrammar(context),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                           decoration: BoxDecoration(
-                              color: AppTheme.retroAccent,
-                              border: Border.all(color: AppTheme.retroDark, width: 2),
-                              boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))]
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (widget.grammarAnalysis != null) ...[
+                            InkWell(
+                              onTap: () => _showGrammar(context),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.retroAccent,
+                                  border: Border.all(color: AppTheme.retroDark, width: 2),
+                                  boxShadow: const [BoxShadow(color: AppTheme.retroDark, offset: Offset(2, 2))],
+                                ),
+                                child: Text(
+                                  "?",
+                                  style: AppFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 8),
+                                ),
+                              ),
                             ),
-                          child: Text(
-                            "?",
-                            style: AppFonts.pressStart2p(color: AppTheme.retroDark, fontSize: 8),
-                          ),
-                        ),
+                            const SizedBox(width: 8),
+                          ],
+                          ReportReplyButton(reply: widget.text, email: widget.reportEmail),
+                        ],
                       ),
                     ),
                 ],

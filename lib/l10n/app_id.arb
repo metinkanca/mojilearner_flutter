@@ -489,5 +489,7 @@
   "deleteAccountDone": "Akun dan data Anda telah dihapus.",
   "deleteAccountFailed": "Akun tidak dapat dihapus. Periksa koneksi Anda dan coba lagi.",
   "privacyPolicyButton": "Kebijakan Privasi",
-  "privacyPolicyOpenFailed": "Tautan tidak dapat dibuka."
+  "privacyPolicyOpenFailed": "Tautan tidak dapat dibuka.",
+  "reportReply": "Laporkan balasan ini",
+  "reportReplyFailed": "Aplikasi email tidak dapat dibuka."
 }

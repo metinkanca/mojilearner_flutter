@@ -3087,6 +3087,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t open the link.'**
   String get privacyPolicyOpenFailed;
+
+  /// No description provided for @reportReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this reply'**
+  String get reportReply;
+
+  /// No description provided for @reportReplyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open your email app.'**
+  String get reportReplyFailed;
 }
 
 class _AppLocalizationsDelegate

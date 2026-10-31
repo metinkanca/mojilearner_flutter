@@ -489,5 +489,7 @@
   "deleteAccountDone": "Twoje konto i dane zostały usunięte.",
   "deleteAccountFailed": "Nie udało się usunąć konta. Sprawdź połączenie i spróbuj ponownie.",
   "privacyPolicyButton": "Polityka prywatności",
-  "privacyPolicyOpenFailed": "Nie udało się otworzyć linku."
+  "privacyPolicyOpenFailed": "Nie udało się otworzyć linku.",
+  "reportReply": "Zgłoś tę odpowiedź",
+  "reportReplyFailed": "Nie udało się otworzyć aplikacji poczty."
 }

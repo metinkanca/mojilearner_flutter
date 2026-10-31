@@ -489,5 +489,7 @@
   "deleteAccountDone": "Din konto og dine data er slettet.",
   "deleteAccountFailed": "Kontoen kunne ikke slettes. Tjek din forbindelse, og prøv igen.",
   "privacyPolicyButton": "Privatlivspolitik",
-  "privacyPolicyOpenFailed": "Linket kunne ikke åbnes."
+  "privacyPolicyOpenFailed": "Linket kunne ikke åbnes.",
+  "reportReply": "Rapportér dette svar",
+  "reportReplyFailed": "Kunne ikke åbne din mailapp."
 }

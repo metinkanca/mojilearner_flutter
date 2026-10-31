@@ -489,5 +489,7 @@
   "deleteAccountDone": "Dein Konto und deine Daten wurden gelöscht.",
   "deleteAccountFailed": "Das Konto konnte nicht gelöscht werden. Prüfe deine Verbindung und versuche es erneut.",
   "privacyPolicyButton": "Datenschutzerklärung",
-  "privacyPolicyOpenFailed": "Der Link konnte nicht geöffnet werden."
+  "privacyPolicyOpenFailed": "Der Link konnte nicht geöffnet werden.",
+  "reportReply": "Diese Antwort melden",
+  "reportReplyFailed": "Die E-Mail-App konnte nicht geöffnet werden."
 }

@@ -105,6 +105,13 @@ class AppRuntimeConfig {
     'PRIVACY_POLICY_URL',
   );
 
+  /// Where reports of a bad AI reply are emailed, passed as
+  /// `--dart-define=SUPPORT_EMAIL=...`.
+  ///
+  /// Empty until there is an address, and the report flag under AI replies hides
+  /// itself while it is. Play expects such a flag, so set it before release.
+  static const String supportEmail = String.fromEnvironment('SUPPORT_EMAIL');
+
   /// The Web OAuth client id, passed to Google Sign-In as `serverClientId`.
   ///
   /// Not a secret: it identifies the project, ships in every build, and is

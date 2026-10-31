@@ -1602,4 +1602,10 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Odkaz se nepodařilo otevřít.';
+
+  @override
+  String get reportReply => 'Nahlásit tuto odpověď';
+
+  @override
+  String get reportReplyFailed => 'Nepodařilo se otevřít e-mailovou aplikaci.';
 }

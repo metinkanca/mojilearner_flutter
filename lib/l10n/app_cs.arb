@@ -489,5 +489,7 @@
   "deleteAccountDone": "Váš účet a data byly smazány.",
   "deleteAccountFailed": "Účet se nepodařilo smazat. Zkontrolujte připojení a zkuste to znovu.",
   "privacyPolicyButton": "Zásady ochrany osobních údajů",
-  "privacyPolicyOpenFailed": "Odkaz se nepodařilo otevřít."
+  "privacyPolicyOpenFailed": "Odkaz se nepodařilo otevřít.",
+  "reportReply": "Nahlásit tuto odpověď",
+  "reportReplyFailed": "Nepodařilo se otevřít e-mailovou aplikaci."
 }

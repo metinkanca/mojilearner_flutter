@@ -1552,4 +1552,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => '无法打开链接。';
+
+  @override
+  String get reportReply => '举报此回复';
+
+  @override
+  String get reportReplyFailed => '无法打开邮件应用。';
 }

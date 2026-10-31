@@ -1556,4 +1556,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => '링크를 열 수 없습니다.';
+
+  @override
+  String get reportReply => '이 답변 신고하기';
+
+  @override
+  String get reportReplyFailed => '이메일 앱을 열 수 없습니다.';
 }

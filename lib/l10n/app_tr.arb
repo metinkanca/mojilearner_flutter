@@ -489,5 +489,7 @@
   "deleteAccountDone": "Hesabın ve verilerin silindi.",
   "deleteAccountFailed": "Hesap silinemedi. Bağlantını kontrol edip tekrar dene.",
   "privacyPolicyButton": "Gizlilik Politikası",
-  "privacyPolicyOpenFailed": "Bağlantı açılamadı."
+  "privacyPolicyOpenFailed": "Bağlantı açılamadı.",
+  "reportReply": "Bu yanıtı bildir",
+  "reportReplyFailed": "E-posta uygulaması açılamadı."
 }

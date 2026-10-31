@@ -1606,4 +1606,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Не удалось открыть ссылку.';
+
+  @override
+  String get reportReply => 'Пожаловаться на этот ответ';
+
+  @override
+  String get reportReplyFailed => 'Не удалось открыть почтовое приложение.';
 }

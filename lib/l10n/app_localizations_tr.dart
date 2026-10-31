@@ -1611,4 +1611,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Bağlantı açılamadı.';
+
+  @override
+  String get reportReply => 'Bu yanıtı bildir';
+
+  @override
+  String get reportReplyFailed => 'E-posta uygulaması açılamadı.';
 }

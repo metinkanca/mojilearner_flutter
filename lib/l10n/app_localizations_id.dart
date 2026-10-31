@@ -1604,4 +1604,10 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Tautan tidak dapat dibuka.';
+
+  @override
+  String get reportReply => 'Laporkan balasan ini';
+
+  @override
+  String get reportReplyFailed => 'Aplikasi email tidak dapat dibuka.';
 }

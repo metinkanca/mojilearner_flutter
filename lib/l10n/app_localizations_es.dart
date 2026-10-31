@@ -1616,4 +1616,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'No se pudo abrir el enlace.';
+
+  @override
+  String get reportReply => 'Reportar esta respuesta';
+
+  @override
+  String get reportReplyFailed => 'No se pudo abrir tu aplicación de correo.';
 }

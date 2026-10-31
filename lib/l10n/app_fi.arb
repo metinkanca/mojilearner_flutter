@@ -489,5 +489,7 @@
   "deleteAccountDone": "Tilisi ja tietosi on poistettu.",
   "deleteAccountFailed": "Tilin poistaminen epäonnistui. Tarkista yhteytesi ja yritä uudelleen.",
   "privacyPolicyButton": "Tietosuojakäytäntö",
-  "privacyPolicyOpenFailed": "Linkkiä ei voitu avata."
+  "privacyPolicyOpenFailed": "Linkkiä ei voitu avata.",
+  "reportReply": "Ilmoita tämä vastaus",
+  "reportReplyFailed": "Sähköpostisovellusta ei voitu avata."
 }

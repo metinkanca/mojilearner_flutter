@@ -489,5 +489,7 @@
   "deleteAccountDone": "アカウントとデータを削除しました。",
   "deleteAccountFailed": "アカウントを削除できませんでした。接続を確認してもう一度お試しください。",
   "privacyPolicyButton": "プライバシーポリシー",
-  "privacyPolicyOpenFailed": "リンクを開けませんでした。"
+  "privacyPolicyOpenFailed": "リンクを開けませんでした。",
+  "reportReply": "この返信を報告",
+  "reportReplyFailed": "メールアプリを開けませんでした。"
 }

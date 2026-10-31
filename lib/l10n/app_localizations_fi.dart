@@ -1609,4 +1609,10 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get privacyPolicyOpenFailed => 'Linkkiä ei voitu avata.';
+
+  @override
+  String get reportReply => 'Ilmoita tämä vastaus';
+
+  @override
+  String get reportReplyFailed => 'Sähköpostisovellusta ei voitu avata.';
 }

@@ -489,5 +489,7 @@
   "deleteAccountDone": "Kontoen og dataene dine er slettet.",
   "deleteAccountFailed": "Kontoen kunne ikke slettes. Sjekk tilkoblingen og prøv igjen.",
   "privacyPolicyButton": "Personvernerklæring",
-  "privacyPolicyOpenFailed": "Kunne ikke åpne lenken."
+  "privacyPolicyOpenFailed": "Kunne ikke åpne lenken.",
+  "reportReply": "Rapporter dette svaret",
+  "reportReplyFailed": "Kunne ikke åpne e-postappen."
 }

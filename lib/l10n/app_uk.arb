@@ -489,5 +489,7 @@
   "deleteAccountDone": "Ваш акаунт і дані видалено.",
   "deleteAccountFailed": "Не вдалося видалити акаунт. Перевірте з'єднання та спробуйте ще раз.",
   "privacyPolicyButton": "Політика конфіденційності",
-  "privacyPolicyOpenFailed": "Не вдалося відкрити посилання."
+  "privacyPolicyOpenFailed": "Не вдалося відкрити посилання.",
+  "reportReply": "Поскаржитися на цю відповідь",
+  "reportReplyFailed": "Не вдалося відкрити поштовий застосунок."
 }

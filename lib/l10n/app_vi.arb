@@ -489,5 +489,7 @@
   "deleteAccountDone": "Tài khoản và dữ liệu của bạn đã được xóa.",
   "deleteAccountFailed": "Không thể xóa tài khoản. Hãy kiểm tra kết nối và thử lại.",
   "privacyPolicyButton": "Chính sách quyền riêng tư",
-  "privacyPolicyOpenFailed": "Không thể mở liên kết."
+  "privacyPolicyOpenFailed": "Không thể mở liên kết.",
+  "reportReply": "Báo cáo phản hồi này",
+  "reportReplyFailed": "Không thể mở ứng dụng email."
 }

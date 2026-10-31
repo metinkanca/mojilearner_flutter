@@ -489,5 +489,7 @@
   "deleteAccountDone": "Ditt konto och dina data har raderats.",
   "deleteAccountFailed": "Kontot kunde inte raderas. Kontrollera anslutningen och försök igen.",
   "privacyPolicyButton": "Integritetspolicy",
-  "privacyPolicyOpenFailed": "Länken kunde inte öppnas."
+  "privacyPolicyOpenFailed": "Länken kunde inte öppnas.",
+  "reportReply": "Rapportera det här svaret",
+  "reportReplyFailed": "Det gick inte att öppna e-postappen."
 }
