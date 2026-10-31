@@ -267,18 +267,34 @@ const Map<String, _PetParts> _layeredPets = {
       AccessorySlots.neck: Offset(11, 35),
       AccessorySlots.face: Offset(11, 37),
     },
-    accessoryPlacements: {
-      'tophat': _AccessoryPlacement(-2, 1),
-      'cowboyhat': _AccessoryPlacement(5, 4),
-      'cap': _AccessoryPlacement(53, 18, mirrored: true),
-      'bowtie': _AccessoryPlacement(23, 37),
-      'collar': _AccessoryPlacement(10, 45),
-      'medal': _AccessoryPlacement(8, 41),
-      // Witching Hour hat. The owner's mock-up pulls it down to just above the
-      // eyes; every other pet derives from a generic head seat 35.4 units
-      // higher, so the cat carries the difference. Mirrored as CAT_PIECE_OFFSET
-      // in art_src/gen_halloween_acc.py.
-      'pumpkinwitch': _AccessoryPlacement(11, 59.4),
+    // Drawn for this cat, on its own 3-unit grid, and worn exactly as drawn
+    // (art_src/gen_cat_hats.py); every other pet keeps the shared piece.
+    accessoryOverrides: {
+      'bandana': 'assets/svgs/acc_bandana_cat.svg',
+      'batchoker': 'assets/svgs/acc_batchoker_cat.svg',
+      'beanie': 'assets/svgs/acc_beanie_cat.svg',
+      'bowtie': 'assets/svgs/acc_bowtie_cat.svg',
+      'cap': 'assets/svgs/acc_cap_cat.svg',
+      'collar': 'assets/svgs/acc_collar_cat.svg',
+      'cowboyhat': 'assets/svgs/acc_cowboyhat_cat.svg',
+      'crown': 'assets/svgs/acc_crown_cat.svg',
+      'devilband': 'assets/svgs/acc_devilband_cat.svg',
+      'flightscarf': 'assets/svgs/acc_flightscarf_cat.svg',
+      'flowercrown': 'assets/svgs/acc_flowercrown_cat.svg',
+      'ghostbandana': 'assets/svgs/acc_ghostbandana_cat.svg',
+      'glasses': 'assets/svgs/acc_glasses_cat.svg',
+      'goggles': 'assets/svgs/acc_goggles_cat.svg',
+      'mask': 'assets/svgs/acc_mask_cat.svg',
+      'medal': 'assets/svgs/acc_medal_cat.svg',
+      'mortarboard': 'assets/svgs/acc_mortarboard_cat.svg',
+      'mustache': 'assets/svgs/acc_mustache_cat.svg',
+      'necklace': 'assets/svgs/acc_necklace_cat.svg',
+      'partyhat': 'assets/svgs/acc_partyhat_cat.svg',
+      'pumpkinwitch': 'assets/svgs/acc_pumpkinwitch_cat.svg',
+      'scarf': 'assets/svgs/acc_scarf_cat.svg',
+      'sunglasses': 'assets/svgs/acc_sunglasses_cat.svg',
+      'tophat': 'assets/svgs/acc_tophat_cat.svg',
+      'wizardhat': 'assets/svgs/acc_wizardhat_cat.svg',
     },
   ),
   // The dog art is 208x248 against the cat's 202x238, placed feet-on-the-same

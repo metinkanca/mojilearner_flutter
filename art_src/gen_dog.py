@@ -4,6 +4,7 @@
 import sys, os, re
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib_dog import *
+import deseam
 
 SRC = r"C:/Users/genso/Documents/mojilearner_flutter/art_src"
 OUT = r"C:/Users/genso/Documents/mojilearner_flutter/assets/svgs"
@@ -73,17 +74,50 @@ def bend(subs, dx):
         out.append(q)
     return out
 
-def tail(dx):
-    parts = []
+OUTLINE_ID = next(i for i in TAIL if canon(master[i]['fill']) == CANON_OUTLINE)
+
+
+def cap(subs):
+    """Outline cells for any coat pixel left with bare canvas beside it.
+
+    The bend makes the silhouette one cell wider on one side of the hinge than
+    the other, and at the corner of that step a single coat pixel ends up with
+    nothing above (or below) it -- the coat leaks out through a one-pixel hole
+    in the outline. This finds those pixels by scanning the pose rather than
+    naming them, so the caps stay correct if the art or SWING changes. The rest
+    pose is already enclosed, so it yields nothing.
+    """
+    W, H = deseam.VBW, deseam.VBH
+    filled = [0] * (W * H)
+    coat = [0] * (W * H)
     for i in TAIL:
-        r = master[i]
-        subs = to_points(r['d'])
-        if dx:
-            subs = bend([[(x + DX, y + DY) for x, y in s] for s in subs], dx)
-            parts.append('<path fill="%s" d="%s"/>' % (canon(r['fill']), emit(subs, 0, 0)))
-        else:
-            parts.append('<path fill="%s" d="%s"/>' % (canon(r['fill']), emit(subs, DX, DY)))
-    return ''.join(parts)
+        buf = [-1] * (W * H)
+        deseam.rasterise(subs[i], buf, 1)
+        for k, v in enumerate(buf):
+            if v == 1:
+                filled[k] = 1
+                if i != OUTLINE_ID:
+                    coat[k] = 1
+    holes = set()
+    for y in range(H):
+        for x in range(W):
+            if not coat[y * W + x]:
+                continue
+            for ax, ay in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                if 0 <= ax < W and 0 <= ay < H and not filled[ay * W + ax]:
+                    holes.add((ax + deseam.VBX, ay + deseam.VBY))
+    return [[(x, y), (x + 1, y), (x + 1, y + 1), (x, y + 1)]
+            for x, y in sorted(holes)]
+
+
+def tail(dx):
+    subs = {}
+    for i in TAIL:
+        s = [[(x + DX, y + DY) for x, y in p] for p in to_points(master[i]['d'])]
+        subs[i] = bend(s, dx) if dx else s
+    subs[OUTLINE_ID] = subs[OUTLINE_ID] + cap(subs)
+    return ''.join('<path fill="%s" d="%s"/>' % (canon(master[i]['fill']), emit(subs[i], 0, 0))
+                   for i in TAIL)
 
 write('dog_tail.svg',   tail(0))
 write('dog_tail_l.svg', tail(-SWING))

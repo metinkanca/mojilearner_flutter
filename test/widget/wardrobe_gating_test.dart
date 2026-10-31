@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/constants/accessories.dart';
 import 'package:mojilearner_flutter/constants/bond.dart';
+import 'package:mojilearner_flutter/constants/pets.dart';
 import 'package:mojilearner_flutter/constants/scenes.dart';
 import 'package:mojilearner_flutter/constants/season_pass.dart';
 import 'package:mojilearner_flutter/constants/shop.dart';
@@ -401,6 +402,30 @@ void main() {
       await settle(tester);
 
       expect(find.text('BEAK COLOR'), findsOneWidget);
+    });
+  });
+
+  // The parrot is drawn in profile and shows one eye, so odd-eyed would colour
+  // a cell nobody can see. It still gets both colour panels -- being rigged is
+  // what the pickers are gated on, and the parrot is.
+  group('a pet with one eye', () {
+    testWidgets('is offered colours but not the odd-eyed mode', (tester) async {
+      // The parrot is bought, not a starter.
+      final character = await pumpWardrobe(
+        tester,
+        unlockedItems: [petUnlockId('parrot')],
+      );
+
+      expect(find.text('SOLID'), findsOneWidget);
+      expect(find.text('ODD-EYED'), findsOneWidget);
+
+      await character.updateCharacterType('parrot');
+      await settle(tester);
+
+      expect(find.text('BODY & TAIL COLOR'), findsOneWidget);
+      expect(find.text('EYE COLOR'), findsOneWidget);
+      expect(find.text('SOLID'), findsNothing);
+      expect(find.text('ODD-EYED'), findsNothing);
     });
   });
 }

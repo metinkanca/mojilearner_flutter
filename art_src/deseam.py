@@ -21,7 +21,10 @@ from collections import defaultdict
 VBX, VBY, VBW, VBH = -20, -90, 222, 328
 
 # Painted bottom to top. Anything unlisted keeps document order after these.
-RANK = {'#959379': 0, '#959279': 0, '#606659': 1, '#6b3439': 2, '#1f2223': 9}
+# `#c8c6b3` is the coat highlight the roster pets use, and sits with the shade:
+# both are the coat's own tones, painted over it and under everything else.
+RANK = {'#959379': 0, '#959279': 0, '#606659': 1, '#c8c6b3': 1,
+        '#6b3439': 2, '#1f2223': 9}
 # Both of the cat's drifted main fills collapse to the canonical one.
 CANON = {'#959279': '#959379'}
 

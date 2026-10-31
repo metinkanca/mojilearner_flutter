@@ -75,6 +75,9 @@ void main() {
     final misses = <String>[];
     for (final entry in fitted.entries) {
       final def = piece(entry.key);
+      // The cat's own drawing of a piece is worn exactly as drawn
+      // (art_src/gen_cat_hats.py), so it has no seat to drift from.
+      if (accessoryAssetFor('cat', def) != def.asset) continue;
       final offset = accessoryOffsetFor('cat', def);
       expect(offset, isNotNull, reason: '${entry.key} has no seat on the cat');
       final extent = kAccessoryExtents[def.asset];
@@ -111,13 +114,15 @@ void main() {
     // derives from a generic head seat, and a pet with less head above its
     // eyes than the cat's would otherwise have its eyes covered.
     final hat = piece('pumpkinwitch');
-    final brimBottom = yExtent(hat.asset)[1];
     final covered = <String>[];
     for (final type in kPetTypes) {
-      final offset = accessoryOffsetFor(type, hat);
+      // A pet's own drawing of the hat is worn exactly as drawn, so its brim
+      // is where the art puts it and there is no offset to add.
+      final own = accessoryAssetFor(type, hat);
+      final offset = own != hat.asset ? Offset.zero : accessoryOffsetFor(type, hat);
       expect(offset, isNotNull, reason: '$type has no seat for the hat');
       final eyeTop = eyeGeometryFor(type).y;
-      final bottom = brimBottom + offset!.dy;
+      final bottom = yExtent(own)[1] + offset!.dy;
       if (bottom > eyeTop) {
         covered.add('$type: brim bottom ${bottom.toStringAsFixed(1)}, '
             'eyes start $eyeTop');

@@ -38,8 +38,7 @@ void main() {
       expect(petPrice(type), isStarterPet(type) ? isNull : kPetPrice,
           reason: type);
     }
-    expect(kPetTypes.where((t) => !isStarterPet(t)),
-        hasLength(kPetTypes.length - kStarterPetTypes.length));
+    expect(kPetTypes.where((t) => !isStarterPet(t)), hasLength(27));
   });
 
   test('a new player owns the starters and nothing else', () async {

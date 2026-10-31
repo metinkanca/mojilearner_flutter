@@ -101,9 +101,9 @@ void main() {
 
   group('choosing a beak colour', () {
     test('sets it on the pet out, and only that pet', () async {
-      // The penguin is bought, not a starter.
+      // The parrot is bought, not a starter.
       SharedPreferences.setMockInitialValues({
-        'unlocked_items': [petUnlockId('penguin')],
+        'unlocked_items': [petUnlockId('parrot')],
       });
       final provider = await buildProvider();
       await provider.updateCharacterType('bird');
@@ -111,7 +111,7 @@ void main() {
       provider.updateBeakColor(orange);
       expect(provider.colorSpec.beakColor, orange);
 
-      await provider.updateCharacterType('penguin');
+      await provider.updateCharacterType('parrot');
       expect(provider.colorSpec.beakColor, isNull);
     });
 

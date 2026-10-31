@@ -277,6 +277,7 @@ const List<AccessoryDef> kAccessories = [
     asset: 'assets/svgs/acc_headphones.svg',
     icon: '🎧',
     price: 150,
+    hidden: true,
   ),
   AccessoryDef(
     id: 'wizardhat',

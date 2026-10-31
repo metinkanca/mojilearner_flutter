@@ -19,9 +19,36 @@ const List<String> kPetTypes = [
   'cat',
   'bird',
   'rabbit',
+  'hamster',
+  'parrot',
+  // The roster set, built from `art_src/pet-roster-restored.svg` by
+  // `art_src/gen_roster_pets.py`. Grouped roughly by kind rather than
+  // alphabetically, so the carousel reads as a walk through a menagerie
+  // instead of a word list.
+  'fox',
   'raccoon',
+  'red-panda',
+  'skunk',
+  'otter',
+  'beaver',
+  'squirrel',
+  'chinchilla',
+  'mouse',
+  'hedgehog',
+  'bat',
+  'fennec',
+  'koala',
+  'wombat',
+  'panda',
+  'sloth',
+  'capybara',
+  'piglet',
+  'seal',
   'penguin',
+  'frog',
   'axolotl',
+  'gecko',
+  'chameleon',
 ];
 
 /// The pet a player starts with, and what an unrecognised saved type falls
