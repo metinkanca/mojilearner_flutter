@@ -989,6 +989,18 @@ def write_svg(rows, floor, path, scale=None):
 
 
 APP_ASSETS = os.path.normpath(os.path.join(HERE, '..', 'assets', 'svgs'))
+
+# Floors drawn with pxl, not read from a props sheet: `pxl/export_climb.py`
+# writes their pictures and this table of where their stops are, and `--app`
+# takes both as they are.
+PXL_TABLE = os.path.join(HERE, 'pxl', 'climb_floors.json')
+
+
+def pxl_floors():
+    if not os.path.exists(PXL_TABLE):
+        return {}
+    with open(PXL_TABLE, encoding='utf-8') as f:
+        return {int(n): row for n, row in json.load(f).items()}
 APP_DART = os.path.normpath(os.path.join(
     HERE, '..', 'lib', 'constants', 'boss_climb_art.dart'))
 
@@ -1053,7 +1065,23 @@ def dart_source(floors):
     """`lib/constants/boss_climb_art.dart`: where each floor's picture is and
     where its five stops sit on it, in the picture's own cells."""
     out = [DART_HEAD]
+    drawn = pxl_floors()
     for n in floors:
+        if n in drawn:
+            row = drawn[n]
+            points = ''.join('      (%.1f, %.1f),\n' % tuple(s)
+                             for s in row['stops'])
+            out.append(
+                "  ClimbFloorArt(\n"
+                "    asset: 'assets/svgs/climb_floor_%d.svg',\n"
+                "    width: %d,\n"
+                "    height: %d,\n"
+                "    ground: 0xFF%s,\n"
+                "    pad: %d,\n"
+                "    stops: [\n%s    ],\n"
+                "  ),\n" % (n, row['width'], row['height'], row['ground'],
+                            row['pad'], points))
+            continue
         grid, stops = build(n)
         parts, _ = read_sheet(n)
         pad = max(max(len(p[0]), len(p)) for p in parts['pads'])
@@ -1116,7 +1144,11 @@ def main(argv):
     if '--check' in argv:
         return check(floors)
     out = argv[argv.index('--preview') + 1] if '--preview' in argv else None
+    drawn = pxl_floors()
     for n in floors:
+        if n in drawn and '--app' in argv:
+            print('floor %d is drawn with pxl: its picture is left as it is' % n)
+            continue
         if out:
             os.makedirs(out, exist_ok=True)
             sheet_preview(n, os.path.join(out, 'sheet%d.png' % n))

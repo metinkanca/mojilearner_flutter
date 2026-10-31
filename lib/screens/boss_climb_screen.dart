@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 
 import '../components/boss_trial/climb_map.dart';
 import '../components/boss_trial/trial_boss.dart';
+import '../components/play/play_kit.dart';
 import '../constants/progression.dart';
 import '../constants/theme.dart';
 import '../providers/user_provider.dart';
-import '../utils/fonts.dart';
 
 /// Where the boss trials are chosen: a climb up through six floors, a boss at
 /// the top of each, opening on the first at the bottom of the screen. A stop is
@@ -93,28 +93,11 @@ class _BackButton extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Back',
-      excludeSemantics: true,
-      child: GestureDetector(
+  Widget build(BuildContext context) => PlaySquareButton(
+        icon: PlayIcon.back,
+        label: 'Back',
+        color: PlayPalette.wall,
+        size: 44,
         onTap: onTap,
-        child: Container(
-          width: 44,
-          height: 44,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppTheme.retroLight,
-            border: Border.all(color: AppTheme.retroDark, width: 3),
-          ),
-          child: Text(
-            '<',
-            style:
-                AppFonts.pressStart2p(fontSize: 16, color: AppTheme.retroDark),
-          ),
-        ),
-      ),
-    );
-  }
+      );
 }

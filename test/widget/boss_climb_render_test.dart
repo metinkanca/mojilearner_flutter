@@ -29,9 +29,10 @@ void main() {
       final ground = Color(art.ground);
       Offset onScreen(double x, double y) => Offset(x * cell, y * cell);
 
-      // The start stone, at the foot of every floor, is the first thing to
-      // tell the picture from the ground it is laid on.
-      final start = onScreen(art.width / 2, art.height - 8);
+      // The first pad is the first thing to tell the picture from the ground
+      // it is laid on, as far in as the checks below look.
+      final (firstX, firstY) = art.stops.first;
+      final start = onScreen(firstX + art.pad / 2 * 0.7, firstY);
 
       final frame = await captureScene(
         tester,

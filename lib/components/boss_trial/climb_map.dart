@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants/boss_climb_art.dart';
-import '../../constants/theme.dart';
 import '../../utils/boss_trial.dart';
 import '../../utils/fonts.dart';
+import '../play/play_kit.dart' show PixelPanel, PlayPalette;
 import '../rasterized_svg.dart';
 import 'trial_boss.dart';
 
@@ -82,9 +81,8 @@ class ClimbMap extends StatelessWidget {
   }
 }
 
-/// One floor: its picture, the stops over it, and under it the band that says
-/// whose floor it is (the band between two floors is the way up from one to
-/// the next).
+/// One floor: its picture and the stops over it. The pictures are drawn so that
+/// each one's top is the next one's bottom, with nothing between them.
 class ClimbFloorView extends StatelessWidget {
   const ClimbFloorView({
     super.key,
@@ -103,13 +101,10 @@ class ClimbFloorView extends StatelessWidget {
   final int playerLevel;
   final void Function(TrialBoss boss, int step) onStop;
 
-  /// How tall the band under a floor is.
-  static const double bandHeight = 52;
-
-  /// How tall a floor is drawn at [width]: its picture at its own aspect, and
-  /// its band.
+  /// How tall a floor is drawn at [width]: its picture at its own aspect. The
+  /// floors meet edge to edge, each one's top being the next one's bottom.
   static double extentFor(double width, ClimbFloorArt art) =>
-      width * art.height / art.width + bandHeight;
+      width * art.height / art.width;
 
   /// The level of the boss's [step]th fight: its openings, one a level, then
   /// its finale, which is the level the boss is named for.
@@ -124,29 +119,24 @@ class ClimbFloorView extends StatelessWidget {
       // Points to a cell of the art: the picture and where the stops are on it
       // scale by it.
       final cell = width / art.width;
-      return Column(
-        children: [
-          SizedBox(
-            width: width,
-            height: height,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // What shows for the frames before the picture has loaded,
-                // and if it never does.
-                Positioned.fill(child: ColoredBox(color: Color(art.ground))),
-                // Drawn once into an image, not replayed as paths on every
-                // frame of a scroll. See [RasterizedSvg].
-                Positioned.fill(
-                  child: RasterizedSvg.asset(art.asset, fit: BoxFit.fill),
-                ),
-                for (var step = 0; step < art.stops.length; step++)
-                  _stop(step, cell),
-              ],
+      return SizedBox(
+        width: width,
+        height: height,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // What shows for the frames before the picture has loaded, and if
+            // it never does.
+            Positioned.fill(child: ColoredBox(color: Color(art.ground))),
+            // Drawn once into an image, not replayed as paths on every frame
+            // of a scroll. See [RasterizedSvg].
+            Positioned.fill(
+              child: RasterizedSvg.asset(art.asset, fit: BoxFit.fill),
             ),
-          ),
-          ClimbBand(boss: boss, floor: floor),
-        ],
+            for (var step = 0; step < art.stops.length; step++)
+              _stop(step, cell),
+          ],
+        ),
       );
     });
   }
@@ -219,7 +209,7 @@ class ClimbStop extends StatelessWidget {
   /// (TABLETS) with its frame.
   static double roomFor(double pad) => pad * 0.82;
 
-  static const Color _ink = AppTheme.retroDark;
+  static const Color _ink = PlayPalette.ink;
 
   @override
   Widget build(BuildContext context) {
@@ -230,19 +220,19 @@ class ClimbStop extends StatelessWidget {
     // pad under it would show.
     final dim = !reached && !finale;
     final fill = finale
-        ? AppTheme.retroAccent
+        ? PlayPalette.gold
         : dim
-            ? const Color(0xFFE3DDD6)
-            : AppTheme.retroLight;
+            ? PlayPalette.stone
+            : PlayPalette.wall;
     final ink = dim ? _ink.withValues(alpha: 0.5) : _ink;
     final room = roomFor(pad);
 
-    Widget frame(Widget child, EdgeInsets padding) => Container(
+    // The games' panel at its smallest: a two-point ink border with the
+    // corners notched, on the floor's own flat colours.
+    Widget frame(Widget child, EdgeInsets padding, {Color? color}) => PixelPanel(
+          color: color ?? fill,
+          cell: 2,
           padding: padding,
-          decoration: BoxDecoration(
-            color: fill,
-            border: Border.all(color: _ink, width: 2),
-          ),
           child: child,
         );
 
@@ -258,18 +248,12 @@ class ClimbStop extends StatelessWidget {
         if (you)
           Positioned(
             top: -label * 2.6,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                  horizontal: label * 0.6, vertical: label * 0.35),
-              decoration: BoxDecoration(
-                color: AppTheme.retroOrange,
-                border: Border.all(color: _ink, width: 2),
-              ),
-              child: Text(
-                'YOU',
-                style: AppFonts.pressStart2p(
-                    fontSize: label, color: AppTheme.retroLight),
-              ),
+            child: frame(
+              Text('YOU',
+                  style: AppFonts.pressStart2p(fontSize: label, color: _ink)),
+              EdgeInsets.symmetric(
+                  horizontal: label * 0.4, vertical: label * 0.2),
+              color: PlayPalette.coral,
             ),
           ),
       ],
@@ -301,71 +285,6 @@ class ClimbStop extends StatelessWidget {
         child: Row(
           children: nameOnLeft ? [caption, onPad] : [onPad, caption],
         ),
-      ),
-    );
-  }
-}
-
-/// The band under a floor: which floor, whose, and which levels.
-class ClimbBand extends StatelessWidget {
-  const ClimbBand({
-    super.key,
-    required this.boss,
-    required this.floor,
-  });
-
-  final TrialBoss boss;
-  final int floor;
-
-  @override
-  Widget build(BuildContext context) {
-    final first = ClimbFloorView.levelOf(boss, 0);
-    return Container(
-      height: ClimbFloorView.bandHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: const BoxDecoration(
-        color: AppTheme.retroDark,
-        border: Border.symmetric(
-          horizontal: BorderSide(color: AppTheme.retroAccent, width: 3),
-        ),
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 44,
-            height: 34,
-            child: SvgPicture.asset(boss.asset, fit: BoxFit.contain),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'FLOOR $floor',
-                  style: AppFonts.pressStart2p(
-                      fontSize: 7, color: AppTheme.retroAccent),
-                ),
-                const SizedBox(height: 6),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    boss.name.toUpperCase(),
-                    style: AppFonts.pressStart2p(
-                        fontSize: 12, color: AppTheme.retroLight),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            'LEVELS $first–${boss.level}',
-            style:
-                AppFonts.pressStart2p(fontSize: 7, color: AppTheme.retroLight),
-          ),
-        ],
       ),
     );
   }

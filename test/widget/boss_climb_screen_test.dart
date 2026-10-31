@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mojilearner_flutter/components/boss_trial/climb_map.dart';
+import 'package:mojilearner_flutter/components/play/play_kit.dart';
 import 'package:mojilearner_flutter/components/boss_trial/trial_boss.dart';
 import 'package:mojilearner_flutter/providers/language_provider.dart';
 import 'package:mojilearner_flutter/providers/vocab_provider.dart';
@@ -81,17 +82,15 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('names each floor for its boss, from the first up',
+    testWidgets('builds the floors as they are climbed to, first up',
         (tester) async {
       await pumpMap(tester);
-      expect(find.text('MOSSBACK'), findsOneWidget);
-      expect(find.text('LEVELS 1–5'), findsOneWidget);
+      expect(stop(1), findsOneWidget);
       // Floors are built as they are climbed to, not all at once.
-      expect(find.text('PYREWING'), findsNothing);
+      expect(stop(30), findsNothing);
 
       await climbTo(tester, stop(30));
-      expect(find.text('PYREWING'), findsOneWidget);
-      expect(find.text('LEVELS 26–30'), findsOneWidget);
+      expect(stop(30), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -264,7 +263,8 @@ void main() {
 
     testWidgets('the back button on the climb leaves it', (tester) async {
       await pumpClimb(tester);
-      await tester.tap(find.text('<'));
+      await tester.tap(find.byWidgetPredicate(
+          (w) => w is PlaySquareButton && w.icon == PlayIcon.back));
       await turnPage(tester);
       expect(find.text('home'), findsOneWidget);
     });
